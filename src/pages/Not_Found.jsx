@@ -6,7 +6,7 @@ const Not_Found = () =>{
     return (
         <>
             <div className="w-screen h-screen flex justify-center items-center flex-col gap-4">
-                <img src={Guitar_Outline} className="absolute right-4 bottom-4 -z-10 h-3/4" alt="" />
+                <img src={Guitar_Outline} className="absolute md:right-4 bottom-4 -z-10 h-2/5 md:h-3/4" alt="" />
                 
                 <p className="text-9xl font-extrabold">OOPs</p>
                 <p>The Guitar String just Broke.</p>
