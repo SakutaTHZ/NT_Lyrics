@@ -7,7 +7,7 @@ const labelClass = 'text-gray-700 font-semibold'
 const inputClass = 'p-2 border border-gray-400 rounded-md'
   return (
     <>
-      <div className="flex w-screen h-screen justify-center items-center">
+      <div className="flex w-screen h-screen justify-center items-center overflow-hidden">
         <div className="loginContainer flex flex-col gap-5 w-full md:w-1/2 px-5 md:px-40 text-lg">
           <h1 className="text-blue-500 font-bold text-3xl italic">NT Lyrics & Chords</h1>
           <p className="text-gray-500">Please Enter your Login details!</p>
