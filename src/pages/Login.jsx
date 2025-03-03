@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import Preview from "../assets/images/Landing_Page.png";
 import { useState } from "react";
+import { BiArrowBack } from "react-icons/bi";
 
 const Login = () => {
   const labelClass = "text-gray-700 font-semibold";
@@ -42,6 +43,9 @@ const Login = () => {
   return (
     <>
       <div className="flex w-screen h-screen justify-center items-center overflow-hidden" id="main-content">
+        <Link to={'/NT_Lyrics/'}>
+        <BiArrowBack className="absolute bottom-2 right-2 rounded-full shadow-md p-2 w-10 h-10" size={20}/>
+        </Link>
         {/* Login Box */}
         <div className="loginContainer flex flex-col gap-5 w-full md:w-1/2 px-5 md:px-40 text-base">
           <h1 className="text-blue-500 font-bold text-3xl italic">
@@ -88,6 +92,11 @@ const Login = () => {
                 Password must be less than 8 characters.
               </p>
             )}
+            {!isLoginCorrect && (
+              <p className={`text-sm text-red-400 mt-1`}>
+                Username or Password is incorrect
+              </p>
+            )}
           </div>
           <div className="flex justify-between">
             <div className="flex gap-2 items-center">
@@ -105,6 +114,7 @@ const Login = () => {
               "w-full bg-blue-500 border-transparent text-white font-medium"
             }
             text="Get Started"
+            onClick={checkCredentials}
           />
           <Normal_Button
             custom_class={`${inputClass} font-semibold`}

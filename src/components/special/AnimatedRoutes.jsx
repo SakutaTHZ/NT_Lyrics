@@ -4,23 +4,23 @@ import Landing from "../../../src/pages/Landing";
 import Login from "../../../src/pages/login";
 import Not_Found from "../../../src/pages/Not_Found";
 import SignUp from "../../../src/pages/SignUp";
-import "../../../src/App.css"; // Import your CSS file for the animations
+import "../../../src/App.css"; 
 
-// Define the variants for Framer Motion with the appropriate transitions
+
 const pageVariants = {
   initial: {
     opacity: 0,
-    y: 50, // New page starts below
-    transition: { duration: .5, ease: "easeOut" },
+    y: 500, 
+    transition: { duration: .25, ease: "easeOut" },
   },
   animate: {
     opacity: 1,
-    y: 0, // Moves into place
-    transition: { duration: .5, ease: "easeOut" },
+    y: 0, 
+    transition: { duration: .25, ease: "easeOut" },
   },
   exit: {
-    opacity: 0.5,
-    y: -50, // Old page moves up
+    opacity: 0.2,
+    y: -500, 
     transition: { duration: .5, ease: "easeIn" },
   },
 };
@@ -36,7 +36,7 @@ const AnimatedRoutes = () => {
         initial="initial"
         animate="animate"
         exit="exit"
-        className="page-container" // Use CSS classes for the page container
+        className="page-container" 
       >
         <Routes location={location}>
           <Route path="/NT_Lyrics/" element={<Landing />} />
