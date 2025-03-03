@@ -4,14 +4,28 @@ import { FaGoogle } from "react-icons/fa";
 import Preview from "../assets/images/Landing_Page.png";
 import { useState } from "react";
 
-const Login = () => {
+const SignUp = () => {
   const labelClass = "text-gray-700 font-semibold";
   const inputClass = "p-2 border border-gray-400 rounded-md";
+
+  //Set Error for the textboxes and labels
+  const [isNameCorrect, setIsNameCorrect] = useState(true);
   const [isEmailCorrect, setIsEmailCorrect] = useState(true);
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(true);
 
-  // Check for correct Login
-  const [isLoginCorrect, setIsLoginCorrect] = useState(true);
+  //Check Errors for textboxes
+  //Check Name
+  const [name, setName] = useState("");
+  const nameInDatabase = ["JohnDoe", "JaneSmith", "User123"];
+
+  const checkName = (input) => {
+    setName(input);
+    if (nameInDatabase.includes(input.trim())) {
+      setIsNameCorrect(false);
+    } else {
+      setIsNameCorrect(true);
+    }
+  };
 
   //Check Email
   const [email, setEmail] = useState("");
@@ -25,30 +39,52 @@ const Login = () => {
   };
 
   //Check Password
-  const [password, setPassword] = useState("");
-  const checkPassword = (input) => {
-    setPassword(input);
-    input.length > 8 ? setIsPasswordCorrect(false) : setIsPasswordCorrect(true);
-  };
-
-  const checkCredentials = () => {
-    if (email === "thz@gmail.com" && password === "1234") {
-      // Go to landing page
-    } else {
-      setIsLoginCorrect(false);
-    }
-  };
+  const [password,setPassword] = useState("");
+  const checkPassword = (input) =>{
+    setPassword(input)
+    input.length>8?setIsPasswordCorrect(false):setIsPasswordCorrect(true)
+  }
 
   return (
     <>
       <div className="flex w-screen h-screen justify-center items-center overflow-hidden">
-        {/* Login Box */}
+        {/* Image Holder */}
+        <div className="imageContainer items-center justify-end h-full hidden md:flex md:w-1/2 bg-gray-100">
+          <img
+            src={Preview}
+            className="h-3/5 rounded-lg -translate-x-44 shadow-2xl"
+            alt=""
+          />
+        </div>
+
+        {/* SignUp Box */}
         <div className="loginContainer flex flex-col gap-5 w-full md:w-1/2 px-5 md:px-40 text-base">
           <h1 className="text-blue-500 font-bold text-3xl italic">
             NT Lyrics & Chords
           </h1>
-          <p className="text-gray-500">Please Enter your Login details!</p>
+          <p className="text-gray-500">Join our musician community today</p>
           <hr className="border-dashed border-gray-300" />
+          <div className="flex flex-col">
+            <label htmlFor="name" className={`${labelClass}`}>
+              Name{" "}
+              {!isNameCorrect && (
+                <span className="text-red-500 font-bold">*</span>
+              )}
+            </label>
+            <input
+              type="text"
+              id="name"
+              className={`${inputClass} ${!isNameCorrect && "border-red-400"}`}
+              placeholder="Enter your Name"
+              value={name}
+              onChange={(e) => checkName(e.target.value)}
+            />
+            {!isNameCorrect && (
+              <p className={`text-sm text-red-400 mt-1`}>
+                Name is already taken.
+              </p>
+            )}
+          </div>
           <div className="flex flex-col">
             <label htmlFor="email" className={`${labelClass}`}>
               Email{" "}
@@ -59,7 +95,7 @@ const Login = () => {
             <input
               type="text"
               id="email"
-              className={inputClass}
+              className={`${inputClass} ${!isEmailCorrect && "border-red-400"}`}
               placeholder="Enter your Email"
               value={email}
               onChange={(e) => checkEmail(e.target.value)}
@@ -78,27 +114,16 @@ const Login = () => {
             <input
               type="text"
               id="password"
-              className={inputClass}
+              className={`${inputClass} ${
+                !isPasswordCorrect && "border-red-400"
+              }`}
               placeholder="Enter your Password"
               value={password}
               onChange={(e) => checkPassword(e.target.value)}
             />
-            {!isPasswordCorrect && (
-              <p className={`text-sm text-red-400 mt-1`}>
-                Password must be less than 8 characters.
-              </p>
-            )}
-          </div>
-          <div className="flex justify-between">
-            <div className="flex gap-2 items-center">
-              <input type="checkbox" id="remember" className="cursor-pointer" />
-              <label htmlFor="remember" className={`${labelClass}`}>
-                Remember for 30 days
-              </label>
-            </div>
-            <a href="*" className={`font-semibold text-blue-500`}>
-              Forgot password
-            </a>
+            <p className={`text-sm mt-1 ${!isPasswordCorrect ? 'text-red-400' : 'text-gray-400'}`}>
+              Password must be less than 8 characters.
+            </p>
           </div>
           <Normal_Button
             custom_class={
@@ -112,27 +137,18 @@ const Login = () => {
             text="Sign In With Google"
           />
           <p>
-            Don&apos;t have an Account?{" "}
+            Already have an Account?{" "}
             <Link
-              to={"/NT_Lyrics/signup"}
+              to={"/NT_Lyrics/login"}
               className={`font-semibold text-blue-500`}
             >
-              Sign up
+              Login
             </Link>
           </p>
-        </div>
-
-        {/* Image Holder */}
-        <div className="imageContainer items-center justify-end h-full hidden md:flex md:w-1/2 bg-gray-100">
-          <img
-            src={Preview}
-            className="h-3/5 rounded-lg translate-x-44 shadow-2xl"
-            alt=""
-          />
         </div>
       </div>
     </>
   );
 };
 
-export default Login;
+export default SignUp;

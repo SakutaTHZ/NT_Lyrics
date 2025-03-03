@@ -11,7 +11,7 @@ const Not_Found = () =>{
                 <p className="text-9xl font-extrabold">OOPs</p>
                 <p>The Guitar String just Broke.</p>
 
-                <Link to={'/NT_Lyrics/Login'}>
+                <Link to={'/NT_Lyrics/login'}>
                 <Normal_Button custom_class={`bg-blue-200 border-transparent shadow-sm font-medium text-blue-900`} text="Go to Login"/>
                 </Link>
             </div>
