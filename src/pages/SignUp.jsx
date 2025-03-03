@@ -47,7 +47,7 @@ const SignUp = () => {
 
   return (
     <>
-      <div className="flex w-screen h-screen justify-center items-center overflow-hidden">
+      <div className="flex w-screen h-screen justify-center items-center overflow-hidden" id="main-content">
         {/* Image Holder */}
         <div className="imageContainer items-center justify-end h-full hidden md:flex md:w-1/2 bg-gray-100">
           <img
