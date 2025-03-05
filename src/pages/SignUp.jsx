@@ -62,7 +62,7 @@ const SignUp = () => {
         </div>
 
         {/* SignUp Box */}
-        <div className="loginContainer flex flex-col gap-5 w-full md:w-1/2 px-5 md:px-40 text-base">
+        <div className="animate-appear loginContainer flex flex-col gap-5 w-full md:w-1/2 px-5 md:px-40 text-base">
           <h1 className="text-blue-500 font-bold text-3xl italic">
             NT Lyrics & Chords
           </h1>

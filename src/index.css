@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
-#root,body {
+#root,
+body {
   overflow: hidden;
+}
+img{
+  max-width:none !important;
 }
 
 @keyframes move-out {
@@ -41,46 +45,61 @@
   height: 100%;
 }
 
-.animate-down{
-  animation: loadDown .5s cubic-bezier(0.87, 0, 0.13, 1);
+.animate-down {
+  animation: loadDown 0.5s cubic-bezier(0.87, 0, 0.13, 1);
 }
 
-.animate-down-start{
+.animate-down-start {
   animation: loadDown 1s cubic-bezier(0.87, 0, 0.13, 1);
 }
 
 @keyframes loadDown {
-  from{
+  from {
     transform: translateY(-50%);
     opacity: 0;
-  }to{
+  }
+  to {
     transform: translateY(0%);
     opacity: 1;
   }
 }
 
-.animate-left{
+.animate-left {
   animation: loadLeft 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 @keyframes loadLeft {
-  from{
+  from {
     transform: translateX(-50%);
     opacity: 0;
-  }to{
+  }
+  to {
     transform: translateX(0%);
     opacity: 1;
   }
 }
 
-.animate-right{
+.animate-right {
   animation: loadRight 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 @keyframes loadRight {
-  from{
+  from {
     transform: translateX(500px);
     opacity: 0;
-  }to{
+  }
+  to {
     transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-appear {
+  animation: appear 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
     opacity: 1;
   }
 }
