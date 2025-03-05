@@ -136,7 +136,7 @@ const Login = () => {
         <div className="imageContainer items-center justify-end h-full hidden md:flex md:w-1/2 bg-gray-100">
           <img
             src={Preview}
-            className="h-3/5 rounded-lg translate-x-44 shadow-2xl"
+            className="h-3/5 rounded-lg animate-right translate-x-44 shadow-2xl"
             alt=""
           />
         </div>
