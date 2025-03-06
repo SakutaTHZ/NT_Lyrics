@@ -11,7 +11,7 @@ const Nav = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const location = useLocation(); // Get current pathname
+  const location = useLocation();
 
   const checkLogInStatus = () => {
     // Login Code Here
