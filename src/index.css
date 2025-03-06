@@ -103,3 +103,7 @@ img{
     opacity: 1;
   }
 }
+
+.gradient-overlay{
+  background: linear-gradient(transparent,rgba(255, 255, 255,.5),white);
+}
