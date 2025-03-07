@@ -66,6 +66,8 @@ img{
 
 .animate-left {
   animation: loadLeft 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}.animate-left-normal {
+  animation: loadLeft 1s linear;
 }
 @keyframes loadLeft {
   from {
@@ -80,6 +82,8 @@ img{
 
 .animate-right {
   animation: loadRight 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}.animate-right-normal {
+  animation: loadRight 1s linear;
 }
 @keyframes loadRight {
   from {
