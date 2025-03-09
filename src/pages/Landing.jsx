@@ -4,8 +4,19 @@ import { BiSearch } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import LyricsCard from "../components/special/LyricsCard";
 import Footer from "../components/common/Footer";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Landing = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (searchQuery.trim() !== "") {
+      navigate(`/NT_Lyrics/lyrics?query=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
   return (
     <>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
@@ -21,12 +32,20 @@ const Landing = () => {
           <div className="bg-white z-10 w-full md:w-96 p-4 rounded-md shadow-md flex flex-col gap-3  translate-y-12">
             <p className="text-lg font-semibold">သီချင်းရှာကြမယ် ...</p>
             <div className="border border-gray-300 rounded-md p-2 flex items-center gap-2">
-              <BiSearch size={20} className="flex-shrink-0 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search Musician or Lyrics"
                 className="w-full outline-0"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()} // Allow "Enter" to trigger search
               />
+              <button
+                className="p-2 bg-blue-500 rounded-md cursor-pointer"
+                onClick={handleSearch}
+              >
+                <BiSearch size={20} className="text-white" />
+              </button>
             </div>
           </div>
         </div>
@@ -78,7 +97,7 @@ const Landing = () => {
             <div className="w-full aspect-video bg-gray-300 rounded-md">
               <iframe
                 className="w-full h-full rounded-md"
-                src="https://www.youtube.com/embed/rhTZTy1rZhw?si=P7LfdH2chUvsPFX3" 
+                src="https://www.youtube.com/embed/rhTZTy1rZhw?si=P7LfdH2chUvsPFX3"
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

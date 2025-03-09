@@ -9,13 +9,13 @@ import { LuLogIn } from "react-icons/lu";
 
 const Nav = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const location = useLocation();
 
   const checkLogInStatus = () => {
     // Login Code Here
-    setIsLoggedIn(false);
+    setIsLoggedIn(true);
   };
 
   useEffect(() => {
