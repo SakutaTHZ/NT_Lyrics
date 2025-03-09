@@ -2,6 +2,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMemo } from "react";
 import Landing from "../../../src/pages/Landing";
+import Lyrics from "../../../src/pages/Lyrics";
 import Login from "../../../src/pages/login";
 import Not_Found from "../../../src/pages/Not_Found";
 import SignUp from "../../../src/pages/SignUp";
@@ -79,6 +80,7 @@ const AnimatedRoutes = () => {
       >
         <Routes location={location}>
           <Route path="/NT_Lyrics/" element={<Landing />} />
+          <Route path="/NT_Lyrics/lyrics" element={<Lyrics />} />
           <Route path="/NT_Lyrics/login" element={<Login />} />
           <Route path="/NT_Lyrics/signup" element={<SignUp />} />
           <Route path="*" element={<Not_Found />} />
