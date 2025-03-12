@@ -4,9 +4,11 @@ import LyricsCard from "../components/special/LyricsCard";
 import Footer from "../components/common/Footer";
 import bgcover from "../assets/images/cover_bg.png";
 import { IoSettingsOutline } from "react-icons/io5";
+import ProfileEdit from "../components/common/ProfileEdit";
 
 const Profile = () => {
   const [myCollection, setMyCollection] = useState(8);
+  const [showEdit, setShowEdit] = useState(false);
 
   const getCollection = () => {
     let collection = localStorage.getItem("collection");
@@ -46,7 +48,7 @@ const Profile = () => {
                   <p className="text-gray-600">johndoe@gmail.com</p>
                 </div>
               </div>
-              <button className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2">
+              <button className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2" onClick={()=>setShowEdit(true)}>
                 <IoSettingsOutline
                   size={20}
                   fontStyle={"bold"}
@@ -71,6 +73,10 @@ const Profile = () => {
             </div>
           </div>
         </div>
+        
+        {
+          showEdit && <ProfileEdit closeBox={()=>setShowEdit(false)}/>
+        }
 
         <Footer />
       </div>
