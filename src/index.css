@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 #root,
-body {
+html,body {
   overflow: hidden;
+  overflow-y: auto;
 }
 img{
   max-width:none !important;
