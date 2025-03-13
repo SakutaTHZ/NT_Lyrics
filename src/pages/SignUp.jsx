@@ -4,10 +4,11 @@ import { FaGoogle } from "react-icons/fa";
 import Preview from "../assets/images/Landing_Page.png";
 import { useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
+import PasswordInput from "../components/common/Password_Input";
 
 const SignUp = () => {
   const labelClass = "text-gray-700 font-semibold";
-  const inputClass = "p-2 border border-gray-400 rounded-md";
+  const inputClass = "p-2 border border-gray-300 rounded-md";
 
   //Set Error for the textboxes and labels
   const [isNameCorrect, setIsNameCorrect] = useState(true);
@@ -115,16 +116,7 @@ const SignUp = () => {
                 <span className="text-red-500 font-bold">*</span>
               )}
             </label>
-            <input
-              type="text"
-              id="password"
-              className={`${inputClass} ${
-                !isPasswordCorrect && "border-red-400"
-              }`}
-              placeholder="Enter your Password"
-              value={password}
-              onChange={(e) => checkPassword(e.target.value)}
-            />
+            <PasswordInput value={password} onChange={checkPassword} />
             <p className={`text-sm mt-1 ${!isPasswordCorrect ? 'text-red-400' : 'text-gray-400'}`}>
               Password must be less than 8 characters.
             </p>

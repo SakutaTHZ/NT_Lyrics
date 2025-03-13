@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { BiMenu } from "react-icons/bi";
 import { GoHome } from "react-icons/go";
@@ -9,18 +9,18 @@ import { LuLogIn } from "react-icons/lu";
 
 const Nav = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  // Check if Logged In
+  const checkUser = () => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) !== null : false;
+  };
+
+  const [isLoggedIn, ] = useState(() => checkUser());
 
   const location = useLocation();
 
-  const checkLogInStatus = () => {
-    // Login Code Here
-    setIsLoggedIn(true);
-  };
-
-  useEffect(() => {
-    checkLogInStatus();
-  }, []);
+  
 
   const mobileNavStyle =
     "p-2 px-4 hover:bg-blue-100 h-fit border-b border-gray-200 md:rounded-md transition-all flex items-center gap-4 md:gap-2";

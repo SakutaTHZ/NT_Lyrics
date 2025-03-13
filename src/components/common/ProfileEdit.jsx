@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import PropTypes from "prop-types";
+import PasswordInput from "./Password_Input";
+import { BiCheck } from "react-icons/bi";
 
 const ProfileEdit = ({ closeBox }) => {
   const labelClass = "text-gray-700 font-semibold";
   const inputClass = "p-2 border border-gray-400 rounded-md";
+
+  const navigate = useNavigate();
   // Get User data here
   const getUser = () => {
     let user = localStorage.getItem("user");
@@ -13,7 +18,7 @@ const ProfileEdit = ({ closeBox }) => {
     } else {
       // For sample data
       return {
-        name: "John Doe",
+        username: "John Doe",
         email: "johndoe@gmail.com",
         profileImage:
           "https://i.pinimg.com/736x/c8/69/8a/c8698a586eb96d0ec43fbb712dcf668d.jpg",
@@ -23,7 +28,9 @@ const ProfileEdit = ({ closeBox }) => {
   };
   const [user, setUser] = useState(getUser);
 
-  const [username, setUsername] = useState(user.name);
+  const [passwordChange, setPasswordChange] = useState(false);
+
+  const [username, setUsername] = useState(user.username);
   const [isUsernameCorrect, setIsUsernameCorrect] = useState(true);
   const checkUsername = (input) => {
     setUsername(input);
@@ -65,11 +72,9 @@ const ProfileEdit = ({ closeBox }) => {
   };
 
   const updateUser = () => {
-    if (currentPassword !== user.password) {
+    // If the password is being updated, check if the current password is correct
+    if (passwordChange && currentPassword !== user.password) {
       alert("Current Password is incorrect");
-      return;
-    } else if (newPassword === "") {
-      alert("New Password cannot be empty");
       return;
     } else if (username === "") {
       alert("Name cannot be empty");
@@ -78,15 +83,26 @@ const ProfileEdit = ({ closeBox }) => {
       alert("Email cannot be empty");
       return;
     } else {
+      // Prepare the updated user data
       let updatedUser = {
-        name: username,
+        username: username,
         email: email,
-        password: newPassword,
       };
+  
+      // Include the new password if the checkbox is checked and new password is provided
+      if (passwordChange && newPassword !== "") {
+        updatedUser.password = newPassword;
+      } else if (passwordChange) {
+        alert("New Password cannot be empty");
+        return;
+      }
+  
+      // Store the updated user data
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);
     }
   };
+  
 
   useEffect(() => {
     getUser;
@@ -94,7 +110,7 @@ const ProfileEdit = ({ closeBox }) => {
 
   return (
     <div className="fixed flex justify-center items-center px-4 top-0 left-0 w-full h-full bg-[#00000080] z-50">
-      <div className="animate-down-start w-full h-fit py-4 bg-white rounded-md">
+      <div className="animate-down-start w-full md:w-96 h-fit py-8 bg-white rounded-md">
         <div className="w-full h-1/2 flex items-center justify-center">
           <div className="profileImageBox w-24 aspect-square rounded-full overflow-hidden border-8 border-white">
             {/* Current Image */}
@@ -149,37 +165,55 @@ const ProfileEdit = ({ closeBox }) => {
               )}
             </div>
             {/* Password */}
+
             <div className="w-full">
-              <label htmlFor="email" className={`${labelClass}`}>
-                Password{" "}
+              <label
+                htmlFor="email"
+                className={`${labelClass} flex justify-between items-center`}
+              >
+                {passwordChange ? "Password" : "Change Password?"}
                 {!isCurrentPasswordCorrect && (
                   <span className="text-red-500 font-bold">*</span>
                 )}
+                <input
+                  type="checkbox"
+                  id="password-toggle"
+                  className="hidden peer"
+                  onChange={() => setPasswordChange(!passwordChange)}
+                />
+                <label
+                  htmlFor="password-toggle"
+                  className="w-5 h-5 border border-gray-400 rounded-md flex items-center justify-center cursor-pointer peer-checked:bg-blue-500 peer-checked:border-blue-500 transition-all"
+                >
+                  <BiCheck className="text-white text-lg peer-checked:text-black " />
+                </label>
               </label>
-              <input
-                type="text"
-                placeholder="Current Password"
-                className="w-full border border-gray-300 p-2 rounded-md"
-                onChange={(e) => checkCurrentPassword(e.target.value)}
-              />
-              {!isCurrentPasswordCorrect && (
-                <p className={`text-sm text-red-400 mt-1`}>
-                  Password must be less than 8 characters.
-                </p>
-              )}
-              <input
-                type="text"
-                placeholder="New Password"
-                className="w-full mt-2 border border-gray-300 p-2 rounded-md"
-                onChange={(e) => checkNewPassword(e.target.value)}
-              />
+              {passwordChange && (
+                <>
+                  <PasswordInput
+                    value={currentPassword}
+                    onChange={checkCurrentPassword}
+                  />
+                  {!isCurrentPasswordCorrect && (
+                    <p className={`text-sm text-red-400 mt-1`}>
+                      Password must be less than 8 characters.
+                    </p>
+                  )}
 
-              {!isNewPasswordCorrect && (
-                <p className={`text-sm text-red-400 mt-1`}>
-                  Password must be less than 8 characters.
-                </p>
+                  <PasswordInput
+                    value={newPassword}
+                    onChange={checkNewPassword}
+                  />
+
+                  {!isNewPasswordCorrect && (
+                    <p className={`text-sm text-red-400 mt-1`}>
+                      Password must be less than 8 characters.
+                    </p>
+                  )}
+                </>
               )}
             </div>
+            {/* Action Buttons */}
             <div className="w-full flex items-center gap-2 mt-2">
               <button
                 className="w-full bg-blue-500 px-4 text-white font-semibold p-2 rounded-md"
@@ -197,6 +231,18 @@ const ProfileEdit = ({ closeBox }) => {
                 Cancel
               </button>
             </div>
+            <hr className="w-full border-dashed border-gray-300" />
+            {/* Log Out */}
+            <button
+              className="w-full bg-red-500 px-4 text-white font-semibold p-2 rounded-md"
+              onClick={() => {
+                localStorage.removeItem("user");
+                // redirect to landing Page
+                navigate(`/NT_Lyrics/`);
+              }}
+            >
+              Log Out
+            </button>
           </div>
         </div>
       </div>

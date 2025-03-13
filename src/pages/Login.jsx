@@ -4,12 +4,15 @@ import { FaGoogle } from "react-icons/fa";
 import Preview from "../assets/images/Landing_Page.png";
 import { useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
+import PasswordInput from "../components/common/Password_Input";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const labelClass = "text-gray-700 font-semibold";
-  const inputClass = "p-2 border border-gray-400 rounded-md";
+  const inputClass = "p-2 border border-gray-300 rounded-md";
   const [isEmailCorrect, setIsEmailCorrect] = useState(true);
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(true);
+  const navigate = useNavigate();
 
   // Check for correct Login
   const [isLoginCorrect, setIsLoginCorrect] = useState(true);
@@ -35,6 +38,10 @@ const Login = () => {
   const checkCredentials = () => {
     if (email === "thz@gmail.com" && password === "1234") {
       // Go to landing page
+      setIsLoginCorrect(true);
+      let username = email.split("@")[0];
+      localStorage.setItem("user", JSON.stringify({ username, email, password }));
+      navigate(`/NT_Lyrics/`);
     } else {
       setIsLoginCorrect(false);
     }
@@ -79,14 +86,7 @@ const Login = () => {
                 <span className="text-red-500 font-bold">*</span>
               )}
             </label>
-            <input
-              type="text"
-              id="password"
-              className={inputClass}
-              placeholder="Enter your Password"
-              value={password}
-              onChange={(e) => checkPassword(e.target.value)}
-            />
+            <PasswordInput value={password} onChange={checkPassword} />
             {!isPasswordCorrect && (
               <p className={`text-sm text-red-400 mt-1`}>
                 Password must be less than 8 characters.

@@ -16,6 +16,24 @@ const Profile = () => {
       setMyCollection(collection);
     }
   };
+  
+  // Get User data here
+  const getUser = () => {
+    let user = localStorage.getItem("user");
+    if (user) {
+      return JSON.parse(user);
+    } else {
+      // For sample data
+      return {
+        username: "John Doe",
+        email: "johndoe@gmail.com",
+        profileImage:
+          "https://i.pinimg.com/736x/c8/69/8a/c8698a586eb96d0ec43fbb712dcf668d.jpg",
+        password: "password",
+      };
+    }
+  };
+  let user = getUser();
 
   useEffect(() => {
     getCollection;
@@ -44,8 +62,8 @@ const Profile = () => {
                   />
                 </div>
                 <div className="profileInfo">
-                  <p className="font-bold text-2xl">John Doe</p>
-                  <p className="text-gray-600">johndoe@gmail.com</p>
+                  <p className="font-bold text-2xl">{user.username}</p>
+                  <p className="text-gray-600">{user.email}</p>
                 </div>
               </div>
               <button className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2" onClick={()=>setShowEdit(true)}>
