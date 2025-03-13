@@ -4,10 +4,11 @@ import { useMemo } from "react";
 import Landing from "../../../src/pages/Landing";
 import Lyrics from "../../../src/pages/Lyrics";
 import Profile from "../../../src/pages/Profile";
-import Login from "../../../src/pages/login";
+import Login from "../../../src/pages/Login";
 import Not_Found from "../../../src/pages/Not_Found";
 import SignUp from "../../../src/pages/SignUp";
 import "../../../src/App.css";
+import LyricsDetails from "../../pages/LyricsDetails";
 
 // Animations to randomly pick from
 const animations = [
@@ -82,6 +83,7 @@ const AnimatedRoutes = () => {
         <Routes location={location}>
           <Route path="/NT_Lyrics/" element={<Landing />} />
           <Route path="/NT_Lyrics/lyrics" element={<Lyrics />} />
+          <Route path="/NT_Lyrics/lyricsdetail/:id" element={<LyricsDetails />} />
           <Route path="/NT_Lyrics/profile" element={<Profile />} />
           <Route path="/NT_Lyrics/login" element={<Login />} />
           <Route path="/NT_Lyrics/signup" element={<SignUp />} />

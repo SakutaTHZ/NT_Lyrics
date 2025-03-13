@@ -6,7 +6,7 @@ import { useSearchParams } from "react-router-dom";
 
 const Lyrics = () => {
     const [searchParams] = useSearchParams();
-    const query = searchParams.get("query");
+    const query = searchParams.get("query") || "";
   return (
     <>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
@@ -41,7 +41,7 @@ const Lyrics = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12 px-4 md:px-24">
             {Array.from({ length: 40 }).map((_, index) => (
-              <LyricsCard key={index} />
+              <LyricsCard key={index} id={index}/>
             ))}
           </div>
         </div>

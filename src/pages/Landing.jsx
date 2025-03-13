@@ -60,7 +60,7 @@ const Landing = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12">
             {Array.from({ length: 4 }).map((_, index) => (
-              <LyricsCard key={index} />
+              <LyricsCard key={index} id={index}/>
             ))}
           </div>
         </div>

@@ -86,7 +86,7 @@ const Profile = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12 px-4 md:px-24">
               {Array.from({ length: 8 }).map((_, index) => (
-                <LyricsCard key={index} />
+                <LyricsCard key={index} id={index}/>
               ))}
             </div>
           </div>
