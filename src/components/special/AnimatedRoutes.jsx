@@ -9,6 +9,7 @@ import Not_Found from "../../../src/pages/Not_Found";
 import SignUp from "../../../src/pages/SignUp";
 import "../../../src/App.css";
 import LyricsDetails from "../../pages/LyricsDetails";
+import Artist from "../../pages/Artist";
 
 // Animations to randomly pick from
 const animations = [
@@ -84,6 +85,7 @@ const AnimatedRoutes = () => {
           <Route path="/NT_Lyrics/" element={<Landing />} />
           <Route path="/NT_Lyrics/lyrics" element={<Lyrics />} />
           <Route path="/NT_Lyrics/lyricsdetail/:id" element={<LyricsDetails />} />
+          <Route path="/NT_Lyrics/artist/:name" element={<Artist />} />
           <Route path="/NT_Lyrics/profile" element={<Profile />} />
           <Route path="/NT_Lyrics/login" element={<Login />} />
           <Route path="/NT_Lyrics/signup" element={<SignUp />} />
