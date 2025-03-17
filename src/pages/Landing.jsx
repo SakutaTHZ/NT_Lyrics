@@ -4,8 +4,10 @@ import { BiSearch } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import LyricsCard from "../components/special/LyricsCard";
 import Footer from "../components/common/Footer";
+import LyricsRow from "../components/special/LyricsRow";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import useIsMobile from "../components/hooks/useIsMobile";
 
 const Landing = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,6 +18,8 @@ const Landing = () => {
       navigate(`/NT_Lyrics/lyrics?query=${encodeURIComponent(searchQuery)}`);
     }
   };
+
+  const isMobile = useIsMobile();
 
   return (
     <>
@@ -49,8 +53,9 @@ const Landing = () => {
             </div>
           </div>
         </div>
+
         {/* Featured Lyrics */}
-        <div className="relative p-4 md:px-24">
+        <div className="relative p-4 pb-0 md:px-24 ">
           <div className="flex justify-between">
             <p className="font-bold text-lg italic">Featured Lyrics</p>
             <Link to={"*"} className="text-blue-500">
@@ -58,10 +63,14 @@ const Landing = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12">
-            {Array.from({ length: 4 }).map((_, index) => (
-              <LyricsCard key={index} id={index}/>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-0 md:gap-12">
+            {Array.from({ length: 4 }).map((_, index) =>
+              isMobile ? (
+                <LyricsRow key={index} id={index} />
+              ) : (
+                <LyricsCard key={index} id={index} />
+              )
+            )}
           </div>
         </div>
 

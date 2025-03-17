@@ -1,13 +1,13 @@
 import sampleImage from "../../assets/images/Lyrics_sample.png";
-import PropTypes from 'prop-types';
-import { FaEye, FaRegHeart } from "react-icons/fa6";
+import PropTypes from "prop-types";
+import { FaRegHeart } from "react-icons/fa6";
 import Normal_Button from "../../components/common/Normal_Button"; // Adjust the path as necessary
 import { useState, useEffect } from "react";
 import { CgRemove } from "react-icons/cg";
 import MessagePopup from "../common/MessagePopup";
 import { useNavigate } from "react-router-dom";
 
-const LyricsCard = ({ id }) => {
+const LyricsRow = ({ id }) => {
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
   const [isInCollection, setIsInCollection] = useState(false);
@@ -27,7 +27,7 @@ const LyricsCard = ({ id }) => {
     console.log("Go to Lyrics Details");
     // Pass the id dynamically in the URL
     navigate(`/NT_Lyrics/lyricsdetail/${id}`);
-  }
+  };
 
   const changeLyricsStatus = () => {
     if (isInCollection) {
@@ -35,10 +35,10 @@ const LyricsCard = ({ id }) => {
     } else {
       setMessageText("Lyrics has been added to the collection");
     }
-  
+
     setIsInCollection(!isInCollection);
     setShowMessage(true);
-  
+
     setTimeout(() => {
       setShowMessage(false);
     }, 2000);
@@ -49,28 +49,36 @@ const LyricsCard = ({ id }) => {
       {showMessage && (
         <MessagePopup message_type={"success"} message_text={messageText} />
       )}
-      <div className="relative card w-full min-h-32 aspect-[4/5] rounded-md shadow-md overflow-hidden" onClick={goToLyricsDetails}>
-        <img src={sampleImage} className="w-full" />
-        <div className="gradient-overlay w-full h-full absolute bottom-0"></div>
-        <div className="flex justify-between w-full absolute bottom-0 p-2 px-4">
-          <div className="flex items-center gap-1 font-semibold">
-            <FaEye size={16} className="translate-y-[1px]" />{" "}
-            <span className="viewCount">1.2k</span>
+      <div
+        className="relative flex items-center w-full border-b last:border-0  border-dashed border-gray-200  p-1"
+        onClick={goToLyricsDetails}
+      >
+        <img src={sampleImage} className="w-12 h-12 object-contain" />
+        <div className="flex justify-between items-center w-full p-2 pl-4 ">
+          <div className="flex flex-col gap-2">
+            <p className="font-semibold">ကျေးဇူးပါကွယ်</p>
+            <p className="text-sm text-gray-500">SHINE</p>
           </div>
 
           {isInCollection ? (
             <Normal_Button
               icon={CgRemove}
-              text="Remove from Collection"
-              custom_class={`py-1 px-3 border-transparent shadow-sm bg-red-50 text-red-500`}
-              onClick={changeLyricsStatus}
+              text=""
+              custom_class={`w-8 h-8 border-transparent shadow-sm bg-red-50 text-red-500`}
+              onClick={(e) => {
+                e.stopPropagation();
+                changeLyricsStatus();
+              }}
             />
           ) : (
             <Normal_Button
               icon={FaRegHeart}
-              text="Add to collection"
-              custom_class={`py-1 px-3 border-transparent shadow-sm bg-white`}
-              onClick={changeLyricsStatus}
+              text=""
+              custom_class={`w-8 h-8 border-transparent shadow-sm bg-white`}
+              onClick={(e) => {
+                e.stopPropagation();
+                changeLyricsStatus();
+              }}
             />
           )}
         </div>
@@ -78,8 +86,8 @@ const LyricsCard = ({ id }) => {
     </>
   );
 };
-LyricsCard.propTypes = {
+LyricsRow.propTypes = {
   id: PropTypes.string.isRequired,
 };
 
-export default LyricsCard;
+export default LyricsRow;

@@ -1,12 +1,16 @@
 import Nav from "../components/common/Nav";
 import LyricsCard from "../components/special/LyricsCard";
 import Footer from "../components/common/Footer";
+import LyricsRow from "../components/special/LyricsRow";
 import { BiSearch } from "react-icons/bi";
+import useIsMobile from "../components/hooks/useIsMobile";
 import { useSearchParams } from "react-router-dom";
 
 const Lyrics = () => {
     const [searchParams] = useSearchParams();
     const query = searchParams.get("query") || "";
+    
+  const isMobile = useIsMobile();
   return (
     <>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
@@ -39,10 +43,15 @@ const Lyrics = () => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12 px-4 md:px-24">
-            {Array.from({ length: 40 }).map((_, index) => (
-              <LyricsCard key={index} id={index}/>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-4 p-2 pb-4 gap-4 md:gap-12 px-4 md:px-24">
+            
+                        {Array.from({ length: 40 }).map((_, index) =>
+                          isMobile ? (
+                            <LyricsRow key={index} id={index} />
+                          ) : (
+                            <LyricsCard key={index} id={index} />
+                          )
+                        )}
           </div>
         </div>
 

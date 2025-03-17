@@ -5,6 +5,8 @@ import Footer from "../components/common/Footer";
 import bgcover from "../assets/images/cover_bg.png";
 import { IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
+import useIsMobile from "../components/hooks/useIsMobile";
+import LyricsRow from "../components/special/LyricsRow";
 
 const Profile = () => {
   const [myCollection, setMyCollection] = useState(8);
@@ -16,7 +18,9 @@ const Profile = () => {
       setMyCollection(collection);
     }
   };
-  
+
+  const isMobile = useIsMobile();
+
   // Get User data here
   const getUser = () => {
     let user = localStorage.getItem("user");
@@ -66,7 +70,10 @@ const Profile = () => {
                   <p className="text-gray-600">{user.email}</p>
                 </div>
               </div>
-              <button className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2" onClick={()=>setShowEdit(true)}>
+              <button
+                className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2"
+                onClick={() => setShowEdit(true)}
+              >
                 <IoSettingsOutline
                   size={20}
                   fontStyle={"bold"}
@@ -85,16 +92,18 @@ const Profile = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12 px-4 md:px-24">
-              {Array.from({ length: 8 }).map((_, index) => (
-                <LyricsCard key={index} id={index}/>
-              ))}
+              {Array.from({ length: 8 }).map((_, index) =>
+                isMobile ? (
+                  <LyricsRow key={index} id={index} />
+                ) : (
+                  <LyricsCard key={index} id={index} />
+                )
+              )}
             </div>
           </div>
         </div>
-        
-        {
-          showEdit && <ProfileEdit closeBox={()=>setShowEdit(false)}/>
-        }
+
+        {showEdit && <ProfileEdit closeBox={() => setShowEdit(false)} />}
 
         <Footer />
       </div>
