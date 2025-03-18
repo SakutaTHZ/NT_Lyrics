@@ -1,23 +1,23 @@
 import Nav from "../components/common/Nav";
-import LyricsCard from "../components/special/LyricsCard";
+// import LyricsCard from "../components/special/LyricsCard";
 import Footer from "../components/common/Footer";
-import LyricsRow from "../components/special/LyricsRow";
+// import LyricsRow from "../components/special/LyricsRow";
 import { BiSearch } from "react-icons/bi";
-import useIsMobile from "../components/hooks/useIsMobile";
+// import useIsMobile from "../components/hooks/useIsMobile";
 import { useSearchParams } from "react-router-dom";
+import LyricsGrid from "../components/special/LyricsGrid";
 
 const Lyrics = () => {
-    const [searchParams] = useSearchParams();
-    const query = searchParams.get("query") || "";
-    
-  const isMobile = useIsMobile();
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("query") || "";
+
+  // const isMobile = useIsMobile();
   return (
     <>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
         <Nav />
         {/* Lyrics */}
         <div className="relative flex flex-col  min-h-screen pt-16">
-            
           <div className="flex justify-between px-4 md:px-24">
             <p className="font-bold text-lg italic">Song List</p>
           </div>
@@ -39,19 +39,19 @@ const Lyrics = () => {
               value={query}
             />
             <button className="p-2 bg-blue-500 rounded-md cursor-pointer">
-                <BiSearch size={20} className="text-white" />
+              <BiSearch size={20} className="text-white" />
             </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 p-2 pb-4 gap-4 md:gap-12 px-4 md:px-24">
-            
-                        {Array.from({ length: 40 }).map((_, index) =>
-                          isMobile ? (
-                            <LyricsRow key={index} id={index} />
-                          ) : (
-                            <LyricsCard key={index} id={index} />
-                          )
-                        )}
+            {/* {Array.from({ length: 40 }).map((_, index) =>
+              isMobile ? (
+                <LyricsRow key={index} id={index} />
+              ) : (
+                <LyricsCard key={index} id={index} />
+              )
+            )} */}
+            <LyricsGrid/>
           </div>
         </div>
 

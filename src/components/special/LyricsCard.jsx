@@ -7,7 +7,7 @@ import { CgRemove } from "react-icons/cg";
 import MessagePopup from "../common/MessagePopup";
 import { useNavigate } from "react-router-dom";
 
-const LyricsCard = ({ id }) => {
+const LyricsCard = ({ id,lyric }) => {
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
   const [isInCollection, setIsInCollection] = useState(false);
@@ -55,7 +55,7 @@ const LyricsCard = ({ id }) => {
         <div className="flex justify-between w-full absolute bottom-0 p-2 px-4">
           <div className="flex items-center gap-1 font-semibold">
             <FaEye size={16} className="translate-y-[1px]" />{" "}
-            <span className="viewCount">1.2k</span>
+            <span className="viewCount">{lyric.view_count}</span>
           </div>
 
           {isInCollection ? (
@@ -80,6 +80,7 @@ const LyricsCard = ({ id }) => {
 };
 LyricsCard.propTypes = {
   id: PropTypes.string.isRequired,
+  lyric: PropTypes.object,
 };
 
 export default LyricsCard;

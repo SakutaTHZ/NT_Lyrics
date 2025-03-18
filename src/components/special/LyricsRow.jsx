@@ -6,11 +6,14 @@ import { useState, useEffect } from "react";
 import { CgRemove } from "react-icons/cg";
 import MessagePopup from "../common/MessagePopup";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
-const LyricsRow = ({ id }) => {
+const LyricsRow = ({ id, lyric }) => {
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
   const [isInCollection, setIsInCollection] = useState(false);
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
 
   const checkIfInCollection = () => {
     // Check if the lyrics is in User's Collection
@@ -49,15 +52,21 @@ const LyricsRow = ({ id }) => {
       {showMessage && (
         <MessagePopup message_type={"success"} message_text={messageText} />
       )}
-      <div
-        className="relative flex items-center w-full border-b last:border-0  border-dashed border-gray-200  p-1"
+      <motion.div
+        className="relative flex items-center w-full border-b last:border-0  border-dashed border-gray-200"
         onClick={goToLyricsDetails}
+        ref={ref}
+        initial={{ scale: 0, opacity: 0, x: 0 }}
+        animate={inView ? { scale: 1, opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.4 }}
       >
         <img src={sampleImage} className="w-12 h-12 object-contain" />
-        <div className="flex justify-between items-center w-full p-2 pl-4 ">
+        <div className="flex justify-between items-center w-full p-2 pl-4">
           <div className="flex flex-col gap-2">
-            <p className="font-semibold">ကျေးဇူးပါကွယ်</p>
-            <p className="text-sm text-gray-500">SHINE</p>
+            <p className="font-semibold">{lyric?.title ?? "Sample Title"}</p>
+            <p className="text-sm text-gray-500">
+              {lyric?.artist?.join(", ") ?? "Sample Artist"}
+            </p>
           </div>
 
           {isInCollection ? (
@@ -82,12 +91,13 @@ const LyricsRow = ({ id }) => {
             />
           )}
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };
 LyricsRow.propTypes = {
   id: PropTypes.string.isRequired,
+  lyric: PropTypes.object,
 };
 
 export default LyricsRow;
