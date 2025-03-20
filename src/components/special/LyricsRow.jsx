@@ -3,11 +3,11 @@ import PropTypes from "prop-types";
 import { FaRegHeart } from "react-icons/fa6";
 import Normal_Button from "../../components/common/Normal_Button"; // Adjust the path as necessary
 import { useState, useEffect } from "react";
-import { CgRemove } from "react-icons/cg";
 import MessagePopup from "../common/MessagePopup";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { BsHeartFill } from "react-icons/bs";
 
 const LyricsRow = ({ id, lyric }) => {
   const [showMessage, setShowMessage] = useState(false);
@@ -27,9 +27,7 @@ const LyricsRow = ({ id, lyric }) => {
   const navigate = useNavigate();
 
   const goToLyricsDetails = () => {
-    console.log("Go to Lyrics Details");
     // Pass the id dynamically in the URL
-    console.log(lyric);
     navigate(`/NT_Lyrics/lyricsdetail/${id}`, { state: { lyric } });
   };
 
@@ -72,9 +70,9 @@ const LyricsRow = ({ id, lyric }) => {
 
           {isInCollection ? (
             <Normal_Button
-              icon={CgRemove}
+              icon={BsHeartFill}
               text=""
-              custom_class={`w-8 h-8 border-transparent shadow-sm bg-red-50 text-red-500`}
+              custom_class={`w-8 h-8 border-transparent shadow-sm bg-red-50 text-red-500 transition-all`}
               onClick={(e) => {
                 e.stopPropagation();
                 changeLyricsStatus();
@@ -84,7 +82,7 @@ const LyricsRow = ({ id, lyric }) => {
             <Normal_Button
               icon={FaRegHeart}
               text=""
-              custom_class={`w-8 h-8 border-transparent shadow-sm bg-white`}
+              custom_class={`w-8 h-8 border-transparent shadow-sm bg-white transition-all`}
               onClick={(e) => {
                 e.stopPropagation();
                 changeLyricsStatus();

@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
 import Nav from "../components/common/Nav";
-import LyricsCard from "../components/special/LyricsCard";
 import Footer from "../components/common/Footer";
 import bgcover from "../assets/images/cover_bg.png";
 import { IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
-import useIsMobile from "../components/hooks/useIsMobile";
-import LyricsRow from "../components/special/LyricsRow";
+import LyricsGrid from "../components/special/LyricsGrid";
+import mockData from "../assets/data/mockData.json"
+
+const fetchUserLyrics = async (page, itemsPerBatch) => {
+  // const response = await fetch(`/api/user/saved-lyrics?page=${page}&limit=${itemsPerBatch}`);
+  // const data = await response.json();
+  // return data.lyrics;
+  const startIndex = (page - 1) * itemsPerBatch;
+  return Promise.resolve(mockData.lyrics.slice(startIndex, startIndex + itemsPerBatch));
+};
 
 const Profile = () => {
   const [myCollection, setMyCollection] = useState(8);
@@ -18,8 +25,6 @@ const Profile = () => {
       setMyCollection(collection);
     }
   };
-
-  const isMobile = useIsMobile();
 
   // Get User data here
   const getUser = () => {
@@ -92,13 +97,7 @@ const Profile = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12 px-4 md:px-24">
-              {Array.from({ length: 8 }).map((_, index) =>
-                isMobile ? (
-                  <LyricsRow key={index} id={index} />
-                ) : (
-                  <LyricsCard key={index} id={index} />
-                )
-              )}
+              <LyricsGrid fetchLyrics={fetchUserLyrics} />
             </div>
           </div>
         </div>

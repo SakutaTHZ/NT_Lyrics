@@ -2,12 +2,16 @@ import Nav from "../components/common/Nav";
 import cover from "../assets/images/cover_bg.png";
 import { BiSearch } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import LyricsCard from "../components/special/LyricsCard";
 import Footer from "../components/common/Footer";
-import LyricsRow from "../components/special/LyricsRow";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import useIsMobile from "../components/hooks/useIsMobile";
+import mockData from "../assets/data/mockData.json"
+import LyricsGrid from "../components/special/LyricsGrid"
+
+const fetchMockLyrics = (page, itemsPerBatch) => {
+  const startIndex = (page - 1) * itemsPerBatch;
+  return Promise.resolve(mockData.lyrics.slice(startIndex, startIndex + itemsPerBatch));
+};
 
 const Landing = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,8 +22,6 @@ const Landing = () => {
       navigate(`/NT_Lyrics/lyrics?query=${encodeURIComponent(searchQuery)}`);
     }
   };
-
-  const isMobile = useIsMobile();
 
   return (
     <>
@@ -64,13 +66,7 @@ const Landing = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-0 md:gap-12">
-            {Array.from({ length: 4 }).map((_, index) =>
-              isMobile ? (
-                <LyricsRow key={index} id={index} />
-              ) : (
-                <LyricsCard key={index} id={index} />
-              )
-            )}
+            <LyricsGrid fetchLyrics={fetchMockLyrics} />
           </div>
         </div>
 

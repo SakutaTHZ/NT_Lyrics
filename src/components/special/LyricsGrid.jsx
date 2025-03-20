@@ -1,10 +1,10 @@
-import mockData from "../../assets/data/mockData.json"; // Import mock data
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import useIsMobile from "../hooks/useIsMobile";
 import LyricsCard from "./LyricsCard";
 import LyricsRow from "./LyricsRow";
+import PropTypes from 'prop-types';
 
-const LyricsGrid = () => {
+const LyricsGrid = ({ fetchLyrics }) => {
   const [lyrics, setLyrics] = useState([]); // Loaded lyrics
   const [page, setPage] = useState(1); // Track pagination
   const [hasMore, setHasMore] = useState(true); // Track if there's more data
@@ -13,22 +13,18 @@ const LyricsGrid = () => {
   const itemsPerBatch = 7;
 
   // Fetch lyrics with pagination
-  const fetchLyrics = useCallback(() => {
-    const startIndex = (page - 1) * itemsPerBatch;
-    const newLyrics = mockData.lyrics.slice(startIndex, startIndex + itemsPerBatch);
-
-    if (newLyrics.length === 0) {
-      setHasMore(false);
-      return;
-    }
-
-    setLyrics((prevLyrics) => [...prevLyrics, ...newLyrics]);
-  }, [page]);
-
-  // Load first batch on mount
   useEffect(() => {
-    fetchLyrics();
-  }, [fetchLyrics]);
+    const loadLyrics = async () => {
+      const newLyrics = await fetchLyrics(page, itemsPerBatch);
+      if (newLyrics.length === 0) {
+        setHasMore(false);
+        return;
+      }
+      setLyrics((prevLyrics) => [...prevLyrics, ...newLyrics]);
+    };
+
+    loadLyrics();
+  }, [page, fetchLyrics]);
 
   // Intersection Observer for infinite scroll
   useEffect(() => {
@@ -37,7 +33,7 @@ const LyricsGrid = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          setPage((prevPage) => prevPage + 1); // Move page update to useEffect
+          setPage((prevPage) => prevPage + 1);
         }
       },
       { threshold: 1.0 }
@@ -45,7 +41,7 @@ const LyricsGrid = () => {
 
     observer.observe(observerRef.current);
     return () => observer.disconnect();
-  }, [hasMore, lyrics.length]); // Only re-trigger when lyrics list grows
+  }, [hasMore, lyrics.length]);
 
   return (
     <>
@@ -60,6 +56,10 @@ const LyricsGrid = () => {
       {hasMore && <p>Loading more...</p>}
     </>
   );
+};
+
+LyricsGrid.propTypes = {
+  fetchLyrics: PropTypes.func.isRequired,
 };
 
 export default LyricsGrid;
