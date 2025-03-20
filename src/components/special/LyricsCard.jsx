@@ -26,7 +26,7 @@ const LyricsCard = ({ id,lyric }) => {
   const goToLyricsDetails = () => {
     console.log("Go to Lyrics Details");
     // Pass the id dynamically in the URL
-    navigate(`/NT_Lyrics/lyricsdetail/${id}`);
+    navigate(`/NT_Lyrics/lyricsdetail/${id}`, { state: { lyric } });
   }
 
   const changeLyricsStatus = () => {
@@ -55,7 +55,7 @@ const LyricsCard = ({ id,lyric }) => {
         <div className="flex justify-between w-full absolute bottom-0 p-2 px-4">
           <div className="flex items-center gap-1 font-semibold">
             <FaEye size={16} className="translate-y-[1px]" />{" "}
-            <span className="viewCount">{lyric.view_count}</span>
+            <span className="viewCount">{lyric?.view_count ?? "1"}</span>
           </div>
 
           {isInCollection ? (
