@@ -1,15 +1,18 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMemo } from "react";
-import Landing from "../../../src/pages/Landing";
-import Lyrics from "../../../src/pages/Lyrics";
-import Profile from "../../../src/pages/Profile";
-import Login from "../../../src/pages/Login";
-import Not_Found from "../../../src/pages/Not_Found";
-import SignUp from "../../../src/pages/SignUp";
+import React, { Suspense } from "react";
 import "../../../src/App.css";
-import LyricsDetails from "../../pages/LyricsDetails";
-import Artist from "../../pages/Artist";
+
+// Dynamically importing pages
+const Landing = React.lazy(() => import("../../../src/pages/Landing"));
+const Lyrics = React.lazy(() => import("../../../src/pages/Lyrics"));
+const Profile = React.lazy(() => import("../../../src/pages/Profile"));
+const Login = React.lazy(() => import("../../../src/pages/Login"));
+const Not_Found = React.lazy(() => import("../../../src/pages/Not_Found"));
+const SignUp = React.lazy(() => import("../../../src/pages/SignUp"));
+const LyricsDetails = React.lazy(() => import("../../pages/LyricsDetails"));
+const Artist = React.lazy(() => import("../../pages/Artist"));
 
 // Animations to randomly pick from
 const animations = [
@@ -72,6 +75,7 @@ const AnimatedRoutes = () => {
   const randomAnimation = useMemo(() => animations[Math.floor(Math.random() * animations.length)], []);
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <AnimatePresence mode="wait">
       <motion.div
         key={location.pathname}
@@ -93,6 +97,7 @@ const AnimatedRoutes = () => {
         </Routes>
       </motion.div>
     </AnimatePresence>
+    </Suspense>
   );
 };
 
