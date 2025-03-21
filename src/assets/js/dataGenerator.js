@@ -1,4 +1,4 @@
-export default function transformSongsData(songs) {
+export function transformSongsData(songs) {
   const uniqueArtists = new Map();
   const types = ["artist", "writer", "both"];
 
@@ -19,7 +19,7 @@ export default function transformSongsData(songs) {
   return Array.from(uniqueArtists.values());
 }
 
-export function generateMockSongs(songs, artists) {
+export default function generateMockSongs(songs, artists) {
     const majorKeys = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     const genres = ["Pop", "Rock", "Jazz", "Blues", "Hip-Hop", "Electronic", "Country", "Classical"];
     const albums = ["Timeless", "Eternal Echoes", "Golden Hits", "Rhythm & Soul", "Melodic Dreams"];
@@ -38,6 +38,7 @@ export function generateMockSongs(songs, artists) {
       return {
         id: index + 1,
         lyric_link: `song-${index + 1}`,
+        video_link: `https://www.youtube.com/embed/VSrQi92AvF8?si=yjEmYeIRU9PET0kP`,
         title: song.title,
         major_key: majorKeys[Math.floor(Math.random() * majorKeys.length)],
         view_count: Math.floor(Math.random() * 10000), // Random view count up to 9999
@@ -48,4 +49,4 @@ export function generateMockSongs(songs, artists) {
         genre: [genres[Math.floor(Math.random() * genres.length)]]
       };
     });
-  }
+}

@@ -52,7 +52,7 @@ const LyricsDetails = () => {
       )}
       <Nav />
 
-      <div className="min-h-screen flex flex-col items-center justify-center gap-8 pt-16 px-6 md:px-24">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 md:gap-8 pt-16 px-6 md:px-24">
         {/* Image Section */}
         <div className="flex justify-center items-center w-full">
           <Zoom
@@ -66,6 +66,17 @@ const LyricsDetails = () => {
               alt="Lyrics"
             />
           </Zoom>
+        </div>
+
+        {/* Video Box */}
+        <div className="w-full aspect-video bg-gray-300 rounded-md">
+          <iframe
+            className="w-full h-full rounded-md"
+            src={lyric.video_link}
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
         </div>
 
         {/* Details Section */}
@@ -102,7 +113,7 @@ const LyricsDetails = () => {
                   {lyric.artist.map((artistData, index) => (
                     <div
                       key={index}
-                      className={`flex items-center gap-2 border border-gray-200 p-1 px-2 rounded-full cursor-pointer`}
+                      className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
                       onClick={goToArtist}
                     >
                       <img
@@ -123,7 +134,7 @@ const LyricsDetails = () => {
                   {lyric.featuring.map((featuringData, index) => (
                     <div
                       key={index}
-                      className={`flex items-center gap-2 border border-gray-200 p-1 px-2 rounded-full cursor-pointer`}
+                      className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
                       onClick={goToArtist}
                     >
                       <img
@@ -143,7 +154,7 @@ const LyricsDetails = () => {
                   {lyric.writer.map((writerData, index) => (
                     <div
                       key={index}
-                      className={`flex items-center gap-2 border border-gray-200 p-1 px-2 rounded-full cursor-pointer`}
+                      className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
                       onClick={goToArtist}
                     >
                       <img

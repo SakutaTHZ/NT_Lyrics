@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import React,{ useEffect, useState, Suspense } from "react";
 import Nav from "../components/common/Nav";
 import Footer from "../components/common/Footer";
 import bgcover from "../assets/images/cover_bg.png";
 import { IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
 import LyricsGrid from "../components/special/LyricsGrid";
-import mockData from "../assets/data/mockData.json"
+const mockData = React.lazy(()=>import("../assets/data/mockSongs.json"));
 
 const fetchUserLyrics = async (page, itemsPerBatch) => {
   // const response = await fetch(`/api/user/saved-lyrics?page=${page}&limit=${itemsPerBatch}`);
@@ -49,7 +49,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
         <Nav />
         {/* Lyrics */}
@@ -106,7 +106,7 @@ const Profile = () => {
 
         <Footer />
       </div>
-    </>
+    </Suspense>
   );
 };
 

@@ -7,7 +7,7 @@ import { RadioButton } from "primereact/radiobutton";
 import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from "primereact/multiselect";
 import artistsData from "../assets/data/artists.json";
-import mockData from "../assets/data/mockSongs.json";
+const mockData = React.lazy(()=>import("../assets/data/mockSongs.json"));
 
 const Nav = React.lazy(() => import("../components/common/Nav"));
 const Footer = React.lazy(() => import("../components/common/Footer"));
