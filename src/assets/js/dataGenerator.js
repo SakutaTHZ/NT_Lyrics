@@ -1,22 +1,23 @@
-export function transformSongsData(songs) {
-    const uniqueArtists = new Map();
-  
-    songs.forEach(song => {
+export default function transformSongsData(songs) {
+  const uniqueArtists = new Map();
+  const types = ["artist", "writer", "both"];
+
+  songs.forEach(song => {
       const artist = song.artist.trim(); // Remove unwanted spaces
-  
+
       if (!uniqueArtists.has(artist)) {
-        uniqueArtists.set(artist, {
-          id: uniqueArtists.size + 1, // Assign index-based ID
-          photo_link: `images/${artist}/profile.jpg`, // Assuming a default profile image
-          name: artist,
-          search_count: Math.floor(Math.random() * 100), // Random number (0-99)
-          type: "artist" // Modify if needed
-        });
+          uniqueArtists.set(artist, {
+              id: uniqueArtists.size + 1, // Assign index-based ID
+              photo_link: `images/${artist}/profile.jpg`, // Assuming a default profile image
+              name: artist,
+              search_count: Math.floor(Math.random() * 100), // Random number (0-99)
+              type: types[Math.floor(Math.random() * types.length)] // Randomize type
+          });
       }
-    });
-  
-    return Array.from(uniqueArtists.values());
-  }
+  });
+
+  return Array.from(uniqueArtists.values());
+}
 
 export function generateMockSongs(songs, artists) {
     const majorKeys = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];

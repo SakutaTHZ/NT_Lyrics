@@ -1,33 +1,52 @@
 import Nav from "../components/common/Nav";
 import Footer from "../components/common/Footer";
-import {
-  // BiCaretDown,
-  BiSearch,
-} from "react-icons/bi";
+import { BiSearch } from "react-icons/bi";
 import { useSearchParams } from "react-router-dom";
 import LyricsGrid from "../components/special/LyricsGrid";
 import mockData from "../assets/data/mockSongs.json";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AutoComplete } from "primereact/autocomplete";
 import { RadioButton } from "primereact/radiobutton";
 import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from "primereact/multiselect";
+import artistsData from "../assets/data/artists.json"; // Make sure to import correctly
+
+// Function to get artists with type 'artist' or 'both'
+function getArtistsByType(artists) {
+  if (!artists) return [];
+  return artists
+    .filter((artist) => artist.type === "artist" || artist.type === "both")
+    .map((artist) => ({
+      Artist: artist.name, // Map each artist to the desired format
+    }));
+}
+
+// Function to get writers with type 'writer' or 'both'
+function getWritersByType(artists) {
+  if (!artists) return [];
+  return artists
+    .filter((artist) => artist.type === "writer" || artist.type === "both")
+    .map((artist) => ({
+      Writer: artist.name, // Map each writer to the desired format
+    }));
+}
 
 const fetchFromAPI = async (page, itemsPerBatch) => {
-  // const response = await fetch(`/api/lyrics?page=${page}&limit=${itemsPerBatch}`);
-  // const data = await response.json();
-  // return data.lyrics;
   const startIndex = (page - 1) * itemsPerBatch;
-  return Promise.resolve(
-    mockData.slice(startIndex, startIndex + itemsPerBatch)
-  );
+  return Promise.resolve(mockData.slice(startIndex, startIndex + itemsPerBatch));
 };
 
 const Lyrics = () => {
   const [searchParams] = useSearchParams();
-
   const [items, setItems] = useState([]);
   const [value, setValue] = useState(searchParams.get("query") || "");
+
+  const [selectedKey, setSelectedKey] = useState("C");
+  const [selectedWriters, setSelectedWriters] = useState([]);
+  const [selectedArtist, setSelectedArtist] = useState([]);
+  const [searchMethod, setSearchMethod] = useState("Song");
+
+  const keys = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
   const search = (event) => {
     const filteredTitles = mockData.lyrics
@@ -35,38 +54,20 @@ const Lyrics = () => {
         item.title.toLowerCase().includes(event.query.toLowerCase())
       )
       .map((item) => item.title);
-
-    console.log(filteredTitles);
     setItems(filteredTitles);
   };
 
-  // Music Major Keys Array
-  const keys = [
-    "C",
-    "C#",
-    "D",
-    "D#",
-    "E",
-    "F",
-    "F#",
-    "G",
-    "G#",
-    "A",
-    "A#",
-    "B",
-  ];
+  const [writers, setWriters] = useState([]);
+  const [artists, setArtists] = useState([]);
 
-  const [selectedKey, setSelectedKey] = useState(keys[0]);
-  const [selectedWriters, setSelectedWriters] = useState([]);
-  const writers = [
-    { Writer: "Writer 1" },
-    { Writer: "Writer 2" },
-    { Writer: "Writer 3" },
-  ];
+  useEffect(() => {
+    // Process artists data on mount
+    const artistsList = getArtistsByType(artistsData);
+    const writersList = getWritersByType(artistsData);
 
-  const [searchMethod, setSearchMethod] = useState("Song");
-
-  
+    setArtists(artistsList);
+    setWriters(writersList);
+  }, []); // Empty dependency array means this runs once on mount
 
   return (
     <>
@@ -162,10 +163,10 @@ const Lyrics = () => {
                 />
               ) : searchMethod === "Artist" ? (
                 <MultiSelect
-                  value={selectedWriters}
-                  onChange={(e) => setSelectedWriters(e.value)}
-                  options={writers}
-                  optionLabel="Writer"
+                  value={selectedArtist}
+                  onChange={(e) => setSelectedArtist(e.value)}
+                  options={artists}
+                  optionLabel="Artist"
                   filter
                   placeholder="တေးဆိုရှာကြမယ်"
                   maxSelectedLabels={3}
