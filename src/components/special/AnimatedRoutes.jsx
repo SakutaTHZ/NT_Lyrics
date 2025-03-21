@@ -75,7 +75,7 @@ const AnimatedRoutes = () => {
   const randomAnimation = useMemo(() => animations[Math.floor(Math.random() * animations.length)], []);
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div></div>}>
     <AnimatePresence mode="wait">
       <motion.div
         key={location.pathname}
