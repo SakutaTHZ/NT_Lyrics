@@ -5,15 +5,21 @@ import { Link } from "react-router-dom";
 import Footer from "../components/common/Footer";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import mockData from "../assets/data/mockData.json"
-import LyricsGrid from "../components/special/LyricsGrid"
+import mockData from "../assets/data/mockSongs.json";
+// import LyricsGrid from "../components/special/LyricsGrid";
+import useIsMobile from "../components/hooks/useIsMobile";
+import LyricsCard from "../components/special/LyricsCard";
+import LyricsRow from "../components/special/LyricsRow";
 
-const fetchMockLyrics = (page, itemsPerBatch) => {
-  const startIndex = (page - 1) * itemsPerBatch;
-  return Promise.resolve(mockData.lyrics.slice(startIndex, startIndex + itemsPerBatch));
-};
+// const fetchMockLyrics = (page, itemsPerBatch) => {
+//   const startIndex = (page - 1) * itemsPerBatch;
+//   return Promise.resolve(
+//     mockData.slice(startIndex, startIndex + itemsPerBatch)
+//   );
+// };
 
 const Landing = () => {
+  const isMobile = useIsMobile();
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
@@ -66,7 +72,19 @@ const Landing = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-0 md:gap-12">
-            <LyricsGrid fetchLyrics={fetchMockLyrics} />
+            {/* <LyricsGrid fetchLyrics={fetchMockLyrics} /> */}
+            {mockData
+              .sort((a, b) => b.view_count - a.view_count) // Sort by view_count (descending)
+              .slice(0, 4) // Get the top 4
+              .map((lyric, index) => (
+                <div key={index} className="m-0 p-0">
+                  {isMobile ? (
+                    <LyricsRow id={index} lyric={lyric} />
+                  ) : (
+                    <LyricsCard id={index} lyric={lyric} />
+                  )}
+                </div>
+              ))}
           </div>
         </div>
 
