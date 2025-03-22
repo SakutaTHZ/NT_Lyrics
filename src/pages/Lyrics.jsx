@@ -7,7 +7,8 @@ import { RadioButton } from "primereact/radiobutton";
 import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from "primereact/multiselect";
 import artistsData from "../assets/data/artists.json";
-import mockData from "../assets/data/mockData.json"
+import mockData from "../assets/data/mockSongs.json";
+import EmptyData from "../assets/images/Collection list is empty.jpg";
 
 const Nav = React.lazy(() => import("../components/common/Nav"));
 const Footer = React.lazy(() => import("../components/common/Footer"));
@@ -199,7 +200,16 @@ const Lyrics = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 p-2 pb-4 gap-4 md:gap-12 px-4 md:px-24">
-            <LyricsGrid fetchLyrics={fetchFromAPI} />
+            {mockData.length === 0 ? (
+              <div className="w-full">
+                <img
+                  src={EmptyData}
+                  alt="No data Found"
+                  className="w-full opacity-50"
+                />
+              </div>
+            ) : (
+            <LyricsGrid fetchLyrics={fetchFromAPI} />)}
           </div>
         </div>
 

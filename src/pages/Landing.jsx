@@ -10,6 +10,7 @@ import mockData from "../assets/data/mockSongs.json";
 import useIsMobile from "../components/hooks/useIsMobile";
 import LyricsCard from "../components/special/LyricsCard";
 import LyricsRow from "../components/special/LyricsRow";
+import EmptyData from "../assets/images/Collection list is empty.jpg";
 
 // const fetchMockLyrics = (page, itemsPerBatch) => {
 //   const startIndex = (page - 1) * itemsPerBatch;
@@ -73,21 +74,26 @@ const Landing = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-0 md:gap-12">
             {/* <LyricsGrid fetchLyrics={fetchMockLyrics} /> */}
-            {mockData
-              .sort((a, b) => b.view_count - a.view_count) // Sort by view_count (descending)
-              .slice(0, 4) // Get the top 4
-              .map((lyric, index) => (
-                <div key={index} className="m-0 p-0">
-                  {isMobile ? (
-                    <LyricsRow id={index} lyric={lyric} />
-                  ) : (
-                    <LyricsCard id={index} lyric={lyric} />
-                  )}
-                </div>
-              ))}
+            {mockData.length === 0 ? (
+              <div className="w-full">
+                <img src={EmptyData} alt="No data Found" className="w-full opacity-50"/>
+              </div>
+            ) : (
+              mockData
+                .sort((a, b) => b.view_count - a.view_count) // Sort by view_count (descending)
+                .slice(0, 4) // Get the top 4
+                .map((lyric, index) => (
+                  <div key={index} className="m-0 p-0">
+                    {isMobile ? (
+                      <LyricsRow id={index} lyric={lyric} />
+                    ) : (
+                      <LyricsCard id={index} lyric={lyric} />
+                    )}
+                  </div>
+                ))
+            )}
           </div>
         </div>
-
         {/* featured Videos */}
         <div className="relative p-4 md:px-24">
           <div className="flex justify-between">
