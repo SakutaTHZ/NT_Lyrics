@@ -9,6 +9,7 @@ import { FaRegHeart, FaEye } from "react-icons/fa6";
 import MessagePopup from "../components/common/MessagePopup";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { BiArrowBack } from "react-icons/bi";
 
 const LyricsDetails = () => {
   const [showMessage, setShowMessage] = useState(false);
@@ -45,6 +46,10 @@ const LyricsDetails = () => {
   const genreTagClass =
     "text-xs border border-dashed border-gray-300 text-gray-600 px-2 py-1 rounded-full  ";
 
+  const goBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="w-screen min-h-screen">
       {showMessage && (
@@ -53,6 +58,9 @@ const LyricsDetails = () => {
       <Nav />
 
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 md:gap-8 pt-16 px-6 md:px-24">
+        <button className="w-full" onClick={goBack}>
+          <BiArrowBack  size={20}/>
+        </button>
         {/* Image Section */}
         <div className="flex justify-center items-center w-full">
           <Zoom
@@ -69,7 +77,7 @@ const LyricsDetails = () => {
         </div>
 
         {/* Video Box */}
-        <div className="w-full aspect-video bg-gray-300 rounded-md">
+        <div className="w-full md:w-122 aspect-video bg-gray-300 rounded-md">
           <iframe
             className="w-full h-full rounded-md"
             src={lyric.video_link}

@@ -238,7 +238,7 @@ const ProfileEdit = ({ closeBox }) => {
               onClick={() => {
                 localStorage.removeItem("user");
                 // redirect to landing Page
-                navigate(`/NT_Lyrics/`);
+                navigate(`/NT_Lyrics`);
               }}
             >
               Log Out

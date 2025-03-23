@@ -31,7 +31,7 @@ const Nav = () => {
   return (
     <>
       <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-24 bg-white z-[100]">
-        <Link to="/NT_Lyrics/" className="font-bold text-lg italic">NT Lyrics & Chords</Link>
+        <Link to="/NT_Lyrics" className="font-bold text-lg italic">NT Lyrics & Chords</Link>
 
         <button
           className="md:hidden"
@@ -41,7 +41,7 @@ const Nav = () => {
         </button>
 
         <div className="md:flex hidden items-center gap-2">
-          <Link to="/NT_Lyrics/" className={`${mobileNavStyle} border-transparent ${isActive("/NT_Lyrics/")}`}>
+          <Link to="/NT_Lyrics" className={`${mobileNavStyle} border-transparent ${isActive("/NT_Lyrics")}`}>
             <GoHome className="flex-shrink-0" size={18} />
             Home
           </Link>
@@ -68,7 +68,7 @@ const Nav = () => {
 
         {isHamburgerOpen && (
           <div className="animate-down flex flex-col absolute top-12 shadow-sm w-full left-0 z-[99] bg-white">
-            <Link to="/NT_Lyrics/" className={`${mobileNavStyle} ${isActive("/NT_Lyrics/")}`}>
+            <Link to="/NT_Lyrics" className={`${mobileNavStyle} ${isActive("/NT_Lyrics")}`}>
               <GoHome className="flex-shrink-0" size={18} />
               Home
             </Link>
