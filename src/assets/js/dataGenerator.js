@@ -8,9 +8,9 @@ export function transformSongsData(songs) {
       if (!uniqueArtists.has(artist)) {
           uniqueArtists.set(artist, {
               id: uniqueArtists.size + 1, // Assign index-based ID
-              photo_link: `images/${artist}/profile.jpg`, // Assuming a default profile image
+              photoLink: `images/${artist}/profile.jpg`, // Assuming a default profile image
               name: artist,
-              search_count: Math.floor(Math.random() * 100), // Random number (0-99)
+              searchCount: Math.floor(Math.random() * 100), // Random number (0-99)
               type: types[Math.floor(Math.random() * types.length)] // Randomize type
           });
       }
