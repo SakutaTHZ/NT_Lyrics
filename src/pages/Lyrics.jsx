@@ -5,7 +5,7 @@ import { useEffect, useState, Suspense } from "react";
 import { AutoComplete } from "primereact/autocomplete";
 import { RadioButton } from "primereact/radiobutton";
 import { Dropdown } from "primereact/dropdown";
-import { MultiSelect } from "primereact/multiselect";
+// import { MultiSelect } from "primereact/multiselect";
 import artistsData from "../assets/data/artists.json";
 import mockData from "../assets/data/mockSongs.json";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
@@ -34,7 +34,9 @@ function getWritersByType(artists) {
 
 const fetchFromAPI = async (page, itemsPerBatch) => {
   const startIndex = (page - 1) * itemsPerBatch;
-  return Promise.resolve(mockData.slice(startIndex, startIndex + itemsPerBatch));
+  return Promise.resolve(
+    mockData.slice(startIndex, startIndex + itemsPerBatch)
+  );
 };
 
 const Lyrics = () => {
@@ -43,12 +45,25 @@ const Lyrics = () => {
   const [value, setValue] = useState(searchParams.get("query") || "");
 
   const [selectedKey, setSelectedKey] = useState("C");
-  const [selectedWriters, setSelectedWriters] = useState([]);
-  const [selectedArtist, setSelectedArtist] = useState([]);
+  const [selectedWriters, setSelectedWriters] = useState("");
+  const [selectedArtist, setSelectedArtist] = useState("");
 
   const [searchMethod, setSearchMethod] = useState("Song");
 
-  const keys = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  const keys = [
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "B",
+  ];
 
   const [writers, setWriters] = useState([]);
   const [artists, setArtists] = useState([]);
@@ -62,13 +77,31 @@ const Lyrics = () => {
   }, []);
   const search = (event) => {
     const filteredTitles = mockData // Use the correct data (no `.lyrics` property)
-      .filter((item) =>
-        item.title.toLowerCase().includes(event.query.toLowerCase()) // Search by title
+      .filter(
+        (item) => item.title.toLowerCase().includes(event.query.toLowerCase()) // Search by title
       )
       .map((item) => item.title); // Return titles
     setItems(filteredTitles); // Set filtered titles
   };
 
+  const valueTemplate = (option) => {
+    if (!option) return <span>Selected None</span>;
+    const displayText = option.Artist || option.Writer || "Unknown"; // Handle both dropdowns
+    return (
+      <div className="flex items-center gap-2">
+        <span>{displayText}</span>
+      </div>
+    );
+  };
+
+  const itemTemplate = (option) => {
+    const displayText = option.Artist || option.Writer || "Unknown";
+    return (
+      <div className="flex items-center gap-2 p-2">
+        <span>{displayText}</span>
+      </div>
+    );
+  };
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
@@ -148,31 +181,35 @@ const Lyrics = () => {
                   }}
                 />
               ) : searchMethod === "Writer" ? (
-                <MultiSelect
-                  value={selectedWriters}
-                  onChange={(e) => setSelectedWriters(e.value)}
-                  options={writers}
-                  optionLabel="Writer"
-                  filter
-                  placeholder="တေးရေးရှာကြမယ်"
-                  maxSelectedLabels={3}
-                  className="w-full md:w-20rem"
-                  showSelectAll={false}
-                  panelClassName="w-screen md:w-auto"
-                />
+                <>
+                  <Dropdown
+                    value={selectedWriters}
+                    onChange={(e) => setSelectedWriters(e.value)}
+                    options={writers}
+                    optionLabel="Writer"
+                    placeholder="တေးရေးရှာကြမယ်"
+                    className="w-full"
+                    showClear
+                    filter
+                    valueTemplate={valueTemplate}
+                    itemTemplate={itemTemplate}
+                  />
+                </>
               ) : searchMethod === "Artist" ? (
-                <MultiSelect
-                  value={selectedArtist}
-                  onChange={(e) => setSelectedArtist(e.value)}
-                  options={artists}
-                  optionLabel="Artist"
-                  filter
-                  placeholder="တေးဆိုရှာကြမယ်"
-                  maxSelectedLabels={3}
-                  className="w-full md:w-20rem"
-                  showSelectAll={false}
-                  panelClassName="w-screen md:w-auto"
-                />
+                <>
+                  <Dropdown
+                    value={selectedArtist}
+                    onChange={(e) => setSelectedArtist(e.value)}
+                    options={artists}
+                    optionLabel="Artist"
+                    placeholder="တေးဆိုရှာကြမယ်"
+                    className="w-full"
+                    showClear
+                    filter
+                    valueTemplate={valueTemplate}
+                    itemTemplate={itemTemplate}
+                  />
+                </>
               ) : searchMethod === "Key" ? (
                 <Dropdown
                   value={selectedKey}
@@ -209,7 +246,8 @@ const Lyrics = () => {
                 />
               </div>
             ) : (
-            <LyricsGrid fetchLyrics={fetchFromAPI} />)}
+              <LyricsGrid fetchLyrics={fetchFromAPI} />
+            )}
           </div>
         </div>
 
