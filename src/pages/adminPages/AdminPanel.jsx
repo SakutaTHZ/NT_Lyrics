@@ -163,7 +163,10 @@ const AdminPanel = () => {
               <p className="m-0">Artist Data Here</p>
             </TabPanel>
             <TabPanel header="Lyrics">
-              <p className="m-0">Lyrics data hhere</p>
+              <p className="m-0">Lyrics data here</p>
+            </TabPanel>
+            <TabPanel header="Users">
+              <p className="m-0">User data here</p>
             </TabPanel>
           </TabView>
         </div>
