@@ -5,6 +5,8 @@ import mockData from "../../assets/data/mockSongs.json";
 import mockArtists from "../../assets/data/artists.json";
 import { useState, useEffect } from "react";
 import sampleImage from "../../assets/images/Lyrics_sample.png";
+import { CgArrowTopRight } from "react-icons/cg";
+import UserTable from "../../components/adminComponents/UserTable";
 
 const Nav = React.lazy(() => import("../../components/adminComponents/Nav"));
 
@@ -79,48 +81,83 @@ const ArtistList = () => {
 };
 
 const AdminPanel = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
     <>
       <Nav />
       <ScrollTop />
       <div className="relative flex flex-col w-screen min-h-screen pt-12">
         <div className="flex justify-between px-4 md:px-24 w-screen">
-          <TabView className="w-full">
+          <TabView
+            className="w-full"
+            activeIndex={activeIndex}
+            onTabChange={(e) => setActiveIndex(e.index)}
+          >
             <TabPanel header="All Data">
               <div className="w-full">
                 {/* Data preview */}
                 <div className="w-full flex flex-col md:flex-row gap-2 md:gap-4">
+                  {/* Lyrics Tab */}
                   <div className="border border-gray-200 rounded-md shadow-sm w-full">
                     <p className="p-2 px-4 bg-gray-50 text-gray-400 font-semibold">
                       Total lyrics
                     </p>
-                    <div className="p-4 ">
-                      <p className="font-bold text-2xl">{"10,000"}</p>
-                      <p className="text-sm text-green-500 mt-2">
-                        +<span>200</span> songs vs last month
-                      </p>
+                    <div className="p-4 flex justify-between">
+                      <div>
+                        <p className="font-bold text-2xl">{"10,000"}</p>
+                        <p className="text-sm text-green-500 mt-2">
+                          +<span>200</span> songs vs last month
+                        </p>
+                      </div>
+
+                      <button
+                        className="bg-blue-100 hover:bg-blue-200 transition-colors h-full aspect-square p-2 rounded-md cursor-pointer"
+                        onClick={() => setActiveIndex(2)}
+                      >
+                        <CgArrowTopRight size={20} />
+                      </button>
                     </div>
                   </div>
+                  {/* Artists Tab */}
                   <div className="border border-gray-200 rounded-md shadow-sm w-full">
                     <p className="p-2 px-4 bg-gray-50 text-gray-400 font-semibold">
                       Total Artists
                     </p>
-                    <div className="p-4 ">
-                      <p className="font-bold text-2xl">{"1,000"}</p>
-                      <p className="text-sm text-green-500 mt-2">
-                        +<span>200</span> artists vs last month
-                      </p>
+                    <div className="p-4 flex justify-between">
+                      <div>
+                        <p className="font-bold text-2xl">{"1,000"}</p>
+                        <p className="text-sm text-green-500 mt-2">
+                          +<span>200</span> artists vs last month
+                        </p>
+                      </div>
+                      <button
+                        className="bg-blue-100 hover:bg-blue-200 transition-colors h-full aspect-square p-2 rounded-md cursor-pointer"
+                        onClick={() => setActiveIndex(1)}
+                      >
+                        <CgArrowTopRight size={20} />
+                      </button>
                     </div>
                   </div>
+                  {/* Users Tab */}
                   <div className="border border-gray-200 rounded-md shadow-sm w-full">
                     <p className="p-2 px-4 bg-gray-50 text-gray-400 font-semibold">
                       Total Users
                     </p>
-                    <div className="p-4 ">
-                      <p className="font-bold text-2xl">{"10,000"}</p>
-                      <p className="text-sm text-green-500 mt-2">
-                        +<span>200</span> users vs last month
-                      </p>
+                    <div className="p-4 flex justify-between">
+                      <div>
+                        <p className="font-bold text-2xl">{"10,000"}</p>
+                        <p className="text-sm text-green-500 mt-2">
+                          +<span>200</span> users vs last month
+                        </p>
+                      </div>
+
+                      <button
+                        className="bg-blue-100 hover:bg-blue-200 transition-colors h-full aspect-square p-2 rounded-md cursor-pointer"
+                        onClick={() => setActiveIndex(3)}
+                      >
+                        <CgArrowTopRight size={20} />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -147,14 +184,24 @@ const AdminPanel = () => {
                     <p className="p-2 px-4 bg-gray-50 text-gray-700 font-semibold mb-2">
                       Accumulated Balance
                     </p>
-                    <p className="p-4 text-2xl font-bold flex items-center gap-2">$ <span>100,000</span> <span className="text-xs font-normal bg-green-100 text-green-600 p-2 py-1 rounded-full">10% more than target</span></p>
+                    <p className="p-4 text-2xl font-bold flex items-center gap-2">
+                      $ <span>100,000</span>{" "}
+                      <span className="text-xs font-normal bg-green-100 text-green-600 p-2 py-1 rounded-full">
+                        10% more than target
+                      </span>
+                    </p>
                   </div>
 
                   <div className="p-2 border border-gray-200 rounded-md shadow-sm w-full h-fit">
                     <p className="p-2 px-4 bg-gray-50 text-gray-700 font-semibold mb-2">
                       Estimated Balance for this month
                     </p>
-                    <p className="p-4 text-2xl font-bold flex items-center gap-2">$ <span>100,000</span> <span className="text-xs font-normal bg-green-100 text-green-600 p-2 py-1 rounded-full">10% more than target</span></p>
+                    <p className="p-4 text-2xl font-bold flex items-center gap-2">
+                      $ <span>100,000</span>{" "}
+                      <span className="text-xs font-normal bg-green-100 text-green-600 p-2 py-1 rounded-full">
+                        10% more than target
+                      </span>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -166,7 +213,7 @@ const AdminPanel = () => {
               <p className="m-0">Lyrics data here</p>
             </TabPanel>
             <TabPanel header="Users">
-              <p className="m-0">User data here</p>
+              <UserTable/>
             </TabPanel>
           </TabView>
         </div>

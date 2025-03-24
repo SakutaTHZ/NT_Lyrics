@@ -9,3 +9,14 @@
       width: 100%;
     }
   }
+
+  .custom-checkbox .p-checkbox-box {
+    width: 1.5rem;  /* Adjust checkbox size */
+    height: 1.5rem;
+    border-radius: 4px;
+  }
+  
+  .custom-checkbox.p-checkbox-checked .p-checkbox-box {
+    background-color: var(--role-color) !important;
+    border-color: var(--role-color) !important;
+  }
