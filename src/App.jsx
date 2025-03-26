@@ -6,8 +6,18 @@ import { BrowserRouter as Router } from "react-router-dom";
 import AnimatedRoutes from "../src/components/special/AnimatedRoutes";
 import { PrimeReactProvider } from "primereact/api";
 
+// import AuthProvider from "./components/hooks/AuthProvider";
+
 function App() {
   return (
+    // <AuthProvider>
+    //   <PrimeReactProvider>
+    //     <Router>
+    //       <AnimatedRoutes />
+    //     </Router>
+    //   </PrimeReactProvider>
+    // </AuthProvider>
+
     <PrimeReactProvider>
       <Router>
         <AnimatedRoutes />
