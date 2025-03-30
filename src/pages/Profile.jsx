@@ -72,7 +72,7 @@ const Profile = () => {
                   />
                 </div>
                 <div className="profileInfo">
-                  <p className="font-bold text-2xl">{user.username}</p>
+                  <p className="font-bold text-2xl">{user.name}</p>
                   <p className="text-gray-600">{user.email}</p>
                 </div>
               </div>
