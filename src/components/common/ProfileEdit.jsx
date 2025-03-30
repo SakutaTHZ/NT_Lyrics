@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 import PropTypes from "prop-types";
 import PasswordInput from "./Password_Input";
@@ -11,30 +10,11 @@ const ProfileEdit = ({ closeBox }) => {
   const labelClass = "text-gray-700 font-semibold";
   const inputClass = "p-2 border border-gray-400 rounded-md";
 
-  const navigate = useNavigate();
-  
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    // Get User data here
-    const getUser = () => {
-      let storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        return JSON.parse(storedUser);
-      } else {
-        navigate("/*"); // Redirect if user is not found
-        return null; // Return null or any fallback value
-      }
-    };
-
-    const userData = getUser();
-    if (userData) {
-      setUser(userData);
-    }
-  }, [navigate]); 
+  const [user, setUser] = useState(localStorage.getItem("user"));
 
   const [passwordChange, setPasswordChange] = useState(false);
 
-  const [username, setUsername] = useState(user.username);
+  const [name, setUsername] = useState(user.name);
   const [isUsernameCorrect, setIsUsernameCorrect] = useState(true);
   const checkUsername = (input) => {
     setUsername(input);
@@ -80,7 +60,7 @@ const ProfileEdit = ({ closeBox }) => {
     if (passwordChange && currentPassword !== user.password) {
       alert("Current Password is incorrect");
       return;
-    } else if (username === "") {
+    } else if (name === "") {
       alert("Name cannot be empty");
       return;
     } else if (email === "") {
@@ -89,7 +69,7 @@ const ProfileEdit = ({ closeBox }) => {
     } else {
       // Prepare the updated user data
       let updatedUser = {
-        username: username,
+        name: name,
         email: email,
       };
 
@@ -121,9 +101,9 @@ const ProfileEdit = ({ closeBox }) => {
         </div>
         <div className="w-full h-1/2 px-8 flex flex-col items-center justify-center gap-4">
           <div className="w-full flex flex-col items-center gap-2">
-            {/* Username */}
+            {/* name */}
             <div className="flex flex-col w-full">
-              <label htmlFor="username" className={`${labelClass}`}>
+              <label htmlFor="name" className={`${labelClass}`}>
                 Nme{" "}
                 {!isUsernameCorrect && (
                   <span className="text-red-500 font-bold">*</span>
@@ -131,10 +111,10 @@ const ProfileEdit = ({ closeBox }) => {
               </label>
               <input
                 type="text"
-                id="username"
+                id="name"
                 className={inputClass}
-                placeholder="Enter your Username"
-                value={username}
+                placeholder="Enter your name"
+                value={name}
                 onChange={(e) => checkUsername(e.target.value)}
               />
               {!isUsernameCorrect && (
@@ -234,9 +214,7 @@ const ProfileEdit = ({ closeBox }) => {
             {/* Log Out */}
             <button
               className="w-full bg-red-500 px-4 text-white font-semibold p-2 rounded-md"
-              onClick={() => {
-                logOut;
-              }}
+              onClick={logOut}
             >
               Log Out
             </button>
