@@ -28,8 +28,19 @@ const AuthProvider = ({ children }) => {
       if (res.token && res.user) {
         setUser(res.user);
         setToken(res.token);
+        // console.log(res);
+        const userDetails = {
+          name: res.user.name,
+          email: res.user.email,
+          role: res.user.role,
+        }
+        localStorage.setItem("user", JSON.stringify(userDetails));
         localStorage.setItem("token", res.token);
-        navigate("/NT_Lyrics/admin");
+        if(res.user.role === "admin"){
+          navigate("/NT_Lyrics/admin");
+        }else{
+          navigate("/NT_Lyrics");
+        }
       } else {
         throw new Error("Invalid response from server");
       }
@@ -42,8 +53,9 @@ const AuthProvider = ({ children }) => {
   const logOut = () => {
     setUser(null);
     setToken("");
+    localStorage.removeItem("user");
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/NT_Lyrics");
   };
 
   return (

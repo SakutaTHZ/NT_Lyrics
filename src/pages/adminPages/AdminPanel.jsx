@@ -81,6 +81,35 @@ const ArtistList = () => {
 };
 
 const AdminPanel = () => {
+  const [users, setUsers] = useState([]);
+  const AUTH_TOKEN = localStorage.getItem("token"); // Replace with your actual token
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/users/search", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${AUTH_TOKEN}`, // Ensure proper auth header
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        console.log(data)
+        setUsers(data); // Store fetched users in state
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
@@ -213,7 +242,7 @@ const AdminPanel = () => {
               <p className="m-0">Lyrics data here</p>
             </TabPanel>
             <TabPanel header="Users">
-              <UserTable/>
+              <UserTable usersFromAPI={users}/>
             </TabPanel>
           </TabView>
         </div>

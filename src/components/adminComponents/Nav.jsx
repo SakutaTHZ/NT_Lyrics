@@ -2,15 +2,11 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { BiMenu } from "react-icons/bi";
 import { LuLogIn } from "react-icons/lu";
+import {useAuth} from "../../components/hooks/authContext"
 
 const Nav = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
-
-  // Check if Logged In
-  // const checkUser = () => {
-  //   const storedUser = localStorage.getItem("user");
-  //   return storedUser ? JSON.parse(storedUser) !== null : false;
-  // };
+    const { logOut } = useAuth(); 
 
   const location = useLocation();
 
@@ -50,17 +46,16 @@ const Nav = () => {
         </div>
 
         {isHamburgerOpen && (
-          <div className="animate-down flex flex-col absolute top-12 shadow-sm w-full left-0 z-[99] bg-white">
-              <Link
-                to="/NT_Lyrics/login"
+          <button className="animate-down flex flex-col absolute top-12 shadow-sm w-full left-0 z-[99] bg-white" onClick={logOut}>
+              <a
                 className={`${mobileNavStyle} border-transparent ${isActive(
                   "/NT_Lyrics/login"
                 )}`}
               >
                 <LuLogIn className="flex-shrink-0" size={18} />
                 Log Out
-              </Link>
-          </div>
+              </a>
+          </button>
         )}
       </nav>
     </>

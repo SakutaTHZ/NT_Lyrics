@@ -5,10 +5,12 @@ import Preview from "../assets/images/Landing_Page.png";
 import { useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import PasswordInput from "../components/common/Password_Input";
+import { useAuth } from "../components/hooks/authContext";
 
 const SignUp = () => {
   const labelClass = "text-gray-700 font-semibold";
   const inputClass = "p-2 border border-gray-300 rounded-md";
+  const { loginAction } = useAuth();
 
   //Set Error for the textboxes and labels
   const [isNameCorrect, setIsNameCorrect] = useState(true);
@@ -42,10 +44,44 @@ const SignUp = () => {
 
   //Check Password
   const [password,setPassword] = useState("");
-  const checkPassword = (input) =>{
-    setPassword(input)
-    input.length>8?setIsPasswordCorrect(false):setIsPasswordCorrect(true)
-  }
+  const checkPassword = (input) => {
+    setPassword(input);
+    if (input.length < 8 && input.length>4) {
+      setIsPasswordCorrect(false);  // Error if password is too short
+    } else {
+      setIsPasswordCorrect(true);  // Valid password
+    }
+  };
+
+  const signUp = async () => {
+    const userData = {
+      name: name,
+      email: email,
+      password: password
+    };
+    
+    try {
+      const response = await fetch("http://localhost:3000/api/users/registerUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Signup failed: ${response.statusText}, ${JSON.stringify(errorData)}`);
+      }
+  
+      const data = await response.json();
+      console.log("User registered successfully:", data);
+      loginAction({ email, password });
+    } catch (error) {
+      console.error("Error signing up:", error.message);
+      alert(`Signup failed: ${error.message}`);  // Optional: Display error message in UI
+    }
+  };
 
   return (
     <>
@@ -118,7 +154,7 @@ const SignUp = () => {
             </label>
             <PasswordInput value={password} onChange={checkPassword} />
             <p className={`text-sm mt-1 ${!isPasswordCorrect ? 'text-red-400' : 'text-gray-400'}`}>
-              Password must be less than 8 characters.
+              Password must be greater than 4 characters and less than 8 characters.
             </p>
           </div>
           <Normal_Button
@@ -126,6 +162,7 @@ const SignUp = () => {
               "w-full bg-blue-500 border-transparent text-white font-medium"
             }
             text="Get Started"
+            onClick={signUp}
           />
           <Normal_Button
             custom_class={`${inputClass} font-semibold`}
