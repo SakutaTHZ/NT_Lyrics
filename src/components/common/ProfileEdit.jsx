@@ -4,29 +4,33 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import PasswordInput from "./Password_Input";
 import { BiCheck } from "react-icons/bi";
+import { useAuth } from "../../components/hooks/authContext";
 
 const ProfileEdit = ({ closeBox }) => {
+  const { logOut } = useAuth();
   const labelClass = "text-gray-700 font-semibold";
   const inputClass = "p-2 border border-gray-400 rounded-md";
 
   const navigate = useNavigate();
-  // Get User data here
-  const getUser = () => {
-    let user = localStorage.getItem("user");
-    if (user) {
-      return JSON.parse(user);
-    } else {
-      // For sample data
-      return {
-        username: "John Doe",
-        email: "johndoe@gmail.com",
-        profileImage:
-          "https://i.pinimg.com/736x/c8/69/8a/c8698a586eb96d0ec43fbb712dcf668d.jpg",
-        password: "password",
-      };
+  
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    // Get User data here
+    const getUser = () => {
+      let storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        return JSON.parse(storedUser);
+      } else {
+        navigate("/*"); // Redirect if user is not found
+        return null; // Return null or any fallback value
+      }
+    };
+
+    const userData = getUser();
+    if (userData) {
+      setUser(userData);
     }
-  };
-  const [user, setUser] = useState(getUser);
+  }, [navigate]); 
 
   const [passwordChange, setPasswordChange] = useState(false);
 
@@ -88,7 +92,7 @@ const ProfileEdit = ({ closeBox }) => {
         username: username,
         email: email,
       };
-  
+
       // Include the new password if the checkbox is checked and new password is provided
       if (passwordChange && newPassword !== "") {
         updatedUser.password = newPassword;
@@ -96,17 +100,12 @@ const ProfileEdit = ({ closeBox }) => {
         alert("New Password cannot be empty");
         return;
       }
-  
+
       // Store the updated user data
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);
     }
   };
-  
-
-  useEffect(() => {
-    getUser;
-  }, []);
 
   return (
     <div className="fixed flex justify-center items-center px-4 top-0 left-0 w-full h-full bg-[#00000080] z-50">
@@ -236,9 +235,7 @@ const ProfileEdit = ({ closeBox }) => {
             <button
               className="w-full bg-red-500 px-4 text-white font-semibold p-2 rounded-md"
               onClick={() => {
-                localStorage.removeItem("user");
-                // redirect to landing Page
-                navigate(`/NT_Lyrics`);
+                logOut;
               }}
             >
               Log Out
