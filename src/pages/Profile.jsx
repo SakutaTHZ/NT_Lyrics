@@ -49,6 +49,9 @@ const Profile = () => {
     getCollection;
   }, []);
 
+  const [username,setUsername] = useState(user.name)
+  const [email,setEmail] = useState(user.email)
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
@@ -72,8 +75,8 @@ const Profile = () => {
                   />
                 </div>
                 <div className="profileInfo">
-                  <p className="font-bold text-2xl">{user.name}</p>
-                  <p className="text-gray-600">{user.email}</p>
+                  <p className="font-bold text-2xl">{username}</p>
+                  <p className="text-gray-600">{email}</p>
                 </div>
               </div>
               <button
@@ -112,7 +115,7 @@ const Profile = () => {
           </div>
         </div>
 
-        {showEdit && <ProfileEdit closeBox={() => setShowEdit(false)} />}
+        {showEdit && <ProfileEdit usernameChange={setUsername} emailChange={setEmail} closeBox={() => setShowEdit(false)} />}
 
         <Footer />
       </div>

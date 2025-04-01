@@ -25,17 +25,21 @@ const AuthProvider = ({ children }) => {
 
       const res = await response.json();
 
+      console.log(res)
+
       if (res.token && res.user) {
         setUser(res.user);
         setToken(res.token);
         // console.log(res);
         const userDetails = {
+          id: res.user._id,
           name: res.user.name,
           email: res.user.email,
           role: res.user.role,
         }
         localStorage.setItem("user", JSON.stringify(userDetails));
         localStorage.setItem("token", res.token);
+        
         if(res.user.role === "admin"){
           navigate("/NT_Lyrics/admin");
         }else{

@@ -1,20 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import PropTypes from "prop-types";
 import PasswordInput from "./Password_Input";
 import { BiCheck } from "react-icons/bi";
 import { useAuth } from "../../components/hooks/authContext";
 
-const ProfileEdit = ({ closeBox }) => {
+const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
   const { logOut } = useAuth();
   const labelClass = "text-gray-700 font-semibold";
   const inputClass = "p-2 border border-gray-400 rounded-md";
 
-  const [user, setUser] = useState(localStorage.getItem("user"));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
   const [passwordChange, setPasswordChange] = useState(false);
 
-  const [name, setUsername] = useState(user.name);
+  const [name, setUsername] = useState("");
   const [isUsernameCorrect, setIsUsernameCorrect] = useState(true);
   const checkUsername = (input) => {
     setUsername(input);
@@ -25,7 +25,7 @@ const ProfileEdit = ({ closeBox }) => {
     }
   };
 
-  const [email, setEmail] = useState(user.email);
+  const [email, setEmail] = useState("");
   const [isEmailCorrect, setIsEmailCorrect] = useState(true);
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -55,37 +55,77 @@ const ProfileEdit = ({ closeBox }) => {
       : setIsNewPasswordCorrect(true);
   };
 
-  const updateUser = () => {
-    // If the password is being updated, check if the current password is correct
-    if (passwordChange && currentPassword !== user.password) {
-      alert("Current Password is incorrect");
+  const updateUser = async () => {
+    if (!user || !user.id) {
+      alert("User data is missing.");
       return;
-    } else if (name === "") {
+    }
+
+    if (name.trim() === "") {
       alert("Name cannot be empty");
       return;
-    } else if (email === "") {
+    } else if (email.trim() === "") {
       alert("Email cannot be empty");
       return;
-    } else {
-      // Prepare the updated user data
-      let updatedUser = {
-        name: name,
-        email: email,
-      };
+    }
 
-      // Include the new password if the checkbox is checked and new password is provided
-      if (passwordChange && newPassword !== "") {
-        updatedUser.password = newPassword;
-      } else if (passwordChange) {
-        alert("New Password cannot be empty");
-        return;
+    // Prepare the updated user data
+    let updatedUser = {
+      name,
+      email,
+    };
+
+    // Include new password if applicable
+    if (passwordChange && newPassword !== "") {
+      updatedUser.oldPassword = currentPassword;
+      updatedUser.newPassword = newPassword;
+    } else if (passwordChange) {
+      alert("New Password cannot be empty");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/users/${user.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Modify as needed
+          },
+          body: JSON.stringify(updatedUser),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update user");
       }
 
-      // Store the updated user data
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      setUser(updatedUser);
+      const result = await response.json();
+
+      // Update local state and localStorage
+      setUser(result);
+      console.log(result);
+      const userDetails = {
+        id: result.user._id,
+        name: result.user.name,
+        email: result.user.email,
+        role: result.user.role,
+      };
+      usernameChange(result.user.name);
+      emailChange(result.user.email);
+
+      localStorage.setItem("user", JSON.stringify(userDetails));
+    } catch (error) {
+      console.error("Error updating user:", error);
+      alert("An error occurred while updating the profile.");
     }
   };
+
+  useEffect(() => {
+    setUsername(user?.name || "");
+    setEmail(user?.email || "");
+  }, [user]);
 
   return (
     <div className="fixed flex justify-center items-center px-4 top-0 left-0 w-full h-full bg-[#00000080] z-50">
@@ -225,6 +265,8 @@ const ProfileEdit = ({ closeBox }) => {
   );
 };
 ProfileEdit.propTypes = {
+  usernameChange: PropTypes.func.isRequired,
+  emailChange: PropTypes.func.isRequired,
   closeBox: PropTypes.func.isRequired,
 };
 
