@@ -1,6 +1,6 @@
 import { Chart } from "primereact/chart";
 import artists from "../../assets/data/artists.json";
-import { useState } from "react";
+import { useState} from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
@@ -73,6 +73,8 @@ const ArtistsTab = () => {
       className="w-12 h-12 rounded-md"
     />
   );
+
+  const [showEditBox,setShowEditBox] = useState(false);
 
   return (
     <>
@@ -196,7 +198,8 @@ const ArtistsTab = () => {
               ))}
             </div>
           </div>
-          <button className="bg-gradient-to-r from-blue-200 hover:from-green-300 to-green-200 hover:to-blue-300 flex items-center transition-all cursor-pointer p-2 px-4 rounded-md shadow-sm gap-2 text-black">
+          <button className="bg-gradient-to-r from-blue-200 hover:from-green-300 to-green-200 hover:to-blue-300 flex items-center transition-all cursor-pointer p-2 px-4 rounded-md shadow-sm gap-2 text-black"
+          onClick={()=>setShowEditBox(true)}>
             <CgAdd />
             Add New Artists
           </button>
@@ -212,7 +215,7 @@ const ArtistsTab = () => {
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} artists"
         >
-          <Column header="#" field="id" style={{ width: "5%" }} sortable/>
+          <Column header="#" field="id" style={{ width: "5%" }} sortable />
           <Column header="Photo" body={imageTemplate} />
           <Column field="name" header="Name" sortable />
           <Column field="searchCount" header="Search Count" sortable />
@@ -221,7 +224,7 @@ const ArtistsTab = () => {
         </DataTable>
       </div>
 
-      <AddNewArtist/>
+      {showEditBox && <AddNewArtist onClose={()=>setShowEditBox(false)}/>}
     </>
   );
 };
