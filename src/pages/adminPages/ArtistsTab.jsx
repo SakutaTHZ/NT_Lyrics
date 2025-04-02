@@ -209,6 +209,8 @@ const ArtistsTab = () => {
           value={filteredArtists}
           tableStyle={{ minWidth: "100%" }} // Fix invalid Tailwind class
           emptyMessage="No matching artists found."
+          stripedRows 
+          removableSort
           paginator
           rows={5}
           rowsPerPageOptions={[5, 10, 25, 50]}
