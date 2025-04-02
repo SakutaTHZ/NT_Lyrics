@@ -7,24 +7,26 @@ import { InputText } from "primereact/inputtext";
 import { RadioButton } from "primereact/radiobutton";
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primereact/resources/primereact.min.css";
+import { CgAdd } from "react-icons/cg";
+import AddNewArtist from "./AddNewArtist";
 
 const ArtistsTab = () => {
   const uniqueNames = new Set();
   let singersCount = 0,
     writerCount = 0;
 
-  artists.forEach(({ name, searchCount, type }) => {
-    console.log(name)
+  artists.forEach(({ name, type }) => {
+    console.log(name);
     if (!uniqueNames.has(name)) {
       uniqueNames.add(name);
 
-      if (type === "artist") {
-        singersCount += searchCount;
+      if (type === "singer") {
+        singersCount += 1;
       } else if (type === "writer") {
-        writerCount += searchCount;
+        writerCount += 1;
       } else if (type === "both") {
-        singersCount += searchCount / 2; // Split evenly
-        writerCount += searchCount / 2;
+        singersCount += 1; // Split evenly
+        writerCount += 1;
       }
     }
   });
@@ -68,7 +70,7 @@ const ArtistsTab = () => {
         "https://i.pinimg.com/736x/43/61/09/4361091dd491bacbbcdbaa0be7a2d2be.jpg"
       }
       alt={rowData.name}
-      className="w-10 h-10 rounded-full"
+      className="w-12 h-12 rounded-md"
     />
   );
 
@@ -78,7 +80,7 @@ const ArtistsTab = () => {
         {/* Data preview */}
         <div className="w-full flex flex-col md:flex-row gap-2 md:gap-4">
           {/* Total Artists */}
-          <div className="relative border border-gray-200 rounded-lg shadow-md w-full bg-white">
+          <div className="relative border border-gray-200 rounded-lg shadow-sm w-full bg-white">
             {/* Header */}
             <p className="p-3 bg-gray-100 text-gray-600 font-medium rounded-t-lg">
               Total Artists
@@ -89,7 +91,7 @@ const ArtistsTab = () => {
               {/* Text Section */}
               <div>
                 <p className="font-extrabold text-3xl text-gray-800">
-                  {(singersCount + writerCount).toLocaleString()}
+                  {artists.length.toLocaleString()}
                 </p>
                 <p className="mt-2 text-sm text-green-600 flex flex-wrap items-center">
                   <span className="font-medium">+200</span>
@@ -110,7 +112,7 @@ const ArtistsTab = () => {
           </div>
 
           {/* Total Singers */}
-          <div className="border border-gray-200 rounded-lg shadow-md w-full md:w-2/5 bg-white">
+          <div className="border border-gray-200 rounded-lg shadow-sm w-full md:w-2/5 bg-white">
             {/* Header */}
             <p className="p-3 bg-gray-100 text-gray-600 font-medium rounded-t-lg">
               Total Singers
@@ -138,7 +140,7 @@ const ArtistsTab = () => {
           </div>
 
           {/* Total Writers */}
-          <div className="border border-gray-200 rounded-lg shadow-md w-full md:w-2/5 bg-white">
+          <div className="border border-gray-200 rounded-lg shadow-sm w-full md:w-2/5 bg-white">
             {/* Header */}
             <p className="p-3 bg-gray-100 text-gray-600 font-medium rounded-t-lg">
               Total Writers
@@ -165,10 +167,10 @@ const ArtistsTab = () => {
           </div>
         </div>
       </div>
-      <div className="w-full p-5 bg-white shadow-md rounded-lg">
+      <div className="w-full p-5 mt-4 bg-white shadow-md rounded-lg">
         {/* Search & Filter Controls */}
         <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <span className="p-input-icon-left">
+          <div className="flex items-center gap-4">
             <InputText
               type="text"
               placeholder="Search by name..."
@@ -176,40 +178,50 @@ const ArtistsTab = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-          </span>
 
-          <div className="flex gap-4">
-            {["all", "artist", "writer", "both"].map((type) => (
-              <div key={type} className="flex items-center gap-2">
-                <RadioButton
-                  inputId={type}
-                  name="type"
-                  value={type}
-                  checked={filterType === type}
-                  onChange={(e) => setFilterType(e.value)}
-                />
-                <label htmlFor={type} className="capitalize">
-                  {type}
-                </label>
-              </div>
-            ))}
+            <div className="flex gap-4">
+              {["all", "singer", "writer", "both"].map((type) => (
+                <div key={type} className="flex items-center gap-2">
+                  <RadioButton
+                    inputId={type}
+                    name="type"
+                    value={type}
+                    checked={filterType === type}
+                    onChange={(e) => setFilterType(e.value)}
+                  />
+                  <label htmlFor={type} className="capitalize">
+                    {type}
+                  </label>
+                </div>
+              ))}
+            </div>
           </div>
+          <button className="bg-gradient-to-r from-blue-200 hover:from-green-300 to-green-200 hover:to-blue-300 flex items-center transition-all cursor-pointer p-2 px-4 rounded-md shadow-sm gap-2 text-black">
+            <CgAdd />
+            Add New Artists
+          </button>
         </div>
 
-        {/* PrimeReact DataTable */}
         <DataTable
           value={filteredArtists}
-          tableStyle={{ minWidth: "w-full" }}
+          tableStyle={{ minWidth: "100%" }} // Fix invalid Tailwind class
           emptyMessage="No matching artists found."
-          paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]}
+          paginator
+          rows={5}
+          rowsPerPageOptions={[5, 10, 25, 50]}
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} artists"
         >
-          <Column header="#" field="id" />
+          <Column header="#" field="id" style={{ width: "5%" }} sortable/>
           <Column header="Photo" body={imageTemplate} />
           <Column field="name" header="Name" sortable />
           <Column field="searchCount" header="Search Count" sortable />
           <Column field="type" header="Type" sortable />
+          <Column field={"1:33pm 4/2/2025"} header="Created At" />
         </DataTable>
       </div>
+
+      <AddNewArtist/>
     </>
   );
 };

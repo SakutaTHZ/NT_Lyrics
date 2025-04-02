@@ -25,7 +25,7 @@
         "photoLink": "images/စိုးလွင်လွင်/profile.jpg",
         "name": "စိုးလွင်လွင်",
         "searchCount": 89,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 5,
@@ -39,7 +39,7 @@
         "photoLink": "images/ဇော်ပိုင်/profile.jpg",
         "name": "ဇော်ပိုင်",
         "searchCount": 49,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 7,
@@ -67,7 +67,7 @@
         "photoLink": "images/နီနီခင်ဇော်/profile.jpg",
         "name": "နီနီခင်ဇော်",
         "searchCount": 91,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 11,
@@ -88,7 +88,7 @@
         "photoLink": "images/မေခလာ/profile.jpg",
         "name": "မေခလာ",
         "searchCount": 74,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 14,
@@ -109,14 +109,14 @@
         "photoLink": "images/လင်းလင်း/profile.jpg",
         "name": "လင်းလင်း",
         "searchCount": 44,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 17,
         "photoLink": "images/လွှမ်းမိုး/profile.jpg",
         "name": "လွှမ်းမိုး",
         "searchCount": 4,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 18,
@@ -137,7 +137,7 @@
         "photoLink": "images/အရိုး/profile.jpg",
         "name": "အရိုး",
         "searchCount": 31,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 21,
@@ -158,21 +158,21 @@
         "photoLink": "images/ဖြိုးပြည့်စုံ/profile.jpg",
         "name": "ဖြိုးပြည့်စုံ",
         "searchCount": 10,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 24,
         "photoLink": "images/ကိုင်ဇာ/profile.jpg",
         "name": "ကိုင်ဇာ",
         "searchCount": 39,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 25,
         "photoLink": "images/ခင်မောင်တိုး/profile.jpg",
         "name": "ခင်မောင်တိုး",
         "searchCount": 30,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 26,
@@ -214,7 +214,7 @@
         "photoLink": "images/လေးဖြူ/profile.jpg",
         "name": "လေးဖြူ",
         "searchCount": 50,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 32,
@@ -256,7 +256,7 @@
         "photoLink": "images/ကျော်ဟိန်း/profile.jpg",
         "name": "ကျော်ဟိန်း",
         "searchCount": 58,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 38,
@@ -277,7 +277,7 @@
         "photoLink": "images/ဂျီလတ်/profile.jpg",
         "name": "ဂျီလတ်",
         "searchCount": 85,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 41,
@@ -368,7 +368,7 @@
         "photoLink": "images/ဟေမာနေဝင်း/profile.jpg",
         "name": "ဟေမာနေဝင်း",
         "searchCount": 42,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 54,
@@ -382,7 +382,7 @@
         "photoLink": "images/Alex/profile.jpg",
         "name": "Alex",
         "searchCount": 94,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 56,
@@ -396,7 +396,7 @@
         "photoLink": "images/စိုင်းဆိုင်မောဝ်/profile.jpg",
         "name": "စိုင်းဆိုင်မောဝ်",
         "searchCount": 88,
-        "type": "artist"
+        "type": "singer"
     },
     {
         "id": 58,
@@ -438,6 +438,6 @@
         "photoLink": "images/အောင်ရင်/profile.jpg",
         "name": "အောင်ရင်",
         "searchCount": 11,
-        "type": "both"
+        "type": "singer"
     }
 ]
