@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import sampleImage from "../../assets/images/Lyrics_sample.png";
 import { CgArrowTopRight } from "react-icons/cg";
 import UserTable from "../../components/adminComponents/UserTable";
+import ArtistsTab from "./ArtistsTab";
 
 const Nav = React.lazy(() => import("../../components/adminComponents/Nav"));
 
@@ -81,36 +82,7 @@ const ArtistList = () => {
 };
 
 const AdminPanel = () => {
-  const [users, setUsers] = useState([]);
-  const AUTH_TOKEN = localStorage.getItem("token"); // Replace with your actual token
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/users/search", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${AUTH_TOKEN}`, // Ensure proper auth header
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        console.log(data)
-        setUsers(data); // Store fetched users in state
-      } catch (error) {
-        console.error("Failed to fetch users:", error);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(1);
 
   return (
     <>
@@ -123,6 +95,7 @@ const AdminPanel = () => {
             activeIndex={activeIndex}
             onTabChange={(e) => setActiveIndex(e.index)}
           >
+            {/* All Data Panel */}
             <TabPanel header="All Data">
               <div className="w-full">
                 {/* Data preview */}
@@ -235,14 +208,17 @@ const AdminPanel = () => {
                 </div>
               </div>
             </TabPanel>
+            {/* Artists Panel */}
             <TabPanel header="Artists">
-              <p className="m-0">Artist Data Here</p>
+              <ArtistsTab/>
             </TabPanel>
+            {/* Lyrics Panel */}
             <TabPanel header="Lyrics">
               <p className="m-0">Lyrics data here</p>
             </TabPanel>
+            {/* Users Panel */}
             <TabPanel header="Users">
-              <UserTable usersFromAPI={users}/>
+              <UserTable/>
             </TabPanel>
           </TabView>
         </div>

@@ -1,16 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { MultiStateCheckbox } from "primereact/multistatecheckbox";
 import { Checkbox } from "primereact/checkbox";
 import { Button } from "primereact/button";
-import PropTypes from "prop-types";
 // import axios from "axios";
 
-const UserTable = ({ usersFromAPI }) => {
-  console.log("Test", usersFromAPI.users);
-  const [users, setUsers] = useState(usersFromAPI?.users || []);
+const UserTable = () => {
+  const [users, setUsers] = useState([]);
+  const AUTH_TOKEN = localStorage.getItem("token"); // Replace with your actual token
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/users/search", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${AUTH_TOKEN}`, // Ensure proper auth header
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        console.log(data);
+        setUsers(data); // Store fetched users in state
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, [AUTH_TOKEN]);
   const [searchTerm, setSearchTerm] = useState("");
   const [emailSearch, setEmailSearch] = useState("");
   const [editModes, setEditModes] = useState({});
@@ -38,43 +64,47 @@ const UserTable = ({ usersFromAPI }) => {
     />
   );
 
-  const nameTemplate = (rowData) => (
+  const nameTemplate = (rowData) =>
     editModes[rowData._id] ? (
       <InputText
         value={rowData.name}
         onChange={(e) => {
           setUsers((prevUsers) =>
             prevUsers.map((user) =>
-              user._id === rowData._id ? { ...user, name: e.target.value } : user
+              user._id === rowData._id
+                ? { ...user, name: e.target.value }
+                : user
             )
           );
         }}
       />
     ) : (
       <span>{rowData.name}</span>
-    )
-  );
+    );
 
-  const emailTemplate = (rowData) => (
+  const emailTemplate = (rowData) =>
     editModes[rowData._id] ? (
       <InputText
         value={rowData.email}
         onChange={(e) => {
           setUsers((prevUsers) =>
             prevUsers.map((user) =>
-              user._id === rowData._id ? { ...user, email: e.target.value } : user
+              user._id === rowData._id
+                ? { ...user, email: e.target.value }
+                : user
             )
           );
         }}
       />
     ) : (
       <span>{rowData.email}</span>
-    )
+    );
+
+  const isActiveTemplate = (rowData) => (
+    <Checkbox checked={rowData.isActive} disabled />
   );
 
-  const isActiveTemplate = (rowData) => <Checkbox checked={rowData.isActive} disabled />;
-
-  const roleTemplate = (rowData) => (
+  const roleTemplate = (rowData) =>
     editModes[rowData._id] ? (
       <MultiStateCheckbox
         value={rowData.role}
@@ -94,10 +124,9 @@ const UserTable = ({ usersFromAPI }) => {
       />
     ) : (
       <span className="font-bold">{rowData.role}</span>
-    )
-  );
+    );
 
-  const actionTemplate = (rowData) => (
+  const actionTemplate = (rowData) =>
     editModes[rowData._id] ? (
       <div className="flex gap-2">
         <Button
@@ -120,8 +149,7 @@ const UserTable = ({ usersFromAPI }) => {
         className="p-button-sm p-button-text p-button-black"
         onClick={() => toggleEdit(rowData._id)}
       />
-    )
-  );
+    );
 
   return (
     <div className="card">
@@ -140,7 +168,15 @@ const UserTable = ({ usersFromAPI }) => {
         />
       </div>
 
-      <DataTable value={filteredUsers.map((user, index) => ({ ...user, serialId: index + 1 }))} paginator rows={5} responsiveLayout="scroll">
+      <DataTable
+        value={filteredUsers.map((user, index) => ({
+          ...user,
+          serialId: index + 1,
+        }))}
+        paginator
+        rows={5}
+        responsiveLayout="scroll"
+      >
         <Column field="serialId" header="ID" sortable style={{ width: "5%" }} />
         <Column field="email" header="Email" body={emailTemplate} sortable />
         <Column field="name" header="Name" body={nameTemplate} sortable />
@@ -151,10 +187,6 @@ const UserTable = ({ usersFromAPI }) => {
       </DataTable>
     </div>
   );
-};
-
-UserTable.propTypes = {
-  usersFromAPI: PropTypes.object.isRequired,
 };
 
 export default UserTable;
