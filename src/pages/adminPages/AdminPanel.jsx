@@ -6,7 +6,7 @@ import mockArtists from "../../assets/data/artists.json";
 import { useState, useEffect } from "react";
 import sampleImage from "../../assets/images/Lyrics_sample.png";
 import { CgArrowTopRight } from "react-icons/cg";
-import UserTable from "../../components/adminComponents/UserTable";
+import UsersTab from "./UsersTab";
 import ArtistsTab from "./ArtistsTab";
 
 const Nav = React.lazy(() => import("../../components/adminComponents/Nav"));
@@ -218,7 +218,7 @@ const AdminPanel = () => {
             </TabPanel>
             {/* Users Panel */}
             <TabPanel header="Users">
-              <UserTable/>
+              <UsersTab/>
             </TabPanel>
           </TabView>
         </div>
