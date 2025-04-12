@@ -82,7 +82,7 @@ const ArtistList = () => {
 };
 
 const AdminPanel = () => {
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(3);
 
   return (
     <>

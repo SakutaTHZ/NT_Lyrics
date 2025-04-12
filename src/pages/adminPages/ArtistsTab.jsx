@@ -16,7 +16,6 @@ const ArtistsTab = () => {
     writerCount = 0;
 
   artists.forEach(({ name, type }) => {
-    console.log(name);
     if (!uniqueNames.has(name)) {
       uniqueNames.add(name);
 

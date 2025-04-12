@@ -42,7 +42,7 @@ const UserTable = () => {
   const [editModes, setEditModes] = useState({});
 
   const updateUser = async (user) => {
-    console.log(user);
+    console.log("User - "+user);
     // API call logic here
   };
 
