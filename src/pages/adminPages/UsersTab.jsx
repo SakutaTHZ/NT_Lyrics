@@ -3,43 +3,55 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import { SelectButton } from "primereact/selectbutton";
 import useDebounce from "../../components/hooks/useDebounce";
+import UserRow from "./UserRow";
+import AddNewArtist from "./AddNewArtist";
 
 const UsersTab = () => {
   const [users, setUsers] = useState([]);
-  const [usersCount, setUsersCount] = useState({ total: 0, admin: 0, free: 0, premium: 0 });
+  const [usersCount, setUsersCount] = useState({
+    total: 0,
+    admin: 0,
+    free: 0,
+    premium: 0,
+  });
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
 
   const [roleFilter, setRoleFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
 
-  const AUTH_TOKEN = localStorage.getItem("token");
+  const AUTH_TOKEN = useRef(localStorage.getItem("token")); // Avoid triggering useEffect
   const observer = useRef();
 
   // Infinite scroll observer
   const lastUserRef = useCallback(
     (node) => {
-      if (loading) return;
+      if (loading || page >= totalPages) return;
       if (observer.current) observer.current.disconnect();
+
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && page < totalPages) {
+        if (entries[0].isIntersecting) {
           setPage((prev) => prev + 1);
         }
       });
+
       if (node) observer.current.observe(node);
     },
     [loading, totalPages, page]
   );
 
-  // Reset page and users when filters/search changes
+  // Reset data when filter or search term changes
   useEffect(() => {
     setUsers([]);
     setPage(1);
+    setTotalPages(null);
+    setInitialLoadDone(false);
   }, [roleFilter, debouncedSearchTerm]);
 
-  // Fetch users
+  // Fetch users when page changes or filters update
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
@@ -47,17 +59,19 @@ const UsersTab = () => {
         const res = await axios.get("http://localhost:3000/api/users/search", {
           params: {
             page,
-            limit: 10,
+            limit: 20,
             role: roleFilter,
             keyword: debouncedSearchTerm,
           },
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${AUTH_TOKEN}`,
+            Authorization: `Bearer ${AUTH_TOKEN.current}`,
           },
         });
 
-        setUsers((prev) => [...prev, ...(res.data.users || [])]);
+        setUsers((prev) =>
+          page === 1 ? res.data.users : [...prev, ...res.data.users]
+        );
         setTotalPages(res.data.totalPages);
 
         setUsersCount({
@@ -66,6 +80,10 @@ const UsersTab = () => {
           free: res.data.totalFreeUsersCount,
           premium: res.data.totalPremiumUsersCount,
         });
+
+        console.log(res.data);
+
+        setInitialLoadDone(true);
       } catch (err) {
         console.error("Error fetching users:", err);
       } finally {
@@ -74,7 +92,7 @@ const UsersTab = () => {
     };
 
     fetchUsers();
-  }, [page, roleFilter, debouncedSearchTerm, AUTH_TOKEN]);
+  }, [page, roleFilter, debouncedSearchTerm]);
 
   const chartData = {
     labels: ["Free Users", "Premium Users"],
@@ -103,32 +121,53 @@ const UsersTab = () => {
     { name: "Premium Users", value: "premium-user" },
   ];
 
+  const [selectedUser, setSelectedUser] = useState(null);
+  const handleEdit = (user) => {
+    setSelectedUser(user);
+  };
+
+  const closeModal = () => {
+    setSelectedUser(null);
+  };
+
   return (
     <div>
       {/* Stats */}
       <div className="w-full flex flex-col md:flex-row gap-2 md:gap-4">
         <div className="relative border border-gray-200 rounded-lg shadow-sm w-full bg-white">
-          <p className="p-3 bg-gray-100 text-gray-600 font-medium rounded-t-lg">Total Users</p>
-
+          <p className="p-3 bg-gray-100 text-gray-600 font-medium rounded-t-lg">
+            Total Users
+          </p>
           <div className="p-5 h-fit flex flex-col md:flex-row gap-2 items-center justify-between">
             <div className="flex h-full">
               <div>
-                <p className="font-extrabold text-3xl text-gray-800">{usersCount.total}</p>
+                <p className="font-extrabold text-3xl text-gray-800">
+                  {usersCount.total}
+                </p>
                 <p className="mt-2 text-sm text-green-600 flex flex-wrap items-center">
                   <span className="font-medium">+200</span>
-                  <span className="ml-1 text-gray-500">users vs last month</span>
+                  <span className="ml-1 text-gray-500">
+                    users vs last month
+                  </span>
                 </p>
               </div>
-
               <div className="ml-4 grid grid-cols-2 gap-2 p-2 rounded-md border-l-2 border-gray-200">
-                <p className="text-right text-[#64B5F6] text-2xl font-bold pr-2">{usersCount.free}</p>
+                <p className="text-right text-[#64B5F6] text-2xl font-bold pr-2">
+                  {usersCount.free}
+                </p>
                 <div className="flex items-center">Free Users</div>
-                <p className="text-right text-[#81C784] text-2xl font-bold pr-2">{usersCount.premium}</p>
+                <p className="text-right text-[#81C784] text-2xl font-bold pr-2">
+                  {usersCount.premium}
+                </p>
                 <div className="flex items-center">Premium Users</div>
               </div>
             </div>
-
-            <Chart type="pie" data={chartData} options={chartOptions} style={{ width: "200px", height: "100px" }} />
+            <Chart
+              type="pie"
+              data={chartData}
+              options={chartOptions}
+              style={{ width: "200px", height: "100px" }}
+            />
           </div>
         </div>
       </div>
@@ -147,7 +186,6 @@ const UsersTab = () => {
               options={roles}
             />
           </div>
-
           <input
             type="text"
             placeholder="Search by name or email"
@@ -176,31 +214,14 @@ const UsersTab = () => {
             {users.map((user, idx) => {
               const isLast = idx === users.length - 1;
               return (
-                <tr
-                  key={idx}
-                  ref={isLast ? lastUserRef : null}
-                  className="hover:bg-gray-50 transition"
-                >
-                  <td className="px-4 py-3">{idx + 1}</td>
-                  <td className="px-4 py-3">{user._id}</td>
-                  <td className="px-4 py-3">{user.name}</td>
-                  <td className="px-4 py-3">{user.email}</td>
-                  <td className="px-4 py-3 capitalize">{user.role}</td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`px-2 py-1 text-xs rounded-full font-semibold ${
-                        user.isActive
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-600"
-                      }`}
-                    >
-                      {user.isActive ? "Active" : "Inactive"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <button className="text-blue-600 hover:underline text-sm">Edit</button>
-                  </td>
-                </tr>
+                <UserRow
+                  key={user._id || idx}
+                  user={user}
+                  idx={idx}
+                  isLast={isLast}
+                  lastUserRef={lastUserRef}
+                  onEdit={handleEdit}
+                />
               );
             })}
             {loading && (
@@ -210,9 +231,26 @@ const UsersTab = () => {
                 </td>
               </tr>
             )}
+            {!loading && users.length === 0 && initialLoadDone && (
+              <tr>
+                <td
+                  colSpan={7}
+                  className="text-center py-4 text-gray-400 italic"
+                >
+                  No users found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
+      {/* Edit Modal */}
+      {selectedUser && (
+        <AddNewArtist
+          onClose={closeModal}
+          user={selectedUser} // Pass it in!
+        />
+      )}
     </div>
   );
 };

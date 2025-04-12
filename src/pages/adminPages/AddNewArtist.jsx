@@ -1,13 +1,11 @@
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 
-const AddNewArtist = ({ onClose }) => {
-  // Prevent scrolling when modal is open
+const AddNewArtist = ({ onClose, user }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden"; // Also stop HTML from scrolling
-    document.documentElement.style.height = "100vh"; // Force full height
-  
+    document.documentElement.style.overflow = "hidden";
+    document.documentElement.style.height = "100vh";
     return () => {
       document.body.style.overflow = "auto";
       document.documentElement.style.overflow = "auto";
@@ -15,24 +13,14 @@ const AddNewArtist = ({ onClose }) => {
     };
   }, []);
 
-  const handleBackgroundClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   return (
     <div className="fixed inset-0 z-[100] flex justify-center items-center">
-      {/* Dark Background */}
-      <div
-        className="absolute inset-0 bg-[#00000050] bg-opacity-50"
-        onClick={handleBackgroundClick}
-      />
-      
-      {/* Modal Box */}
-      <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101]">
-        <h2 className="text-xl font-bold">Add New Artist</h2>
-        <p className="mt-2">This is an overlay box.</p>
+      <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
+      <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[400px]">
+        <h2 className="text-xl font-bold">Edit User</h2>
+        <p className="mt-2 text-sm text-gray-600">Editing user: {user.name}</p>
+        {/* Include your form here, pre-filled with user data */}
+
         <button onClick={onClose} className="mt-4 bg-red-500 text-white px-4 py-2 rounded">
           Close
         </button>
@@ -43,6 +31,8 @@ const AddNewArtist = ({ onClose }) => {
 
 AddNewArtist.propTypes = {
   onClose: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 };
+
 
 export default AddNewArtist;
