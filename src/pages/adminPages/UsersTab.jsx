@@ -2,16 +2,7 @@ import { Chart } from "primereact/chart";
 import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import { SelectButton } from "primereact/selectbutton";
-
-// Debounce hook
-function useDebounce(value, delay = 500) {
-  const [debounced, setDebounced] = useState(value);
-  useEffect(() => {
-    const handler = setTimeout(() => setDebounced(value), delay);
-    return () => clearTimeout(handler);
-  }, [value, delay]);
-  return debounced;
-}
+import useDebounce from "../../components/hooks/useDebounce";
 
 const UsersTab = () => {
   const [users, setUsers] = useState([]);
