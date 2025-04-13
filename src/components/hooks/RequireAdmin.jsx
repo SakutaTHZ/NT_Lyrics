@@ -6,6 +6,8 @@ import PropTypes from "prop-types";
 const RequireAdmin = ({ children }) => {
   const { user } = useContext(AuthContext);
 
+  console.log("RequireAdmin user", user);
+
   if (!user) return <Navigate to="/NT_Lyrics" replace />;
   if (user.role !== "admin") return <Navigate to="/NT_Lyrics" replace />;
 

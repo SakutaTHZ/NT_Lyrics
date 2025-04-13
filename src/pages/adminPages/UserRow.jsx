@@ -2,20 +2,59 @@
 import { MdEdit } from "react-icons/md";
 import PropTypes from "prop-types";
 
+const RoleTab = ({ role }) => {
+  switch (role) {
+    case "admin":
+      return (
+        <span
+          className={`px-2 py-1 text-xs rounded-full font-semibold bg-red-100 text-red-600`}
+        >
+          Admin
+        </span>
+      );
+    case "free-user":
+      return (
+        <span
+          className={`px-2 py-1 text-xs rounded-full font-semibold bg-gray-100 text-gray-600`}
+        >
+          Free
+        </span>
+      );
+    case "premium-user":
+      return (
+        <span
+          className={`px-2 py-1 text-xs rounded-full font-semibold bg-yellow-100 text-yellow-600`}
+        >
+          Premium
+        </span>
+      );
+    default:
+      <span
+        className={`px-2 py-1 text-xs rounded-full font-semibold bg-blue-100 text-blue-600`}
+      >
+        Unknown
+      </span>;
+  }
+};
+
+RoleTab.propTypes = {
+  role: PropTypes.string.isRequired,
+};
+
 const UserRow = ({ user, idx, isLast, lastUserRef, onEdit }) => {
   const ref = isLast ? lastUserRef : null;
 
   return (
-    <tr
-      key={user._id || idx}
-      ref={ref}
-      className="hover:bg-gray-50 transition"
-    >
+    <tr key={user._id || idx} ref={ref} className="hover:bg-gray-50 transition">
       <td className="px-4 py-3">{idx + 1}</td>
-      <td className="px-4 py-3">{user._id}</td>
+      <td className="px-4 py-3" title={user._id}>
+        <p className="w-16 truncate">{user._id}</p>
+      </td>
       <td className="px-4 py-3">{user.name}</td>
       <td className="px-4 py-3">{user.email}</td>
-      <td className="px-4 py-3 capitalize">{user.role}</td>
+      <td className="px-4 py-3 capitalize">
+        <RoleTab role={user.role} />
+      </td>
       <td className="px-4 py-3">
         <span
           className={`px-2 py-1 text-xs rounded-full font-semibold ${

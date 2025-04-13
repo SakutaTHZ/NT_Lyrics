@@ -8,7 +8,7 @@ import { RadioButton } from "primereact/radiobutton";
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import { CgAdd } from "react-icons/cg";
-import AddNewArtist from "./AddNewArtist";
+import AddNewUser from "./AddNewUser";
 
 const ArtistsTab = () => {
   const uniqueNames = new Set();
@@ -225,7 +225,7 @@ const ArtistsTab = () => {
         </DataTable>
       </div>
 
-      {showEditBox && <AddNewArtist onClose={()=>setShowEditBox(false)}/>}
+      {showEditBox && <AddNewUser onClose={()=>setShowEditBox(false)}/>}
     </>
   );
 };

@@ -4,7 +4,7 @@ import axios from "axios";
 import { SelectButton } from "primereact/selectbutton";
 import useDebounce from "../../components/hooks/useDebounce";
 import UserRow from "./UserRow";
-import AddNewArtist from "./AddNewArtist";
+import AddNewUser from "./AddNewUser";
 
 const UsersTab = () => {
   const [users, setUsers] = useState([]);
@@ -246,7 +246,7 @@ const UsersTab = () => {
       </div>
       {/* Edit Modal */}
       {selectedUser && (
-        <AddNewArtist
+        <AddNewUser
           onClose={closeModal}
           user={selectedUser} // Pass it in!
         />
