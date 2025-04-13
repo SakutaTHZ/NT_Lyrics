@@ -58,12 +58,12 @@ const UserRow = ({ user, idx, isLast, lastUserRef, onEdit }) => {
       <td className="px-4 py-3">
         <span
           className={`px-2 py-1 text-xs rounded-full font-semibold ${
-            user.isActive
+            user.isValid
               ? "bg-green-100 text-green-700"
               : "bg-red-100 text-red-600"
           }`}
         >
-          {user.isActive ? "Active" : "Inactive"}
+          {user.isValid ? "Active" : "Inactive"}
         </span>
       </td>
       <td className="px-4 py-3">

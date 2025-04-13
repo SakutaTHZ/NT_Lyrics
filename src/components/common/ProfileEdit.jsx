@@ -144,7 +144,7 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
             {/* name */}
             <div className="flex flex-col w-full">
               <label htmlFor="name" className={`${labelClass}`}>
-                Nme{" "}
+                Name{" "}
                 {!isUsernameCorrect && (
                   <span className="text-red-500 font-bold">*</span>
                 )}
@@ -174,10 +174,11 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
               <input
                 type="text"
                 id="email"
-                className={inputClass}
+                className={`${user?.isOAuth && 'bg-gray-100'} `+inputClass}
                 placeholder="Enter your Email"
                 value={email}
                 onChange={(e) => checkEmail(e.target.value)}
+                disabled={user?.isOAuth}
               />
               {!isEmailCorrect && (
                 <p className={`text-sm text-red-400 mt-1`}>Invalid Email.</p>
@@ -185,9 +186,9 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
             </div>
             {/* Password */}
 
-            <div className="w-full">
+            <div className={`w-full ${user?.isOAuth && 'hidden'} `}>
               <label
-                htmlFor="email"
+                htmlFor="Change Password"
                 className={`${labelClass} flex justify-between items-center`}
               >
                 {passwordChange ? "Password" : "Change Password?"}

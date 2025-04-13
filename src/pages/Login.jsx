@@ -52,6 +52,7 @@ const Login = () => {
       email,
       password,
       rememberMe: isRemember,
+      isOAuth: false,
     });
 
     if (response?.success === false) {

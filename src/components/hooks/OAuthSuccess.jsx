@@ -33,6 +33,7 @@ const OAuthSuccess = () => {
           name: userObj.name,
           email: userObj.email,
           role: userObj.role,
+          isOAuth: true,
         };
         localStorage.setItem("user", JSON.stringify(userDetails));
 

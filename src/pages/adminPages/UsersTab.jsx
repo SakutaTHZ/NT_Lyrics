@@ -23,8 +23,43 @@ const UsersTab = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
 
-  const AUTH_TOKEN = useRef(localStorage.getItem("token")); // Avoid triggering useEffect
+  const AUTH_TOKEN = useRef(localStorage.getItem("token"));
   const observer = useRef();
+
+  // Fetch users function
+  const fetchUsers = async (pageNum = 1, override = false) => {
+    setLoading(true);
+    try {
+      const res = await axios.get("http://localhost:3000/api/users/search", {
+        params: {
+          page: pageNum,
+          limit: 20,
+          role: roleFilter,
+          keyword: debouncedSearchTerm,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${AUTH_TOKEN.current}`,
+        },
+      });
+
+      setUsers((prev) =>
+        override || pageNum === 1 ? res.data.users : [...prev, ...res.data.users]
+      );
+      setTotalPages(res.data.totalPages);
+      setUsersCount({
+        total: res.data.totalCount,
+        admin: res.data.totalAdminUsersCount,
+        free: res.data.totalFreeUsersCount,
+        premium: res.data.totalPremiumUsersCount,
+      });
+      setInitialLoadDone(true);
+    } catch (err) {
+      console.error("Error fetching users:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Infinite scroll observer
   const lastUserRef = useCallback(
@@ -53,45 +88,7 @@ const UsersTab = () => {
 
   // Fetch users when page changes or filters update
   useEffect(() => {
-    const fetchUsers = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get("http://localhost:3000/api/users/search", {
-          params: {
-            page,
-            limit: 20,
-            role: roleFilter,
-            keyword: debouncedSearchTerm,
-          },
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${AUTH_TOKEN.current}`,
-          },
-        });
-
-        setUsers((prev) =>
-          page === 1 ? res.data.users : [...prev, ...res.data.users]
-        );
-        setTotalPages(res.data.totalPages);
-
-        setUsersCount({
-          total: res.data.totalCount,
-          admin: res.data.totalAdminUsersCount,
-          free: res.data.totalFreeUsersCount,
-          premium: res.data.totalPremiumUsersCount,
-        });
-
-        console.log(res.data);
-
-        setInitialLoadDone(true);
-      } catch (err) {
-        console.error("Error fetching users:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
+    fetchUsers(page);
   }, [page, roleFilter, debouncedSearchTerm]);
 
   const chartData = {
@@ -244,11 +241,13 @@ const UsersTab = () => {
           </tbody>
         </table>
       </div>
+
       {/* Edit Modal */}
       {selectedUser && (
         <AddNewUser
           onClose={closeModal}
-          user={selectedUser} // Pass it in!
+          user={selectedUser}
+          onUpdate={() => fetchUsers(1, true)} // reset to page 1 and override
         />
       )}
     </div>

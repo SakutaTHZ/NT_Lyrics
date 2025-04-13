@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { RadioButton } from "primereact/radiobutton";
 import { useState } from "react";
 
-const AddNewUser = ({ onClose, user }) => {
+const AddNewUser = ({ onClose, user, onUpdate }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
@@ -19,27 +19,30 @@ const AddNewUser = ({ onClose, user }) => {
 
   const updateUser = async () => {
     const updatedUser = {
-      ...user,
-      role: role,
+      userId: user._id || user.id,
+      userRole: role,
     };
+    const token = localStorage.getItem("token");
 
-    console.log("Updated User:", updatedUser); // Debugging line
+    console.log("token:", token);
+    console.log("Updated User:", updatedUser);
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/users/${user.id}`,
+        `http://localhost:3000/api/users/changeUserRole`,
         {
-          method: "PUT",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Modify as needed
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(updatedUser),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Failed to update user");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update user");
       }
     } catch (error) {
       console.error("Error updating user:", error);
@@ -112,23 +115,24 @@ const AddNewUser = ({ onClose, user }) => {
           </div>
         </div>
 
-              <div className="flex justify-end gap-2 mt-4">
-        <button
-        onClick={() => {
-                  updateUser();
-                  onClose();
-                }}
-          className="w-full cursor-pointer mt-4 bg-green-200 text-green-700 font-semibold px-4 py-2 rounded"
-        >
-          Save
-        </button>
-        <button
-          onClick={onClose}
-          className="w-full cursor-pointer mt-4 bg-gray-200 text-gray-500 font-semibold px-4 py-2 rounded"
-        >
-          Cancel
-        </button>
-              </div>
+        <div className="flex justify-end gap-2 mt-4">
+          <button
+            onClick={async () => {
+              await updateUser();
+              onUpdate();
+              onClose();
+            }}
+            className="w-full cursor-pointer mt-4 bg-green-200 text-green-700 font-semibold px-4 py-2 rounded"
+          >
+            Save
+          </button>
+          <button
+            onClick={onClose}
+            className="w-full cursor-pointer mt-4 bg-gray-200 text-gray-500 font-semibold px-4 py-2 rounded"
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -137,6 +141,7 @@ const AddNewUser = ({ onClose, user }) => {
 AddNewUser.propTypes = {
   onClose: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 export default AddNewUser;

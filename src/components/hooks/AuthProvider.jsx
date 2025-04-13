@@ -43,6 +43,7 @@ const AuthProvider = ({ children }) => {
           name: res.user.name,
           email: res.user.email,
           role: res.user.role,
+          isOAuth: false,
         }
         localStorage.setItem("user", JSON.stringify(userDetails));
         localStorage.setItem("token", res.token);
