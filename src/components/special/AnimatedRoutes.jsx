@@ -14,6 +14,8 @@ const SignUp = React.lazy(() => import("../../../src/pages/SignUp"));
 const LyricsDetails = React.lazy(() => import("../../pages/LyricsDetails"));
 const Artist = React.lazy(() => import("../../pages/Artist"));
 const AdminPanel = React.lazy(()=> import("../../pages/adminPages/AdminPanel"))
+const OAuthSuccess = React.lazy(() => import("../../components/hooks/OAuthSuccess"));
+const RequireAdmin = React.lazy(() => import("../../components/hooks/RequireAdmin"));
 
 // Animations to randomly pick from
 const animations = [
@@ -87,7 +89,8 @@ const AnimatedRoutes = () => {
         className="page-container"
       >
         <Routes location={location}>
-          <Route path="/NT_Lyrics" element={<Landing />} />
+            <Route path="/NT_Lyrics" element={<Landing />} />
+            <Route path="/NT_Lyrics/oauth/success" element={<OAuthSuccess />} />
           <Route path="/NT_Lyrics/login" element={<Login />} />
           <Route path="/NT_Lyrics/signup" element={<SignUp />} />
           <Route path="*" element={<Not_Found />} />
@@ -97,7 +100,10 @@ const AnimatedRoutes = () => {
           <Route path="/NT_Lyrics/artist/:name" element={<Artist />} />
           <Route path="/NT_Lyrics/profile" element={<Profile />} />
           {/* Admin */}
-          <Route path="/NT_Lyrics/admin" element={<AdminPanel />} />
+          <Route path="/NT_Lyrics/admin" element={
+  <RequireAdmin>
+    <AdminPanel />
+  </RequireAdmin>} />
         </Routes>
       </motion.div>
     </AnimatePresence>

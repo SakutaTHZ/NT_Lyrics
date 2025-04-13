@@ -12,9 +12,11 @@ import ArtistsTab from "./ArtistsTab";
 const Nav = React.lazy(() => import("../../components/adminComponents/Nav"));
 
 const LyricsList = () => {
+
   const [lyrics, setLyrics] = useState([]);
 
   useEffect(() => {
+
     // Sort by view_count in descending order and take top 10
     const topSongs = [...mockData] // Create a copy to avoid modifying original data
       .sort((a, b) => b.view_count - a.view_count)
@@ -210,7 +212,7 @@ const AdminPanel = () => {
             </TabPanel>
             {/* Artists Panel */}
             <TabPanel header="Artists">
-              <ArtistsTab/>
+              <ArtistsTab />
             </TabPanel>
             {/* Lyrics Panel */}
             <TabPanel header="Lyrics">
@@ -218,7 +220,7 @@ const AdminPanel = () => {
             </TabPanel>
             {/* Users Panel */}
             <TabPanel header="Users">
-              <UsersTab/>
+              <UsersTab />
             </TabPanel>
           </TabView>
         </div>

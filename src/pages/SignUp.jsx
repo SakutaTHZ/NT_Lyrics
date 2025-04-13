@@ -43,13 +43,13 @@ const SignUp = () => {
   };
 
   //Check Password
-  const [password,setPassword] = useState("");
+  const [password, setPassword] = useState("");
   const checkPassword = (input) => {
     setPassword(input);
-    if (input.length < 8 && input.length>4) {
-      setIsPasswordCorrect(false);  // Error if password is too short
+    if (input.length < 8 && input.length > 4) {
+      setIsPasswordCorrect(false); // Error if password is too short
     } else {
-      setIsPasswordCorrect(true);  // Valid password
+      setIsPasswordCorrect(true); // Valid password
     }
   };
 
@@ -57,38 +57,49 @@ const SignUp = () => {
     const userData = {
       name: name,
       email: email,
-      password: password
+      password: password,
     };
-    
+
     try {
-      const response = await fetch("http://localhost:3000/api/users/registerUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
-  
+      const response = await fetch(
+        "http://localhost:3000/api/users/registerUser",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
+
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(`Signup failed: ${response.statusText}, ${JSON.stringify(errorData)}`);
+        throw new Error(
+          `Signup failed: ${response.statusText}, ${JSON.stringify(errorData)}`
+        );
       }
-  
+
       const data = await response.json();
       console.log("User registered successfully:", data);
       loginAction({ email, password });
     } catch (error) {
       console.error("Error signing up:", error.message);
-      alert(`Signup failed: ${error.message}`);  // Optional: Display error message in UI
+      alert(`Signup failed: ${error.message}`); // Optional: Display error message in UI
     }
   };
 
   return (
     <>
-      <div className="flex w-screen h-screen justify-center items-center overflow-hidden" id="main-content">
-        <Link to={'/NT_Lyrics'}>
-                <BiArrowBack className="absolute bottom-2 right-2 rounded-full shadow-md p-2 w-10 h-10" size={20}/>
-                </Link>
+      <div
+        className="flex w-screen h-screen justify-center items-center overflow-hidden"
+        id="main-content"
+      >
+        <Link to={"/NT_Lyrics"}>
+          <BiArrowBack
+            className="absolute bottom-2 right-2 rounded-full shadow-md p-2 w-10 h-10"
+            size={20}
+          />
+        </Link>
         {/* Image Holder */}
         <div className="imageContainer items-center justify-end h-full hidden md:flex md:w-1/2 bg-gray-100">
           <img
@@ -153,8 +164,13 @@ const SignUp = () => {
               )}
             </label>
             <PasswordInput value={password} onChange={checkPassword} />
-            <p className={`text-sm mt-1 ${!isPasswordCorrect ? 'text-red-400' : 'text-gray-400'}`}>
-              Password must be greater than 4 characters and less than 8 characters.
+            <p
+              className={`text-sm mt-1 ${
+                !isPasswordCorrect ? "text-red-400" : "text-gray-400"
+              }`}
+            >
+              Password must be greater than 4 characters and less than 8
+              characters.
             </p>
           </div>
           <Normal_Button
@@ -167,7 +183,10 @@ const SignUp = () => {
           <Normal_Button
             custom_class={`${inputClass} font-semibold`}
             icon={FaGoogle}
-            text="Sign In With Google"
+            text="Sign Up With Google"
+            onClick={() => {
+              window.location.href = "http://localhost:3000/auth/google";
+            }}
           />
           <p>
             Already have an Account?{" "}

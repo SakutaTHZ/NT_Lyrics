@@ -9,6 +9,7 @@ import Normal_Button from "../components/common/Normal_Button";
 import PasswordInput from "../components/common/Password_Input";
 import Preview from "../assets/images/Landing_Page.png";
 import { useAuth } from "../components/hooks/authContext";
+
 const Login = () => {
   const labelClass = "text-gray-700 font-semibold";
   const inputClass = "p-2 border border-gray-300 rounded-md";
@@ -20,6 +21,12 @@ const Login = () => {
   const [isEmailCorrect, setIsEmailCorrect] = useState(true);
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(true);
   const [errorMessage, setErrorMessage] = useState(""); // Store API error messages
+
+  const [isRemember, setIsRemember] = useState(true);
+  const handleRemember = () => {
+    setIsRemember(!isRemember);
+    console.log(isRemember);
+  };
 
   // Validate Email
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -41,7 +48,11 @@ const Login = () => {
       return;
     }
 
-    const response = await loginAction({ email, password });
+    const response = await loginAction({
+      email,
+      password,
+      rememberMe: isRemember,
+    });
 
     if (response?.success === false) {
       setErrorMessage(response.message || "Login failed. Try again.");
@@ -113,7 +124,12 @@ const Login = () => {
         {/* Remember Me & Forgot Password */}
         <div className="flex justify-between">
           <div className="flex gap-2 items-center">
-            <input type="checkbox" id="remember" className="cursor-pointer" />
+            <input
+              type="checkbox"
+              id="remember"
+              className="cursor-pointer"
+              onChange={handleRemember}
+            />
             <label htmlFor="remember" className={labelClass}>
               Remember for 30 days
             </label>
@@ -135,6 +151,9 @@ const Login = () => {
           custom_class={`${inputClass} font-semibold`}
           icon={FaGoogle}
           text="Sign In With Google"
+          onClick={() => {
+            window.location.href = "http://localhost:3000/auth/google";
+          }}
         />
 
         {/* Sign Up Link */}

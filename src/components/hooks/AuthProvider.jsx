@@ -63,7 +63,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, loginAction, logOut }}>
+    <AuthContext.Provider value={{ token, user, loginAction, logOut, setToken, setUser }}>
       {children}
     </AuthContext.Provider>
   );
@@ -74,3 +74,4 @@ AuthProvider.propTypes = {
 };
 
 export default AuthProvider;
+export { AuthContext }; 
