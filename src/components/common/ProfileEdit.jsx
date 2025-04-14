@@ -111,6 +111,7 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
         name: result.user.name,
         email: result.user.email,
         role: result.user.role,
+        isOAuth: user.isOAuth,
       };
       usernameChange(result.user.name);
       emailChange(result.user.email);

@@ -9,10 +9,13 @@ import AddNewUser from "./AddNewUser";
 const UsersTab = () => {
   const [users, setUsers] = useState([]);
   const [usersCount, setUsersCount] = useState({
-    total: 0,
-    admin: 0,
-    free: 0,
-    premium: 0,
+    totalCount: 0,
+    totalAdminUsersCount: 0,
+    totalFreeUsersCount: 0,
+    totalPremiumUsersCount: 0,
+    countDiff: 0,
+    totalValidCount: 0,
+    totalInvalidCount: 0,
   });
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
@@ -26,8 +29,27 @@ const UsersTab = () => {
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
   const observer = useRef();
 
+  const getUserOverview = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:3000/api/users/getUserOverview",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${AUTH_TOKEN.current}`,
+          },
+        }
+      );
+      setUsersCount(res.data);
+      console.log("User Overview:", res.data);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    }
+  };
+
   // Fetch users function
   const fetchUsers = async (pageNum = 1, override = false) => {
+    getUserOverview();
     setLoading(true);
     try {
       const res = await axios.get("http://localhost:3000/api/users/search", {
@@ -44,15 +66,11 @@ const UsersTab = () => {
       });
 
       setUsers((prev) =>
-        override || pageNum === 1 ? res.data.users : [...prev, ...res.data.users]
+        override || pageNum === 1
+          ? res.data.users
+          : [...prev, ...res.data.users]
       );
       setTotalPages(res.data.totalPages);
-      setUsersCount({
-        total: res.data.totalCount,
-        admin: res.data.totalAdminUsersCount,
-        free: res.data.totalFreeUsersCount,
-        premium: res.data.totalPremiumUsersCount,
-      });
       setInitialLoadDone(true);
     } catch (err) {
       console.error("Error fetching users:", err);
@@ -92,12 +110,16 @@ const UsersTab = () => {
   }, [page, roleFilter, debouncedSearchTerm]);
 
   const chartData = {
-    labels: ["Free Users", "Premium Users"],
+    labels: [`Free Users`, `Premium Users`, `Admin`],
     datasets: [
       {
-        data: [usersCount.free, usersCount.premium],
-        backgroundColor: ["#42A5F5", "#66BB6A"],
-        hoverBackgroundColor: ["#64B5F6", "#81C784"],
+        data: [
+          usersCount.totalFreeUsersCount,
+          usersCount.totalPremiumUsersCount,
+          usersCount.totalAdminUsersCount,
+        ],
+        backgroundColor: ["#42A5F5", "#66BB6A", "#e7000b"],
+        hoverBackgroundColor: ["#64B5F6", "#81C784", "#e7000b"],
       },
     ],
   };
@@ -113,9 +135,9 @@ const UsersTab = () => {
   };
 
   const roles = [
-    { name: "All Users", value: "all" },
-    { name: "Free Users", value: "free-user" },
-    { name: "Premium Users", value: "premium-user" },
+    { name: `All (${usersCount.totalCount})`, value: "all" },
+    { name: `Free (${usersCount.totalFreeUsersCount})`, value: "free-user" },
+    { name: `Premium (${usersCount.totalPremiumUsersCount})`, value: "premium-user" },
   ];
 
   const [selectedUser, setSelectedUser] = useState(null);
@@ -136,34 +158,46 @@ const UsersTab = () => {
             Total Users
           </p>
           <div className="p-5 h-fit flex flex-col md:flex-row gap-2 items-center justify-between">
-            <div className="flex h-full">
+            <div className="flex flex-wrap h-full w-full">
               <div>
                 <p className="font-extrabold text-3xl text-gray-800">
-                  {usersCount.total}
+                  {usersCount.totalCount}
                 </p>
                 <p className="mt-2 text-sm text-green-600 flex flex-wrap items-center">
-                  <span className="font-medium">+200</span>
+                  <span className="font-medium">+{usersCount.countDiff}</span>
                   <span className="ml-1 text-gray-500">
                     users vs last month
                   </span>
                 </p>
               </div>
-              <div className="ml-4 grid grid-cols-2 gap-2 p-2 rounded-md border-l-2 border-gray-200">
-                <p className="text-right text-[#64B5F6] text-2xl font-bold pr-2">
-                  {usersCount.free}
-                </p>
-                <div className="flex items-center">Free Users</div>
-                <p className="text-right text-[#81C784] text-2xl font-bold pr-2">
-                  {usersCount.premium}
-                </p>
-                <div className="flex items-center">Premium Users</div>
+              <div className="md:ml-4 flex flex-wrap gap-2 p-2 rounded-md md:border-l-2 border-gray-200">
+                <div className="flex items-center md:px-4 gap-3">
+                  <p className="min-w-16 text-center text-blue-500 text-2xl font-bold bg-blue-50 p-3 rounded-md">
+                    {usersCount.totalFreeUsersCount}
+                  </p>
+                  <div className="flex items-center">Free Users</div>
+                </div>
+
+                <div className="flex items-center md:px-4 gap-3">
+                  <p className="min-w-16 text-center text-green-500 text-2xl font-bold bg-green-50 p-3 rounded-md">
+                    {usersCount.totalPremiumUsersCount}
+                  </p>
+                  <div className="flex items-center">Premium Users</div>
+                </div>
+
+                <div className="flex items-center md:px-4 gap-3">
+                  <p className="min-w-16 text-center text-red-500 text-2xl font-bold bg-red-50 p-3 rounded-md">
+                    {usersCount.totalAdminUsersCount}
+                  </p>
+                  <div className="flex items-center">Admin Users</div>
+                </div>
               </div>
             </div>
             <Chart
               type="pie"
               data={chartData}
               options={chartOptions}
-              style={{ width: "200px", height: "100px" }}
+              style={{ width: "300px", height: "100px" }}
             />
           </div>
         </div>
@@ -178,7 +212,7 @@ const UsersTab = () => {
           <div className="flex-shrink-0">
             <SelectButton
               value={roleFilter}
-              onChange={(e) => setRoleFilter(e.value)}
+              onChange={(e) => setRoleFilter(e.value || "admin")}
               optionLabel="name"
               options={roles}
             />
