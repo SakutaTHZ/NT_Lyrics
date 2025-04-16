@@ -2,10 +2,10 @@ import { Chart } from "primereact/chart";
 import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import { SelectButton } from "primereact/selectbutton";
-import useDebounce from "../../components/hooks/useDebounce";
+import useDebounce from "../../../components/hooks/useDebounce";
 import UserRow from "./UserRow";
 import AddNewUser from "./AddNewUser";
-import MessagePopup from "../../components/common/MessagePopup";
+import MessagePopup from "../../../components/common/MessagePopup";
 
 const UsersTab = () => {
   const [users, setUsers] = useState([]);

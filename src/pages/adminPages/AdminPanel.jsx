@@ -6,8 +6,8 @@ import mockArtists from "../../assets/data/artists.json";
 import { useState, useEffect } from "react";
 import sampleImage from "../../assets/images/Lyrics_sample.png";
 import { CgArrowTopRight } from "react-icons/cg";
-import UsersTab from "./UsersTab";
-import ArtistsTab from "./ArtistsTab";
+import UsersTab from "./UsersTab/UsersTab";
+import ArtistsTab from "./ArtistTab/ArtistsTab";
 
 const Nav = React.lazy(() => import("../../components/adminComponents/Nav"));
 
@@ -84,7 +84,7 @@ const ArtistList = () => {
 };
 
 const AdminPanel = () => {
-  const [activeIndex, setActiveIndex] = useState(3);
+  const [activeIndex, setActiveIndex] = useState(1);
 
   return (
     <>
