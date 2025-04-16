@@ -146,19 +146,21 @@ const UsersTab = () => {
 
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
+  const [messageType, setMessageType] = useState("success");
 
-  const showNewMessage = (message) => {
+  const showNewMessage = (type, message) => {
     setMessageText(message);
+    setMessageType(type);
     setShowMessage(true);
     setTimeout(() => {
       setShowMessage(false);
-    }, 3000);
+    }, 10000);
   }
 
   return (
     <div>
       {showMessage && (
-        <MessagePopup message_type={"success"} message_text={messageText} />
+        <MessagePopup message_type={messageType} message_text={messageText} />
       )}
 
       {/* Stats */}

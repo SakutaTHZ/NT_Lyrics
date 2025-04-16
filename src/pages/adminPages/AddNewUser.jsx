@@ -65,13 +65,12 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
     const token = localStorage.getItem("token");
 
     try {
-      await changeUserRole(updatedUser.userId, role, token);
       await changeUserValidity(updatedUser.userId, isValid, token);
+      await changeUserRole(updatedUser.userId, role, token);
 
-      showNewMessage("User updated successfully!");
+      showNewMessage("success","User updated successfully!");
     } catch (error) {
-      console.error("Error updating user:", error);
-      showNewMessage("Something went wrong updating the user.");
+      showNewMessage("error", error.message);
     }
   };
 

@@ -7,7 +7,15 @@ const MessagePopup = ({ custom_class = "", message_type = "", message_text = "Th
   return (
     <>
       <div
-        className={`animate-right-normal fixed top-16 right-0 shadow-sm flex items-center gap-4 md:gap-2 p-2 px-4 rounded-l-lg bg-white z-[90] w-fit max-w-3/4 ${custom_class}`}
+        className={`animate-right-normal fixed top-16 right-0 shadow-sm flex items-center gap-4 md:gap-2 p-2 px-4 rounded-l-lg ${
+          message_type === "error"
+            ? "bg-red-50 "
+            : message_type === "alert"
+            ? "bg-yellow-50 "
+            : message_type === "success"
+            ? "bg-green-50 "
+            : "bg-blue-50 "
+        } z-[90] w-fit max-w-3/4 ${custom_class}`}
       >
         {message_type === "error" ? (
           <BiErrorCircle className="flex-shrink-0 text-red-500" size={20} />
