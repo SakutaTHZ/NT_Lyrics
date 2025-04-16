@@ -63,7 +63,7 @@ const UserRow = ({ user, idx, isLast, lastUserRef, onEdit }) => {
               : "bg-red-100 text-red-600"
           }`}
         >
-          {user.isValid ? "Active" : "Inactive"}
+          {user.isValid ? "Valid" : "Invalid"}
         </span>
       </td>
       <td className="px-4 py-3">

@@ -5,6 +5,7 @@ import { SelectButton } from "primereact/selectbutton";
 import useDebounce from "../../components/hooks/useDebounce";
 import UserRow from "./UserRow";
 import AddNewUser from "./AddNewUser";
+import MessagePopup from "../../components/common/MessagePopup";
 
 const UsersTab = () => {
   const [users, setUsers] = useState([]);
@@ -27,7 +28,7 @@ const UsersTab = () => {
   const debouncedSearchTerm = useDebounce(searchTerm);
 
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
-  const observer = useRef();
+  const observer = useRef(null);
 
   const getUserOverview = async () => {
     try {
@@ -41,15 +42,12 @@ const UsersTab = () => {
         }
       );
       setUsersCount(res.data);
-      console.log("User Overview:", res.data);
     } catch (err) {
       console.error("Error fetching user overview:", err);
     }
   };
 
-  // Fetch users function
   const fetchUsers = async (pageNum = 1, override = false) => {
-    getUserOverview();
     setLoading(true);
     try {
       const res = await axios.get("http://localhost:3000/api/users/search", {
@@ -65,10 +63,9 @@ const UsersTab = () => {
         },
       });
 
+      const fetchedUsers = res.data.users;
       setUsers((prev) =>
-        override || pageNum === 1
-          ? res.data.users
-          : [...prev, ...res.data.users]
+        override || pageNum === 1 ? fetchedUsers : [...prev, ...fetchedUsers]
       );
       setTotalPages(res.data.totalPages);
       setInitialLoadDone(true);
@@ -79,7 +76,6 @@ const UsersTab = () => {
     }
   };
 
-  // Infinite scroll observer
   const lastUserRef = useCallback(
     (node) => {
       if (loading || page >= totalPages) return;
@@ -87,7 +83,7 @@ const UsersTab = () => {
 
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-          setPage((prev) => prev + 1);
+          setPage((prevPage) => prevPage + 1);
         }
       });
 
@@ -96,7 +92,7 @@ const UsersTab = () => {
     [loading, totalPages, page]
   );
 
-  // Reset data when filter or search term changes
+  // Reset on filter or search
   useEffect(() => {
     setUsers([]);
     setPage(1);
@@ -104,13 +100,14 @@ const UsersTab = () => {
     setInitialLoadDone(false);
   }, [roleFilter, debouncedSearchTerm]);
 
-  // Fetch users when page changes or filters update
+  // Fetch data
   useEffect(() => {
+    getUserOverview();
     fetchUsers(page);
   }, [page, roleFilter, debouncedSearchTerm]);
 
   const chartData = {
-    labels: [`Free Users`, `Premium Users`, `Admin`],
+    labels: ["Free Users", "Premium Users", "Admin"],
     datasets: [
       {
         data: [
@@ -137,20 +134,33 @@ const UsersTab = () => {
   const roles = [
     { name: `All (${usersCount.totalCount})`, value: "all" },
     { name: `Free (${usersCount.totalFreeUsersCount})`, value: "free-user" },
-    { name: `Premium (${usersCount.totalPremiumUsersCount})`, value: "premium-user" },
+    {
+      name: `Premium (${usersCount.totalPremiumUsersCount})`,
+      value: "premium-user",
+    },
   ];
 
   const [selectedUser, setSelectedUser] = useState(null);
-  const handleEdit = (user) => {
-    setSelectedUser(user);
-  };
+  const handleEdit = (user) => setSelectedUser(user);
+  const closeModal = () => setSelectedUser(null);
 
-  const closeModal = () => {
-    setSelectedUser(null);
-  };
+  const [showMessage, setShowMessage] = useState(false);
+  const [messageText, setMessageText] = useState("");
+
+  const showNewMessage = (message) => {
+    setMessageText(message);
+    setShowMessage(true);
+    setTimeout(() => {
+      setShowMessage(false);
+    }, 3000);
+  }
 
   return (
     <div>
+      {showMessage && (
+        <MessagePopup message_type={"success"} message_text={messageText} />
+      )}
+
       {/* Stats */}
       <div className="w-full flex flex-col md:flex-row gap-2 md:gap-4">
         <div className="relative border border-gray-200 rounded-lg shadow-sm w-full bg-white">
@@ -163,7 +173,7 @@ const UsersTab = () => {
                 <p className="font-extrabold text-3xl text-gray-800">
                   {usersCount.totalCount}
                 </p>
-                <p className="mt-2 text-sm text-green-600 flex flex-wrap items-center">
+                <p className="mt-2 text-sm text-green-600 flex items-center">
                   <span className="font-medium">+{usersCount.countDiff}</span>
                   <span className="ml-1 text-gray-500">
                     users vs last month
@@ -204,10 +214,8 @@ const UsersTab = () => {
       </div>
 
       {/* Filters */}
-      <div className="filters">
-        <div className="flex items-center justify-between mt-4">
-          <p className="text-gray-600 font-semibold">Filters</p>
-        </div>
+      <div className="filters mt-4">
+        <p className="text-gray-600 font-semibold mb-2">Filters</p>
         <div className="flex gap-4 mt-2 items-center">
           <div className="flex-shrink-0">
             <SelectButton
@@ -230,8 +238,8 @@ const UsersTab = () => {
       {/* Table */}
       <div className="tableContainer border border-gray-200 rounded-md shadow-sm w-full h-[calc(100vh-180px)] mt-4 overflow-x-auto sticky top-12">
         <table className="min-w-full bg-white text-sm text-left">
-          <thead className="thead-shadow text-xs text-gray-600 uppercase">
-            <tr className="sticky top-0 bg-gray-100 z-10">
+          <thead className="thead-shadow text-xs text-gray-600 uppercase sticky top-0 bg-gray-100 z-10">
+            <tr>
               <th className="px-4 py-3">#</th>
               <th className="px-4 py-3">ID</th>
               <th className="px-4 py-3">Name</th>
@@ -281,7 +289,12 @@ const UsersTab = () => {
         <AddNewUser
           onClose={closeModal}
           user={selectedUser}
-          onUpdate={() => fetchUsers(1, true)} // reset to page 1 and override
+          onUpdate={() => {
+            setUsers([]);
+            setPage(1);
+            fetchUsers(1, true);
+          }}
+          showNewMessage={showNewMessage}
         />
       )}
     </div>
