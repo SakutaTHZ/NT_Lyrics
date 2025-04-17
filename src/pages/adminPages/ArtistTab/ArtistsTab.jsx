@@ -22,7 +22,7 @@ const ArtistsTab = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [typeFilter,setTypeFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
@@ -75,9 +75,38 @@ const ArtistsTab = () => {
     [typeFilter, debouncedSearchTerm]
   );
 
+  const [toptenArtists,] = useState([]);
+
+  const getTop10Artists = useCallback(async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:3000/api/artists/getTopArtists",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${AUTH_TOKEN.current}`,
+          },
+        }
+      );
+  
+      const mappedArtists = res.data.topArtists.map(artist => ({
+        photoLink: artist.photoLink,
+        name: artist.name,
+        searchCount: artist.searchCount,
+      }));
+  
+      toptenArtists.current = mappedArtists;
+  
+      console.log("Top 10 artists:", toptenArtists);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    }
+  }, [toptenArtists]);
+
   useEffect(() => {
     fetchArtists();
-  }, [debouncedSearchTerm, typeFilter, fetchArtists]);
+    getTop10Artists();
+  }, [debouncedSearchTerm, typeFilter, fetchArtists, getTop10Artists]);
 
   const observer = useRef(null);
 
@@ -127,7 +156,7 @@ const ArtistsTab = () => {
   };
 
   const types = [
-    { name: `Both (${artistCounts.totalCount})`, value: "both" },
+    { name: `Both (${artistCounts.totalBothCount})`, value: "both" },
     { name: `Artists (${artistCounts.totalArtistCount})`, value: "artist" },
     { name: `Writers (${artistCounts.totalWrtierCount})`, value: "writer" },
   ];
@@ -207,14 +236,14 @@ const ArtistsTab = () => {
       <div className="filters mt-4">
         <p className="text-gray-600 font-semibold mb-2">Filters</p>
         <div className="flex gap-4 mt-2 items-center">
-                  <div className="flex-shrink-0">
-                    <SelectButton
-                      value={typeFilter}
-                      onChange={(e) => setTypeFilter(e.value || "")}
-                      optionLabel="name"
-                      options={types}
-                    />
-                  </div>
+          <div className="flex-shrink-0">
+            <SelectButton
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.value || "")}
+              optionLabel="name"
+              options={types}
+            />
+          </div>
           <input
             type="text"
             placeholder="Search by Artist Name"
@@ -232,11 +261,11 @@ const ArtistsTab = () => {
             <tr>
               <th className="px-4 py-3">#</th>
               <th className="px-4 py-3">ID</th>
+              <th className="px-4 py-3">Photo</th>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Bio</th>
-              <th className="px-4 py-3">Photo Link</th>
-              <th className="px-4 py-3">Search Count</th>
               <th className="px-4 py-3">Type</th>
+              <th className="px-4 py-3">search</th>
               <th className="px-4 py-3">Created At</th>
               <th className="px-4 py-3">Actions</th>
             </tr>
