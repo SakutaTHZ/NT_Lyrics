@@ -80,7 +80,6 @@ const ArtistRow = ({ artist, idx, isLast, lastUserRef, onEdit }) => {
           {artist.searchCount}
         </span>
       </td>
-      <td className="px-4 py-3">{artist.createdAt}</td>
       <td className="px-4 py-3">
         <button
           className="w-full flex items-center justify-center p-2 rounded-md text-blue-600 bg-blue-50 hover:underline text-sm cursor-pointer"

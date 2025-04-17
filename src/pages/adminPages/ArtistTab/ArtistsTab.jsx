@@ -75,7 +75,7 @@ const ArtistsTab = () => {
     [typeFilter, debouncedSearchTerm]
   );
 
-  const [toptenArtists,] = useState([]);
+  const [toptenArtists, setToptenArtists] = useState([]);
 
   const getTop10Artists = useCallback(async () => {
     try {
@@ -88,20 +88,18 @@ const ArtistsTab = () => {
           },
         }
       );
-  
-      const mappedArtists = res.data.topArtists.map(artist => ({
+
+      const mappedArtists = res.data.topArtists.map((artist) => ({
         photoLink: artist.photoLink,
         name: artist.name,
         searchCount: artist.searchCount,
       }));
-  
-      toptenArtists.current = mappedArtists;
-  
-      console.log("Top 10 artists:", toptenArtists);
+
+      setToptenArtists(mappedArtists);
     } catch (err) {
       console.error("Error fetching user overview:", err);
     }
-  }, [toptenArtists]);
+  }, []);
 
   useEffect(() => {
     fetchArtists();
@@ -232,6 +230,49 @@ const ArtistsTab = () => {
         </div>
       </div>
 
+      {/* Top 10 Artists */}
+      <div className="mt-4 w-full flex flex-col md:flex-row gap-2 md:gap-4">
+        <div className="relative border border-gray-200 rounded-lg shadow-sm w-full bg-white">
+          <p className="p-3 bg-gray-100 text-gray-600 font-medium rounded-t-lg">
+            Trending Artists
+          </p>
+          <div className="flex flex-wrap gap-2 p-4">
+            {(toptenArtists || []).map((artist, idx) => (
+              <div
+                key={idx}
+                className="relative flex items-center gap-3 p-2 px-4 border border-gray-300 rounded-full shadow-sm hover:shadow-md transition cursor-pointer"
+              >
+                <p
+                  className={`absolute  border  w-6 h-6 -inset-2 rounded-full text-sm flex items-center justify-center ${
+                    idx < 3
+                      ? "bg-yellow-100 border-yellow-500 text-yellow-500 font-semibold"
+                      : "bg-white border-gray-300 text-gray-600"
+                  }`}
+                >
+                  {idx + 1}
+                </p>
+                <img
+                  src={artist.photoLink}
+                  alt="Artist Photo"
+                  className="w-8 h-8 object-cover rounded-full"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src =
+                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+                  }}
+                />
+                <div className="flex items-center gap-2">
+                  <p className="text-gray-800 font-semibold">{artist.name}</p>
+                  <p className="text-gray-500 text-sm  bg-gray-100 p-1 px-2 rounded-full">
+                    {artist.searchCount}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Filters */}
       <div className="filters mt-4">
         <p className="text-gray-600 font-semibold mb-2">Filters</p>
@@ -251,6 +292,7 @@ const ArtistsTab = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <button className="text-nowrap bg-blue-500 text-white p-3 rounded-md cursor-pointer">Add New Atists</button>
         </div>
       </div>
 
@@ -266,7 +308,6 @@ const ArtistsTab = () => {
               <th className="px-4 py-3">Bio</th>
               <th className="px-4 py-3">Type</th>
               <th className="px-4 py-3">search</th>
-              <th className="px-4 py-3">Created At</th>
               <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
