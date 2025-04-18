@@ -42,20 +42,24 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
   };
 
   const changeUserValidity = async (userId, isValid, token) => {
-    const response = await fetch(`http://localhost:3000/api/users/${userId}?type=${isValid?"activate":"deactivate"}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `http://localhost:3000/api/users/${userId}?type=${
+        isValid ? "activate" : "deactivate"
+      }`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message || "Failed to update user validity");
     }
   };
-
 
   const updateUser = async () => {
     const updatedUser = {
@@ -68,7 +72,7 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
       await changeUserValidity(updatedUser.userId, isValid, token);
       await changeUserRole(updatedUser.userId, role, token);
 
-      showNewMessage("success","User updated successfully!");
+      showNewMessage("success", "User updated successfully!");
     } catch (error) {
       showNewMessage("error", error.message);
     }
@@ -79,20 +83,16 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
       <div className="fixed inset-0 z-[100] flex justify-center items-center">
         <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
         <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[400px]">
-          <h2 className="text-xl font-bold">Edit User</h2>
+          <h2 className="text-xl font-bold flex items-center justify-between">
+            Edit User
+            <p className="flex items-center px-2 py-1 border border-gray-300 rounded-full">
+              <span className="text-xs font-normal text-gray-700">
+                {user._id}
+              </span>
+            </p>
+          </h2>
 
           <div className="flex flex-col mt-2">
-            <div className="row">
-              <label className="block my-2 text-sm font-medium text-gray-700">
-                User ID
-              </label>
-              <input
-                type="text"
-                value={user._id}
-                readOnly
-                className="w-full p-2 py-2 border border-gray-300 rounded-md"
-              />
-            </div>
             <div className="row">
               <label className="block my-2 text-sm font-medium text-gray-700">
                 User Name

@@ -5,6 +5,7 @@ import useDebounce from "../../../components/hooks/useDebounce";
 import ArtistRow from "./ArtistRow";
 import { Chart } from "primereact/chart";
 import { SelectButton } from "primereact/selectbutton";
+import EditArtist from "./EditArtist";
 
 const ArtistsTab = () => {
   const [artists, setArtists] = useState([]);
@@ -101,11 +102,6 @@ const ArtistsTab = () => {
     }
   }, []);
 
-  useEffect(() => {
-    fetchArtists();
-    getTop10Artists();
-  }, [debouncedSearchTerm, typeFilter, fetchArtists, getTop10Artists]);
-
   const observer = useRef(null);
 
   const lastUserRef = useCallback(
@@ -134,9 +130,16 @@ const ArtistsTab = () => {
   };
 
   useEffect(() => {
-    // Example of showing a message when the component mounts
-    showNewMessage("success", "Artists tab loaded successfully!");
-  }, []);
+    fetchArtists();
+    getTop10Artists();
+  }, [debouncedSearchTerm, typeFilter, fetchArtists, getTop10Artists]);
+
+  useEffect(() => {
+    setArtists([]);
+    setPage(1);
+    setTotalPages(null);
+    setInitialLoadDone(false);
+  }, [typeFilter, debouncedSearchTerm]);
 
   const chartData = {
     labels: ["Artists", "Writers", "Both"],
@@ -171,6 +174,8 @@ const ArtistsTab = () => {
 
   const [selectedArtist, setSelectedArtist] = useState(null);
   const handleEdit = (artist) => setSelectedArtist(artist);
+
+  const closeModal = () => setSelectedArtist(null);
 
   return (
     <>
@@ -315,7 +320,6 @@ const ArtistsTab = () => {
             {artists.map((artist, idx) => {
               const isLast = idx === artists.length - 1;
               return (
-                <>
                   <ArtistRow
                     key={artist._id || idx}
                     artist={artist}
@@ -324,7 +328,6 @@ const ArtistsTab = () => {
                     lastUserRef={lastUserRef}
                     onEdit={handleEdit}
                   />
-                </>
               );
             })}
             {loading && (
@@ -348,7 +351,18 @@ const ArtistsTab = () => {
         </table>
       </div>
 
-      {selectedArtist && <></>}
+      {selectedArtist && (
+              <EditArtist
+                onClose={closeModal}
+                artist={selectedArtist}
+                onUpdate={() => {
+                  setArtists([]);
+                  setPage(1);
+                  fetchArtists(1, true);
+                }}
+                showNewMessage={showNewMessage}
+              />
+            )}
     </>
   );
 };
