@@ -281,13 +281,19 @@ const ArtistsTab = () => {
       {/* Filters */}
       <div className="filters mt-4">
         <p className="text-gray-600 font-semibold mb-2">Filters</p>
-        <div className="flex gap-4 mt-2 items-center">
+        <div className="flex flex-wrap md:flex-nowrap gap-4 mt-2 items-center ">
           <div className="flex-shrink-0">
             <SelectButton
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.value || "")}
               optionLabel="name"
               options={types}
+              className="w-full md:w-auto"
+              itemTemplate={(option) => (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold">{option.name}</span>
+                </div>
+              )}
             />
           </div>
           <input
@@ -297,7 +303,9 @@ const ArtistsTab = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="text-nowrap bg-blue-500 text-white p-3 rounded-md cursor-pointer">Add New Atists</button>
+          <button className="w-full md:w-auto text-nowrap bg-blue-500 text-white p-3 rounded-md cursor-pointer">
+            Add New Atists
+          </button>
         </div>
       </div>
 
@@ -320,14 +328,14 @@ const ArtistsTab = () => {
             {artists.map((artist, idx) => {
               const isLast = idx === artists.length - 1;
               return (
-                  <ArtistRow
-                    key={artist._id || idx}
-                    artist={artist}
-                    idx={idx}
-                    isLast={isLast}
-                    lastUserRef={lastUserRef}
-                    onEdit={handleEdit}
-                  />
+                <ArtistRow
+                  key={artist._id || idx}
+                  artist={artist}
+                  idx={idx}
+                  isLast={isLast}
+                  lastUserRef={lastUserRef}
+                  onEdit={handleEdit}
+                />
               );
             })}
             {loading && (
@@ -352,17 +360,17 @@ const ArtistsTab = () => {
       </div>
 
       {selectedArtist && (
-              <EditArtist
-                onClose={closeModal}
-                artist={selectedArtist}
-                onUpdate={() => {
-                  setArtists([]);
-                  setPage(1);
-                  fetchArtists(1, true);
-                }}
-                showNewMessage={showNewMessage}
-              />
-            )}
+        <EditArtist
+          onClose={closeModal}
+          artist={selectedArtist}
+          onUpdate={() => {
+            setArtists([]);
+            setPage(1);
+            fetchArtists(1, true);
+          }}
+          showNewMessage={showNewMessage}
+        />
+      )}
     </>
   );
 };

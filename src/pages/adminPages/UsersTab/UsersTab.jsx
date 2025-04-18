@@ -218,13 +218,19 @@ const UsersTab = () => {
       {/* Filters */}
       <div className="filters mt-4">
         <p className="text-gray-600 font-semibold mb-2">Filters</p>
-        <div className="flex gap-4 mt-2 items-center">
+        <div className="flex flex-wrap md:flex-nowrap gap-4 mt-2 items-center">
           <div className="flex-shrink-0">
             <SelectButton
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.value || "admin")}
               optionLabel="name"
               options={roles}
+              className="w-full md:w-auto"
+              itemTemplate={(option) => (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold">{option.name}</span>
+                </div>
+              )}
             />
           </div>
           <input
