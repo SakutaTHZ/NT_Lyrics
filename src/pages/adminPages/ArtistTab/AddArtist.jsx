@@ -1,10 +1,8 @@
-import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { RadioButton } from "primereact/radiobutton";
-import { ConfirmPopup } from "primereact/confirmpopup";
-import { confirmPopup } from "primereact/confirmpopup";
 
-const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
+const AddArtist = ({onClose,onUpdate, showNewMessage}) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
@@ -16,17 +14,16 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
     };
   }, []);
 
-  const [name, setName] = useState(artist.name || "");
-  const [bio, setBio] = useState(artist.bio || "");
-  const [photoLink, setPhotoLink] = useState(artist.photoLink || "");
-  const [type, setType] = useState(artist.type || "both");
-
+  const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
+  const [photoLink, setPhotoLink] = useState("");
+  const [type, setType] = useState("singer");
   const token = localStorage.getItem("token");
 
-  const updateArtist = async () => {
+  const addArtist = async () => {
     console.log("Updating artist...");
     const response = await fetch(
-      `http://localhost:3000/api/artists/updateArtist/${artist._id}`,
+      `http://localhost:3000/api/artists/updateArtist/`,
       {
         method: "PUT",
         headers: {
@@ -53,48 +50,13 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
     return data;
   };
 
-  const deleteArtist = async () => {
-    if (!artist?._id) {
-        console.error("Missing artist ID");
-        return;
-      }
-      
-      if (!token) {
-        console.error("Missing auth token");
-        return;
-      }
-    const response = await fetch(
-      `http://localhost:3000/api/artists/deleteArtist/${artist._id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.log(errorData.errors[0].message)
-      showNewMessage("error", errorData.errors[0].message);
-      throw new Error(errorData.message || "Failed to delete artist");
-    } else {
-      showNewMessage("success", "Artist deleted successfully");
-    }
-  }
-
   return (
     <>
       <div className="fixed inset-0 z-[100] flex justify-center items-center">
         <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
         <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[600px]">
           <h2 className="text-xl font-bold flex items-center justify-between">
-            Edit Artist
-            <p className="flex items-center px-2 py-1 border border-gray-300 rounded-full">
-              <span className="text-xs font-normal text-gray-700">
-                {artist._id}
-              </span>
-            </p>
+            Add New Artist
           </h2>
 
           <div className="flex flex-col mt-2">
@@ -176,7 +138,7 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
           <div className="flex justify-end gap-2">
             <button
               onClick={async () => {
-                await updateArtist();
+                await addArtist();
                 onUpdate();
                 onClose();
               }}
@@ -191,40 +153,17 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
               Cancel
             </button>
           </div>
-          <div className="flex justify-end gap-2">
-            <button
-              onClick={(e) => {
-                confirmPopup({
-                  target: e.currentTarget,
-                  message: "Are you sure you want to delete this artist?",
-                  icon: "pi pi-exclamation-triangle",
-                  acceptClassName: "p-button-danger",
-                  acceptLabel: "Yes",
-                  rejectLabel: "No",
-                  accept: async () => {
-                    await deleteArtist();
-                    onUpdate();
-                    onClose();
-                  },
-                });
-              }}
-              className="w-full cursor-pointer mt-4 bg-red-200 text-red-700 font-semibold px-4 py-2 rounded"
-            >
-              Delete
-            </button>
-          </div>
         </div>
       </div>
-      <ConfirmPopup />
     </>
   );
 };
 
-EditArtist.propTypes = {
+AddArtist.propTypes = {
   onClose: PropTypes.func.isRequired,
   artist: PropTypes.object.isRequired,
   onUpdate: PropTypes.func.isRequired,
   showNewMessage: PropTypes.func.isRequired,
 };
 
-export default EditArtist;
+export default AddArtist;

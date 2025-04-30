@@ -28,6 +28,14 @@ const ArtistType = ({ type }) => {
           Artist
         </span>
       );
+    case "singer":
+      return (
+        <span
+          className={`px-2 py-1 text-xs rounded-full font-semibold bg-blue-100 text-blue-600`}
+        >
+          Singer
+        </span>
+      );
     default:
       <span
         className={`px-2 py-1 text-xs rounded-full font-semibold bg-gray-100 text-gray-600`}

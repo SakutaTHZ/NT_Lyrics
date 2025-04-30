@@ -17,7 +17,7 @@ const ArtistsTab = () => {
   const [artistCounts, setArtistCounts] = useState({
     countDiff: 100,
     totalCount: 0,
-    totalArtistCount: 0,
+    totalSingerCount: 0,
     totalWrtierCount: 0,
     totalBothCount: 0,
   });
@@ -52,21 +52,14 @@ const ArtistsTab = () => {
           }
         );
 
-        const fetchedArtists = res.data.artists;
-        setArtistCounts({
-          countDiff: res.data.totalCount,
-          totalCount: res.data.totalCount,
-          totalArtistCount: res.data.totalArtistCount,
-          totalWrtierCount: res.data.totalWrtierCount,
-          totalBothCount: res.data.totalBothCount,
-        });
         setArtists((prev) =>
           override || pageNum === 1
-            ? fetchedArtists
-            : [...prev, ...fetchedArtists]
+            ? res.data.artists
+            : [...prev, ...res.data.artists]
         );
         setTotalPages(res.data.totalPages);
         setInitialLoadDone(true);
+        getArtistOverview();
       } catch (err) {
         console.error("Error fetching users:", err);
       } finally {
@@ -97,10 +90,35 @@ const ArtistsTab = () => {
       }));
 
       setToptenArtists(mappedArtists);
+      console.log(res.data.topArtists);
     } catch (err) {
       console.error("Error fetching user overview:", err);
     }
   }, []);
+
+  const getArtistOverview = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:3000/api/artists/getArtistOverview",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${AUTH_TOKEN.current}`,
+          },
+        }
+      );
+      setArtistCounts({
+        countDiff: res.data.totalCount,
+        totalCount: res.data.totalCount,
+        totalSingerCount: res.data.totalSingerCount,
+        totalWrtierCount: res.data.totalWriterCount,
+        totalBothCount: res.data.totalBothCount,
+      });
+      console.log("Artist Overview:", res.data);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    }
+  };
 
   const observer = useRef(null);
 
@@ -142,11 +160,11 @@ const ArtistsTab = () => {
   }, [typeFilter, debouncedSearchTerm]);
 
   const chartData = {
-    labels: ["Artists", "Writers", "Both"],
+    labels: ["Singers", "Writers", "Both"],
     datasets: [
       {
         data: [
-          artistCounts.totalArtistCount,
+          artistCounts.totalSingerCount,
           artistCounts.totalWrtierCount,
           artistCounts.totalBothCount,
         ],
@@ -158,7 +176,7 @@ const ArtistsTab = () => {
 
   const types = [
     { name: `Both (${artistCounts.totalBothCount})`, value: "both" },
-    { name: `Artists (${artistCounts.totalArtistCount})`, value: "artist" },
+    { name: `Singers (${artistCounts.totalSingerCount})`, value: "singer" },
     { name: `Writers (${artistCounts.totalWrtierCount})`, value: "writer" },
   ];
 
@@ -205,9 +223,9 @@ const ArtistsTab = () => {
               <div className="md:ml-4 flex flex-wrap gap-2 p-2 rounded-md md:border-l-2 border-gray-200">
                 <div className="flex items-center md:px-4 gap-3">
                   <p className="min-w-16 text-center text-blue-500 text-2xl font-bold bg-blue-50 p-3 rounded-md">
-                    {artistCounts.totalArtistCount}
+                    {artistCounts.totalSingerCount}
                   </p>
-                  <div className="flex items-center">Artists</div>
+                  <div className="flex items-center">Singers</div>
                 </div>
 
                 <div className="flex items-center md:px-4 gap-3">
