@@ -15,7 +15,7 @@ const MessagePopup = ({ custom_class = "", message_type = "", message_text = "Th
             : message_type === "success"
             ? "bg-green-50 "
             : "bg-blue-50 "
-        } z-[90] w-fit max-w-3/4 ${custom_class}`}
+        } z-[10000] w-fit max-w-3/4 ${custom_class}`}
       >
         {message_type === "error" ? (
           <BiErrorCircle className="flex-shrink-0 text-red-500" size={20} />

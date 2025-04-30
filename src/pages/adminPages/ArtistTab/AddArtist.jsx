@@ -94,7 +94,7 @@ const AddArtist = ({onClose,onUpdate, showNewMessage}) => {
               </label>
               <div className="flex items-center gap-2 py-1">
                 <img
-                  src={photoLink}
+                  src={photoLink || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
                   alt="Artist Photo"
                   className="w-12 h-12 object-cover rounded-full mb-2"
                   onError={(e) => {
