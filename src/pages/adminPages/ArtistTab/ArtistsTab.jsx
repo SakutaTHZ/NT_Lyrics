@@ -6,6 +6,7 @@ import ArtistRow from "./ArtistRow";
 import { Chart } from "primereact/chart";
 import { SelectButton } from "primereact/selectbutton";
 import EditArtist from "./EditArtist";
+import AddArtist from "./AddArtist";
 
 const ArtistsTab = () => {
   const [artists, setArtists] = useState([]);
@@ -195,6 +196,11 @@ const ArtistsTab = () => {
 
   const closeModal = () => setSelectedArtist(null);
 
+  const [openAddArtistModal, setOpenAddArtistModal] = useState(false);
+  const handleAddArtist = () => setOpenAddArtistModal(true);
+
+  const closeAddArtistModal = () => setOpenAddArtistModal(false);
+
   return (
     <>
       {showMessage && (
@@ -321,7 +327,7 @@ const ArtistsTab = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="w-full md:w-auto text-nowrap bg-blue-500 text-white p-3 rounded-md cursor-pointer">
+          <button className="w-full md:w-auto text-nowrap bg-blue-500 text-white p-3 rounded-md cursor-pointer" onClick={handleAddArtist}>
             Add New Atists
           </button>
         </div>
@@ -381,6 +387,17 @@ const ArtistsTab = () => {
         <EditArtist
           onClose={closeModal}
           artist={selectedArtist}
+          onUpdate={() => {
+            setArtists([]);
+            setPage(1);
+            fetchArtists(1, true);
+          }}
+          showNewMessage={showNewMessage}
+        />
+      )}
+      {openAddArtistModal && (
+        <AddArtist
+          onClose={closeAddArtistModal}
           onUpdate={() => {
             setArtists([]);
             setPage(1);

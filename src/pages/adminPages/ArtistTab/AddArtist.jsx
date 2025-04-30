@@ -14,18 +14,19 @@ const AddArtist = ({onClose,onUpdate, showNewMessage}) => {
     };
   }, []);
 
-  const [name, setName] = useState("");
-  const [bio, setBio] = useState("");
-  const [photoLink, setPhotoLink] = useState("");
+  const [name, setName] = useState();
+  const [bio, setBio] = useState();
+  const [photoLink, setPhotoLink] = useState();
   const [type, setType] = useState("singer");
+
   const token = localStorage.getItem("token");
 
   const addArtist = async () => {
-    console.log("Updating artist...");
+    console.log("Adding artist...");
     const response = await fetch(
-      `http://localhost:3000/api/artists/updateArtist/`,
+      `http://localhost:3000/api/artists/createArtist`,
       {
-        method: "PUT",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -40,10 +41,10 @@ const AddArtist = ({onClose,onUpdate, showNewMessage}) => {
     );
     if (!response.ok) {
       const errorData = await response.json();
-      showNewMessage("error", errorData.message);
-      throw new Error(errorData.message || "Failed to update artist");
+      showNewMessage("error", errorData.errors[0].message);
+      throw new Error(errorData.errors[0].message);
     } else {
-      showNewMessage("success", "Artist updated successfully");
+      showNewMessage("success", `${name} added successfully`);
     }
     console.log("Artist updated successfully");
     const data = await response.json();
@@ -107,7 +108,7 @@ const AddArtist = ({onClose,onUpdate, showNewMessage}) => {
                   value={photoLink}
                   className="w-full p-2 py-2 border border-gray-300 rounded-md"
                   onChange={(e) => setPhotoLink(e.target.value)}
-                  placeholder="Enter artist name"
+                  placeholder="Link Here"
                 />
               </div>
             </div>
