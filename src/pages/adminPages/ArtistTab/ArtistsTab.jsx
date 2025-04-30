@@ -344,6 +344,7 @@ const ArtistsTab = () => {
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Bio</th>
               <th className="px-4 py-3">Type</th>
+              <th className="px-4 py-3">Lyrics</th>
               <th className="px-4 py-3">search</th>
               <th className="px-4 py-3">Actions</th>
             </tr>

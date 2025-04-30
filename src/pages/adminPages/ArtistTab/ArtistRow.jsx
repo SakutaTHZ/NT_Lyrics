@@ -1,6 +1,8 @@
 // components/UserRow.jsx
 import { MdEdit } from "react-icons/md";
 import PropTypes from "prop-types";
+import axios from "axios";
+import {useEffect, useRef,useState,useCallback} from "react";
 
 const ArtistType = ({ type }) => {
   switch (type) {
@@ -51,6 +53,30 @@ ArtistType.propTypes = {
 
 const ArtistRow = ({ artist, idx, isLast, lastUserRef, onEdit }) => {
   const ref = isLast ? lastUserRef : null;
+  const AUTH_TOKEN = useRef(localStorage.getItem("token"));
+
+  const [lyricsCount, setLyricsCount] = useState(0);
+
+  const getLyricsCountByArtist = useCallback(async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/api/lyrics/getLyricsCountByArtist?artistId=${artist._id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${AUTH_TOKEN.current}`,
+          },
+        }
+      );
+      setLyricsCount(res.data.lyricsCount);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    }
+  }, [artist._id]);
+
+  useEffect(() => {
+      getLyricsCountByArtist();
+  }, [getLyricsCountByArtist]);
 
   return (
     <tr
@@ -80,6 +106,13 @@ const ArtistRow = ({ artist, idx, isLast, lastUserRef, onEdit }) => {
       </td>
       <td className="px-4 py-3">
         <ArtistType type={artist.type} />
+      </td>
+      <td className="px-4 py-3">
+        <span
+          className={`px-2 py-1 text-xs rounded-full font-semibold bg-gray-5  bg-gray-50 text-gray-600`}
+        >
+          {lyricsCount}
+        </span>
       </td>
       <td className="px-4 py-3">
         <span

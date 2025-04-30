@@ -84,7 +84,7 @@ const AddArtist = ({onClose,onUpdate, showNewMessage}) => {
                 value={bio}
                 className="w-full resize-none p-2 py-2 border border-gray-300 rounded-md"
                 onChange={(e) => setBio(e.target.value)}
-                placeholder="Enter artist name"
+                placeholder="Enter artist Bio"
               />
             </div>
 
@@ -108,7 +108,7 @@ const AddArtist = ({onClose,onUpdate, showNewMessage}) => {
                   value={photoLink}
                   className="w-full p-2 py-2 border border-gray-300 rounded-md"
                   onChange={(e) => setPhotoLink(e.target.value)}
-                  placeholder="Link Here"
+                  placeholder="Enter artist photo link"
                 />
               </div>
             </div>
