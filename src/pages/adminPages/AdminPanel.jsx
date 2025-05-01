@@ -1,53 +1,63 @@
 import React from "react";
 import { ScrollTop } from "primereact/scrolltop";
 import { TabView, TabPanel } from "primereact/tabview";
-import mockData from "../../assets/data/mockSongs.json";
-import mockArtists from "../../assets/data/artists.json";
-import { useState, useEffect } from "react";
-import sampleImage from "../../assets/images/Lyrics_sample.png";
+import { useState, useEffect, useCallback } from "react";
 import { CgArrowTopRight } from "react-icons/cg";
 import UsersTab from "./UsersTab/UsersTab";
 import ArtistsTab from "./ArtistTab/ArtistsTab";
+import {
+  fetchTop10Artists,
+  fetchArtistOverview,
+  fetchUserOverview,
+  fetchLyricOverview,
+  fetchPopularLyrics,
+} from "../../assets/util/api";
 
 const Nav = React.lazy(() => import("../../components/adminComponents/Nav"));
 
 const LyricsList = () => {
-
-  const [lyrics, setLyrics] = useState([]);
+  const [popularLyrics, setPopularLyrics] = useState([]);
+  const getPopularLyrics = useCallback(async () => {
+    try {
+      const lyrics = await fetchPopularLyrics(localStorage.getItem("token"));
+      setPopularLyrics(lyrics);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    }
+  }, []);
 
   useEffect(() => {
-
-    // Sort by view_count in descending order and take top 10
-    const topSongs = [...mockData] // Create a copy to avoid modifying original data
-      .sort((a, b) => b.view_count - a.view_count)
-      .slice(0, 10);
-
-    setLyrics(topSongs);
-  }, []);
+    getPopularLyrics();
+  }, [getPopularLyrics]);
 
   return (
     <div>
-      {lyrics.map((lyric, index) => (
+      {popularLyrics.map((lyric, index) => (
         <div
           key={index}
           className="relative flex items-center justify-between w-full border-b last:border-0  border-dashed border-gray-200 px-3"
         >
           <div className="flex items-center gap-1">
-            <span className="mr-2">{index + 1}.</span>
-            <img src={sampleImage} className="w-12 h-12 object-contain" />
+          <p className="mr-4 font-semibold">{index + 1}.</p>
+            <img src={lyric.lyricsPhoto} className="w-12 h-12 object-contain" />
             <div className="flex justify-between items-center w-full p-2 pl-4">
               <div className="flex flex-col gap-2">
                 <p className="font-semibold">
                   {lyric?.title ?? "Sample Title"}
                 </p>
                 <p className="text-sm text-gray-500">
-                  {lyric?.artist?.join(", ") ?? "Sample Artist"}
+                  {lyric.singers.map((singer, index) => (
+                    <span key={index}>
+                      {singer.name}
+                      {index < lyric.singers.length - 1 && ", "}
+                    </span>
+                  ))}
                 </p>
               </div>
             </div>
           </div>
 
-          <p className="text-lg">{lyric.view_count}</p>
+          <p className="text-gray-500 text-base font-semibold bg-gray-100 p-1 px-2 rounded-full">{lyric.viewCount}</p>
         </div>
       ))}
     </div>
@@ -55,28 +65,46 @@ const LyricsList = () => {
 };
 
 const ArtistList = () => {
-  const [artists, setArtists] = useState([]);
+  const [toptenArtists, setToptenArtists] = useState([]);
+
+  const getTop10Artists = useCallback(async () => {
+    try {
+      const artists = await fetchTop10Artists(localStorage.getItem("token"));
+      setToptenArtists(artists);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    }
+  }, []);
 
   useEffect(() => {
-    // Sort by view_count in descending order and take top 10
-    const topArtists = [...mockArtists] // Create a copy to avoid modifying original data
-      .sort((a, b) => b.searchCount - a.searchCount)
-      .slice(0, 10);
-
-    setArtists(topArtists);
-  }, []);
+    getTop10Artists();
+  }, [getTop10Artists]);
 
   return (
     <div>
-      {artists.map((artist, index) => (
+      {(toptenArtists || []).map((artist, index) => (
         <div
           key={index}
           className="p-4 px-4 border-b last-of-type:border-0 border-gray-200 border-dashed flex items-center justify-between"
         >
-          <p>
-            {index + 1}. {artist.name}
+          <p className="mr-4 font-semibold">{index + 1}.</p>
+          <div className="w-full flex justify-start items-center gap-2">
+            <img
+              src={artist.photoLink}
+              alt="Artist Photo"
+              className="w-8 h-8 object-cover rounded-full"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src =
+                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+              }}
+            />
+
+            <p>{artist.name}</p>
+          </div>
+          <p className="text-gray-500 text-base font-semibold bg-gray-100 p-1 px-2 rounded-full">
+            {artist.searchCount}
           </p>
-          <p className="text-lg">{artist.searchCount}</p>
         </div>
       ))}
     </div>
@@ -84,7 +112,64 @@ const ArtistList = () => {
 };
 
 const AdminPanel = () => {
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const [artistCounts, setArtistCounts] = useState({
+    countDiff: 100,
+    totalCount: 0,
+    totalSingerCount: 0,
+    totalWrtierCount: 0,
+    totalBothCount: 0,
+  });
+
+  const getArtistOverview = async () => {
+    try {
+      const artistOverView = await fetchArtistOverview(
+        localStorage.getItem("token")
+      );
+      setArtistCounts(artistOverView);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    }
+  };
+
+  const [usersCount, setUsersCount] = useState({
+    totalCount: 0,
+    totalAdminUsersCount: 0,
+    totalFreeUsersCount: 0,
+    totalPremiumUsersCount: 0,
+    countDiff: 0,
+    totalValidCount: 0,
+    totalInvalidCount: 0,
+  });
+  const getUserOverview = async () => {
+    try {
+      const counts = await fetchUserOverview(localStorage.getItem("token"));
+      setUsersCount(counts);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    }
+  };
+
+  const [lyricsCount, setLyricsCount] = useState({
+    totalCount: 1,
+    countDiff: 1,
+  });
+
+  const getLyricOverview = async () => {
+    try {
+      const counts = await fetchLyricOverview(localStorage.getItem("token"));
+      setLyricsCount(counts);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    }
+  };
+
+  useEffect(() => {
+    getArtistOverview();
+    getLyricOverview;
+    getUserOverview();
+  }, []);
 
   return (
     <>
@@ -109,9 +194,12 @@ const AdminPanel = () => {
                     </p>
                     <div className="p-4 flex justify-between">
                       <div>
-                        <p className="font-bold text-2xl">{"10,000"}</p>
+                        <p className="font-bold text-2xl">
+                          {lyricsCount.totalCount}
+                        </p>
                         <p className="text-sm text-green-500 mt-2">
-                          +<span>200</span> songs vs last month
+                          +<span>{lyricsCount.countDiff}</span> songs vs last
+                          month
                         </p>
                       </div>
 
@@ -130,9 +218,12 @@ const AdminPanel = () => {
                     </p>
                     <div className="p-4 flex justify-between">
                       <div>
-                        <p className="font-bold text-2xl">{"1,000"}</p>
+                        <p className="font-bold text-2xl">
+                          {artistCounts.totalCount}
+                        </p>
                         <p className="text-sm text-green-500 mt-2">
-                          +<span>200</span> artists vs last month
+                          +<span>{artistCounts.countDiff}</span> artists vs last
+                          month
                         </p>
                       </div>
                       <button
@@ -150,9 +241,12 @@ const AdminPanel = () => {
                     </p>
                     <div className="p-4 flex justify-between">
                       <div>
-                        <p className="font-bold text-2xl">{"10,000"}</p>
+                        <p className="font-bold text-2xl">
+                          {usersCount.totalCount}
+                        </p>
                         <p className="text-sm text-green-500 mt-2">
-                          +<span>200</span> users vs last month
+                          +<span>{usersCount.countDiff}</span> users vs last
+                          month
                         </p>
                       </div>
 

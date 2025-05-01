@@ -24,7 +24,6 @@ const LyricsCard = ({ id,lyric }) => {
   const navigate = useNavigate();
 
   const goToLyricsDetails = () => {
-    console.log("Go to Lyrics Details");
     // Pass the id dynamically in the URL
     navigate(`/NT_Lyrics/lyricsdetail/${id}`, { state: { lyric } });
   }

@@ -28,7 +28,6 @@ const UserTable = () => {
 
         const data = await response.json();
 
-        console.log(data);
         setUsers(data); // Store fetched users in state
       } catch (error) {
         console.error("Failed to fetch users:", error);
@@ -41,10 +40,6 @@ const UserTable = () => {
   const [emailSearch, setEmailSearch] = useState("");
   const [editModes, setEditModes] = useState({});
 
-  const updateUser = async (user) => {
-    console.log("User - "+user);
-    // API call logic here
-  };
 
   const toggleEdit = (userId) => {
     setEditModes((prev) => ({ ...prev, [userId]: !prev[userId] }));
@@ -133,7 +128,6 @@ const UserTable = () => {
           icon="pi pi-check"
           className="p-button-sm p-button-success p-button-text"
           onClick={() => {
-            updateUser(rowData);
             toggleEdit(rowData._id);
           }}
         />

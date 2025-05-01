@@ -25,7 +25,6 @@ const Login = () => {
   const [isRemember, setIsRemember] = useState(true);
   const handleRemember = () => {
     setIsRemember(!isRemember);
-    console.log(isRemember);
   };
 
   // Validate Email

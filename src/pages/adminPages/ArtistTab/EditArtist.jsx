@@ -24,7 +24,6 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
   const token = localStorage.getItem("token");
 
   const updateArtist = async () => {
-    console.log("Updating artist...");
     const response = await fetch(
       `http://localhost:3000/api/artists/updateArtist/${artist._id}`,
       {
@@ -48,7 +47,6 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
     } else {
       showNewMessage("success", "Artist updated successfully");
     }
-    console.log("Artist updated successfully");
     const data = await response.json();
     return data;
   };
@@ -75,7 +73,6 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
     );
     if (!response.ok) {
       const errorData = await response.json();
-      console.log(errorData.errors[0].message)
       showNewMessage("error", errorData.errors[0].message);
       throw new Error(errorData.message || "Failed to delete artist");
     } else {

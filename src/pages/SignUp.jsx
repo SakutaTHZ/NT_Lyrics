@@ -78,9 +78,6 @@ const SignUp = () => {
           `Signup failed: ${response.statusText}, ${JSON.stringify(errorData)}`
         );
       }
-
-      const data = await response.json();
-      console.log("User registered successfully:", data);
       loginAction({ email, password });
     } catch (error) {
       console.error("Error signing up:", error.message);

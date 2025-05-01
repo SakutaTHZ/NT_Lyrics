@@ -32,12 +32,10 @@ const AuthProvider = ({ children }) => {
 
       const res = await response.json();
 
-      console.log(res)
 
       if (res.token && res.user) {
         setUser(res.user);
         setToken(res.token);
-        // console.log(res);
         const userDetails = {
           id: res.user._id,
           name: res.user.name,

@@ -105,7 +105,6 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
 
       // Update local state and localStorage
       setUser(result);
-      console.log(result);
       const userDetails = {
         id: result.user._id,
         name: result.user.name,

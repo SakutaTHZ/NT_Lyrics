@@ -18,8 +18,7 @@ const LyricsDetails = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const lyric = location.state?.lyric; // Retrieve the lyric object
-  console.log(lyric);
+  const lyric = location.state?.lyric;
   if (!lyric) {
     return <p>Lyrics data not found.</p>;
   }

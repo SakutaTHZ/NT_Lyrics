@@ -22,7 +22,6 @@ const AddArtist = ({onClose,onUpdate, showNewMessage}) => {
   const token = localStorage.getItem("token");
 
   const addArtist = async () => {
-    console.log("Adding artist...");
     const response = await fetch(
       `http://localhost:3000/api/artists/createArtist`,
       {
@@ -46,7 +45,6 @@ const AddArtist = ({onClose,onUpdate, showNewMessage}) => {
     } else {
       showNewMessage("success", `${name} added successfully`);
     }
-    console.log("Artist updated successfully");
     const data = await response.json();
     return data;
   };

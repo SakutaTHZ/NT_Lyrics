@@ -6,6 +6,7 @@ import useDebounce from "../../../components/hooks/useDebounce";
 import UserRow from "./UserRow";
 import AddNewUser from "./AddNewUser";
 import MessagePopup from "../../../components/common/MessagePopup";
+import { fetchUserOverview } from "../../../assets/util/api";
 
 const UsersTab = () => {
   const [users, setUsers] = useState([]);
@@ -32,16 +33,8 @@ const UsersTab = () => {
 
   const getUserOverview = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3000/api/users/getUserOverview",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${AUTH_TOKEN.current}`,
-          },
-        }
-      );
-      setUsersCount(res.data);
+      const counts = await fetchUserOverview(AUTH_TOKEN.current);
+      setUsersCount(counts);
     } catch (err) {
       console.error("Error fetching user overview:", err);
     }
@@ -104,6 +97,7 @@ const UsersTab = () => {
   useEffect(() => {
     getUserOverview();
     fetchUsers(page);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, roleFilter, debouncedSearchTerm]);
 
   const chartData = {

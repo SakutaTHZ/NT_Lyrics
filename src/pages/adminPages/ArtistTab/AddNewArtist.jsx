@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 
-const AddNewArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
+const AddNewArtist = ({ onClose, artist, onUpdate}) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
@@ -12,8 +12,6 @@ const AddNewArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
       document.documentElement.style.height = "auto";
     };
   }, []);
-
-  console.log(showNewMessage("success", "User updated successfully!"));
 
   return (
     <>

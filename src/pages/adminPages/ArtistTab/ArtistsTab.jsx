@@ -7,6 +7,7 @@ import { Chart } from "primereact/chart";
 import { SelectButton } from "primereact/selectbutton";
 import EditArtist from "./EditArtist";
 import AddArtist from "./AddArtist";
+import {fetchTop10Artists,fetchArtistOverview} from '../../../assets/util/api'
 
 const ArtistsTab = () => {
   const [artists, setArtists] = useState([]);
@@ -74,24 +75,8 @@ const ArtistsTab = () => {
 
   const getTop10Artists = useCallback(async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3000/api/artists/getTopArtists",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${AUTH_TOKEN.current}`,
-          },
-        }
-      );
-
-      const mappedArtists = res.data.topArtists.map((artist) => ({
-        photoLink: artist.photoLink,
-        name: artist.name,
-        searchCount: artist.searchCount,
-      }));
-
-      setToptenArtists(mappedArtists);
-      console.log(res.data.topArtists);
+      const artists = await fetchTop10Artists(AUTH_TOKEN.current);
+      setToptenArtists(artists);
     } catch (err) {
       console.error("Error fetching user overview:", err);
     }
@@ -99,23 +84,8 @@ const ArtistsTab = () => {
 
   const getArtistOverview = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3000/api/artists/getArtistOverview",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${AUTH_TOKEN.current}`,
-          },
-        }
-      );
-      setArtistCounts({
-        countDiff: res.data.totalCount,
-        totalCount: res.data.totalCount,
-        totalSingerCount: res.data.totalSingerCount,
-        totalWrtierCount: res.data.totalWriterCount,
-        totalBothCount: res.data.totalBothCount,
-      });
-      console.log("Artist Overview:", res.data);
+      const artistOverView = await fetchArtistOverview(AUTH_TOKEN.current);
+      setArtistCounts(artistOverView);
     } catch (err) {
       console.error("Error fetching user overview:", err);
     }
