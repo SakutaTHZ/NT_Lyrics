@@ -94,6 +94,8 @@ export const fetchLyricOverview = async (authToken) => {
         },
       }
     );
+    console.log("Lyric Overview Response:", res.data); // Debugging line
+    console.log(res.data);
     return res.data;
   } catch (err) {
     console.error("Error fetching user overview:", err);
@@ -109,29 +111,7 @@ export const fetchPopularLyrics = async (authToken) => {
         },
       });
   
-      const lyricsWithArtists = await Promise.all(
-        res.data.topLyrics.map(async (lyric) => {
-          const resolvedSingers = await Promise.all(
-            lyric.singers.map(async (singerId) => {
-              const artist = await fetchArtistById(authToken, singerId);
-              return {
-                name: artist?.name || "Unknown",
-                photoLink: artist?.photoLink || null,
-              };
-            })
-          );
-  
-          return {
-            title: lyric.title,
-            viewCount: lyric.viewCount,
-            lyricsPhoto: lyric.lyricsPhoto,
-            genre: lyric.genre,
-            singers: resolvedSingers,
-          };
-        })
-      );
-  
-      return lyricsWithArtists;
+      return res.data.topLyrics;
     } catch (err) {
       console.error("Error fetching top lyrics with artists:", err);
       throw err;

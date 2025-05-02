@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import { CgArrowTopRight } from "react-icons/cg";
 import UsersTab from "./UsersTab/UsersTab";
 import ArtistsTab from "./ArtistTab/ArtistsTab";
+import LyricsTab from "./LyricsTab/LyricsTab";
 import {
   fetchTop10Artists,
   fetchArtistOverview,
@@ -152,13 +153,17 @@ const AdminPanel = () => {
   };
 
   const [lyricsCount, setLyricsCount] = useState({
-    totalCount: 1,
-    countDiff: 1,
+    totalCount: 0,
+    countDiff: 0,
+    enabledCount: 0,
+    disabledCount: 0,
   });
 
   const getLyricOverview = async () => {
+    console.log("Fetching lyric overview...");
     try {
       const counts = await fetchLyricOverview(localStorage.getItem("token"));
+      console.log(counts);
       setLyricsCount(counts);
     } catch (err) {
       console.error("Error fetching user overview:", err);
@@ -167,7 +172,7 @@ const AdminPanel = () => {
 
   useEffect(() => {
     getArtistOverview();
-    getLyricOverview;
+    getLyricOverview();
     getUserOverview();
   }, []);
 
@@ -310,7 +315,7 @@ const AdminPanel = () => {
             </TabPanel>
             {/* Lyrics Panel */}
             <TabPanel header="Lyrics">
-              <p className="m-0">Lyrics data here</p>
+              <LyricsTab/>
             </TabPanel>
             {/* Users Panel */}
             <TabPanel header="Users">
