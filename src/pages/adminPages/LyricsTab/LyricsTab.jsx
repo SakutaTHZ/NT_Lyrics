@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import MessagePopup from "../../../components/common/MessagePopup";
 import { Chart } from "primereact/chart";
 import { SelectButton } from "primereact/selectbutton";
-import { fetchLyricOverview } from "../../../assets/util/api"; // Adjust the import path as necessary
+import { fetchLyricOverview } from "../../../assets/util/api";
+import AddLyric from "./AddLyric";
 
 const LyricsTab = () => {
   const [lyricsCount, setLyricsCount] = useState({
@@ -64,6 +65,11 @@ const LyricsTab = () => {
     } catch (err) {
       console.error("Error fetching user overview:", err);
     }
+  };
+
+  const [openAddLyricsModal, setOpenAddLyricsModal] = useState(false);
+  const closeAddLyricsModal = () => {
+    setOpenAddLyricsModal(false);
   };
 
   useEffect(() => {
@@ -148,11 +154,23 @@ const LyricsTab = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="w-full md:w-auto text-nowrap bg-blue-500 text-white p-3 rounded-md cursor-pointer">
+          <button className="w-full md:w-auto text-nowrap bg-blue-500 text-white p-3 rounded-md cursor-pointer" onClick={() => {setOpenAddLyricsModal(true)}}>
             Add New Lyrics
           </button>
         </div>
       </div>
+
+      
+            {openAddLyricsModal && (
+              <AddLyric
+                onClose={closeAddLyricsModal}
+                onUpdate={() => {
+                  getLyricOverview();
+                  showNewMessage("success", "Lyric Added Successfully!");
+                }}
+                showNewMessage={showNewMessage}
+              />
+            )}
     </>
   );
 };
