@@ -5,15 +5,21 @@ import { SelectButton } from "primereact/selectbutton";
 import { fetchLyricOverview } from "../../../assets/util/api";
 import AddLyric from "./AddLyric";
 import { Dropdown } from "primereact/dropdown";
+import axios from "axios";
+import { useCallback } from "react";
+import { useRef } from "react";
+import useDebounce from "../../../components/hooks/useDebounce";
+import LyricRow from "./LyricRow";
 
 const LyricsTab = () => {
+  const [lyrics, setLyrics] = useState([]);
   const [lyricsCount, setLyricsCount] = useState({
     totalCount: 0,
     countDiff: 0,
     enabledCount: 0,
     disabledCount: 0,
   });
-  const [typeFilter, setTypeFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
   const [selectedType, setSelectedType] = useState("all");
@@ -24,6 +30,67 @@ const LyricsTab = () => {
     { name: "Lyrics", value: "lyrics" },
     { name: "Key", value: "key" },
   ];
+
+  
+  const [loading, setLoading] = useState(false);
+  const debouncedSearchTerm = useDebounce(searchTerm);
+  const [totalPages, setTotalPages] = useState(0);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
+
+  const fetchLyrics = useCallback(
+    async (pageNum = 1, override = false) => {
+      setLoading(true);
+      try {
+        const res = await axios.get(
+          "http://localhost:3000/api/lyrics/searchLyrics",
+          {
+            params: {
+              page: pageNum,
+              limit: 20,
+              type: typeFilter,
+              keyword: debouncedSearchTerm,
+            },
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        setLyrics((prev) =>
+          override || pageNum === 1
+            ? res.data.lyrics
+            : [...prev, ...res.data.lyrics]
+        );
+        setTotalPages(res.data.totalPages);
+        setInitialLoadDone(true);
+        getLyricOverview();
+      } catch (err) {
+        console.error("Error fetching users:", err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [typeFilter, debouncedSearchTerm]
+  );
+  const [page, setPage] = useState(1);
+  const observer = useRef(null);
+
+  const lastUserRef = useCallback(
+    (node) => {
+      if (loading || page >= totalPages) return;
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [loading, totalPages, page]
+  );
+
   // For Error Messages
   const [showMessage, setShowMessage] = useState(false);
   const [messageType, setMessageType] = useState("success");
@@ -51,9 +118,9 @@ const LyricsTab = () => {
   };
 
   const types = [
-    { name: `All (${lyricsCount.totalCount})`, value: "all"},
-    { name: `Disabled (${lyricsCount.disabledCount})`, value: "disabled"},
-    { name: `Enabled (${lyricsCount.enabledCount})`, value: "enabled"},
+    { name: `All (${lyricsCount.totalCount})`, value: "all" },
+    { name: `Disabled (${lyricsCount.disabledCount})`, value: "disabled" },
+    { name: `Enabled (${lyricsCount.enabledCount})`, value: "enabled" },
   ];
 
   const chartOptions = {
@@ -66,10 +133,8 @@ const LyricsTab = () => {
     },
   };
   const getLyricOverview = async () => {
-    console.log("Fetching lyric overview...");
     try {
       const counts = await fetchLyricOverview(localStorage.getItem("token"));
-      console.log(counts);
       setLyricsCount(counts);
     } catch (err) {
       console.error("Error fetching user overview:", err);
@@ -85,7 +150,8 @@ const LyricsTab = () => {
     showNewMessage("success", "Lyrics Tab Loaded Successfully!");
 
     getLyricOverview();
-  }, []);
+    fetchLyrics();
+  }, [fetchLyrics]);
 
   return (
     <>
@@ -150,7 +216,9 @@ const LyricsTab = () => {
               options={types}
               className="w-full md:w-auto"
               itemTemplate={(option) => (
-                <div className={`flex items-center gap-2 px-2 py-1 rounded ${option.color}`}>
+                <div
+                  className={`flex items-center gap-2 px-2 py-1 rounded ${option.color}`}
+                >
                   <span className="text-sm font-semibold">{option.name}</span>
                 </div>
               )}
@@ -182,6 +250,59 @@ const LyricsTab = () => {
             Add New Lyrics
           </button>
         </div>
+      </div>
+
+      {/* Table */}
+      <div className="tableContainer border border-gray-200 rounded-md shadow-sm w-full h-[calc(100vh-180px)] mt-4 overflow-x-auto sticky top-12">
+        <table className="min-w-full bg-white text-sm text-left">
+          <thead className="thead-shadow text-xs text-gray-600 uppercase sticky top-0 bg-gray-100 z-10">
+            <tr>
+              <th className="px-4 py-3">#</th>
+              <th className="px-4 py-3 w-16">ID</th>
+              <th className="px-4 py-3">Photo</th>
+              <th className="px-4 py-3">Title / Album / Genres</th>
+              <th className="px-4 py-3">Singers</th>
+              <th className="px-4 py-3">Features</th>
+              <th className="px-4 py-3">Writers</th>
+              <th className="px-4 py-3">Key</th>
+              <th className="px-4 py-3">View Count</th>
+              <th className="px-4 py-3">isEnabled</th>
+              <th className="px-4 py-3">Action</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+                  {lyrics.map((lyric, idx) => {
+                    const isLast = idx === lyrics.length - 1;
+                    return (
+                      <LyricRow
+                        key={lyric._id || idx}
+                        lyric={lyric}
+                        idx={idx}
+                        isLast={isLast}
+                        lastUserRef={lastUserRef}
+                        onEdit={() => {console.log("Edit clicked")}}
+                      />
+                    );
+                  })}
+                  {loading && (
+                    <tr>
+                      <td colSpan={7} className="text-center py-4 text-gray-500">
+                        Loading more artists...
+                      </td>
+                    </tr>
+                  )}
+                  {!loading && lyrics.length === 0 && initialLoadDone && (
+                    <tr>
+                      <td
+                        colSpan={7}
+                        className="text-center py-4 text-gray-400 italic"
+                      >
+                        No artists found.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+        </table>
       </div>
 
       {openAddLyricsModal && (

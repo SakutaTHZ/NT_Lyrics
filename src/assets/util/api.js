@@ -94,8 +94,6 @@ export const fetchLyricOverview = async (authToken) => {
         },
       }
     );
-    console.log("Lyric Overview Response:", res.data); // Debugging line
-    console.log(res.data);
     return res.data;
   } catch (err) {
     console.error("Error fetching user overview:", err);
