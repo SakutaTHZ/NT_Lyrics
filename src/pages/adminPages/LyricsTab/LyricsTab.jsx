@@ -4,6 +4,7 @@ import { Chart } from "primereact/chart";
 import { SelectButton } from "primereact/selectbutton";
 import { fetchLyricOverview } from "../../../assets/util/api";
 import AddLyric from "./AddLyric";
+import { Dropdown } from "primereact/dropdown";
 
 const LyricsTab = () => {
   const [lyricsCount, setLyricsCount] = useState({
@@ -15,6 +16,14 @@ const LyricsTab = () => {
   const [typeFilter, setTypeFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [selectedType, setSelectedType] = useState("all");
+  const typeOptions = [
+    { name: "All", value: "all" },
+    { name: "Singer", value: "singer" },
+    { name: "Writer", value: "writer" },
+    { name: "Lyrics", value: "lyrics" },
+    { name: "Key", value: "key" },
+  ];
   // For Error Messages
   const [showMessage, setShowMessage] = useState(false);
   const [messageType, setMessageType] = useState("success");
@@ -35,16 +44,16 @@ const LyricsTab = () => {
     datasets: [
       {
         data: [lyricsCount.disabledCount, lyricsCount.enabledCount],
-        backgroundColor: ["#66BB6A", "#eab308"],
-        hoverBackgroundColor: ["#81C784", "#eab308"],
+        backgroundColor: ["#eab308", "#66BB6A"],
+        hoverBackgroundColor: ["#eab308", "#81C784"],
       },
     ],
   };
 
   const types = [
-    { name: `All (${lyricsCount.totalCount})`, value: "all" },
-    { name: `Disabled (${lyricsCount.disabledCount})`, value: "disabled" },
-    { name: `Enabled (${lyricsCount.enabledCount})`, value: "enabled" },
+    { name: `All (${lyricsCount.totalCount})`, value: "all"},
+    { name: `Disabled (${lyricsCount.disabledCount})`, value: "disabled"},
+    { name: `Enabled (${lyricsCount.enabledCount})`, value: "enabled"},
   ];
 
   const chartOptions = {
@@ -106,16 +115,16 @@ const LyricsTab = () => {
               <div className="md:ml-4 flex flex-wrap gap-2 p-2 rounded-md md:border-l-2 border-gray-200">
                 <div className="flex items-center md:px-4 gap-3">
                   <p className="min-w-16 text-center text-green-500 text-2xl font-bold bg-green-50 p-3 rounded-md">
-                    {lyricsCount.disabledCount}
+                    {lyricsCount.enabledCount}
                   </p>
-                  <div className="flex items-center">Disabled</div>
+                  <div className="flex items-center">Enabled</div>
                 </div>
 
                 <div className="flex items-center md:px-4 gap-3">
                   <p className="min-w-16 text-center text-yellow-500 text-2xl font-bold bg-yellow-50 p-3 rounded-md">
-                    {lyricsCount.enabledCount}
+                    {lyricsCount.disabledCount}
                   </p>
-                  <div className="flex items-center">Enabled</div>
+                  <div className="flex items-center">Disabled</div>
                 </div>
               </div>
             </div>
@@ -141,36 +150,50 @@ const LyricsTab = () => {
               options={types}
               className="w-full md:w-auto"
               itemTemplate={(option) => (
-                <div className="flex items-center gap-2">
+                <div className={`flex items-center gap-2 px-2 py-1 rounded ${option.color}`}>
                   <span className="text-sm font-semibold">{option.name}</span>
                 </div>
               )}
             />
           </div>
+
+          <Dropdown
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.value)}
+            options={typeOptions}
+            optionLabel="name"
+            placeholder="Search by Type"
+            className="w-fit min-w-42 md:w-12rem"
+          />
+
           <input
             type="text"
             placeholder="Search by Lyrics Name"
-            className="border border-gray-300 rounded-md px-3 py-2 w-full h-[42px]"
+            className="border border-gray-300 rounded-md px-3 py-2 w-full h-[50px]"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="w-full md:w-auto text-nowrap bg-blue-500 text-white p-3 rounded-md cursor-pointer" onClick={() => {setOpenAddLyricsModal(true)}}>
+          <button
+            className="w-full md:w-auto text-nowrap bg-blue-500 text-white p-3 rounded-md cursor-pointer"
+            onClick={() => {
+              setOpenAddLyricsModal(true);
+            }}
+          >
             Add New Lyrics
           </button>
         </div>
       </div>
 
-      
-            {openAddLyricsModal && (
-              <AddLyric
-                onClose={closeAddLyricsModal}
-                onUpdate={() => {
-                  getLyricOverview();
-                  showNewMessage("success", "Lyric Added Successfully!");
-                }}
-                showNewMessage={showNewMessage}
-              />
-            )}
+      {openAddLyricsModal && (
+        <AddLyric
+          onClose={closeAddLyricsModal}
+          onUpdate={() => {
+            getLyricOverview();
+            showNewMessage("success", "Lyric Added Successfully!");
+          }}
+          showNewMessage={showNewMessage}
+        />
+      )}
     </>
   );
 };

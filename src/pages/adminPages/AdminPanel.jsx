@@ -113,7 +113,7 @@ const ArtistList = () => {
 };
 
 const AdminPanel = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(2);
 
   const [artistCounts, setArtistCounts] = useState({
     countDiff: 100,
