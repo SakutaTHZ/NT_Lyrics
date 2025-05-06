@@ -44,18 +44,36 @@ const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit }) => {
         </div>
       </td>
       <td className="px-4 py-3">
-        {lyric.singers.map((name, index) => (
+        {lyric.singers.map((singer, index) => (
           <span key={index}>
-            {name}
+            {singer.name}
             {index < lyric.singers.length - 1 ? ", " : ""}
           </span>
         ))}
       </td>
-      <td className="px-4 py-3">Features</td>
-      <td className="px-4 py-3">Writers</td>
-      <td className="px-4 py-3">Key</td>
-      <td className="px-4 py-3">View Count</td>
-      <td className="px-4 py-3">isEnabled</td>
+      <td className="px-4 py-3">
+        {lyric.featureArtists.map((featureArtist, index) => (
+          <span key={index}>
+            {featureArtist.name}
+            {index < lyric.singers.length - 1 ? ", " : ""}
+          </span>
+        ))}
+      </td>
+      <td className="px-4 py-3">
+        {lyric.writers.map((writer, index) => (
+          <span key={index}>
+            {writer.name}
+            {index < lyric.singers.length - 1 ? ", " : ""}
+          </span>
+        ))}
+      </td>
+      <td className="px-4 py-3 font-semibold">{lyric.majorKey}</td>
+      <td className="px-4 py-3">{lyric.viewCount}</td>
+      <td className="px-4 py-3">{lyric.isEnable ? (
+        <span className="border px-2 py-1 rounded-md bg-green-50 border-green-500 text-green-500">Enabled</span>
+      ) : (
+        <span className="border px-2 py-1 rounded-md bg-red-50 border-red-500 text-red-500">Enabled</span>
+      )}</td>
       <td className="px-4 py-3">
         <button
           className="w-full flex items-center justify-center p-2 rounded-md text-blue-600 bg-blue-50 hover:underline text-sm cursor-pointer"

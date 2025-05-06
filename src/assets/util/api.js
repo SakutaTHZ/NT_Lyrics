@@ -116,3 +116,17 @@ export const fetchPopularLyrics = async (authToken) => {
     }
   };
   
+ export const fetchSingers = async (type) => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/artists/getArtistsByType?type=${type}`);
+      const data = await res.json();
+      if (data.artists) {
+        return data.artists
+      } else {
+        console.warn("No artists found in response:", data);
+        return null
+      }
+    } catch (error) {
+      console.error("Error fetching singers:", error);
+    }
+  };

@@ -6,6 +6,7 @@ import {
   genreOptions,
   keyOptions,
 } from "../../../../src/assets/js/constantDatas"; // Assuming you have a file with genres
+import { fetchSingers } from "../../../assets/util/api";
 
 const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
   useEffect(() => {
@@ -51,6 +52,40 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
     const data = await response.json();
     return data;
   };
+
+  const [singers, setSingers] = useState([]);
+const [selectedSingers, setSelectedSingers] = useState([]);
+
+const [writers, setWriters] = useState([]);
+const [selectedWriters, setSelectedWriters] = useState([]);
+
+const [features, setFeatures] = useState([]);
+const [selectedFeatures, setSelectedFeatures] = useState([]);
+
+useEffect(() => {
+  const getArtists = async () => {
+    try {
+      const [singerData, writerData] = await Promise.all([
+        fetchSingers("singer"),
+        fetchSingers("writer"),
+      ]);
+
+      setSingers(singerData);
+      setWriters(writerData);
+
+      const combined = [...singerData, ...writerData];
+      const deduped = Array.from(
+        new Map(combined.map((item) => [item._id, item])).values()
+      );
+      setFeatures(deduped);
+      console.log("Deduped features:", deduped);
+    } catch (err) {
+      console.error("Error fetching artists:", err);
+    }
+  };
+
+  getArtists();
+}, []);
 
   return (
     <>
@@ -116,6 +151,57 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
                   className="w-full md:w-20rem"
                 />
               </div>
+            </div>
+
+            <div className="row gap-4">
+              <label className="block my-2 text-sm font-medium text-gray-700">
+                Singers
+              </label>
+              <MultiSelect
+                value={selectedSingers}
+                onChange={(e) => setSelectedSingers(e.value)}
+                options={singers}
+                optionLabel="name"
+                placeholder="Select Singers"
+                maxSelectedLabels={3}
+                className="w-full md:w-20rem"
+                filter
+                filterPlaceholder="Search Singers..."
+              />
+            </div>
+
+            <div className="row gap-4">
+              <label className="block my-2 text-sm font-medium text-gray-700">
+                Writers
+              </label>
+              <MultiSelect
+                value={selectedWriters}
+                onChange={(e) => setSelectedWriters(e.value)}
+                options={writers}
+                optionLabel="name"
+                placeholder="Select Writers"
+                maxSelectedLabels={3}
+                className="w-full md:w-20rem"
+                filter
+                filterPlaceholder="Search Writers..."
+              />
+            </div>
+
+            <div className="row gap-4">
+              <label className="block my-2 text-sm font-medium text-gray-700">
+                Features
+              </label>
+              <MultiSelect
+                value={selectedFeatures}
+                onChange={(e) => setSelectedFeatures(e.value)}
+                options={features}
+                optionLabel="name"
+                placeholder="Select Features"
+                maxSelectedLabels={3}
+                className="w-full md:w-20rem"
+                filter
+                filterPlaceholder="Search Features..."
+              />
             </div>
           </div>
 
