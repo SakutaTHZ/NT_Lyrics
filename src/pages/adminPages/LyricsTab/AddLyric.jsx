@@ -78,7 +78,6 @@ useEffect(() => {
         new Map(combined.map((item) => [item._id, item])).values()
       );
       setFeatures(deduped);
-      console.log("Deduped features:", deduped);
     } catch (err) {
       console.error("Error fetching artists:", err);
     }
@@ -119,7 +118,7 @@ useEffect(() => {
                 value={albumnName}
                 className="w-full p-2 py-2 border border-gray-300 rounded-md"
                 onChange={(e) => setAlbumnName(e.target.value)}
-                placeholder="Enter lyric title"
+                placeholder="Enter Album Name"
               />
             </div>
 
