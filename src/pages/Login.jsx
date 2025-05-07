@@ -22,10 +22,8 @@ const Login = () => {
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(true);
   const [errorMessage, setErrorMessage] = useState(""); // Store API error messages
 
-  const [isRemember, setIsRemember] = useState(true);
-  const handleRemember = () => {
-    setIsRemember(!isRemember);
-  };
+  const [isRemember, setIsRemember] = useState(false);
+    
 
   // Validate Email
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -46,6 +44,8 @@ const Login = () => {
       setErrorMessage("Please enter valid credentials.");
       return;
     }
+
+    console.log(isRemember)
 
     const response = await loginAction({
       email,
@@ -128,7 +128,8 @@ const Login = () => {
               type="checkbox"
               id="remember"
               className="cursor-pointer"
-              onChange={handleRemember}
+              onChange={()=>setIsRemember(!isRemember)}
+              checked={isRemember}
             />
             <label htmlFor="remember" className={labelClass}>
               Remember for 30 days
