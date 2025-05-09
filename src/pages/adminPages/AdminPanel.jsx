@@ -160,10 +160,8 @@ const AdminPanel = () => {
   });
 
   const getLyricOverview = async () => {
-    console.log("Fetching lyric overview...");
     try {
       const counts = await fetchLyricOverview(localStorage.getItem("token"));
-      console.log(counts);
       setLyricsCount(counts);
     } catch (err) {
       console.error("Error fetching user overview:", err);

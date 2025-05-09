@@ -45,8 +45,6 @@ const Login = () => {
       return;
     }
 
-    console.log(isRemember)
-
     const response = await loginAction({
       email,
       password,

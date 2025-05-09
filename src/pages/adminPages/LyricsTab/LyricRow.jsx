@@ -72,7 +72,7 @@ const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit }) => {
       <td className="px-4 py-3">{lyric.isEnable ? (
         <span className="border px-2 py-1 rounded-md bg-green-50 border-green-500 text-green-500">Enabled</span>
       ) : (
-        <span className="border px-2 py-1 rounded-md bg-red-50 border-red-500 text-red-500">Enabled</span>
+        <span className="border px-2 py-1 rounded-md bg-red-50 border-red-500 text-red-500">Disabled</span>
       )}</td>
       <td className="px-4 py-3">
         <button

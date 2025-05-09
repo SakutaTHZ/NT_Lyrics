@@ -2,13 +2,33 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { MultiSelect } from "primereact/multiselect";
 import { Dropdown } from "primereact/dropdown";
+
 import {
   genreOptions,
   keyOptions,
-} from "../../../../src/assets/js/constantDatas"; // Assuming you have a file with genres
+} from "../../../../src/assets/js/constantDatas";
 import { fetchSingers } from "../../../assets/util/api";
 
 const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
+  const token = localStorage.getItem("token");
+
+  // Form States
+  const [title, setTitle] = useState("");
+  const [albumName, setAlbumName] = useState("");
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedMajorKey, setSelectedMajorKey] = useState(null);
+
+  const [singers, setSingers] = useState([]);
+  const [writers, setWriters] = useState([]);
+  const [features, setFeatures] = useState([]);
+
+  const [selectedSingers, setSelectedSingers] = useState([]);
+  const [selectedWriters, setSelectedWriters] = useState([]);
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
+
+  const [uploadedFile, setUploadedFile] = useState(null);
+
+  // Scroll lock
   useEffect(() => {
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
@@ -20,219 +40,305 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
     };
   }, []);
 
-  const [title, setTitle] = useState();
-  const [albumnName, setAlbumnName] = useState();
+  // Fetch artists
+  useEffect(() => {
+    const getArtists = async () => {
+      try {
+        const [singerData, writerData] = await Promise.all([
+          fetchSingers("singer"),
+          fetchSingers("writer"),
+        ]);
+        setSingers(singerData);
+        setWriters(writerData);
 
-  const token = localStorage.getItem("token");
-
-  const [selectedGenres, setSelectedGenres] = useState([]);
-  const [selectedMajorKey, setSelectedMajorKey] = useState(null);
-
-  const addLyric = async () => {
-    const response = await fetch(
-      `http://localhost:3000/api/artists/createArtist`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name: title,
-        }),
+        // Merge and dedupe for Features
+        const deduped = Array.from(
+          new Map(
+            [...singerData, ...writerData].map((artist) => [artist._id, artist])
+          ).values()
+        );
+        setFeatures(deduped);
+      } catch (err) {
+        console.error("Error fetching artists:", err);
       }
+    };
+
+    getArtists();
+  }, []);
+
+  const validateForm = () => {
+    if (!title?.trim()) return "Title is required.";
+    if (!albumName?.trim()) return "Album name is required.";
+    if (!selectedGenres.length) return "Select at least one genre.";
+    if (!selectedMajorKey) return "Please choose a major key.";
+    if (!selectedSingers.length) return "Select at least one singer.";
+    if (!uploadedFile) {
+      console.log("No file uploaded:", uploadedFile); // Log the file for debugging
+      return "You must upload a lyric file.";
+    }
+    return null; // No errors
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const errorMessage = validateForm();
+    if (errorMessage) {
+      showNewMessage("error", errorMessage);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("albumName", albumName);
+    formData.append("majorKey", selectedMajorKey?.name || selectedMajorKey);
+    formData.append("genre",  JSON.stringify(selectedGenres.map((s) => s.name)));
+    formData.append(
+      "singers",
+      JSON.stringify(selectedSingers.map((s) => s._id))
     );
-    if (!response.ok) {
-      const errorData = await response.json();
-      showNewMessage("error", errorData.errors[0].message);
-      throw new Error(errorData.errors[0].message);
+    formData.append(
+      "writers",
+      JSON.stringify(selectedWriters.map((w) => w._id))
+    );
+    formData.append(
+      "featureArtists",
+      JSON.stringify(selectedFeatures.map((f) => f._id))
+    );
+
+    if (uploadedFile) {
+      formData.append("lyricsPhoto", uploadedFile);
     } else {
-      showNewMessage("success", `${name} added successfully`);
+      showNewMessage("error", "You must upload a lyric file.");
+      return;
     }
-    const data = await response.json();
-    return data;
-  };
 
-  const [singers, setSingers] = useState([]);
-const [selectedSingers, setSelectedSingers] = useState([]);
+    console.log("Form data before submission:", {
+      title,
+      albumName,
+      majorKey: selectedMajorKey?.name || selectedMajorKey,
+      genre: selectedGenres,
+      singers: selectedSingers.map((s) => s._id),
+      writers: selectedWriters.map((w) => w._id),
+      featureArtists: selectedFeatures.map((f) => f._id),
+    });
 
-const [writers, setWriters] = useState([]);
-const [selectedWriters, setSelectedWriters] = useState([]);
+    console.log("FormData contents:");
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
 
-const [features, setFeatures] = useState([]);
-const [selectedFeatures, setSelectedFeatures] = useState([]);
-
-useEffect(() => {
-  const getArtists = async () => {
     try {
-      const [singerData, writerData] = await Promise.all([
-        fetchSingers("singer"),
-        fetchSingers("writer"),
-      ]);
-
-      setSingers(singerData);
-      setWriters(writerData);
-
-      const combined = [...singerData, ...writerData];
-      const deduped = Array.from(
-        new Map(combined.map((item) => [item._id, item])).values()
+      const response = await fetch(
+        "http://localhost:3000/api/lyrics/createLyrics",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
       );
-      setFeatures(deduped);
+
+      const contentType = response.headers.get("content-type");
+      let data;
+
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        throw new Error(`Unexpected non-JSON response:\n${text}`);
+      }
+
+      console.log("Response data:", data); // Log the response data for debugging
+
+      if (!response.ok) {
+        showNewMessage("error", data.message || "Failed to add lyric.");
+        return;
+      }
+
+      showNewMessage("success", `${title} added successfully.`);
+      onUpdate();
+      onClose();
     } catch (err) {
-      console.error("Error fetching artists:", err);
+      console.error("Failed to save lyric:", err.message || err);
+      showNewMessage("error", err.message || "Something went wrong.");
     }
   };
-
-  getArtists();
-}, []);
 
   return (
-    <>
-      <div className="fixed inset-0 z-[100] flex justify-center items-center">
-        <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
-        <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[600px]">
-          <h2 className="text-xl font-bold flex items-center justify-between">
-            Add New Lyric
-          </h2>
-
-          <div className="flex flex-col mt-2">
-            <div className="row">
-              <label className="block my-2 text-sm font-medium text-gray-700">
-                Title
-              </label>
-              <input
-                type="text"
+    <div className="fixed inset-0 z-[100] flex justify-center items-center">
+      <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
+      <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[1000px]">
+        <h2 className="text-xl font-bold mb-4">Add New Lyric</h2>
+        <form>
+          {" "}
+          {/* Wrap the form */}
+          <div className="flex gap-4">
+            {/* Left Column */}
+            <div className="flex flex-col w-full gap-4">
+              <InputField
+                label="Title"
                 value={title}
-                className="w-full p-2 py-2 border border-gray-300 rounded-md"
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={setTitle}
                 placeholder="Enter lyric title"
               />
-            </div>
-
-            <div className="row">
-              <label className="block my-2 text-sm font-medium text-gray-700">
-                Album Name
-              </label>
-              <input
-                type="text"
-                value={albumnName}
-                className="w-full p-2 py-2 border border-gray-300 rounded-md"
-                onChange={(e) => setAlbumnName(e.target.value)}
-                placeholder="Enter Album Name"
+              <InputField
+                label="Album Name"
+                value={albumName}
+                onChange={setAlbumName}
+                placeholder="Enter album name"
               />
-            </div>
 
-            <div className="row flex gap-4">
-              <div className="col w-full">
-                <label className="block my-2 text-sm font-medium text-gray-700">
-                  Genres
-                </label>
-                <MultiSelect
+              <div className="flex gap-4">
+                <MultiSelectField
+                  label="Genres"
                   value={selectedGenres}
-                  onChange={(e) => setSelectedGenres(e.value)}
                   options={genreOptions}
-                  optionLabel="name"
-                  placeholder="Select Genres"
-                  maxSelectedLabels={3}
-                  className="w-full md:w-20rem"
+                  onChange={setSelectedGenres}
                 />
-              </div>
-              <div className="col w-full">
-                <label className="block my-2 text-sm font-medium text-gray-700">
-                  Key
-                </label>
-                <Dropdown
+                <DropdownField
+                  label="Key"
                   value={selectedMajorKey}
-                  onChange={(e) => setSelectedMajorKey(e.value)}
                   options={keyOptions}
-                  optionLabel="name"
-                  placeholder="Select a Major Key"
-                  className="w-full md:w-20rem"
+                  onChange={setSelectedMajorKey}
                 />
               </div>
             </div>
 
-            <div className="row gap-4">
-              <label className="block my-2 text-sm font-medium text-gray-700">
-                Singers
-              </label>
-              <MultiSelect
+            {/* Right Column */}
+            <div className="flex flex-col w-full gap-4">
+              <MultiSelectField
+                label="Singers"
                 value={selectedSingers}
-                onChange={(e) => setSelectedSingers(e.value)}
                 options={singers}
-                optionLabel="name"
-                placeholder="Select Singers"
-                maxSelectedLabels={3}
-                className="w-full md:w-20rem"
-                filter
-                filterPlaceholder="Search Singers..."
+                onChange={setSelectedSingers}
               />
-            </div>
-
-            <div className="row gap-4">
-              <label className="block my-2 text-sm font-medium text-gray-700">
-                Writers
-              </label>
-              <MultiSelect
+              <MultiSelectField
+                label="Writers"
                 value={selectedWriters}
-                onChange={(e) => setSelectedWriters(e.value)}
                 options={writers}
-                optionLabel="name"
-                placeholder="Select Writers"
-                maxSelectedLabels={3}
-                className="w-full md:w-20rem"
-                filter
-                filterPlaceholder="Search Writers..."
+                onChange={setSelectedWriters}
               />
-            </div>
-
-            <div className="row gap-4">
-              <label className="block my-2 text-sm font-medium text-gray-700">
-                Features
-              </label>
-              <MultiSelect
+              <MultiSelectField
+                label="Features"
                 value={selectedFeatures}
-                onChange={(e) => setSelectedFeatures(e.value)}
                 options={features}
-                optionLabel="name"
-                placeholder="Select Features"
-                maxSelectedLabels={3}
-                className="w-full md:w-20rem"
-                filter
-                filterPlaceholder="Search Features..."
+                onChange={setSelectedFeatures}
               />
             </div>
           </div>
-
-          <div className="flex justify-end gap-2">
+          {/* File Upload */}
+          <div className="mt-6">
+            <label className="block mb-2 text-sm font-medium text-gray-700">
+              Upload Lyric File
+            </label>
+            <input
+              type="file"
+              onChange={(e) => setUploadedFile(e.target.files[0])}
+              className="w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+          {/* Actions */}
+          <div className="flex justify-end gap-2 mt-6">
             <button
-              onClick={async () => {
-                await addLyric();
-                onUpdate();
-                onClose();
-              }}
-              className="w-full cursor-pointer mt-4 bg-green-200 text-green-700 font-semibold px-4 py-2 rounded"
+              type="submit"
+              className="w-full bg-green-200 text-green-700 font-semibold px-4 py-2 rounded"
+              onClick={handleSubmit}
             >
               Save
             </button>
             <button
+              type="button"
               onClick={onClose}
-              className="w-full cursor-pointer mt-4 bg-gray-200 text-gray-500 font-semibold px-4 py-2 rounded"
+              className="w-full bg-gray-200 text-gray-500 font-semibold px-4 py-2 rounded"
             >
               Cancel
             </button>
           </div>
-        </div>
+        </form>{" "}
+        {/* Close the form tag */}
       </div>
-    </>
+    </div>
   );
 };
 
+// 🔍 Modular Components
+const InputField = ({ label, value, onChange, placeholder }) => (
+  <div>
+    <label className="block mb-1 text-sm font-medium text-gray-700">
+      {label}
+    </label>
+    <input
+      type="text"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      className="w-full p-2 border border-gray-300 rounded-md"
+    />
+  </div>
+);
+
+const MultiSelectField = ({ label, value, options, onChange }) => (
+  <div className="w-full">
+    <label className="block mb-1 text-sm font-medium text-gray-700">
+      {label}
+    </label>
+    <MultiSelect
+      value={value}
+      options={options}
+      onChange={(e) => onChange(e.value)}
+      optionLabel="name"
+      placeholder={`Select ${label}`}
+      className="w-full"
+      maxSelectedLabels={3}
+      filter
+      filterPlaceholder={`Search ${label}...`}
+    />
+  </div>
+);
+
+const DropdownField = ({ label, value, options, onChange }) => (
+  <div className="w-full">
+    <label className="block mb-1 text-sm font-medium text-gray-700">
+      {label}
+    </label>
+    <Dropdown
+      value={value}
+      options={options}
+      onChange={(e) => onChange(e.value)}
+      optionLabel="name"
+      placeholder={`Select ${label}`}
+      className="w-full"
+    />
+  </div>
+);
+
 AddLyric.propTypes = {
   onClose: PropTypes.func.isRequired,
-  artist: PropTypes.object.isRequired,
   onUpdate: PropTypes.func.isRequired,
   showNewMessage: PropTypes.func.isRequired,
+};
+
+InputField.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+};
+
+MultiSelectField.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.array.isRequired,
+  options: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
+DropdownField.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.any.isRequired,
+  options: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default AddLyric;

@@ -8,11 +8,7 @@ export const GenreEnum = {
   Country: "Country",
   Reggae: "Reggae",
   Electronic: "Electronic",
-  Folk: "Folk",
   Blues: "Blues",
-  Metal: "Metal",
-  Punk: "Punk",
-  Indie: "Indie",
 };
 
 export const genreOptions = Object.values(GenreEnum).map((name) => ({ name }));

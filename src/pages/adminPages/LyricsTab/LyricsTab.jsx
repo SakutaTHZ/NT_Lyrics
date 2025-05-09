@@ -12,6 +12,7 @@ import useDebounce from "../../../components/hooks/useDebounce";
 import LyricRow from "./LyricRow";
 
 const LyricsTab = () => {
+  const AUTH_TOKEN = useRef(localStorage.getItem("token"));
   const [lyrics, setLyrics] = useState([]);
   const [lyricsCount, setLyricsCount] = useState({
     totalCount: 0,
@@ -19,7 +20,6 @@ const LyricsTab = () => {
     enabledCount: 0,
     disabledCount: 0,
   });
-  const [typeFilter, setTypeFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
   const [selectedType, setSelectedType] = useState("all");
@@ -37,21 +37,25 @@ const LyricsTab = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
+  const [isEnabled, setIsEnabled] = useState("");
+
   const fetchLyrics = useCallback(
     async (pageNum = 1, override = false) => {
       setLoading(true);
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/lyrics/searchLyrics",
+          "http://localhost:3000/api/lyrics/searchLyricsByAdmin",
           {
             params: {
               page: pageNum,
               limit: 20,
-              type: typeFilter,
+              type: selectedType,
               keyword: debouncedSearchTerm,
+              isEnable: isEnabled,
             },
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${AUTH_TOKEN.current}`,
             },
           }
         );
@@ -70,7 +74,7 @@ const LyricsTab = () => {
         setLoading(false);
       }
     },
-    [typeFilter, debouncedSearchTerm]
+    [debouncedSearchTerm, selectedType,isEnabled]
   );
   const [page, setPage] = useState(1);
   const observer = useRef(null);
@@ -117,10 +121,9 @@ const LyricsTab = () => {
     ],
   };
 
-  const types = [
-    { name: `All (${lyricsCount.totalCount})`, value: "all" },
-    { name: `Disabled (${lyricsCount.disabledCount})`, value: "disabled" },
-    { name: `Enabled (${lyricsCount.enabledCount})`, value: "enabled" },
+  const isEnable = [
+    { name: `Disabled (${lyricsCount.disabledCount})`, value: false },
+    { name: `Enabled (${lyricsCount.enabledCount})`, value: true },
   ];
 
   const chartOptions = {
@@ -210,10 +213,10 @@ const LyricsTab = () => {
         <div className="flex flex-wrap md:flex-nowrap gap-4 mt-2 items-center ">
           <div className="flex-shrink-0">
             <SelectButton
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.value || "")}
+              value={isEnabled}
+              onChange={(e) => setIsEnabled(e.value)}
               optionLabel="name"
-              options={types}
+              options={isEnable}
               className="w-full md:w-auto"
               itemTemplate={(option) => (
                 <div
@@ -311,6 +314,8 @@ const LyricsTab = () => {
           onUpdate={() => {
             getLyricOverview();
             showNewMessage("success", "Lyric Added Successfully!");
+            setPage(1);
+            fetchLyrics(1, true);
           }}
           showNewMessage={showNewMessage}
         />
