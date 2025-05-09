@@ -11,9 +11,8 @@ import { useRef } from "react";
 import useDebounce from "../../../components/hooks/useDebounce";
 import LyricRow from "./LyricRow";
 import { keyOptions } from "../../../../src/assets/js/constantDatas";
-import { DropdownField, MultiSelectField } from "./AddLyric";
+import { DropdownField} from "./AddLyric";
 import { fetchSingers } from "../../../assets/util/api";
-import { select } from "framer-motion/client";
 
 const LyricsTab = () => {
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
@@ -62,7 +61,14 @@ const LyricsTab = () => {
               page: pageNum,
               limit: 20,
               type: selectedType,
-              keyword: selectedType=="all" || selectedType==="lyrics" ? debouncedSearchTerm : selectedType==="key" ? selectedMajorKey : selectedType==="singer" ? selectedSingers : selectedWriters,
+              keyword:
+                selectedType == "all" || selectedType === "lyrics"
+                  ? debouncedSearchTerm
+                  : selectedType === "key"
+                  ? selectedMajorKey
+                  : selectedType === "singer"
+                  ? selectedSingers
+                  : selectedWriters,
               isEnable: isEnabled,
             },
             headers: {
@@ -82,11 +88,19 @@ const LyricsTab = () => {
         getLyricOverview();
       } catch (err) {
         console.error("Error fetching users:", err);
+        console.log(err.response.data);
       } finally {
         setLoading(false);
       }
     },
-    [selectedType, debouncedSearchTerm, selectedMajorKey, selectedSingers, selectedWriters, isEnabled]
+    [
+      selectedType,
+      debouncedSearchTerm,
+      selectedMajorKey,
+      selectedSingers,
+      selectedWriters,
+      isEnabled,
+    ]
   );
 
   const getArtists = async () => {
@@ -281,7 +295,10 @@ const LyricsTab = () => {
           ) : selectedType === "singer" ? (
             <Dropdown
               value={selectedSingers}
-              onChange={(e) => setSelectedSingers(e.value)}
+              onChange={(e) => {
+                setSelectedSingers(e.value?._id || ""); // Only store the ID
+                console.log(e.value?._id || "");
+              }}
               options={singers}
               optionLabel="name"
               placeholder="Select a singer"
@@ -289,10 +306,12 @@ const LyricsTab = () => {
               className="w-full md:w-14rem"
             />
           ) : selectedType === "writer" ? (
-            
             <Dropdown
               value={selectedWriters}
-              onChange={(e) => setSelectedWriters(e.value)}
+              onChange={(e) => {
+                setSelectedWriters(e.value?._id || ""); // Only store the ID
+                console.log(e.value?._id || "");
+              }}
               options={writers}
               optionLabel="name"
               placeholder="Select a writer"
