@@ -10,6 +10,10 @@ import { useCallback } from "react";
 import { useRef } from "react";
 import useDebounce from "../../../components/hooks/useDebounce";
 import LyricRow from "./LyricRow";
+import { keyOptions } from "../../../../src/assets/js/constantDatas";
+import { DropdownField, MultiSelectField } from "./AddLyric";
+import { fetchSingers } from "../../../assets/util/api";
+import { select } from "framer-motion/client";
 
 const LyricsTab = () => {
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
@@ -23,6 +27,9 @@ const LyricsTab = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [selectedType, setSelectedType] = useState("all");
+
+  const [selectedMajorKey, setSelectedMajorKey] = useState("all");
+
   const typeOptions = [
     { name: "All", value: "all" },
     { name: "Singer", value: "singer" },
@@ -31,13 +38,18 @@ const LyricsTab = () => {
     { name: "Key", value: "key" },
   ];
 
-  
   const [loading, setLoading] = useState(false);
   const debouncedSearchTerm = useDebounce(searchTerm);
   const [totalPages, setTotalPages] = useState(0);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
   const [isEnabled, setIsEnabled] = useState("");
+
+  const [singers, setSingers] = useState([]);
+  const [writers, setWriters] = useState([]);
+
+  const [selectedSingers, setSelectedSingers] = useState();
+  const [selectedWriters, setSelectedWriters] = useState();
 
   const fetchLyrics = useCallback(
     async (pageNum = 1, override = false) => {
@@ -50,7 +62,7 @@ const LyricsTab = () => {
               page: pageNum,
               limit: 20,
               type: selectedType,
-              keyword: debouncedSearchTerm,
+              keyword: selectedType=="all" || selectedType==="lyrics" ? debouncedSearchTerm : selectedType==="key" ? selectedMajorKey : selectedType==="singer" ? selectedSingers : selectedWriters,
               isEnable: isEnabled,
             },
             headers: {
@@ -74,8 +86,21 @@ const LyricsTab = () => {
         setLoading(false);
       }
     },
-    [debouncedSearchTerm, selectedType,isEnabled]
+    [selectedType, debouncedSearchTerm, selectedMajorKey, selectedSingers, selectedWriters, isEnabled]
   );
+
+  const getArtists = async () => {
+    try {
+      const [singerData, writerData] = await Promise.all([
+        fetchSingers("singer"),
+        fetchSingers("writer"),
+      ]);
+      setSingers(singerData);
+      setWriters(writerData);
+    } catch (err) {
+      console.error("Error fetching artists:", err);
+    }
+  };
   const [page, setPage] = useState(1);
   const observer = useRef(null);
 
@@ -151,7 +176,7 @@ const LyricsTab = () => {
 
   useEffect(() => {
     showNewMessage("success", "Lyrics Tab Loaded Successfully!");
-
+    getArtists();
     getLyricOverview();
     fetchLyrics();
   }, [fetchLyrics]);
@@ -237,13 +262,50 @@ const LyricsTab = () => {
             className="w-fit min-w-42 md:w-12rem"
           />
 
-          <input
-            type="text"
-            placeholder="Search by Lyrics Name"
-            className="border border-gray-300 rounded-md px-3 py-2 w-full h-[50px]"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          {selectedType === "all" ? (
+            <input
+              type="text"
+              placeholder="Search by Lyrics Name"
+              className="border border-gray-300 rounded-md px-3 py-2 w-full h-[50px]"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          ) : selectedType === "lyrics" ? (
+            <input
+              type="text"
+              placeholder="Search by Lyrics title"
+              className="border border-gray-300 rounded-md px-3 py-2 w-full h-[50px]"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          ) : selectedType === "singer" ? (
+            <Dropdown
+              value={selectedSingers}
+              onChange={(e) => setSelectedSingers(e.value)}
+              options={singers}
+              optionLabel="name"
+              placeholder="Select a singer"
+              filter
+              className="w-full md:w-14rem"
+            />
+          ) : selectedType === "writer" ? (
+            
+            <Dropdown
+              value={selectedWriters}
+              onChange={(e) => setSelectedWriters(e.value)}
+              options={writers}
+              optionLabel="name"
+              placeholder="Select a writer"
+              filter
+              className="w-full md:w-14rem"
+            />
+          ) : selectedType === "key" ? (
+            <DropdownField
+              value={selectedMajorKey}
+              options={keyOptions}
+              onChange={setSelectedMajorKey}
+            />
+          ) : null}
           <button
             className="w-full md:w-auto text-nowrap bg-blue-500 text-white p-3 rounded-md cursor-pointer"
             onClick={() => {
@@ -274,37 +336,39 @@ const LyricsTab = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-                  {lyrics.map((lyric, idx) => {
-                    const isLast = idx === lyrics.length - 1;
-                    return (
-                      <LyricRow
-                        key={lyric._id || idx}
-                        lyric={lyric}
-                        idx={idx}
-                        isLast={isLast}
-                        lastUserRef={lastUserRef}
-                        onEdit={() => {console.log("Edit clicked")}}
-                      />
-                    );
-                  })}
-                  {loading && (
-                    <tr>
-                      <td colSpan={7} className="text-center py-4 text-gray-500">
-                        Loading more artists...
-                      </td>
-                    </tr>
-                  )}
-                  {!loading && lyrics.length === 0 && initialLoadDone && (
-                    <tr>
-                      <td
-                        colSpan={7}
-                        className="text-center py-4 text-gray-400 italic"
-                      >
-                        No artists found.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
+            {lyrics.map((lyric, idx) => {
+              const isLast = idx === lyrics.length - 1;
+              return (
+                <LyricRow
+                  key={lyric._id || idx}
+                  lyric={lyric}
+                  idx={idx}
+                  isLast={isLast}
+                  lastUserRef={lastUserRef}
+                  onEdit={() => {
+                    console.log("Edit clicked");
+                  }}
+                />
+              );
+            })}
+            {loading && (
+              <tr>
+                <td colSpan={7} className="text-center py-4 text-gray-500">
+                  Loading more artists...
+                </td>
+              </tr>
+            )}
+            {!loading && lyrics.length === 0 && initialLoadDone && (
+              <tr>
+                <td
+                  colSpan={7}
+                  className="text-center py-4 text-gray-400 italic"
+                >
+                  No artists found.
+                </td>
+              </tr>
+            )}
+          </tbody>
         </table>
       </div>
 

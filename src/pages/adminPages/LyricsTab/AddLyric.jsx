@@ -9,7 +9,6 @@ import {
   keyOptions,
 } from "../../../../src/assets/js/constantDatas";
 import { fetchSingers } from "../../../assets/util/api";
-import { div } from "framer-motion/client";
 
 const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
   const token = localStorage.getItem("token");
@@ -257,7 +256,17 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
               }`}
               onClick={handleSubmit}
             >
-              {isLoading ? (<div className="flex justify-center items-center gap-2"><AiOutlineLoading3Quarters size={16} className="animate-spin text-2xl text-green-700" />Saving...</div>) : "Save"}
+              {isLoading ? (
+                <div className="flex justify-center items-center gap-2">
+                  <AiOutlineLoading3Quarters
+                    size={16}
+                    className="animate-spin text-2xl text-green-700"
+                  />
+                  Saving...
+                </div>
+              ) : (
+                "Save"
+              )}
             </button>
             <button
               type="button"
@@ -290,11 +299,13 @@ const InputField = ({ label, value, onChange, placeholder }) => (
   </div>
 );
 
-const MultiSelectField = ({ label, value, options, onChange }) => (
+export const MultiSelectField = ({ label, value, options, onChange }) => (
   <div className="w-full">
-    <label className="block mb-1 text-sm font-medium text-gray-700">
-      {label}
-    </label>
+    {label && (
+      <label className="block mb-1 text-sm font-medium text-gray-700">
+        {label}
+      </label>
+    )}
     <MultiSelect
       value={value}
       options={options}
@@ -304,22 +315,24 @@ const MultiSelectField = ({ label, value, options, onChange }) => (
       className="w-full"
       maxSelectedLabels={3}
       filter
-      filterPlaceholder={`Search ${label}...`}
+      filterPlaceholder={`Choose one...`}
     />
   </div>
 );
 
-const DropdownField = ({ label, value, options, onChange }) => (
+export const DropdownField = ({ label, value, options, onChange }) => (
   <div className="w-full">
-    <label className="block mb-1 text-sm font-medium text-gray-700">
-      {label}
-    </label>
+    {label && (
+      <label className="block mb-1 text-sm font-medium text-gray-700">
+        {label}
+      </label>
+    )}
     <Dropdown
       value={value}
       options={options}
       onChange={(e) => onChange(e.value)}
       optionLabel="name"
-      placeholder={`Select ${label}`}
+      placeholder={`Choose one ...`}
       className="w-full"
     />
   </div>
