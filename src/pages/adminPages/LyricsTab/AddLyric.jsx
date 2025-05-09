@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import PropTypes from "prop-types";
 import { MultiSelect } from "primereact/multiselect";
 import { Dropdown } from "primereact/dropdown";
@@ -8,6 +9,7 @@ import {
   keyOptions,
 } from "../../../../src/assets/js/constantDatas";
 import { fetchSingers } from "../../../assets/util/api";
+import { div } from "framer-motion/client";
 
 const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
   const token = localStorage.getItem("token");
@@ -78,7 +80,7 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
     }
     return null; // No errors
   };
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -92,7 +94,7 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
     formData.append("title", title);
     formData.append("albumName", albumName);
     formData.append("majorKey", selectedMajorKey?.name || selectedMajorKey);
-    formData.append("genre",  JSON.stringify(selectedGenres.map((s) => s.name)));
+    formData.append("genre", JSON.stringify(selectedGenres.map((s) => s.name)));
     formData.append(
       "singers",
       JSON.stringify(selectedSingers.map((s) => s._id))
@@ -112,6 +114,8 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
       showNewMessage("error", "You must upload a lyric file.");
       return;
     }
+
+    setIsLoading(true);
 
     console.log("Form data before submission:", {
       title,
@@ -163,6 +167,8 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
     } catch (err) {
       console.error("Failed to save lyric:", err.message || err);
       showNewMessage("error", err.message || "Something went wrong.");
+    } finally {
+      setIsLoading(false); // ✅ End loading
     }
   };
 
@@ -174,7 +180,7 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
         <form>
           {" "}
           {/* Wrap the form */}
-          <div className="flex gap-4">
+          <div className="flex flex-wrap md:flex-nowrap gap-4">
             {/* Left Column */}
             <div className="flex flex-col w-full gap-4">
               <InputField
@@ -243,10 +249,15 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
           <div className="flex justify-end gap-2 mt-6">
             <button
               type="submit"
-              className="w-full bg-green-200 text-green-700 font-semibold px-4 py-2 rounded"
+              disabled={isLoading}
+              className={`w-full font-semibold px-4 py-2 rounded ${
+                isLoading
+                  ? "bg-green-100 text-green-500 cursor-not-allowed"
+                  : "bg-green-200 text-green-700"
+              }`}
               onClick={handleSubmit}
             >
-              Save
+              {isLoading ? (<div className="flex justify-center items-center gap-2"><AiOutlineLoading3Quarters size={16} className="animate-spin text-2xl text-green-700" />Saving...</div>) : "Save"}
             </button>
             <button
               type="button"
