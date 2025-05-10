@@ -3,8 +3,12 @@ import { useEffect } from "react";
 import { RadioButton } from "primereact/radiobutton";
 import { InputSwitch } from "primereact/inputswitch";
 import { useState } from "react";
+import ModalPortal from "../../../components/special/ModalPortal";
+import useModalEscClose from "../../../components/hooks/useModalEscClose";
 
 const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
+  useModalEscClose(onClose);
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
@@ -80,98 +84,100 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
 
   return (
     <>
-      <div className="fixed inset-0 z-[100] flex justify-center items-center">
-        <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
-        <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[400px]">
-          <h2 className="text-xl font-bold flex items-center justify-between">
-            Edit User
-            <p className="flex items-center px-2 py-1 border border-gray-300 rounded-full">
-              <span className="text-xs font-normal text-gray-700">
-                {user._id}
-              </span>
-            </p>
-          </h2>
+      <ModalPortal>
+        <div className="fixed inset-0 z-[100] flex justify-center items-center">
+          <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
+          <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[400px]">
+            <h2 className="text-xl font-bold flex items-center justify-between">
+              Edit User
+              <p className="flex items-center px-2 py-1 border border-gray-300 rounded-full">
+                <span className="text-xs font-normal text-gray-700">
+                  {user._id}
+                </span>
+              </p>
+            </h2>
 
-          <div className="flex flex-col mt-2">
-            <div className="row">
-              <label className="block my-2 text-sm font-medium text-gray-700">
-                User Name
-              </label>
-              <input
-                type="text"
-                value={user.name}
-                readOnly
-                className="w-full p-2 py-2 border border-gray-300 rounded-md"
-              />
-            </div>
-
-            <div className="row">
-              <label className="block my-2 text-sm font-medium text-gray-700">
-                Email
-              </label>
-              <input
-                type="text"
-                value={user.email}
-                readOnly
-                className="w-full p-2 py-2 border border-gray-300 rounded-md"
-              />
-            </div>
-
-            <div className="row">
-              <label className="block my-2 text-sm font-medium text-gray-700">
-                Role
-              </label>
-              <div className="flex flex-wrap gap-2 py-1">
-                {["admin", "free-user", "premium-user"].map((option) => (
-                  <div key={option} className="flex items-center gap-2">
-                    <RadioButton
-                      inputId={option}
-                      name="role"
-                      value={option}
-                      onChange={(e) => setRole(e.value)}
-                      checked={role === option}
-                    />
-                    <label htmlFor={option} className="text-sm capitalize">
-                      {option.replace("-", " ")}
-                    </label>
-                  </div>
-                ))}
-              </div>
+            <div className="flex flex-col mt-2">
               <div className="row">
                 <label className="block my-2 text-sm font-medium text-gray-700">
-                  IsValid?{" "}
-                  <span className="text-xs text-gray-400">
-                    (This is for banning users)
-                  </span>
+                  User Name
                 </label>
-                <InputSwitch
-                  checked={isValid}
-                  onChange={(e) => setIsValid(e.value)}
+                <input
+                  type="text"
+                  value={user.name}
+                  readOnly
+                  className="w-full p-2 py-2 border border-gray-300 rounded-md"
                 />
               </div>
+
+              <div className="row">
+                <label className="block my-2 text-sm font-medium text-gray-700">
+                  Email
+                </label>
+                <input
+                  type="text"
+                  value={user.email}
+                  readOnly
+                  className="w-full p-2 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div className="row">
+                <label className="block my-2 text-sm font-medium text-gray-700">
+                  Role
+                </label>
+                <div className="flex flex-wrap gap-2 py-1">
+                  {["admin", "free-user", "premium-user"].map((option) => (
+                    <div key={option} className="flex items-center gap-2">
+                      <RadioButton
+                        inputId={option}
+                        name="role"
+                        value={option}
+                        onChange={(e) => setRole(e.value)}
+                        checked={role === option}
+                      />
+                      <label htmlFor={option} className="text-sm capitalize">
+                        {option.replace("-", " ")}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+                <div className="row">
+                  <label className="block my-2 text-sm font-medium text-gray-700">
+                    IsValid?{" "}
+                    <span className="text-xs text-gray-400">
+                      (This is for banning users)
+                    </span>
+                  </label>
+                  <InputSwitch
+                    checked={isValid}
+                    onChange={(e) => setIsValid(e.value)}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                onClick={async () => {
+                  await updateUser();
+                  onUpdate();
+                  onClose();
+                }}
+                className="w-full cursor-pointer mt-4 bg-green-200 text-green-700 font-semibold px-4 py-2 rounded"
+              >
+                Save
+              </button>
+              <button
+                onClick={onClose}
+                className="w-full cursor-pointer mt-4 bg-gray-200 text-gray-500 font-semibold px-4 py-2 rounded"
+              >
+                Cancel
+              </button>
             </div>
           </div>
-
-          <div className="flex justify-end gap-2 mt-4">
-            <button
-              onClick={async () => {
-                await updateUser();
-                onUpdate();
-                onClose();
-              }}
-              className="w-full cursor-pointer mt-4 bg-green-200 text-green-700 font-semibold px-4 py-2 rounded"
-            >
-              Save
-            </button>
-            <button
-              onClick={onClose}
-              className="w-full cursor-pointer mt-4 bg-gray-200 text-gray-500 font-semibold px-4 py-2 rounded"
-            >
-              Cancel
-            </button>
-          </div>
         </div>
-      </div>
+      </ModalPortal>
     </>
   );
 };
