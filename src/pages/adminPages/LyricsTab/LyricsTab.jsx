@@ -13,6 +13,7 @@ import LyricRow from "./LyricRow";
 import { keyOptions } from "../../../../src/assets/js/constantDatas";
 import { DropdownField} from "./AddLyric";
 import { fetchSingers } from "../../../assets/util/api";
+import EditLyric from "./EditLyrics";
 
 const LyricsTab = () => {
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
@@ -53,6 +54,7 @@ const LyricsTab = () => {
   const fetchLyrics = useCallback(
     async (pageNum = 1, override = false) => {
       setLoading(true);
+      console.log(selectedMajorKey)
       try {
         const res = await axios.get(
           "http://localhost:3000/api/lyrics/searchLyricsByAdmin",
@@ -65,7 +67,7 @@ const LyricsTab = () => {
                 selectedType == "all" || selectedType === "lyrics"
                   ? debouncedSearchTerm
                   : selectedType === "key"
-                  ? selectedMajorKey
+                  ? selectedMajorKey.name
                   : selectedType === "singer"
                   ? selectedSingers
                   : selectedWriters,
@@ -188,6 +190,11 @@ const LyricsTab = () => {
     setOpenAddLyricsModal(false);
   };
 
+  const [selectedLyric, setSelectedLyric] = useState(null);
+  const handleEdit = (lyric) => setSelectedLyric(lyric);
+
+  const closeModal = () => setSelectedLyric(null);
+
   useEffect(() => {
     showNewMessage("success", "Lyrics Tab Loaded Successfully!");
     getArtists();
@@ -294,28 +301,40 @@ const LyricsTab = () => {
             />
           ) : selectedType === "singer" ? (
             <Dropdown
-              value={selectedSingers}
+            value={
+              singers.find((singer) => singer._id === selectedSingers) || null
+            }
               onChange={(e) => {
-                setSelectedSingers(e.value?._id || ""); // Only store the ID
-                console.log(e.value?._id || "");
+                if (!e.value) {
+                  setSelectedSingers(""); 
+                } else {
+                  setSelectedSingers(e.value._id);
+                }
               }}
               options={singers}
               optionLabel="name"
               placeholder="Select a singer"
               filter
+              showClear
               className="w-full md:w-14rem"
             />
           ) : selectedType === "writer" ? (
             <Dropdown
-              value={selectedWriters}
+            value={
+              singers.find((singer) => singer._id === selectedWriters) || null
+            }
               onChange={(e) => {
-                setSelectedWriters(e.value?._id || ""); // Only store the ID
-                console.log(e.value?._id || "");
+                if (!e.value) {
+                  setSelectedWriters("");
+                } else {
+                  setSelectedWriters(e.value._id); 
+                }
               }}
               options={writers}
               optionLabel="name"
               placeholder="Select a writer"
               filter
+              showClear
               className="w-full md:w-14rem"
             />
           ) : selectedType === "key" ? (
@@ -364,9 +383,7 @@ const LyricsTab = () => {
                   idx={idx}
                   isLast={isLast}
                   lastUserRef={lastUserRef}
-                  onEdit={() => {
-                    console.log("Edit clicked");
-                  }}
+                  onEdit={handleEdit}
                 />
               );
             })}
@@ -403,6 +420,19 @@ const LyricsTab = () => {
           showNewMessage={showNewMessage}
         />
       )}
+
+      {selectedLyric && (
+        <EditLyric
+          lyric={selectedLyric}
+          onClose={closeModal}
+          onUpdate={() => {
+          getLyricOverview();
+          showNewMessage("success", "Lyric Updated Successfully!");
+          setPage(1);
+          fetchLyrics(1, true);
+        }}
+        showNewMessage={showNewMessage}
+      />)}
     </>
   );
 };

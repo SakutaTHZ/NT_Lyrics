@@ -10,16 +10,25 @@ import {
 } from "../../../../src/assets/js/constantDatas";
 import { fetchSingers } from "../../../assets/util/api";
 
-const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
+const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
   const token = localStorage.getItem("token");
 
   // Form States
-  const [title, setTitle] = useState("");
-  const [albumName, setAlbumName] = useState("");
-  const [selectedGenres, setSelectedGenres] = useState([]);
-  const [selectedMajorKey, setSelectedMajorKey] = useState(null);
+  const [title, setTitle] = useState(lyric.title || "");
+  const [albumName, setAlbumName] = useState(lyric.albumName || "");
+  console.log("Lyrics - ", lyric);
+  const [selectedGenres, setSelectedGenres] = useState(lyric.genre || []);
+
+  const [selectedMajorKey, setSelectedMajorKey] = useState(
+    lyric.majorKey || null
+  );
+
+  console.log('keyOptions - ', keyOptions);
 
   const [singers, setSingers] = useState([]);
+
+  console.log('singers - ', singers);
+  console.log('lyric.singers - ', lyric.singers);
   const [writers, setWriters] = useState([]);
   const [features, setFeatures] = useState([]);
 
@@ -28,6 +37,20 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
   const [selectedFeatures, setSelectedFeatures] = useState([]);
 
   const [uploadedFile, setUploadedFile] = useState(null);
+
+  useEffect(() => {
+    if (lyric?.genre && Array.isArray(lyric.genre)) {
+      const mappedGenres = genreOptions.filter((opt) =>
+        lyric.genre.includes(opt.name)
+      );
+      setSelectedGenres(mappedGenres);
+    }
+
+    if (lyric?.majorKey && keyOptions.length > 0) {
+        const matched = keyOptions.find(opt => opt.name === lyric.majorKey);
+        setSelectedMajorKey(matched || null);
+      }
+  }, [lyric]);
 
   // Scroll lock
   useEffect(() => {
@@ -67,6 +90,45 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
     getArtists();
   }, []);
 
+  useEffect(() => {
+    if (
+      lyric?.singers &&
+      Array.isArray(lyric.singers) &&
+      singers.length > 0
+    ) {
+      const matchedSingers = singers.filter((singer) =>
+        lyric.singers.some((selected) => selected._id === singer._id)
+      );
+      setSelectedSingers(matchedSingers);
+    }
+  }, [lyric?.singers, singers]);
+
+  useEffect(() => {
+    if (
+      lyric?.writers &&
+      Array.isArray(lyric.writers) &&
+      writers.length > 0
+    ) {
+      const matchedWriters = writers.filter((writer) =>
+        lyric.writers.some((selected) => selected._id === writer._id)
+      );
+      setSelectedWriters(matchedWriters);
+    }
+  }, [lyric?.writers, writers]);
+
+  useEffect(() => {
+    if (
+      lyric?.featureArtists &&
+      Array.isArray(lyric.featureArtists) &&
+      features.length > 0
+    ) {
+      const matchedFeatures = features.filter((feature) =>
+        lyric.featureArtists.some((selected) => selected._id === feature._id)
+      );
+      setSelectedFeatures(matchedFeatures);
+    }
+  }, [lyric?.featureArtists, features]);
+
   const validateForm = () => {
     if (!title?.trim()) return "Title is required.";
     if (!albumName?.trim()) return "Album name is required.";
@@ -93,28 +155,19 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
     formData.append("title", title);
     formData.append("albumName", albumName);
     formData.append("majorKey", selectedMajorKey?.name || selectedMajorKey);
-    formData.append("genre[]", selectedGenres.map((s) => s.name));
-    // formData.append(
-    //   "singers[]",
-    //   selectedSingers.map((s) => s._id)
-    // );
+    formData.append(
+      "genre[]",
+      selectedGenres.map((s) => s.name)
+    );
     selectedSingers.map((singer) => {
       formData.append("singers[]", singer._id);
-    })
-    // formData.append(
-    //   "writers[]",
-    //   selectedWriters.map((w) => w._id)
-    // );
+    });
     selectedWriters.map((writer) => {
       formData.append("writers[]", writer._id);
-    })
-    // formData.append(
-    //   "featureArtists[]",
-    //   selectedFeatures.map((f) => f._id)
-    // );
+    });
     selectedFeatures.map((feature) => {
       formData.append("featureArtists[]", feature._id);
-    })
+    });
     if (uploadedFile) {
       formData.append("lyricsPhoto", uploadedFile);
     } else {
@@ -183,7 +236,12 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
     <div className="fixed inset-0 z-[100] flex justify-center items-center">
       <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
       <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[1000px]">
-        <h2 className="text-xl font-bold mb-4">Add New Lyric</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">Edit Lyric</h2>
+          <p className="text-sm border px-2 py-1 rounded-full border-gray-300">
+            {lyric._id}
+          </p>
+        </div>
         <form>
           {" "}
           {/* Wrap the form */}
@@ -346,10 +404,11 @@ export const DropdownField = ({ label, value, options, onChange }) => (
   </div>
 );
 
-AddLyric.propTypes = {
+EditLyric.propTypes = {
   onClose: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
   showNewMessage: PropTypes.func.isRequired,
+  lyric: PropTypes.object.isRequired,
 };
 
 InputField.propTypes = {
@@ -373,4 +432,4 @@ DropdownField.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-export default AddLyric;
+export default EditLyric;
