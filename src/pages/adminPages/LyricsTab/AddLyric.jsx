@@ -3,6 +3,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import PropTypes from "prop-types";
 import { MultiSelect } from "primereact/multiselect";
 import { Dropdown } from "primereact/dropdown";
+import ModalPortal from "../../../components/special/ModalPortal";
 
 import {
   genreOptions,
@@ -180,6 +181,7 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
   };
 
   return (
+    <ModalPortal>
     <div className="fixed inset-0 z-[100] flex justify-center items-center">
       <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
       <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[1000px]">
@@ -288,6 +290,7 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
         {/* Close the form tag */}
       </div>
     </div>
+    </ModalPortal>
   );
 };
 
@@ -342,6 +345,7 @@ export const DropdownField = ({ label, value, options, onChange }) => (
       optionLabel="name"
       placeholder={`Choose one ...`}
       className="w-full"
+      showClear
     />
   </div>
 );

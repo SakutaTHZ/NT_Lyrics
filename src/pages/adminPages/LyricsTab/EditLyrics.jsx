@@ -3,6 +3,8 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import PropTypes from "prop-types";
 import { MultiSelect } from "primereact/multiselect";
 import { Dropdown } from "primereact/dropdown";
+import ModalPortal from "../../../components/special/ModalPortal";
+import useModalEscClose from "../../../components/hooks/useModalEscClose";
 
 import {
   genreOptions,
@@ -11,46 +13,37 @@ import {
 import { fetchSingers } from "../../../assets/util/api";
 
 const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
+  useModalEscClose(onClose);
+
   const token = localStorage.getItem("token");
 
-  // Form States
   const [title, setTitle] = useState(lyric.title || "");
   const [albumName, setAlbumName] = useState(lyric.albumName || "");
-  console.log("Lyrics - ", lyric);
-  const [selectedGenres, setSelectedGenres] = useState(lyric.genre || []);
-
-  const [selectedMajorKey, setSelectedMajorKey] = useState(
-    lyric.majorKey || null
-  );
-
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedMajorKey, setSelectedMajorKey] = useState(null);
   const [singers, setSingers] = useState([]);
-
-  console.log('singers - ', lyric);
-
   const [writers, setWriters] = useState([]);
   const [features, setFeatures] = useState([]);
-
   const [selectedSingers, setSelectedSingers] = useState([]);
   const [selectedWriters, setSelectedWriters] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
-
   const [uploadedFile, setUploadedFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (lyric?.genre && Array.isArray(lyric.genre)) {
-      const mappedGenres = genreOptions.filter((opt) =>
+    if (Array.isArray(lyric.genre)) {
+      const mapped = genreOptions.filter((opt) =>
         lyric.genre.includes(opt.name)
       );
-      setSelectedGenres(mappedGenres);
+      setSelectedGenres(mapped);
     }
 
-    if (lyric?.majorKey && keyOptions.length > 0) {
-        const matched = keyOptions.find(opt => opt.name === lyric.majorKey);
-        setSelectedMajorKey(matched || null);
-      }
+    if (lyric.majorKey) {
+      const match = keyOptions.find((opt) => opt.name === lyric.majorKey);
+      setSelectedMajorKey(match || null);
+    }
   }, [lyric]);
 
-  // Scroll lock
   useEffect(() => {
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
@@ -62,7 +55,6 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
     };
   }, []);
 
-  // Fetch artists
   useEffect(() => {
     const getArtists = async () => {
       try {
@@ -70,15 +62,16 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
           fetchSingers("singer"),
           fetchSingers("writer"),
         ]);
+
         setSingers(singerData);
         setWriters(writerData);
 
-        // Merge and dedupe for Features
         const deduped = Array.from(
           new Map(
             [...singerData, ...writerData].map((artist) => [artist._id, artist])
           ).values()
         );
+
         setFeatures(deduped);
       } catch (err) {
         console.error("Error fetching artists:", err);
@@ -89,65 +82,45 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
   }, []);
 
   useEffect(() => {
-    if (
-      lyric?.singers &&
-      Array.isArray(lyric.singers) &&
-      singers.length > 0
-    ) {
-      const matchedSingers = singers.filter((singer) =>
-        lyric.singers.some((selected) => selected._id === singer._id)
+    if (Array.isArray(lyric.singers) && singers.length > 0) {
+      setSelectedSingers(
+        singers.filter((s) => lyric.singers.some((sel) => sel._id === s._id))
       );
-      setSelectedSingers(matchedSingers);
     }
-  }, [lyric?.singers, singers]);
+  }, [lyric.singers, singers]);
 
   useEffect(() => {
-    if (
-      lyric?.writers &&
-      Array.isArray(lyric.writers) &&
-      writers.length > 0
-    ) {
-      const matchedWriters = writers.filter((writer) =>
-        lyric.writers.some((selected) => selected._id === writer._id)
+    if (Array.isArray(lyric.writers) && writers.length > 0) {
+      setSelectedWriters(
+        writers.filter((w) => lyric.writers.some((sel) => sel._id === w._id))
       );
-      setSelectedWriters(matchedWriters);
     }
-  }, [lyric?.writers, writers]);
+  }, [lyric.writers, writers]);
 
   useEffect(() => {
-    if (
-      lyric?.featureArtists &&
-      Array.isArray(lyric.featureArtists) &&
-      features.length > 0
-    ) {
-      const matchedFeatures = features.filter((feature) =>
-        lyric.featureArtists.some((selected) => selected._id === feature._id)
+    if (Array.isArray(lyric.featureArtists) && features.length > 0) {
+      setSelectedFeatures(
+        features.filter((f) =>
+          lyric.featureArtists.some((sel) => sel._id === f._id)
+        )
       );
-      setSelectedFeatures(matchedFeatures);
     }
-  }, [lyric?.featureArtists, features]);
+  }, [lyric.featureArtists, features]);
 
   const validateForm = () => {
-    if (!title?.trim()) return "Title is required.";
-    if (!albumName?.trim()) return "Album name is required.";
+    if (!title.trim()) return "Title is required.";
+    if (!albumName.trim()) return "Album name is required.";
     if (!selectedGenres.length) return "Select at least one genre.";
     if (!selectedMajorKey) return "Please choose a major key.";
     if (!selectedSingers.length) return "Select at least one singer.";
-    if (!uploadedFile) {
-      console.log("No file uploaded:", uploadedFile); // Log the file for debugging
-      return "You must upload a lyric file.";
-    }
-    return null; // No errors
+    if (!uploadedFile) return "You must upload a lyric file.";
+    return null;
   };
-  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const errorMessage = validateForm();
-    if (errorMessage) {
-      showNewMessage("error", errorMessage);
-      return;
-    }
+    if (errorMessage) return showNewMessage("error", errorMessage);
 
     const formData = new FormData();
     formData.append("title", title);
@@ -157,200 +130,158 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
       "genre[]",
       selectedGenres.map((s) => s.name)
     );
-    selectedSingers.map((singer) => {
-      formData.append("singers[]", singer._id);
-    });
-    selectedWriters.map((writer) => {
-      formData.append("writers[]", writer._id);
-    });
-    selectedFeatures.map((feature) => {
-      formData.append("featureArtists[]", feature._id);
-    });
-    if (uploadedFile) {
-      formData.append("lyricsPhoto", uploadedFile);
-    } else {
-      showNewMessage("error", "You must upload a lyric file.");
-      return;
-    }
+    selectedSingers.forEach((s) => formData.append("singers[]", s._id));
+    selectedWriters.forEach((w) => formData.append("writers[]", w._id));
+    selectedFeatures.forEach((f) => formData.append("featureArtists[]", f._id));
+    formData.append("lyricsPhoto", uploadedFile);
 
     setIsLoading(true);
 
-    console.log("Form data before submission:", {
-      title,
-      albumName,
-      majorKey: selectedMajorKey?.name || selectedMajorKey,
-      genre: selectedGenres,
-      singers: selectedSingers.map((s) => s._id),
-      writers: selectedWriters.map((w) => w._id),
-      featureArtists: selectedFeatures.map((f) => f._id),
-    });
-
-    console.log("FormData contents:");
-    for (let pair of formData.entries()) {
-      console.log(`${pair[0]}: ${pair[1]}`);
-    }
-
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/lyrics/createLyrics",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
+      const res = await fetch("http://localhost:3000/api/lyrics/createLyrics", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
 
-      const contentType = response.headers.get("content-type");
-      let data;
+      const contentType = res.headers.get("content-type");
+      const data = contentType?.includes("application/json")
+        ? await res.json()
+        : null;
 
-      if (contentType && contentType.includes("application/json")) {
-        data = await response.json();
-      } else {
-        const text = await response.text();
-        throw new Error(`Unexpected non-JSON response:\n${text}`);
-      }
-
-      console.log("Response data:", data); // Log the response data for debugging
-
-      if (!response.ok) {
-        showNewMessage("error", data.message || "Failed to add lyric.");
-        return;
-      }
+      if (!res.ok || !data)
+        throw new Error(data?.message || "Unexpected error.");
 
       showNewMessage("success", `${title} added successfully.`);
       onUpdate();
       onClose();
     } catch (err) {
-      console.error("Failed to save lyric:", err.message || err);
+      console.error("Submit error:", err);
       showNewMessage("error", err.message || "Something went wrong.");
     } finally {
-      setIsLoading(false); // ✅ End loading
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex justify-center items-center">
-      <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
-      <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[1000px]">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Edit Lyric</h2>
-          <p className="text-sm border px-2 py-1 rounded-full border-gray-300">
-            {lyric._id}
-          </p>
-        </div>
-        <form>
-          {" "}
-          {/* Wrap the form */}
-          <div className="flex flex-wrap md:flex-nowrap gap-4">
-            {/* Left Column */}
-            <div className="flex flex-col w-full gap-4">
-              <InputField
-                label="Title"
-                value={title}
-                onChange={setTitle}
-                placeholder="Enter lyric title"
-              />
-              <InputField
-                label="Album Name"
-                value={albumName}
-                onChange={setAlbumName}
-                placeholder="Enter album name"
-              />
-
-              <div className="flex gap-4">
-                <MultiSelectField
-                  label="Genres"
-                  value={selectedGenres}
-                  options={genreOptions}
-                  onChange={setSelectedGenres}
-                />
-                <DropdownField
-                  label="Key"
-                  value={selectedMajorKey}
-                  options={keyOptions}
-                  onChange={setSelectedMajorKey}
-                />
-              </div>
+      <ModalPortal>
+        <div className="fixed bottom-0 left-0 w-screen h-screen z-[100] flex justify-center items-center">
+          <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
+          <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[1000px]">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Edit Lyric</h2>
+              <p className="text-sm border px-2 py-1 rounded-full border-gray-300">
+                {lyric._id}
+              </p>
             </div>
 
-            {/* Right Column */}
-            <div className="flex flex-col w-full gap-4">
-              <MultiSelectField
-                label="Singers"
-                value={selectedSingers}
-                options={singers}
-                onChange={setSelectedSingers}
-              />
-              <MultiSelectField
-                label="Writers"
-                value={selectedWriters}
-                options={writers}
-                onChange={setSelectedWriters}
-              />
-              <MultiSelectField
-                label="Features"
-                value={selectedFeatures}
-                options={features}
-                onChange={setSelectedFeatures}
-              />
-            </div>
-          </div>
-          {/* File Upload */}
-          <div className="mt-6 flex gap-4 items-center w-full relative">
-            <img className="h-16 hover:h-128 transition-all absolute bottom-0 shadow-md" src={lyric.lyricsPhoto} alt="" />
-            <div className="w-full ml-16">
-            <label className="block mb-2 text-sm font-medium text-gray-700">
-              Upload Lyric File
-            </label>
-            <input
-              type="file"
-              onChange={(e) => setUploadedFile(e.target.files[0])}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
-            </div>
-          </div>
-          {/* Actions */}
-          <div className="flex justify-end gap-2 mt-6">
-            <button
-              type="submit"
-              disabled={isLoading}
-              className={`w-full font-semibold px-4 py-2 rounded ${
-                isLoading
-                  ? "bg-green-100 text-green-500 cursor-not-allowed"
-                  : "bg-green-200 text-green-700"
-              }`}
-              onClick={handleSubmit}
-            >
-              {isLoading ? (
-                <div className="flex justify-center items-center gap-2">
-                  <AiOutlineLoading3Quarters
-                    size={16}
-                    className="animate-spin text-2xl text-green-700"
+            <form onSubmit={handleSubmit}>
+              <div className="flex flex-wrap md:flex-nowrap gap-4">
+                <div className="flex flex-col w-full gap-4">
+                  <InputField
+                    label="Title"
+                    value={title}
+                    onChange={setTitle}
+                    placeholder="Enter lyric title"
                   />
-                  Saving...
+                  <InputField
+                    label="Album Name"
+                    value={albumName}
+                    onChange={setAlbumName}
+                    placeholder="Enter album name"
+                  />
+                  <div className="flex gap-4">
+                    <MultiSelectField
+                      label="Genres"
+                      value={selectedGenres}
+                      options={genreOptions}
+                      onChange={setSelectedGenres}
+                    />
+                    <DropdownField
+                      label="Key"
+                      value={selectedMajorKey}
+                      options={keyOptions}
+                      onChange={setSelectedMajorKey}
+                    />
+                  </div>
                 </div>
-              ) : (
-                "Save"
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="w-full bg-gray-200 text-gray-500 font-semibold px-4 py-2 rounded"
-            >
-              Cancel
-            </button>
+                <div className="flex flex-col w-full gap-4">
+                  <MultiSelectField
+                    label="Singers"
+                    value={selectedSingers}
+                    options={singers}
+                    onChange={setSelectedSingers}
+                  />
+                  <MultiSelectField
+                    label="Writers"
+                    value={selectedWriters}
+                    options={writers}
+                    onChange={setSelectedWriters}
+                  />
+                  <MultiSelectField
+                    label="Features"
+                    value={selectedFeatures}
+                    options={features}
+                    onChange={setSelectedFeatures}
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6 flex gap-4 items-center w-full relative">
+                <img
+                  className="h-16 hover:h-128 transition-all absolute bottom-0 shadow-md"
+                  src={lyric.lyricsPhoto}
+                  alt=""
+                />
+                <div className="w-full ml-16">
+                  <label className="block mb-2 text-sm font-medium text-gray-700">
+                    Upload Lyric File
+                  </label>
+                  <input
+                    type="file"
+                    onChange={(e) => setUploadedFile(e.target.files[0])}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 mt-6">
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className={`w-full font-semibold px-4 py-2 rounded ${
+                    isLoading
+                      ? "bg-green-100 text-green-500 cursor-not-allowed"
+                      : "bg-green-200 text-green-700"
+                  }`}
+                >
+                  {isLoading ? (
+                    <div className="flex justify-center items-center gap-2">
+                      <AiOutlineLoading3Quarters
+                        size={16}
+                        className="animate-spin text-2xl text-green-700"
+                      />
+                      Saving...
+                    </div>
+                  ) : (
+                    "Save"
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="w-full bg-gray-200 text-gray-500 font-semibold px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
-        </form>{" "}
-        {/* Close the form tag */}
-      </div>
-    </div>
+        </div>
+      </ModalPortal>
   );
 };
 
-// 🔍 Modular Components
 const InputField = ({ label, value, onChange, placeholder }) => (
   <div>
     <label className="block mb-1 text-sm font-medium text-gray-700">
@@ -368,11 +299,9 @@ const InputField = ({ label, value, onChange, placeholder }) => (
 
 export const MultiSelectField = ({ label, value, options, onChange }) => (
   <div className="w-full">
-    {label && (
-      <label className="block mb-1 text-sm font-medium text-gray-700">
-        {label}
-      </label>
-    )}
+    <label className="block mb-1 text-sm font-medium text-gray-700">
+      {label}
+    </label>
     <MultiSelect
       value={value}
       options={options}
@@ -382,24 +311,22 @@ export const MultiSelectField = ({ label, value, options, onChange }) => (
       className="w-full"
       maxSelectedLabels={3}
       filter
-      filterPlaceholder={`Choose one...`}
+      filterPlaceholder="Choose one..."
     />
   </div>
 );
 
 export const DropdownField = ({ label, value, options, onChange }) => (
   <div className="w-full">
-    {label && (
-      <label className="block mb-1 text-sm font-medium text-gray-700">
-        {label}
-      </label>
-    )}
+    <label className="block mb-1 text-sm font-medium text-gray-700">
+      {label}
+    </label>
     <Dropdown
       value={value}
       options={options}
       onChange={(e) => onChange(e.value)}
       optionLabel="name"
-      placeholder={`Choose one ...`}
+      placeholder="Choose one ..."
       className="w-full"
     />
   </div>
