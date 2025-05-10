@@ -23,12 +23,10 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
     lyric.majorKey || null
   );
 
-  console.log('keyOptions - ', keyOptions);
-
   const [singers, setSingers] = useState([]);
 
-  console.log('singers - ', singers);
-  console.log('lyric.singers - ', lyric.singers);
+  console.log('singers - ', lyric);
+
   const [writers, setWriters] = useState([]);
   const [features, setFeatures] = useState([]);
 
@@ -300,7 +298,9 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
             </div>
           </div>
           {/* File Upload */}
-          <div className="mt-6">
+          <div className="mt-6 flex gap-4 items-center w-full relative">
+            <img className="h-16 hover:h-128 transition-all absolute bottom-0 shadow-md" src={lyric.lyricsPhoto} alt="" />
+            <div className="w-full ml-16">
             <label className="block mb-2 text-sm font-medium text-gray-700">
               Upload Lyric File
             </label>
@@ -309,6 +309,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
               onChange={(e) => setUploadedFile(e.target.files[0])}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
+            </div>
           </div>
           {/* Actions */}
           <div className="flex justify-end gap-2 mt-6">
