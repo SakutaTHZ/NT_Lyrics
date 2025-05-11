@@ -118,26 +118,6 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
     if (!selectedSingers.length) return "Select at least one singer.";
     return null;
   };
-  useEffect(() => {
-    const fetchImageAsFile = async () => {
-      if (!lyric.lyricsPhoto) return;
-  
-      try {
-        const response = await fetch(lyric.lyricsPhoto);
-        const blob = await response.blob();
-  
-        const filename = lyric.lyricsPhoto.split('/').pop() || 'image.jpg';
-  
-        const file = new File([blob], filename, { type: blob.type });
-        setUploadedFile(file);
-      } catch (error) {
-        console.error("Failed to fetch and convert image:", error);
-      }
-    };
-  
-    // Only if no new upload has occurred yet
-    if (!uploadedFile) fetchImageAsFile();
-  }, [lyric.lyricsPhoto, uploadedFile]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -160,7 +140,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
       formData.append("lyricsPhoto", uploadedFile);
     }
 
-    console.log("Form data:", {
+    console.log("Current :", {
       title,
       albumName,
       majorKey: selectedMajorKey?.name || selectedMajorKey,

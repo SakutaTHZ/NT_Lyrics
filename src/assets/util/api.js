@@ -130,3 +130,44 @@ export const fetchPopularLyrics = async (authToken) => {
       console.error("Error fetching singers:", error);
     }
   };
+
+  export const disableLyricById = async (lyricId, token) => {
+    const response = await fetch(
+      `http://localhost:3000/api/lyrics/disableLyrics/${lyricId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  
+    const data = await response.json();
+  
+    if (!response.ok) {
+      throw new Error(data.errors?.[0]?.message || "Failed to disable lyric");
+    }
+  
+    return data;
+  };
+
+  export const changeUserValidity = async (userId, isValid, token) => {
+    const response = await fetch(
+      `http://localhost:3000/api/users/${userId}?type=${
+        isValid ? "activate" : "deactivate"
+      }`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to update user validity");
+    }
+  };
