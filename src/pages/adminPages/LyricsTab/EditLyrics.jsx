@@ -5,6 +5,8 @@ import { MultiSelect } from "primereact/multiselect";
 import { Dropdown } from "primereact/dropdown";
 import ModalPortal from "../../../components/special/ModalPortal";
 import useModalEscClose from "../../../components/hooks/useModalEscClose";
+import { ConfirmPopup } from "primereact/confirmpopup";
+import { confirmPopup } from "primereact/confirmpopup";
 
 import {
   genreOptions,
@@ -110,6 +112,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
     }
   }, [lyric.featureArtists, features]);
 
+  
   const deleteLyric = async () => {
     if (!lyric?._id) {
       console.error("Missing lyric ID");
@@ -122,7 +125,6 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
     }
   
     try {
-      console.log("Deleting lyric with ID:", lyric._id);
   
       const response = await fetch(
         `http://localhost:3000/api/lyrics/deleteLyrics/${lyric._id}`,
@@ -137,7 +139,6 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
   
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Server error response:", errorData);
         showNewMessage("error", errorData.errors?.[0]?.message || "Delete failed");
         throw new Error(errorData.message || "Failed to delete lyric");
       }
@@ -149,6 +150,23 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
       console.error("Delete error:", err);
     }
   };
+
+  const handleDelete = (e) => {
+    confirmPopup({
+      target: e.currentTarget,
+      message: "Are you sure you want to delete this artist?",
+      icon: "pi pi-exclamation-triangle",
+      acceptClassName: "p-button-danger",
+      acceptLabel: "Yes",
+      rejectLabel: "No",
+      accept: async () => {
+        await deleteLyric();
+        onUpdate();
+        onClose();
+      },
+    });
+  };
+
 
   const validateForm = () => {
     if (!title.trim()) return "Title is required.";
@@ -180,25 +198,6 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
       formData.append("lyricsPhoto", uploadedFile);
     }
 
-    console.log("Current :", {
-      title,
-      albumName,
-      majorKey: selectedMajorKey?.name || selectedMajorKey,
-      genre: selectedGenres.map((s) => s.name),
-      singers: selectedSingers.map((s) => s._id),
-      writers: selectedWriters.map((w) => w._id),
-      featureArtists: selectedFeatures.map((f) => f._id),
-      lyricsPhoto: lyric.lyricsPhoto,
-      uploadedFile,
-    });
-
-    console.log(
-      "Form data:",
-      formData.forEach((value, key) => {
-        console.log(key, value);
-      })
-    );
-
     setIsLoading(true);
 
     try {
@@ -215,8 +214,6 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
       const data = contentType?.includes("application/json")
         ? await res.json()
         : null;
-
-      console.log("Response data:", data);
 
       if (!res.ok || !data)
         throw new Error(data?.message || "Unexpected error.");
@@ -356,13 +353,15 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
           <div className="flex justify-end gap-2 mt-4">
             <button
               className={`w-full font-semibold px-4 py-2 rounded bg-red-200 text-red-700 cursor-pointer hover:bg-red-300 hover:text-red-900`}
-              onClick={deleteLyric}
+              onClick={handleDelete}
             >
               Delete
             </button>
           </div>
         </div>
       </div>
+      
+      <ConfirmPopup />
     </ModalPortal>
   );
 };

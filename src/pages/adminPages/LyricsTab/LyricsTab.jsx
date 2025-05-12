@@ -54,7 +54,6 @@ const LyricsTab = () => {
   const fetchLyrics = useCallback(
     async (pageNum = 1, override = false) => {
       setLoading(true);
-      console.log(selectedMajorKey);
       try {
         const res = await axios.get(
           "http://localhost:3000/api/lyrics/searchLyricsByAdmin",
@@ -90,7 +89,6 @@ const LyricsTab = () => {
         getLyricOverview();
       } catch (err) {
         console.error("Error fetching users:", err);
-        console.log(err.response.data);
       } finally {
         setLoading(false);
       }

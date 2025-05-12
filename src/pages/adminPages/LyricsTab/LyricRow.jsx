@@ -70,17 +70,6 @@ const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit, isDisabled }) => {
       </td>
       <td className="px-4 py-3 font-semibold">{lyric.majorKey}</td>
       <td className="px-4 py-3">{lyric.viewCount}</td>
-      {/* <td className="px-4 py-3">
-        {lyric.isEnable ? (
-          <span className="border px-2 py-1 rounded-md bg-green-50 border-green-500 text-green-500">
-            Enabled
-          </span>
-        ) : (
-          <span className="border px-2 py-1 rounded-md bg-red-50 border-red-500 text-red-500">
-            Disabled
-          </span>
-        )}
-      </td> */}
       <td className="px-4 py-3">
         <button
           onClick={() => {
@@ -98,9 +87,8 @@ const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit, isDisabled }) => {
               : enableLyricById(lyric._id, token);
 
             apiCall
-              .then((res) => {
-                console.log("Lyric status updated:", res);
-                isDisabled(); // ✅ Call this *after* success
+              .then(() => {
+                isDisabled();
               })
               .catch((err) => {
                 console.error("Failed to update lyric status:", err);
@@ -117,8 +105,9 @@ const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit, isDisabled }) => {
       </td>
       <td className="px-4 py-3">
         <button
-          className="w-full flex items-center justify-center p-2 rounded-md text-blue-600 bg-blue-50 hover:underline text-sm cursor-pointer"
+          className={`w-full flex items-center justify-center p-2 rounded-md ${lyric.isEnable ? "text-blue-600 bg-blue-50":"text-gray-400 bg-gray-50"}  hover:underline text-sm cursor-pointer`}
           onClick={() => onEdit(lyric)}
+          disabled={!lyric.isEnable}
         >
           <MdEdit size={16} />
         </button>
