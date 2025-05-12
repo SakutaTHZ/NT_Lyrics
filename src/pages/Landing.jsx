@@ -6,18 +6,10 @@ import Footer from "../components/common/Footer";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import mockData from "../assets/data/mockSongs.json";
-// import LyricsGrid from "../components/special/LyricsGrid";
 import useIsMobile from "../components/hooks/useIsMobile";
 import LyricsCard from "../components/special/LyricsCard";
 import LyricsRow from "../components/special/LyricsRow";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
-
-// const fetchMockLyrics = (page, itemsPerBatch) => {
-//   const startIndex = (page - 1) * itemsPerBatch;
-//   return Promise.resolve(
-//     mockData.slice(startIndex, startIndex + itemsPerBatch)
-//   );
-// };
 
 const Landing = () => {
   const isMobile = useIsMobile();

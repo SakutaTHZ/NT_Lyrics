@@ -17,12 +17,6 @@ function App() {
         </AuthProvider>
       </Router>
     </PrimeReactProvider>
-
-    // <PrimeReactProvider>
-    //   <Router>
-    //     <AnimatedRoutes />
-    //   </Router>
-    // </PrimeReactProvider>
   );
 }
 
