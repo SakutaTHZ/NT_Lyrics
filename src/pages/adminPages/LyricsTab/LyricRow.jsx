@@ -1,9 +1,9 @@
 // components/UserRow.jsx
 import { MdEdit } from "react-icons/md";
 import PropTypes from "prop-types";
-import { disableLyricById } from "../../../assets/util/api";
+import { disableLyricById, enableLyricById } from "../../../assets/util/api";
 
-const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit }) => {
+const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit, isDisabled }) => {
   const ref = isLast ? lastUserRef : null;
 
   return (
@@ -82,31 +82,39 @@ const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit }) => {
         )}
       </td> */}
       <td className="px-4 py-3">
-  <button
-    onClick={() => {
-      const confirmMsg = lyric.isEnable
-        ? "Are you sure you want to disable this lyric?"
-        : "Are you sure you want to enable this lyric?";
-      const confirmed = window.confirm(confirmMsg);
-      if (confirmed) {
-        disableLyricById(lyric._id,localStorage.getItem("token"))
-          .then((res) => {
-            console.log("Lyric status updated:", res);
-          })
-          .catch((err) => {
-            console.error("Failed to update lyric status:", err);
-          });
-      }
-    }}
-    className={`border px-2 py-1 rounded-md font-semibold text-sm ${
-      lyric.isEnable
-        ? "bg-green-50 border-green-500 text-green-500"
-        : "bg-red-50 border-red-500 text-red-500"
-    } hover:underline cursor-pointer`}
-  >
-    {lyric.isEnable ? "Enabled" : "Disabled"}
-  </button>
-</td>
+        <button
+          onClick={() => {
+            const confirmMsg = lyric.isEnable
+              ? "Are you sure you want to disable this lyric?"
+              : "Are you sure you want to enable this lyric?";
+
+            const confirmed = window.confirm(confirmMsg);
+            if (!confirmed) return;
+
+            const token = localStorage.getItem("token");
+
+            const apiCall = lyric.isEnable
+              ? disableLyricById(lyric._id, token)
+              : enableLyricById(lyric._id, token);
+
+            apiCall
+              .then((res) => {
+                console.log("Lyric status updated:", res);
+                isDisabled(); // ✅ Call this *after* success
+              })
+              .catch((err) => {
+                console.error("Failed to update lyric status:", err);
+              });
+          }}
+          className={`border px-2 py-1 rounded-md font-semibold text-sm ${
+            lyric.isEnable
+              ? "bg-green-50 border-green-500 text-green-500"
+              : "bg-red-50 border-red-500 text-red-500"
+          } hover:underline cursor-pointer`}
+        >
+          {lyric.isEnable ? "Enabled" : "Disabled"}
+        </button>
+      </td>
       <td className="px-4 py-3">
         <button
           className="w-full flex items-center justify-center p-2 rounded-md text-blue-600 bg-blue-50 hover:underline text-sm cursor-pointer"
@@ -125,6 +133,7 @@ LyricRow.propTypes = {
   isLast: PropTypes.bool,
   lastUserRef: PropTypes.any,
   onEdit: PropTypes.func.isRequired,
+  isDisabled: PropTypes.func.isRequired,
 };
 
 export default LyricRow;

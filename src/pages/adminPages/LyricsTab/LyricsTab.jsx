@@ -11,7 +11,7 @@ import { useRef } from "react";
 import useDebounce from "../../../components/hooks/useDebounce";
 import LyricRow from "./LyricRow";
 import { keyOptions } from "../../../../src/assets/js/constantDatas";
-import { DropdownField} from "./AddLyric";
+import { DropdownField } from "./AddLyric";
 import { fetchSingers } from "../../../assets/util/api";
 import EditLyric from "./EditLyrics";
 
@@ -54,7 +54,7 @@ const LyricsTab = () => {
   const fetchLyrics = useCallback(
     async (pageNum = 1, override = false) => {
       setLoading(true);
-      console.log(selectedMajorKey)
+      console.log(selectedMajorKey);
       try {
         const res = await axios.get(
           "http://localhost:3000/api/lyrics/searchLyricsByAdmin",
@@ -301,12 +301,12 @@ const LyricsTab = () => {
             />
           ) : selectedType === "singer" ? (
             <Dropdown
-            value={
-              singers.find((singer) => singer._id === selectedSingers) || null
-            }
+              value={
+                singers.find((singer) => singer._id === selectedSingers) || null
+              }
               onChange={(e) => {
                 if (!e.value) {
-                  setSelectedSingers(""); 
+                  setSelectedSingers("");
                 } else {
                   setSelectedSingers(e.value._id);
                 }
@@ -320,14 +320,14 @@ const LyricsTab = () => {
             />
           ) : selectedType === "writer" ? (
             <Dropdown
-            value={
-              singers.find((singer) => singer._id === selectedWriters) || null
-            }
+              value={
+                singers.find((singer) => singer._id === selectedWriters) || null
+              }
               onChange={(e) => {
                 if (!e.value) {
                   setSelectedWriters("");
                 } else {
-                  setSelectedWriters(e.value._id); 
+                  setSelectedWriters(e.value._id);
                 }
               }}
               options={writers}
@@ -384,6 +384,12 @@ const LyricsTab = () => {
                   isLast={isLast}
                   lastUserRef={lastUserRef}
                   onEdit={handleEdit}
+                  isDisabled={() => {
+                    getLyricOverview();
+                    showNewMessage("success", "Lyric Status Changed Successfully!");
+                    setPage(1);
+                    fetchLyrics(1, true);
+                  }}
                 />
               );
             })}
@@ -426,13 +432,14 @@ const LyricsTab = () => {
           lyric={selectedLyric}
           onClose={closeModal}
           onUpdate={() => {
-          getLyricOverview();
-          showNewMessage("success", "Lyric Updated Successfully!");
-          setPage(1);
-          fetchLyrics(1, true);
-        }}
-        showNewMessage={showNewMessage}
-      />)}
+            getLyricOverview();
+            showNewMessage("success", "Lyric Updated Successfully!");
+            setPage(1);
+            fetchLyrics(1, true);
+          }}
+          showNewMessage={showNewMessage}
+        />
+      )}
     </>
   );
 };

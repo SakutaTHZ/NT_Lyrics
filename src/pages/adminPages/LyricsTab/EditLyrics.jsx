@@ -110,6 +110,46 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
     }
   }, [lyric.featureArtists, features]);
 
+  const deleteLyric = async () => {
+    if (!lyric?._id) {
+      console.error("Missing lyric ID");
+      return;
+    }
+  
+    if (!token) {
+      console.error("Missing auth token");
+      return;
+    }
+  
+    try {
+      console.log("Deleting lyric with ID:", lyric._id);
+  
+      const response = await fetch(
+        `http://localhost:3000/api/lyrics/deleteLyrics/${lyric._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Server error response:", errorData);
+        showNewMessage("error", errorData.errors?.[0]?.message || "Delete failed");
+        throw new Error(errorData.message || "Failed to delete lyric");
+      }
+  
+      showNewMessage("success", "Lyric deleted successfully");
+      onClose();
+      onUpdate();
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
+  };
+
   const validateForm = () => {
     if (!title.trim()) return "Title is required.";
     if (!albumName.trim()) return "Album name is required.";
@@ -312,6 +352,15 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
               </button>
             </div>
           </form>
+
+          <div className="flex justify-end gap-2 mt-4">
+            <button
+              className={`w-full font-semibold px-4 py-2 rounded bg-red-200 text-red-700 cursor-pointer hover:bg-red-300 hover:text-red-900`}
+              onClick={deleteLyric}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     </ModalPortal>
