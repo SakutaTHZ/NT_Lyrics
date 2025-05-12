@@ -107,6 +107,7 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
                   value={user.name}
                   readOnly
                   className="w-full p-2 py-2 border border-gray-300 rounded-md"
+                  disabled={!isValid}
                 />
               </div>
 
@@ -119,6 +120,7 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
                   value={user.email}
                   readOnly
                   className="w-full p-2 py-2 border border-gray-300 rounded-md"
+                  disabled={!isValid}
                 />
               </div>
 
@@ -135,6 +137,7 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
                         value={option}
                         onChange={(e) => setRole(e.value)}
                         checked={role === option}
+                        disabled={!isValid}
                       />
                       <label htmlFor={option} className="text-sm capitalize">
                         {option.replace("-", " ")}
@@ -142,7 +145,7 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
                     </div>
                   ))}
                 </div>
-                <div className="row">
+                <div className={`row ${role === "admin" ? "hidden" : ""}`}>
                   <label className="block my-2 text-sm font-medium text-gray-700">
                     IsValid?{" "}
                     <span className="text-xs text-gray-400">

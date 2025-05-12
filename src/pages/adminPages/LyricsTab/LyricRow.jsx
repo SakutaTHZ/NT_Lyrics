@@ -1,7 +1,7 @@
 // components/UserRow.jsx
 import { MdEdit } from "react-icons/md";
 import PropTypes from "prop-types";
-import { disableLyricById, enableLyricById } from "../../../assets/util/api";
+import { changeLyricsEnableFlag} from "../../../assets/util/api";
 
 const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit, isDisabled }) => {
   const ref = isLast ? lastUserRef : null;
@@ -82,9 +82,7 @@ const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit, isDisabled }) => {
 
             const token = localStorage.getItem("token");
 
-            const apiCall = lyric.isEnable
-              ? disableLyricById(lyric._id, token)
-              : enableLyricById(lyric._id, token);
+            const apiCall = changeLyricsEnableFlag(lyric._id, token)
 
             apiCall
               .then(() => {

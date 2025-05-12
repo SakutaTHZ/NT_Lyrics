@@ -34,6 +34,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
   const [uploadedFile, setUploadedFile] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (Array.isArray(lyric.genre)) {
@@ -123,10 +124,11 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
       console.error("Missing auth token");
       return;
     }
+
+    setIsDeleting(true);
   
     try {
-  
-      const response = await fetch(
+        const response = await fetch(
         `http://localhost:3000/api/lyrics/deleteLyrics/${lyric._id}`,
         {
           method: "DELETE",
@@ -148,13 +150,15 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
       onUpdate();
     } catch (err) {
       console.error("Delete error:", err);
+    }finally {
+      setIsDeleting(false);
     }
   };
 
   const handleDelete = (e) => {
     confirmPopup({
       target: e.currentTarget,
-      message: "Are you sure you want to delete this artist?",
+      message: "Are you sure you want to delete this lyric?",
       icon: "pi pi-exclamation-triangle",
       acceptClassName: "p-button-danger",
       acceptLabel: "Yes",
@@ -352,10 +356,24 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
 
           <div className="flex justify-end gap-2 mt-4">
             <button
-              className={`w-full font-semibold px-4 py-2 rounded bg-red-200 text-red-700 cursor-pointer hover:bg-red-300 hover:text-red-900`}
+              className={`w-full font-semibold px-4 py-2 rounded cursor-pointer hover:bg-red-300 hover:text-red-900 ${
+                isDeleting
+                  ? "bg-red-100 text-red-500 cursor-not-allowed"
+                  : "bg-red-200 text-red-700"
+              }`}
               onClick={handleDelete}
             >
-              Delete
+              {isDeleting ? (
+                  <div className="flex justify-center items-center gap-2">
+                    <AiOutlineLoading3Quarters
+                      size={16}
+                      className="animate-spin text-2xl text-red-800"
+                    />
+                    Deleting...
+                  </div>
+                ) : (
+                  "Delete"
+                )}
             </button>
           </div>
         </div>

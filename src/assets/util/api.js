@@ -193,3 +193,24 @@ export const fetchPopularLyrics = async (authToken) => {
     }
   };
   
+
+  export const changeLyricsEnableFlag = async (lyricId, token) => {
+    const response = await fetch(
+      `http://localhost:3000/api/lyrics/changeEnableFlag/${lyricId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  
+    const data = await response.json();
+  
+    if (!response.ok) {
+      throw new Error(data.errors?.[0]?.message || "Failed to disable lyric");
+    }
+  
+    return data;
+  };
