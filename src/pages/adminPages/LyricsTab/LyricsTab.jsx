@@ -194,11 +194,16 @@ const LyricsTab = () => {
   const closeModal = () => setSelectedLyric(null);
 
   useEffect(() => {
-    showNewMessage("success", "Lyrics Tab Loaded Successfully!");
     getArtists();
     getLyricOverview();
-    fetchLyrics();
+    fetchLyrics(1,true);
   }, [fetchLyrics]);
+
+  useEffect(() => {
+  if (page > 1) {
+    fetchLyrics(page, false); // append mode
+  }
+  }, [page,fetchLyrics]);
 
   return (
     <>

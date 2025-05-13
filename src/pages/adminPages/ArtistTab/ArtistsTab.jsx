@@ -59,6 +59,7 @@ const ArtistsTab = () => {
             ? res.data.artists
             : [...prev, ...res.data.artists]
         );
+
         setTotalPages(res.data.totalPages);
         setInitialLoadDone(true);
         getArtistOverview();
@@ -95,7 +96,7 @@ const ArtistsTab = () => {
 
   const lastUserRef = useCallback(
     (node) => {
-      if (loading || page >= totalPages) return;
+      if (loading || page + 1 > totalPages) return;
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
@@ -119,7 +120,7 @@ const ArtistsTab = () => {
   };
 
   useEffect(() => {
-    fetchArtists();
+    fetchArtists(1, true);
     getTop10Artists();
   }, [debouncedSearchTerm, typeFilter, fetchArtists, getTop10Artists]);
 
@@ -129,6 +130,12 @@ const ArtistsTab = () => {
     setTotalPages(null);
     setInitialLoadDone(false);
   }, [typeFilter, debouncedSearchTerm]);
+
+  useEffect(() => {
+  if (page > 1) {
+    fetchArtists(page, false); // append mode
+  }
+  }, [page,fetchArtists]);
 
   const chartData = {
     labels: ["Singers", "Writers", "Both"],
@@ -324,7 +331,7 @@ const ArtistsTab = () => {
               const isLast = idx === artists.length - 1;
               return (
                 <ArtistRow
-                  key={artist._id || idx}
+                  key={idx}
                   artist={artist}
                   idx={idx}
                   isLast={isLast}
