@@ -5,6 +5,7 @@ import "primeicons/primeicons.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import AnimatedRoutes from "../src/components/special/AnimatedRoutes";
 import { PrimeReactProvider } from "primereact/api";
+import { ScrollTop } from 'primereact/scrolltop';
 
 import AuthProvider from "./components/hooks/AuthProvider";
 
@@ -16,6 +17,7 @@ function App() {
           <AnimatedRoutes />
         </AuthProvider>
       </Router>
+      <ScrollTop className="opacity-40"/>
     </PrimeReactProvider>
   );
 }

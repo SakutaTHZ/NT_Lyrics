@@ -7,7 +7,10 @@ import { Chart } from "primereact/chart";
 import { SelectButton } from "primereact/selectbutton";
 import EditArtist from "./EditArtist";
 import AddArtist from "./AddArtist";
-import {fetchTop10Artists,fetchArtistOverview} from '../../../assets/util/api'
+import {
+  fetchTop10Artists,
+  fetchArtistOverview,
+} from "../../../assets/util/api";
 
 const ArtistsTab = () => {
   const [artists, setArtists] = useState([]);
@@ -132,10 +135,10 @@ const ArtistsTab = () => {
   }, [typeFilter, debouncedSearchTerm]);
 
   useEffect(() => {
-  if (page > 1) {
-    fetchArtists(page, false); // append mode
-  }
-  }, [page,fetchArtists]);
+    if (page > 1) {
+      fetchArtists(page, false); // append mode
+    }
+  }, [page, fetchArtists]);
 
   const chartData = {
     labels: ["Singers", "Writers", "Both"],
@@ -246,7 +249,7 @@ const ArtistsTab = () => {
             {(toptenArtists || []).map((artist, idx) => (
               <div
                 key={idx}
-                className="relative flex items-center gap-3 p-2 px-4 border border-gray-300 rounded-full shadow-sm hover:shadow-md transition cursor-pointer"
+                className="relative w-full md:w-fit flex items-center gap-3 p-2 px-4 border border-gray-300 rounded-full shadow-sm hover:shadow-md transition cursor-pointer"
               >
                 <p
                   className={`absolute  border  w-6 h-6 -inset-2 rounded-full text-sm flex items-center justify-center ${
@@ -267,7 +270,7 @@ const ArtistsTab = () => {
                       "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
                   }}
                 />
-                <div className="flex items-center gap-2">
+                <div className="flex w-full md:w-fit items-center justify-between md:justify-normal gap-2">
                   <p className="text-gray-800 font-semibold">{artist.name}</p>
                   <p className="text-gray-500 text-sm  bg-gray-100 p-1 px-2 rounded-full">
                     {artist.searchCount}
@@ -283,16 +286,16 @@ const ArtistsTab = () => {
       <div className="filters mt-4">
         <p className="text-gray-600 font-semibold mb-2">Filters</p>
         <div className="flex flex-wrap md:flex-nowrap gap-4 mt-2 items-center ">
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 w-full md:w-auto">
             <SelectButton
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.value || "")}
               optionLabel="name"
               options={types}
-              className="w-full md:w-auto"
+              className="w-full md:w-auto flex"
               itemTemplate={(option) => (
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold">{option.name}</span>
+                  <span className="text-sm font-semibold text-nowrap">{option.name}</span>
                 </div>
               )}
             />
@@ -304,7 +307,10 @@ const ArtistsTab = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="w-full md:w-auto text-nowrap bg-blue-500 text-white p-3 rounded-md cursor-pointer" onClick={handleAddArtist}>
+          <button
+            className="w-full md:w-auto text-nowrap bg-blue-500 text-white p-3 rounded-md cursor-pointer"
+            onClick={handleAddArtist}
+          >
             Add New Atists
           </button>
         </div>

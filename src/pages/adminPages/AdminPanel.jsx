@@ -1,5 +1,4 @@
 import React from "react";
-import { ScrollTop } from "primereact/scrolltop";
 import { TabView, TabPanel } from "primereact/tabview";
 import { useState, useEffect, useCallback } from "react";
 import { CgArrowTopRight } from "react-icons/cg";
@@ -113,7 +112,7 @@ const ArtistList = () => {
 };
 
 const AdminPanel = () => {
-  const [activeIndex, setActiveIndex] = useState(2);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const [artistCounts, setArtistCounts] = useState({
     countDiff: 100,
@@ -177,7 +176,6 @@ const AdminPanel = () => {
   return (
     <>
       <Nav />
-      <ScrollTop />
       <div className="relative flex flex-col w-screen min-h-screen pt-12">
         <div className="flex justify-between px-4 md:px-24 w-screen">
           <TabView
