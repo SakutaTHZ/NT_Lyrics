@@ -9,7 +9,7 @@ import {
   genreOptions,
   keyOptions,
 } from "../../../../src/assets/js/constantDatas";
-import { fetchSingers } from "../../../assets/util/api";
+import { apiUrl, fetchSingers } from "../../../assets/util/api";
 
 const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
   const token = localStorage.getItem("token");
@@ -102,7 +102,7 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/lyrics/createLyrics", {
+      const response = await fetch(`${apiUrl}/lyrics/createLyrics`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

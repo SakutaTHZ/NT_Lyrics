@@ -5,6 +5,7 @@ import { InputSwitch } from "primereact/inputswitch";
 import { useState } from "react";
 import ModalPortal from "../../../components/special/ModalPortal";
 import useModalEscClose from "../../../components/hooks/useModalEscClose";
+import { apiUrl } from "../../../assets/util/api";
 
 const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
   useModalEscClose(onClose);
@@ -25,7 +26,7 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
 
   const changeUserRole = async (userId, role, token) => {
     const response = await fetch(
-      `http://localhost:3000/api/users/changeUserRole`,
+      `${apiUrl}/users/changeUserRole`,
       {
         method: "POST",
         headers: {
@@ -47,7 +48,7 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
 
   const changeUserValidity = async (userId, isValid, token) => {
     const response = await fetch(
-      `http://localhost:3000/api/users/${userId}?type=${
+      `${apiUrl}/users/${userId}?type=${
         isValid ? "activate" : "deactivate"
       }`,
       {

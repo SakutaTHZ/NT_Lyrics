@@ -3,6 +3,7 @@ import { MdEdit } from "react-icons/md";
 import PropTypes from "prop-types";
 import axios from "axios";
 import {useEffect, useRef,useState,useCallback} from "react";
+import { apiUrl } from "../../../assets/util/api";
 
 const ArtistType = ({ type }) => {
   switch (type) {
@@ -60,7 +61,7 @@ const ArtistRow = ({ artist, idx, isLast, lastUserRef, onEdit }) => {
   const getLyricsCountByArtist = useCallback(async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/lyrics/getLyricsCountByArtist?artistId=${artist._id}`,
+        `${apiUrl}/lyrics/getLyricsCountByArtist?artistId=${artist._id}`,
         {
           headers: {
             "Content-Type": "application/json",

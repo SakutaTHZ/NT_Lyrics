@@ -6,7 +6,7 @@ import useDebounce from "../../../components/hooks/useDebounce";
 import UserRow from "./UserRow";
 import AddNewUser from "./AddNewUser";
 import MessagePopup from "../../../components/common/MessagePopup";
-import { fetchUserOverview } from "../../../assets/util/api";
+import { apiUrl, fetchUserOverview } from "../../../assets/util/api";
 
 const UsersTab = () => {
   const [users, setUsers] = useState([]);
@@ -43,7 +43,7 @@ const UsersTab = () => {
   const fetchUsers = async (pageNum = 1, override = false) => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:3000/api/users/search", {
+      const res = await axios.get(`${apiUrl}/users/search`, {
         params: {
           page: pageNum,
           limit: 20,

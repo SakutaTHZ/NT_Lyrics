@@ -10,6 +10,7 @@ import AddArtist from "./AddArtist";
 import {
   fetchTop10Artists,
   fetchArtistOverview,
+  apiUrl,
 } from "../../../assets/util/api";
 
 const ArtistsTab = () => {
@@ -42,7 +43,7 @@ const ArtistsTab = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/artists/search",
+          `${apiUrl}/artists/search`,
           {
             params: {
               page: pageNum,

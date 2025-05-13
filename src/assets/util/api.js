@@ -1,10 +1,13 @@
 import axios from "axios";
 
+
+export const apiUrl = import.meta.env.VITE_API_URL;
+export const siteUrl = import.meta.env.VITE_SITE_URL;
 // Artist
 export const fetchTop10Artists = async (authToken) => {
   try {
     const res = await axios.get(
-      "http://localhost:3000/api/artists/getTopArtists",
+      `${apiUrl}/artists/getTopArtists`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -27,7 +30,7 @@ export const fetchTop10Artists = async (authToken) => {
 export const fetchArtistOverview = async (authToken) => {
   try {
     const res = await axios.get(
-      "http://localhost:3000/api/artists/getArtistOverview",
+      `${apiUrl}/artists/getArtistOverview`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +53,7 @@ export const fetchArtistOverview = async (authToken) => {
 export const fetchArtistById = async (authToken, artistId) => {
   try {
     const res = await axios.get(
-      `http://localhost:3000/api/artists/getArtistById/${artistId}`,
+      `${apiUrl}/artists/getArtistById/${artistId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -68,7 +71,7 @@ export const fetchArtistById = async (authToken, artistId) => {
 export const fetchUserOverview = async (authToken) => {
   try {
     const res = await axios.get(
-      "http://localhost:3000/api/users/getUserOverview",
+      `${apiUrl}/users/getUserOverview`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -86,7 +89,7 @@ export const fetchUserOverview = async (authToken) => {
 export const fetchLyricOverview = async (authToken) => {
   try {
     const res = await axios.get(
-      "http://localhost:3000/api/lyrics/getLyricsOverview",
+      `${apiUrl}/lyrics/getLyricsOverview`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -102,7 +105,7 @@ export const fetchLyricOverview = async (authToken) => {
 
 export const fetchPopularLyrics = async (authToken) => {
     try {
-      const res = await axios.get("http://localhost:3000/api/lyrics/getTopLyrics", {
+      const res = await axios.get(`${apiUrl}/lyrics/getTopLyrics`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,
@@ -118,7 +121,7 @@ export const fetchPopularLyrics = async (authToken) => {
   
  export const fetchSingers = async (type) => {
     try {
-      const res = await fetch(`http://localhost:3000/api/artists/getArtistsByType?type=${type}`);
+      const res = await fetch(`${apiUrl}/artists/getArtistsByType?type=${type}`);
       const data = await res.json();
       if (data.artists) {
         return data.artists
@@ -133,7 +136,7 @@ export const fetchPopularLyrics = async (authToken) => {
 
   export const disableLyricById = async (lyricId, token) => {
     const response = await fetch(
-      `http://localhost:3000/api/lyrics/disableLyrics/${lyricId}`,
+      `${apiUrl}/lyrics/disableLyrics/${lyricId}`,
       {
         method: "GET",
         headers: {
@@ -154,7 +157,7 @@ export const fetchPopularLyrics = async (authToken) => {
 
   export const enableLyricById = async (lyricId, token) => {
     const response = await fetch(
-      `http://localhost:3000/api/lyrics/enableLyrics/${lyricId}`,
+      `${apiUrl}/lyrics/enableLyrics/${lyricId}`,
       {
         method: "GET",
         headers: {
@@ -175,7 +178,7 @@ export const fetchPopularLyrics = async (authToken) => {
 
   export const changeUserValidity = async (userId, isValid, token) => {
     const response = await fetch(
-      `http://localhost:3000/api/users/${userId}?type=${
+      `${apiUrl}/users/${userId}?type=${
         isValid ? "activate" : "deactivate"
       }`,
       {
@@ -196,7 +199,7 @@ export const fetchPopularLyrics = async (authToken) => {
 
   export const changeLyricsEnableFlag = async (lyricId, token) => {
     const response = await fetch(
-      `http://localhost:3000/api/lyrics/changeEnableFlag/${lyricId}`,
+      `${apiUrl}/lyrics/changeEnableFlag/${lyricId}`,
       {
         method: "GET",
         headers: {

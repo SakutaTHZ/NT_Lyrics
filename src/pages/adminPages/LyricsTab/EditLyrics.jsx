@@ -12,7 +12,7 @@ import {
   genreOptions,
   keyOptions,
 } from "../../../../src/assets/js/constantDatas";
-import { fetchSingers } from "../../../assets/util/api";
+import { apiUrl, fetchSingers } from "../../../assets/util/api";
 
 const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
   useModalEscClose(onClose);
@@ -129,7 +129,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
   
     try {
         const response = await fetch(
-        `http://localhost:3000/api/lyrics/deleteLyrics/${lyric._id}`,
+        `${apiUrl}/lyrics/deleteLyrics/${lyric._id}`,
         {
           method: "DELETE",
           headers: {
@@ -206,7 +206,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/api/lyrics/updateLyrics/${lyric._id}`,
+        `${apiUrl}/lyrics/updateLyrics/${lyric._id}`,
         {
           method: "PUT",
           headers: { Authorization: `Bearer ${token}` },

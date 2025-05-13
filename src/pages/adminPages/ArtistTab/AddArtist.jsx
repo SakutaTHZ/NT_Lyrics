@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { RadioButton } from "primereact/radiobutton";
 import ModalPortal from "../../../components/special/ModalPortal";
 import useModalEscClose from "../../../components/hooks/useModalEscClose";
+import { apiUrl } from "../../../assets/util/api";
 
 const AddArtist = ({ onClose, onUpdate, showNewMessage }) => {
   useModalEscClose(onClose);
@@ -26,7 +27,7 @@ const AddArtist = ({ onClose, onUpdate, showNewMessage }) => {
 
   const addArtist = async () => {
     const response = await fetch(
-      `http://localhost:3000/api/artists/createArtist`,
+      `${apiUrl}/artists/createArtist`,
       {
         method: "POST",
         headers: {

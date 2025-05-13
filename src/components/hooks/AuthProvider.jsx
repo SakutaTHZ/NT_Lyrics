@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { AuthContext } from "./authContext"; // ✅ Import AuthContext here
+import { apiUrl } from "../../assets/util/api";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -17,7 +18,7 @@ const AuthProvider = ({ children }) => {
 
   const loginAction = async (data) => {
     try {
-      const response = await fetch("http://localhost:3000/api/users/loginUser", {
+      const response = await fetch(`${apiUrl}/users/loginUser`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

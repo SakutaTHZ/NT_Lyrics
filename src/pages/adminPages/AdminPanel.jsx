@@ -112,6 +112,8 @@ const ArtistList = () => {
 };
 
 const AdminPanel = () => {
+  // Accessing environment variables
+
   const [activeIndex, setActiveIndex] = useState(0);
 
   const [artistCounts, setArtistCounts] = useState({

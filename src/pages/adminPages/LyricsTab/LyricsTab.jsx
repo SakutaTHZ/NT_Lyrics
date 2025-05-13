@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import MessagePopup from "../../../components/common/MessagePopup";
 import { Chart } from "primereact/chart";
 import { SelectButton } from "primereact/selectbutton";
-import { fetchLyricOverview } from "../../../assets/util/api";
+import { apiUrl, fetchLyricOverview } from "../../../assets/util/api";
 import AddLyric from "./AddLyric";
 import { Dropdown } from "primereact/dropdown";
 import axios from "axios";
@@ -56,7 +56,7 @@ const LyricsTab = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/lyrics/searchLyricsByAdmin",
+          `${apiUrl}/lyrics/searchLyricsByAdmin`,
           {
             params: {
               page: pageNum,

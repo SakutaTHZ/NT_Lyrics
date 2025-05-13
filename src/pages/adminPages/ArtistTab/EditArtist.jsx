@@ -5,6 +5,7 @@ import { ConfirmPopup } from "primereact/confirmpopup";
 import { confirmPopup } from "primereact/confirmpopup";
 import ModalPortal from "../../../components/special/ModalPortal";
 import useModalEscClose from "../../../components/hooks/useModalEscClose";
+import { apiUrl } from "../../../assets/util/api";
 
 const fallbackImg =
   "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
@@ -36,7 +37,7 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
     console.log("Updating artist...");
     try {
       const res = await fetch(
-        `http://localhost:3000/api/artists/updateArtist/${artist._id}`,
+        `${apiUrl}/artists/updateArtist/${artist._id}`,
         {
           method: "PUT",
           headers: {
@@ -64,7 +65,7 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
   const deleteArtist = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/artists/deleteArtist/${artist._id}`,
+        `${apiUrl}/artists/deleteArtist/${artist._id}`,
         {
           method: "DELETE",
           headers: {

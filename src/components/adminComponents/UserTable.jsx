@@ -5,6 +5,7 @@ import { InputText } from "primereact/inputtext";
 import { MultiStateCheckbox } from "primereact/multistatecheckbox";
 import { Checkbox } from "primereact/checkbox";
 import { Button } from "primereact/button";
+import { apiUrl } from "../../utils/api"; // Adjust the import path as necessary
 // import axios from "axios";
 
 const UserTable = () => {
@@ -14,7 +15,7 @@ const UserTable = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/users/search", {
+        const response = await fetch(`${apiUrl}/users/search`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

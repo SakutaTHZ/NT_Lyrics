@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import PasswordInput from "./Password_Input";
 import { BiCheck } from "react-icons/bi";
 import { useAuth } from "../../components/hooks/authContext";
+import { apiUrl } from "../../assets/util/api"; // Adjust the import path as necessary
 
 const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
   const { logOut } = useAuth();
@@ -86,7 +87,7 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/users/${user.id}`,
+        `${apiUrl}/users/${user.id}`,
         {
           method: "PUT",
           headers: {
@@ -117,7 +118,7 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
 
       localStorage.setItem("user", JSON.stringify(userDetails));
     } catch (error) {
-      console.error("Error updating user:", error);
+      console.error("Error updating user:", error.errors[0].message);
       alert("An error occurred while updating the profile.");
     }
   };

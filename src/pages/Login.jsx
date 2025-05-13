@@ -9,6 +9,7 @@ import Normal_Button from "../components/common/Normal_Button";
 import PasswordInput from "../components/common/Password_Input";
 import Preview from "../assets/images/Landing_Page.png";
 import { useAuth } from "../components/hooks/authContext";
+import { siteUrl } from "../assets/util/api";
 
 const Login = () => {
   const labelClass = "text-gray-700 font-semibold";
@@ -151,7 +152,7 @@ const Login = () => {
           icon={FaGoogle}
           text="Sign In With Google"
           onClick={() => {
-            window.location.href = "http://localhost:3000/auth/google";
+            window.location.href = `${siteUrl}/auth/google`;
           }}
         />
 

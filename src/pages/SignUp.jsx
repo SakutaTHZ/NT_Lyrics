@@ -6,6 +6,8 @@ import { useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import PasswordInput from "../components/common/Password_Input";
 import { useAuth } from "../components/hooks/authContext";
+import { apiUrl, siteUrl } from "../assets/util/api";
+import MessagePopup from "../components/common/MessagePopup";
 
 const SignUp = () => {
   const labelClass = "text-gray-700 font-semibold";
@@ -53,6 +55,18 @@ const SignUp = () => {
     }
   };
 
+  const [showMessage, setShowMessage] = useState(false);
+  const [messageText, setMessageText] = useState("");
+  const [messageType, setMessageType] = useState("success");
+  const showNewMessage = (type, message) => {
+    setMessageText(message);
+    setMessageType(type);
+    setShowMessage(true);
+    setTimeout(() => {
+      setShowMessage(false);
+    }, 10000);
+  };
+
   const signUp = async () => {
     const userData = {
       name: name,
@@ -62,7 +76,7 @@ const SignUp = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/users/registerUser",
+        `${apiUrl}/users/registerUser`,
         {
           method: "POST",
           headers: {
@@ -74,19 +88,24 @@ const SignUp = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
+        showNewMessage("error", errorData.errors[0].message);
         throw new Error(
           `Signup failed: ${response.statusText}, ${JSON.stringify(errorData)}`
         );
       }
       loginAction({ email, password });
     } catch (error) {
-      console.error("Error signing up:", error.message);
-      alert(`Signup failed: ${error.message}`); // Optional: Display error message in UI
+      console.error(error.message.errors);
     }
   };
 
+  
+
   return (
     <>
+      {showMessage && (
+            <MessagePopup message_type={messageType} message_text={messageText} />
+          )}
       <div
         className="flex w-screen h-screen justify-center items-center overflow-hidden"
         id="main-content"
@@ -182,7 +201,7 @@ const SignUp = () => {
             icon={FaGoogle}
             text="Sign Up With Google"
             onClick={() => {
-              window.location.href = "http://localhost:3000/auth/google";
+              window.location.href = `${siteUrl}/auth/google`;
             }}
           />
           <p>

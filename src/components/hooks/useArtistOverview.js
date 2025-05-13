@@ -1,6 +1,7 @@
 // useArtistOverview.js
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
+import { apiUrl } from "../../assets/util/api";
 
 export const useArtistOverview = (token) => {
   const [artistCounts, setArtistCounts] = useState({
@@ -13,7 +14,7 @@ export const useArtistOverview = (token) => {
 
   const fetchOverview = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/artists/getArtistOverview", {
+      const res = await axios.get(`${apiUrl}/artists/getArtistOverview`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
