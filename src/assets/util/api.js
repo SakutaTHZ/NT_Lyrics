@@ -217,3 +217,19 @@ export const fetchPopularLyrics = async (authToken) => {
   
     return data;
   };
+
+  export const fetchLyricById = async (lyricId) => {
+  try {
+    const res = await axios.get(
+      `${apiUrl}/lyrics/getLyricsById/${lyricId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching lyric by ID:", err);
+  }
+}

@@ -4,12 +4,13 @@ import { BiSearch } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import Footer from "../components/common/Footer";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import mockData from "../assets/data/mockSongs.json";
+import { useEffect, useState } from "react";
 import useIsMobile from "../components/hooks/useIsMobile";
 import LyricsCard from "../components/special/LyricsCard";
 import LyricsRow from "../components/special/LyricsRow";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
+import { fetchPopularLyrics } from "../assets/util/api";
+import { useCallback } from "react";
 
 const Landing = () => {
   const isMobile = useIsMobile();
@@ -21,6 +22,20 @@ const Landing = () => {
       navigate(`/NT_Lyrics/lyrics?query=${encodeURIComponent(searchQuery)}`);
     }
   };
+
+  const [popularLyrics, setPopularLyrics] = useState([]);
+    const getPopularLyrics = useCallback(async () => {
+      try {
+        const lyrics = await fetchPopularLyrics(localStorage.getItem("token"));
+        setPopularLyrics(lyrics);
+      } catch (err) {
+        console.error("Error fetching user overview:", err);
+      }
+    }, []);
+
+  useEffect(() => {
+    getPopularLyrics();
+  }, [getPopularLyrics]);
 
   return (
     <>
@@ -43,7 +58,7 @@ const Landing = () => {
                 className="w-full outline-0"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSearch()} // Allow "Enter" to trigger search
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               />
               <button
                 className="p-2 bg-blue-500 rounded-md cursor-pointer"
@@ -64,14 +79,14 @@ const Landing = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-0 md:gap-12">
+          <div className={`grid grid-cols-1 ${popularLyrics.length === 0 ? "md:grid-cols-1" : "md:grid-cols-4" }  py-4 gap-0 md:gap-12`}>
             {/* <LyricsGrid fetchLyrics={fetchMockLyrics} /> */}
-            {mockData.length === 0 ? (
-              <div className="w-full">
-                <img src={EmptyData} alt="No data Found" className="w-full opacity-50"/>
+            {popularLyrics.length === 0 ? (
+              <div className="w-full justify-center flex items-center">
+                <img src={EmptyData} alt="No data Found" className="h-42 opacity-50"/>
               </div>
             ) : (
-              mockData
+              popularLyrics
                 .sort((a, b) => b.view_count - a.view_count) // Sort by view_count (descending)
                 .slice(0, 4) // Get the top 4
                 .map((lyric, index) => (
@@ -109,7 +124,6 @@ const Landing = () => {
                 className="w-full h-full rounded-md"
                 src="https://www.youtube.com/embed/Tg9yLrJTmTc"
                 title="YouTube video player"
-                frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>
@@ -120,7 +134,6 @@ const Landing = () => {
                 className="w-full h-full rounded-md"
                 src="https://www.youtube.com/embed/rhTZTy1rZhw?si=P7LfdH2chUvsPFX3"
                 title="YouTube video player"
-                frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>

@@ -6,11 +6,19 @@ import { useState, useEffect } from "react";
 import { CgRemove } from "react-icons/cg";
 import MessagePopup from "../common/MessagePopup";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
-const LyricsCard = ({ id,lyric }) => {
+const LyricsCard = ({ id,lyric ,isLast, lastUserRef }) => {
+  const ref = isLast ? lastUserRef : null;
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
   const [isInCollection, setIsInCollection] = useState(false);
+
+  const { ref: inViewRef, inView } = useInView({
+    triggerOnce: true, // Trigger only once when it first comes into view
+    threshold: 0.5, // 50% of the element should be in view
+  });
 
   const checkIfInCollection = () => {
     // Check if the lyrics is in User's Collection
@@ -25,7 +33,7 @@ const LyricsCard = ({ id,lyric }) => {
 
   const goToLyricsDetails = () => {
     // Pass the id dynamically in the URL
-    navigate(`/NT_Lyrics/lyricsdetail/${id}`, { state: { lyric } });
+    navigate(`/NT_Lyrics/lyricsdetail/${id}`);
   }
 
   const changeLyricsStatus = () => {
@@ -48,6 +56,18 @@ const LyricsCard = ({ id,lyric }) => {
       {showMessage && (
         <MessagePopup message_type={"success"} message_text={messageText} />
       )}
+      <motion.div
+        className="relative flex items-center w-full border-b last:border-0  border-dashed border-gray-200"
+        onClick={goToLyricsDetails}
+        ref={(node) => {
+          // Combine refs for IntersectionObserver and lastUserRef
+          if (ref) ref(node);
+          inViewRef(node);
+        }}
+        initial={{ scale: 0, opacity: 0, x: 0 }}
+        animate={inView ? { scale: 1, opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.4 }}
+      >
       <div className="relative card w-full min-h-32 aspect-[4/5] rounded-md shadow-md overflow-hidden" onClick={goToLyricsDetails}>
         <img src={sampleImage} className="w-full" />
         <div className="gradient-overlay w-full h-full absolute bottom-0"></div>
@@ -73,13 +93,15 @@ const LyricsCard = ({ id,lyric }) => {
             />
           )}
         </div>
-      </div>
+      </div></motion.div>
     </>
   );
 };
 LyricsCard.propTypes = {
   id: PropTypes.string.isRequired,
   lyric: PropTypes.object,
+    lastUserRef: PropTypes.object,
+    isLast: PropTypes.bool,
 };
 
 export default LyricsCard;

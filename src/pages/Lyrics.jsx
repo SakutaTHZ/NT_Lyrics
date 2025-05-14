@@ -1,80 +1,61 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { BiSearch } from "react-icons/bi";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState, Suspense } from "react";
 import { AutoComplete } from "primereact/autocomplete";
 import { RadioButton } from "primereact/radiobutton";
 import { Dropdown } from "primereact/dropdown";
-// import { MultiSelect } from "primereact/multiselect";
-import artistsData from "../assets/data/artists.json";
 import mockData from "../assets/data/mockSongs.json";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
+import { fetchSingers } from "../assets/util/api";
+import { majorkeys } from "../assets/js/constantDatas";
+import { apiUrl } from "../assets/util/api";
+import axios from "axios";
+import useDebounce from "../components/hooks/useDebounce";
+import useIsMobile from "../components/hooks/useIsMobile";
+import LyricsCard from "../components/special/LyricsCard";
+import LyricsRow from "../components/special/LyricsRow";
+import { useRef } from "react";
 
 const Nav = React.lazy(() => import("../components/common/Nav"));
 const Footer = React.lazy(() => import("../components/common/Footer"));
-const LyricsGrid = React.lazy(() => import("../components/special/LyricsGrid"));
-
-function getArtistsByType(artists) {
-  if (!artists) return [];
-  return artists
-    .filter((artist) => artist.type === "artist" || artist.type === "both")
-    .map((artist) => ({
-      Artist: artist.name,
-    }));
-}
-
-function getWritersByType(artists) {
-  if (!artists) return [];
-  return artists
-    .filter((artist) => artist.type === "writer" || artist.type === "both")
-    .map((artist) => ({
-      Writer: artist.name,
-    }));
-}
-
-const fetchFromAPI = async (page, itemsPerBatch) => {
-  const startIndex = (page - 1) * itemsPerBatch;
-  return Promise.resolve(
-    mockData.slice(startIndex, startIndex + itemsPerBatch)
-  );
-};
 
 const Lyrics = () => {
   const [searchParams] = useSearchParams();
+
+  const isMobile = useIsMobile();
+
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
+  const debouncedSearchTerm = useDebounce(searchTerm);
   const [items, setItems] = useState([]);
-  const [value, setValue] = useState(searchParams.get("query") || "");
 
   const [selectedKey, setSelectedKey] = useState("C");
   const [selectedWriters, setSelectedWriters] = useState("");
   const [selectedArtist, setSelectedArtist] = useState("");
 
-  const [searchMethod, setSearchMethod] = useState("Song");
-
-  const keys = [
-    "C",
-    "C#",
-    "D",
-    "D#",
-    "E",
-    "F",
-    "F#",
-    "G",
-    "G#",
-    "A",
-    "A#",
-    "B",
-  ];
+  const [searchMethod, setSearchMethod] = useState("all");
 
   const [writers, setWriters] = useState([]);
-  const [artists, setArtists] = useState([]);
+  const [singers, setSingers] = useState([]);
 
   useEffect(() => {
-    const artistsList = getArtistsByType(artistsData);
-    const writersList = getWritersByType(artistsData);
+    const getArtists = async () => {
+      try {
+        const [singerData, writerData] = await Promise.all([
+          fetchSingers("singer"),
+          fetchSingers("writer"),
+        ]);
 
-    setArtists(artistsList);
-    setWriters(writersList);
+        setSingers(singerData);
+        setWriters(writerData);
+      } catch (err) {
+        console.error("Error fetching artists:", err);
+      }
+    };
+
+    getArtists();
   }, []);
+
   const search = (event) => {
     const filteredTitles = mockData // Use the correct data (no `.lyrics` property)
       .filter(
@@ -86,7 +67,7 @@ const Lyrics = () => {
 
   const valueTemplate = (option) => {
     if (!option) return <span>Selected None</span>;
-    const displayText = option.Artist || option.Writer || "Unknown"; // Handle both dropdowns
+    const displayText = option.name || "Unknown"; // Handle both dropdowns
     return (
       <div className="flex items-center gap-2">
         <span>{displayText}</span>
@@ -95,13 +76,84 @@ const Lyrics = () => {
   };
 
   const itemTemplate = (option) => {
-    const displayText = option.Artist || option.Writer || "Unknown";
+    const displayText = option.name || "Unknown";
     return (
       <div className="flex items-center gap-2 p-2">
         <span>{displayText}</span>
       </div>
     );
   };
+
+  const [lyrics, setLyrics] = useState([]);
+
+  const [page, setPage] = useState(1);
+  const observer = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
+
+  const lastUserRef = useCallback(
+    (node) => {
+      if (loading || page >= totalPages) return;
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [loading, totalPages, page]
+  );
+
+  const fetchLyrics = useCallback(
+    async (pageNum, override = false) => {
+      setLoading(true);
+      try {
+        const res = await axios.get(`${apiUrl}/lyrics/searchLyrics`, {
+          params: {
+            page,
+            limit: 20,
+            type: searchMethod,
+            keyword: searchMethod === "all" ? debouncedSearchTerm : "",
+          },
+        });
+
+        const data = res.data.lyrics;
+
+        if (!Array.isArray(data)) {
+          console.error("Expected array, got:", data);
+          return [];
+        }
+
+        setLyrics((prev) =>
+          override || pageNum === 1
+            ? res.data.lyrics
+            : [...prev, ...res.data.lyrics]
+        );
+        setTotalPages(res.data.totalPages);
+        setInitialLoadDone(true);
+      } catch (error) {
+        console.error("Failed to fetch lyrics:", error);
+        return [];
+      } finally {
+        setLoading(false);
+      }
+    },
+    [searchMethod, debouncedSearchTerm, page]
+  );
+
+  useEffect(() => {
+    fetchLyrics(1, true);
+  }, [fetchLyrics]);
+  useEffect(() => {
+    if (page > 1) {
+      fetchLyrics(page, false); // append mode
+    }
+  }, [page, fetchLyrics]);
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
@@ -118,7 +170,7 @@ const Lyrics = () => {
                 <RadioButton
                   inputId="searchMethod"
                   name="searchMethod"
-                  value="Song"
+                  value="all"
                   onChange={(e) => setSearchMethod(e.value)}
                   checked={searchMethod === "Song"}
                 />
@@ -130,7 +182,7 @@ const Lyrics = () => {
                 <RadioButton
                   inputId="searchMethod"
                   name="searchMethod"
-                  value="Writer"
+                  value="writer"
                   onChange={(e) => setSearchMethod(e.value)}
                   checked={searchMethod === "Writer"}
                 />
@@ -142,7 +194,7 @@ const Lyrics = () => {
                 <RadioButton
                   inputId="searchMethod"
                   name="searchMethod"
-                  value="Artist"
+                  value="singer"
                   onChange={(e) => setSearchMethod(e.value)}
                   checked={searchMethod === "Artist"}
                 />
@@ -154,7 +206,7 @@ const Lyrics = () => {
                 <RadioButton
                   inputId="searchMethod"
                   name="searchMethod"
-                  value="Key"
+                  value="key"
                   onChange={(e) => setSearchMethod(e.value)}
                   checked={searchMethod === "Key"}
                 />
@@ -165,12 +217,12 @@ const Lyrics = () => {
             </div>
             {}
             <div className="flex justify-between gap-2 mt-4">
-              {searchMethod === "Song" ? (
+              {searchMethod === "all" ? (
                 <AutoComplete
-                  value={value}
+                  value={searchTerm}
                   suggestions={items}
                   completeMethod={search}
-                  onChange={(e) => setValue(e.value)}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full"
                   placeholder="သီချင်းရှာကြမယ်"
                   pt={{
@@ -180,13 +232,13 @@ const Lyrics = () => {
                     item: "px-4 py-2 hover:bg-gray-200 cursor-pointer",
                   }}
                 />
-              ) : searchMethod === "Writer" ? (
+              ) : searchMethod === "writer" ? (
                 <>
                   <Dropdown
                     value={selectedWriters}
                     onChange={(e) => setSelectedWriters(e.value)}
                     options={writers}
-                    optionLabel="Writer"
+                    optionLabel="name"
                     placeholder="တေးရေးရှာကြမယ်"
                     className="w-full"
                     showClear
@@ -195,13 +247,13 @@ const Lyrics = () => {
                     itemTemplate={itemTemplate}
                   />
                 </>
-              ) : searchMethod === "Artist" ? (
+              ) : searchMethod === "singer" ? (
                 <>
                   <Dropdown
                     value={selectedArtist}
                     onChange={(e) => setSelectedArtist(e.value)}
-                    options={artists}
-                    optionLabel="Artist"
+                    options={singers}
+                    optionLabel="name"
                     placeholder="တေးဆိုရှာကြမယ်"
                     className="w-full"
                     showClear
@@ -210,11 +262,11 @@ const Lyrics = () => {
                     itemTemplate={itemTemplate}
                   />
                 </>
-              ) : searchMethod === "Key" ? (
+              ) : searchMethod === "key" ? (
                 <Dropdown
                   value={selectedKey}
                   onChange={(e) => setSelectedKey(e.value)}
-                  options={keys}
+                  options={majorkeys}
                   optionLabel="name"
                   placeholder="Select a Key"
                   className="w-full"
@@ -223,7 +275,7 @@ const Lyrics = () => {
                 <Dropdown
                   value={selectedKey}
                   onChange={(e) => setSelectedKey(e.value)}
-                  options={keys}
+                  options={majorkeys}
                   optionLabel="name"
                   placeholder="Select a Key"
                   className="w-full"
@@ -236,7 +288,7 @@ const Lyrics = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 p-2 pb-4 gap-4 md:gap-12 px-4 md:px-24">
+          <div className="grid grid-cols-1 md:grid-cols-5 p-2 pb-4 gap-4 md:gap-12 px-4 md:px-24">
             {mockData.length === 0 ? (
               <div className="w-full">
                 <img
@@ -246,7 +298,40 @@ const Lyrics = () => {
                 />
               </div>
             ) : (
-              <LyricsGrid fetchLyrics={fetchFromAPI} />
+              <>
+                {lyrics.map((lyric, index) => {
+                  const isLast = index === lyrics.length - 1;
+                  return (
+                    <div key={index} className="m-0 p-0">
+                      {isMobile ? (
+                        <LyricsRow
+                          id={lyric._id}
+                          lyric={lyric}
+                          isLast={isLast}
+                          lastUserRef={lastUserRef}
+                        />
+                      ) : (
+                        <LyricsCard
+                          id={lyric._id}
+                          lyric={lyric}
+                          lastUserRef={lastUserRef}
+                          isLast={isLast}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+                {loading && (
+                  <div className="text-center py-4 text-gray-500">
+                    Loading more lyrics...
+                  </div>
+                )}
+                {!loading && lyrics.length === 0 && initialLoadDone && (
+                  <div className="text-center py-4 text-gray-400 italic">
+                    No lyrics found.
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

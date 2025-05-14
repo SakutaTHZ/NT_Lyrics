@@ -399,7 +399,7 @@ const LyricsTab = () => {
             {loading && (
               <tr>
                 <td colSpan={7} className="text-center py-4 text-gray-500">
-                  Loading more artists...
+                  Loading more lyrics...
                 </td>
               </tr>
             )}
@@ -409,7 +409,7 @@ const LyricsTab = () => {
                   colSpan={7}
                   className="text-center py-4 text-gray-400 italic"
                 >
-                  No artists found.
+                  No lyrics found.
                 </td>
               </tr>
             )}

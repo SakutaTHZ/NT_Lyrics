@@ -1,15 +1,16 @@
 import Nav from "../components/common/Nav";
 import Footer from "../components/common/Footer";
-import sampleImage from "../assets/images/Lyrics_sample.png";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import Normal_Button from "../components/common/Normal_Button";
 import { CgRemove } from "react-icons/cg";
 import { FaRegHeart, FaEye } from "react-icons/fa6";
 import MessagePopup from "../components/common/MessagePopup";
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
+import { useParams } from "react-router-dom";
+import { fetchLyricById } from "../assets/util/api";
 
 const LyricsDetails = () => {
   const [showMessage, setShowMessage] = useState(false);
@@ -17,8 +18,23 @@ const LyricsDetails = () => {
   const [isInCollection, setIsInCollection] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const lyric = location.state?.lyric;
+  const { id } = useParams();
+
+  const [lyric,setLyrics] = useState(null);
+
+  const getLyric = async () => {
+      try {
+        const lyricData = await fetchLyricById(id);
+        setLyrics(lyricData);
+      } catch (err) {
+        console.error("Error fetching user overview:", err);
+      }
+    };
+  
+    useEffect(() => {
+      getLyric();
+    }, [getLyric]);
+
   if (!lyric) {
     return <p>Lyrics data not found.</p>;
   }
@@ -58,7 +74,7 @@ const LyricsDetails = () => {
 
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 md:gap-8 pt-16 px-6 md:px-24">
         <button className="w-full" onClick={goBack}>
-          <BiArrowBack  size={20}/>
+          <BiArrowBack size={20} />
         </button>
         {/* Image Section */}
         <div className="flex justify-center items-center w-full">
@@ -68,7 +84,7 @@ const LyricsDetails = () => {
             zoomMargin={20}
           >
             <img
-              src={sampleImage}
+              src={lyric.lyricsPhoto}
               className="w-full max-w-md rounded-lg shadow-lg"
               alt="Lyrics"
             />
@@ -117,18 +133,18 @@ const LyricsDetails = () => {
                 <p className={`text-sm text-gray-600 w-16`}>Artist:</p>
 
                 <div className="w-1/2 flex flex-wrap gap-2">
-                  {lyric.artist.map((artistData, index) => (
+                  {lyric.singers.map((artistData, index) => (
                     <div
                       key={index}
                       className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
                       onClick={goToArtist}
                     >
                       <img
-                        src={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZwqXtyBSujH-HlZpZgeBViGQ_MLhG2I5FPQ&s`}
+                        src={artistData.photoLink}
                         alt="Lyrics"
-                        className="w-6 h-6 rounded-full"
+                        className="w-6 h-6 object-cover rounded-full"
                       />
-                      <p>{artistData}</p>
+                      <p>{artistData.name}</p>{" "}
                     </div>
                   ))}
                 </div>
@@ -138,18 +154,18 @@ const LyricsDetails = () => {
                 <p className={`text-sm text-gray-600 w-16`}>Featuring:</p>
 
                 <div className="w-1/2 flex flex-wrap gap-2">
-                  {lyric.featuring.map((featuringData, index) => (
+                  {lyric.featureArtists.map((featuringData, index) => (
                     <div
                       key={index}
                       className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
                       onClick={goToArtist}
                     >
                       <img
-                        src={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZwqXtyBSujH-HlZpZgeBViGQ_MLhG2I5FPQ&s`}
+                        src={featuringData.photoLink}
                         alt="Lyrics"
-                        className="w-6 h-6 rounded-full"
+                        className="w-6 h-6 object-cover rounded-full"
                       />
-                      <p>{featuringData}</p>
+                      <p>{featuringData.name}</p>
                     </div>
                   ))}
                 </div>
@@ -158,18 +174,18 @@ const LyricsDetails = () => {
               <div className="flex items-start gap-2">
                 <p className={`text-sm text-gray-600 w-16`}>Writer:</p>
                 <div className="w-1/2 flex flex-wrap gap-2">
-                  {lyric.writer.map((writerData, index) => (
+                  {lyric.writers.map((writerData, index) => (
                     <div
                       key={index}
                       className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
                       onClick={goToArtist}
                     >
                       <img
-                        src={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZwqXtyBSujH-HlZpZgeBViGQ_MLhG2I5FPQ&s`}
+                        src={writerData.photoLink}
                         alt="Lyrics"
-                        className="w-6 h-6 rounded-full"
+                        className="w-6 h-6 object-cover rounded-full"
                       />
-                      <p className="text-nowrap">{writerData}</p>
+                      <p className="text-nowrap">{writerData.name}</p>
                     </div>
                   ))}
                 </div>

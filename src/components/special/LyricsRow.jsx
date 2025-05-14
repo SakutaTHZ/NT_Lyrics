@@ -1,22 +1,27 @@
-import sampleImage from "../../assets/images/Lyrics_sample.png";
 import PropTypes from "prop-types";
 import { FaRegHeart } from "react-icons/fa6";
-import Normal_Button from "../../components/common/Normal_Button"; // Adjust the path as necessary
+import Normal_Button from "../../components/common/Normal_Button";
 import { useState, useEffect } from "react";
 import MessagePopup from "../common/MessagePopup";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
 import { BsHeartFill } from "react-icons/bs";
+import { useInView } from "react-intersection-observer";
 
-const LyricsRow = ({ id, lyric }) => {
+const LyricsRow = ({ id, lyric, isLast, lastUserRef }) => {
+  const ref = isLast ? lastUserRef : null;
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
   const [isInCollection, setIsInCollection] = useState(false);
-  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+
+  // IntersectionObserver hook
+  const { ref: inViewRef, inView } = useInView({
+    triggerOnce: true, // Trigger only once when it first comes into view
+    threshold: 0.5, // 50% of the element should be in view
+  });
 
   const checkIfInCollection = () => {
-    // Check if the lyrics is in User's Collection
+    // Check if the lyrics are in User's Collection
     return setIsInCollection(false);
   };
 
@@ -28,7 +33,7 @@ const LyricsRow = ({ id, lyric }) => {
 
   const goToLyricsDetails = () => {
     // Pass the id dynamically in the URL
-    navigate(`/NT_Lyrics/lyricsdetail/${id}`, { state: { lyric } });
+    navigate(`/NT_Lyrics/lyricsdetail/${id}`);
   };
 
   const changeLyricsStatus = () => {
@@ -54,17 +59,26 @@ const LyricsRow = ({ id, lyric }) => {
       <motion.div
         className="relative flex items-center w-full border-b last:border-0  border-dashed border-gray-200"
         onClick={goToLyricsDetails}
-        ref={ref}
+        ref={(node) => {
+          // Combine refs for IntersectionObserver and lastUserRef
+          if (ref) ref(node);
+          inViewRef(node);
+        }}
         initial={{ scale: 0, opacity: 0, x: 0 }}
         animate={inView ? { scale: 1, opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.4 }}
       >
-        <img src={sampleImage} className="w-12 h-12 object-contain" />
+        <img src={lyric.lyricsPhoto} className="w-12 h-12 object-contain" />
         <div className="flex justify-between items-center w-full p-2 pl-4">
           <div className="flex flex-col gap-2">
             <p className="font-semibold">{lyric?.title ?? "Sample Title"}</p>
             <p className="text-sm text-gray-500">
-              {lyric?.artist?.join(", ") ?? "Sample Artist"}
+              {lyric.singers.map((singer, index) => (
+                <span key={index}>
+                  {singer.name}
+                  {index < lyric.singers.length - 1 ? ", " : ""}
+                </span>
+              ))}
             </p>
           </div>
 
@@ -94,9 +108,12 @@ const LyricsRow = ({ id, lyric }) => {
     </>
   );
 };
+
 LyricsRow.propTypes = {
   id: PropTypes.string.isRequired,
   lyric: PropTypes.object,
+  lastUserRef: PropTypes.object,
+  isLast: PropTypes.bool,
 };
 
 export default LyricsRow;
