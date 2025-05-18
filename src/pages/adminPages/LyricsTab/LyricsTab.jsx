@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BiSearch } from "react-icons/bi";
 import MessagePopup from "../../../components/common/MessagePopup";
 import { Chart } from "primereact/chart";
 import { SelectButton } from "primereact/selectbutton";
@@ -55,29 +56,26 @@ const LyricsTab = () => {
     async (pageNum = 1, override = false) => {
       setLoading(true);
       try {
-        const res = await axios.get(
-          `${apiUrl}/lyrics/searchLyricsByAdmin`,
-          {
-            params: {
-              page: pageNum,
-              limit: 20,
-              type: selectedType,
-              keyword:
-                selectedType == "all" || selectedType === "lyrics"
-                  ? debouncedSearchTerm
-                  : selectedType === "key"
-                  ? selectedMajorKey.name
-                  : selectedType === "singer"
-                  ? selectedSingers
-                  : selectedWriters,
-              isEnable: isEnabled,
-            },
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${AUTH_TOKEN.current}`,
-            },
-          }
-        );
+        const res = await axios.get(`${apiUrl}/lyrics/searchLyricsByAdmin`, {
+          params: {
+            page: pageNum,
+            limit: 20,
+            type: selectedType,
+            keyword:
+              selectedType == "all" || selectedType === "lyrics"
+                ? debouncedSearchTerm
+                : selectedType === "key"
+                ? selectedMajorKey.name
+                : selectedType === "singer"
+                ? selectedSingers
+                : selectedWriters,
+            isEnable: isEnabled,
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${AUTH_TOKEN.current}`,
+          },
+        });
 
         setLyrics((prev) =>
           override || pageNum === 1
@@ -196,14 +194,14 @@ const LyricsTab = () => {
   useEffect(() => {
     getArtists();
     getLyricOverview();
-    fetchLyrics(1,true);
+    fetchLyrics(1, true);
   }, [fetchLyrics]);
 
   useEffect(() => {
-  if (page > 1) {
-    fetchLyrics(page, false); // append mode
-  }
-  }, [page,fetchLyrics]);
+    if (page > 1) {
+      fetchLyrics(page, false); // append mode
+    }
+  }, [page, fetchLyrics]);
 
   return (
     <>
@@ -389,7 +387,10 @@ const LyricsTab = () => {
                   onEdit={handleEdit}
                   isDisabled={() => {
                     getLyricOverview();
-                    showNewMessage("success", "Lyric Status Changed Successfully!");
+                    showNewMessage(
+                      "success",
+                      "Lyric Status Changed Successfully!"
+                    );
                     setPage(1);
                     fetchLyrics(1, true);
                   }}
@@ -399,7 +400,15 @@ const LyricsTab = () => {
             {loading && (
               <tr>
                 <td colSpan={7} className="text-center py-4 text-gray-500">
-                  Loading more lyrics...
+                  <div className="text-center py-4 text-gray-500 flex items-center justify-center gap-2">
+                    <BiSearch
+                      style={{
+                        display: "inline-block",
+                        animation: "wave 3s infinite",
+                      }}
+                    />
+                    Searching more lyrics...
+                  </div>
                 </td>
               </tr>
             )}

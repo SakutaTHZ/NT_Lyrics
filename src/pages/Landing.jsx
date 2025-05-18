@@ -74,7 +74,7 @@ const Landing = () => {
         <div className="relative p-4 pb-0 md:px-24 ">
           <div className="flex justify-between">
             <p className="font-bold text-lg italic">Featured Lyrics</p>
-            <Link to={"*"} className="text-blue-500">
+            <Link to={"/NT_Lyrics/lyrics"} className="text-blue-500">
               See All
             </Link>
           </div>
@@ -100,9 +100,9 @@ const Landing = () => {
                 .map((lyric, index) => (
                   <div key={index} className="m-0 p-0">
                     {isMobile ? (
-                      <LyricsRow id={index} lyric={lyric} />
+                      <LyricsRow id={lyric._id} lyric={lyric} hideCollection={true}/>
                     ) : (
-                      <LyricsCard id={index} lyric={lyric} />
+                      <LyricsCard id={lyric._id} lyric={lyric} />
                     )}
                   </div>
                 ))
@@ -120,27 +120,27 @@ const Landing = () => {
             <div className="w-full aspect-video bg-gray-300 rounded-md">
               <iframe
                 className="w-full h-full rounded-md"
-                src="https://www.youtube.com/embed/n_XxP4K1iYA?si=Bo-75TdZD02fZtAf"
+                src="https://www.youtube-nocookie.com/embed/n_XxP4K1iYA?si=Bo-75TdZD02fZtAf"
                 title="YouTube video player"
-                allowfullscreen
+                allowFullScreen
               ></iframe>
             </div>
             {/* Video Box */}
             <div className="w-full aspect-video bg-gray-300 rounded-md">
               <iframe
                 className="w-full h-full rounded-md"
-                src="https://www.youtube.com/embed/n_XxP4K1iYA?si=Bo-75TdZD02fZtAf"
+                src="https://www.youtube-nocookie.com/embed/n_XxP4K1iYA?si=Bo-75TdZD02fZtAf"
                 title="YouTube video player"
-                allowfullscreen
+                allowFullScreen
               ></iframe>
             </div>
             {/* Video Box */}
             <div className="w-full aspect-video bg-gray-300 rounded-md">
               <iframe
                 className="w-full h-full rounded-md"
-                src="https://www.youtube.com/embed/n_XxP4K1iYA?si=Bo-75TdZD02fZtAf"
+                src="https://www.youtube-nocookie.com/embed/n_XxP4K1iYA?si=Bo-75TdZD02fZtAf"
                 title="YouTube video player"
-                allowfullscreen
+                allowFullScreen
               ></iframe>
             </div>
           </div>

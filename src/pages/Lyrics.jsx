@@ -15,6 +15,7 @@ import useIsMobile from "../components/hooks/useIsMobile";
 import LyricsCard from "../components/special/LyricsCard";
 import LyricsRow from "../components/special/LyricsRow";
 import { useRef } from "react";
+import { BiSearch } from "react-icons/bi";
 
 const Nav = React.lazy(() => import("../components/common/Nav"));
 const Footer = React.lazy(() => import("../components/common/Footer"));
@@ -150,7 +151,14 @@ const Lyrics = () => {
         setLoading(false);
       }
     },
-    [searchMethod, debouncedSearchTerm, selectedArtist, selectedWriters, selectedKey, page]
+    [
+      searchMethod,
+      debouncedSearchTerm,
+      selectedArtist,
+      selectedWriters,
+      selectedKey,
+      page,
+    ]
   );
 
   useEffect(() => {
@@ -180,7 +188,7 @@ const Lyrics = () => {
                   name="searchMethod"
                   value="all"
                   onChange={(e) => setSearchMethod(e.value)}
-                  checked={searchMethod === "Song"}
+                  checked={searchMethod === "all"}
                 />
                 <label htmlFor="searchMethod" className="ml-2">
                   သီချင်း
@@ -192,7 +200,7 @@ const Lyrics = () => {
                   name="searchMethod"
                   value="writer"
                   onChange={(e) => setSearchMethod(e.value)}
-                  checked={searchMethod === "Writer"}
+                  checked={searchMethod === "writer"}
                 />
                 <label htmlFor="searchMethod" className="ml-2">
                   တေးရေး
@@ -204,7 +212,7 @@ const Lyrics = () => {
                   name="searchMethod"
                   value="singer"
                   onChange={(e) => setSearchMethod(e.value)}
-                  checked={searchMethod === "Artist"}
+                  checked={searchMethod === "singer"}
                 />
                 <label htmlFor="searchMethod" className="ml-2">
                   တေးဆို
@@ -216,7 +224,7 @@ const Lyrics = () => {
                   name="searchMethod"
                   value="key"
                   onChange={(e) => setSearchMethod(e.value)}
-                  checked={searchMethod === "Key"}
+                  checked={searchMethod === "key"}
                 />
                 <label htmlFor="searchMethod" className="ml-2">
                   Key
@@ -261,7 +269,6 @@ const Lyrics = () => {
                     value={selectedArtist}
                     onChange={(e) => {
                       setSelectedArtist(e.value);
-                      console.log(selectedArtist);
                     }}
                     options={singers}
                     optionLabel="name"
@@ -329,8 +336,14 @@ const Lyrics = () => {
                   );
                 })}
                 {loading && (
-                  <div className="text-center py-4 text-gray-500">
-                    Loading more lyrics...
+                  <div className="text-center py-4 text-gray-500 flex items-center justify-center gap-2">
+                    <BiSearch
+                      style={{
+                        display: "inline-block",
+                        animation: "wave 3s infinite",
+                      }}
+                    />
+                    Searching more lyrics...
                   </div>
                 )}
                 {!loading && lyrics.length === 0 && initialLoadDone && (

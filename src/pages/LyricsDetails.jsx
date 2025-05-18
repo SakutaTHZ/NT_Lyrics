@@ -11,6 +11,10 @@ import { useNavigate } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import { fetchLyricById } from "../assets/util/api";
+import {
+  addLyricsToCollection,
+  removeLyricsFromCollection,
+} from "../assets/util/api";
 
 const LyricsDetails = () => {
   const [showMessage, setShowMessage] = useState(false);
@@ -20,7 +24,7 @@ const LyricsDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [lyric,setLyrics] = useState(null);
+  const [lyric, setLyrics] = useState(null);
 
   useEffect(() => {
     const getLyric = async () => {
@@ -39,23 +43,8 @@ const LyricsDetails = () => {
     return <p>Lyrics data not found.</p>;
   }
 
-  const changeLyricsStatus = () => {
-    if (isInCollection) {
-      setMessageText("Lyrics has been removed from the collection");
-    } else {
-      setMessageText("Lyrics has been added to the collection");
-    }
-
-    setIsInCollection(!isInCollection);
-    setShowMessage(true);
-
-    setTimeout(() => {
-      setShowMessage(false);
-    }, 2000);
-  };
-
-  const goToArtist = () => {
-    navigate(`/NT_Lyrics/artist/${lyric.artist}`);
+  const goToArtist = (id) => {
+    navigate(`/NT_Lyrics/artist/${id}`);
   };
 
   const genreTagClass =
@@ -63,6 +52,35 @@ const LyricsDetails = () => {
 
   const goBack = () => {
     navigate(-1);
+  };
+
+  const changeLyricsStatus = async (shouldAdd) => {
+    const token = localStorage.getItem("token");
+    const successMessage = shouldAdd
+      ? "Lyrics has been added to the collection"
+      : "Lyrics has been removed from the collection";
+
+    try {
+      let res = null;
+      if (shouldAdd) {
+        // Add lyrics to collection
+        res = await addLyricsToCollection(id, token);
+      } else {
+        // Remove lyrics from collection
+        res = await removeLyricsFromCollection(id, "Default", token);
+      }
+
+      setIsInCollection(shouldAdd);
+      setMessageText(successMessage);
+
+      return res;
+    } catch (err) {
+      console.error("Error changing lyrics status:", err);
+      setMessageText("Failed to change lyrics status");
+    } finally {
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 2000);
+    }
   };
 
   return (
@@ -107,18 +125,15 @@ const LyricsDetails = () => {
           <div className="flex flex-col justify-center items-start ml-4 gap-2">
             <p className="text-lg font-semibold flex items-center">
               {lyric.title}{" "}
-              <span className="text-sm font-normal ml-2 text-blue-500">
-                (Trending #3)
-              </span>
             </p>
-            <p className="text-sm text-gray-600">Album - {lyric.album_name}</p>
+            <p className="text-sm text-gray-600">Album - {lyric.albumName}</p>
 
             {/* Genres */}
             <div className="genres flex flex-wrap gap-2">
               <span
                 className={`text-xs border border-red-300 px-2 py-1 rounded-full bg-red-100 text-red-700 font-semibold`}
               >
-                Key-{lyric.major_key}
+                Key-{lyric.majorKey}
               </span>
               {lyric.genre.map((genreData, index) => (
                 <span key={index} className={`${genreTagClass}`}>
@@ -129,89 +144,101 @@ const LyricsDetails = () => {
             <hr className="w-full border border-dashed border-gray-200 my-1" />
             <div className="flex flex-col gap-2">
               {/* Artist name */}
-              <div className="flex items-start gap-2">
-                <p className={`text-sm text-gray-600 w-16`}>Artist:</p>
+              {lyric.singers.length > 0 && (
+                <div className="flex items-start gap-2">
+                  <p className={`text-sm text-gray-600 w-16 p-1`}>Artist:</p>
 
-                <div className="w-1/2 flex flex-wrap gap-2">
-                  {lyric.singers.map((artistData, index) => (
-                    <div
-                      key={index}
-                      className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
-                      onClick={goToArtist}
-                    >
-                      <img
-                        src={artistData.photoLink}
-                        alt="Lyrics"
-                        className="w-6 h-6 object-cover rounded-full"
-                      />
-                      <p>{artistData.name}</p>{" "}
-                    </div>
-                  ))}
+                  <div className="w-1/2 flex flex-wrap gap-2">
+                    {lyric.singers.map((artistData, index) => (
+                      <div
+                        key={index}
+                        className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
+                        onClick={() => goToArtist(artistData._id)}
+                      >
+                        <img
+                          src={artistData.photoLink}
+                          alt="Lyrics"
+                          className="w-6 h-6 object-cover rounded-full"
+                        />
+                        <p>{artistData.name}</p>{" "}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
               {/* Feature Artist name */}
-              <div className="flex items-start gap-2">
-                <p className={`text-sm text-gray-600 w-16`}>Featuring:</p>
+              {lyric.featureArtists.length > 0 && (
+                <div className="flex items-start gap-2">
+                  <p className={`text-sm text-gray-600 w-16 p-1`}>Featuring:</p>
 
-                <div className="w-1/2 flex flex-wrap gap-2">
-                  {lyric.featureArtists.map((featuringData, index) => (
-                    <div
-                      key={index}
-                      className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
-                      onClick={goToArtist}
-                    >
-                      <img
-                        src={featuringData.photoLink}
-                        alt="Lyrics"
-                        className="w-6 h-6 object-cover rounded-full"
-                      />
-                      <p>{featuringData.name}</p>
-                    </div>
-                  ))}
+                  <div className="w-1/2 flex flex-wrap gap-2">
+                    {lyric.featureArtists.map((featuringData, index) => (
+                      <div
+                        key={index}
+                        className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
+                        onClick={() => goToArtist(featuringData._id)}
+                      >
+                        <img
+                          src={featuringData.photoLink}
+                          alt="Lyrics"
+                          className="w-6 h-6 object-cover rounded-full"
+                        />
+                        <p>{featuringData.name}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
               {/* Writer name */}
-              <div className="flex items-start gap-2">
-                <p className={`text-sm text-gray-600 w-16`}>Writer:</p>
-                <div className="w-1/2 flex flex-wrap gap-2">
-                  {lyric.writers.map((writerData, index) => (
-                    <div
-                      key={index}
-                      className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
-                      onClick={goToArtist}
-                    >
-                      <img
-                        src={writerData.photoLink}
-                        alt="Lyrics"
-                        className="w-6 h-6 object-cover rounded-full"
-                      />
-                      <p className="text-nowrap">{writerData.name}</p>
-                    </div>
-                  ))}
+              {lyric.writers.length > 0 && (
+                <div className="flex items-start gap-2">
+                  <p className={`text-sm text-gray-600 w-16 p-1`}>Writer:</p>
+                  <div className="w-1/2 flex flex-wrap gap-2">
+                    {lyric.writers.map((writerData, index) => (
+                      <div
+                        key={index}
+                        className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
+                        onClick={() => goToArtist(writerData._id)}
+                      >
+                        <img
+                          src={writerData.photoLink}
+                          alt="Lyrics"
+                          className="w-6 h-6 object-cover rounded-full"
+                        />
+                        <p className="text-nowrap">{writerData.name}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             <hr className="w-full border border-dashed border-gray-200 my-1" />
             <div className="flex justify-between w-full">
               <div className="flex items-center gap-1 font-semibold">
                 <FaEye size={16} className="translate-y-[1px]" />{" "}
-                <span className="viewCount">{lyric.view_count}</span>
+                <span className="viewCount">{lyric.viewCount}</span>
               </div>
 
               {isInCollection ? (
                 <Normal_Button
                   icon={CgRemove}
                   text="Remove from Collection"
-                  custom_class={`py-1 px-3 border-transparent shadow-sm bg-red-50 text-red-500`}
-                  onClick={changeLyricsStatus}
+                  custom_class={`w-8 h-8 border-transparent shadow-sm bg-red-50 text-red-500 transition-all`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    changeLyricsStatus(false);
+                  }}
                 />
               ) : (
                 <Normal_Button
                   icon={FaRegHeart}
-                  text="Add to collection"
-                  custom_class={`py-1 px-3 border-transparent shadow-sm bg-white`}
-                  onClick={changeLyricsStatus}
+                  text="Add to Collection"
+                  custom_class={`w-8 h-8 border-transparent shadow-sm bg-white transition-all`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    changeLyricsStatus(true);
+                  }}
                 />
               )}
             </div>

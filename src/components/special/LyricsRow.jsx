@@ -7,9 +7,18 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { BsHeartFill } from "react-icons/bs";
 import { useInView } from "react-intersection-observer";
-import { addLyricsToCollection,removeLyricsFromCollection } from "../../assets/util/api";
+import {
+  addLyricsToCollection,
+  removeLyricsFromCollection,
+} from "../../assets/util/api";
 
-const LyricsRow = ({ id, lyric, isLast, lastUserRef }) => {
+const LyricsRow = ({
+  id,
+  lyric,
+  isLast,
+  lastUserRef,
+  hideCollection = false,
+}) => {
   const ref = isLast ? lastUserRef : null;
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
@@ -42,7 +51,7 @@ const LyricsRow = ({ id, lyric, isLast, lastUserRef }) => {
     const successMessage = shouldAdd
       ? "Lyrics has been added to the collection"
       : "Lyrics has been removed from the collection";
-  
+
     try {
       let res = null;
       if (shouldAdd) {
@@ -50,12 +59,13 @@ const LyricsRow = ({ id, lyric, isLast, lastUserRef }) => {
         res = await addLyricsToCollection(id, token);
       } else {
         // Remove lyrics from collection
-        res = await removeLyricsFromCollection(id,"Default", token);
+        res = await removeLyricsFromCollection(id, "Default", token);
       }
-      console.log("Response from API:", res);
-  
+
       setIsInCollection(shouldAdd);
       setMessageText(successMessage);
+
+      return res;
     } catch (err) {
       console.error("Error changing lyrics status:", err);
       setMessageText("Failed to change lyrics status");
@@ -64,7 +74,6 @@ const LyricsRow = ({ id, lyric, isLast, lastUserRef }) => {
       setTimeout(() => setShowMessage(false), 2000);
     }
   };
-  
 
   return (
     <>
@@ -97,27 +106,29 @@ const LyricsRow = ({ id, lyric, isLast, lastUserRef }) => {
             </p>
           </div>
 
-          {isInCollection ? (
-            <Normal_Button
-              icon={BsHeartFill}
-              text=""
-              custom_class={`w-8 h-8 border-transparent shadow-sm bg-red-50 text-red-500 transition-all`}
-              onClick={(e) => {
-                e.stopPropagation();
-                changeLyricsStatus(false);
-              }}
-            />
-          ) : (
-            <Normal_Button
-              icon={FaRegHeart}
-              text=""
-              custom_class={`w-8 h-8 border-transparent shadow-sm bg-white transition-all`}
-              onClick={(e) => {
-                e.stopPropagation();
-                changeLyricsStatus(true);
-              }}
-            />
-          )}
+          {!hideCollection &&
+            (isInCollection ? (
+              <Normal_Button
+                icon={BsHeartFill}
+                text=""
+                custom_class={`w-8 h-8 border-transparent shadow-sm bg-red-50 text-red-500 transition-all`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  changeLyricsStatus(false);
+                }}
+              />
+            ) : (
+              <Normal_Button
+                icon={FaRegHeart}
+                text=""
+                custom_class={`w-8 h-8 border-transparent shadow-sm bg-white transition-all`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  changeLyricsStatus(true);
+                }}
+              />
+            ))}
+          {}
         </div>
       </motion.div>
     </>
@@ -129,6 +140,7 @@ LyricsRow.propTypes = {
   lyric: PropTypes.object,
   lastUserRef: PropTypes.object,
   isLast: PropTypes.bool,
+  hideCollection: PropTypes.bool,
 };
 
 export default LyricsRow;

@@ -12,6 +12,7 @@ import {
   fetchArtistOverview,
   apiUrl,
 } from "../../../assets/util/api";
+import { BiSearch } from "react-icons/bi";
 
 const ArtistsTab = () => {
   const [artists, setArtists] = useState([]);
@@ -42,21 +43,18 @@ const ArtistsTab = () => {
     async (pageNum = 1, override = false) => {
       setLoading(true);
       try {
-        const res = await axios.get(
-          `${apiUrl}/artists/search`,
-          {
-            params: {
-              page: pageNum,
-              limit: 20,
-              type: typeFilter,
-              keyword: debouncedSearchTerm,
-            },
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${AUTH_TOKEN.current}`,
-            },
-          }
-        );
+        const res = await axios.get(`${apiUrl}/artists/search`, {
+          params: {
+            page: pageNum,
+            limit: 20,
+            type: typeFilter,
+            keyword: debouncedSearchTerm,
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${AUTH_TOKEN.current}`,
+          },
+        });
 
         setArtists((prev) =>
           override || pageNum === 1
@@ -296,7 +294,9 @@ const ArtistsTab = () => {
               className="w-full md:w-auto flex"
               itemTemplate={(option) => (
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-nowrap">{option.name}</span>
+                  <span className="text-sm font-semibold text-nowrap">
+                    {option.name}
+                  </span>
                 </div>
               )}
             />
@@ -350,7 +350,15 @@ const ArtistsTab = () => {
             {loading && (
               <tr>
                 <td colSpan={7} className="text-center py-4 text-gray-500">
-                  Loading more artists...
+                  <div className="text-center py-4 text-gray-500 flex items-center justify-center gap-2">
+                    <BiSearch
+                      style={{
+                        display: "inline-block",
+                        animation: "wave 3s infinite",
+                      }}
+                    />
+                    Searching more artists...
+                  </div>
                 </td>
               </tr>
             )}

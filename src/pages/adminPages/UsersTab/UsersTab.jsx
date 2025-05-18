@@ -2,6 +2,7 @@ import { Chart } from "primereact/chart";
 import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import { SelectButton } from "primereact/selectbutton";
+import { BiSearch } from "react-icons/bi";
 import useDebounce from "../../../components/hooks/useDebounce";
 import UserRow from "./UserRow";
 import AddNewUser from "./AddNewUser";
@@ -97,7 +98,7 @@ const UsersTab = () => {
   useEffect(() => {
     getUserOverview();
     fetchUsers(page);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, roleFilter, debouncedSearchTerm]);
 
   const chartData = {
@@ -149,7 +150,7 @@ const UsersTab = () => {
     setTimeout(() => {
       setShowMessage(false);
     }, 10000);
-  }
+  };
 
   return (
     <div>
@@ -268,7 +269,15 @@ const UsersTab = () => {
             {loading && (
               <tr>
                 <td colSpan={7} className="text-center py-4 text-gray-500">
-                  Loading more users...
+                  <div className="text-center py-4 text-gray-500 flex items-center justify-center gap-2">
+                    <BiSearch
+                      style={{
+                        display: "inline-block",
+                        animation: "wave 3s infinite",
+                      }}
+                    />
+                    Searching more users...
+                  </div>
                 </td>
               </tr>
             )}

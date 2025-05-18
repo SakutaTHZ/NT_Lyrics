@@ -34,7 +34,6 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
   const showMessage = (type, msg) => showNewMessage(type, msg);
 
   const updateArtist = async () => {
-    console.log("Updating artist...");
     try {
       const res = await fetch(
         `${apiUrl}/artists/updateArtist/${artist._id}`,

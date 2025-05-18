@@ -2,10 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import useIsMobile from "../hooks/useIsMobile";
 import LyricsCard from "./LyricsCard";
 import LyricsRow from "./LyricsRow";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import { BiSearch } from "react-icons/bi";
 
 const LyricsGrid = ({ fetchLyrics }) => {
-
   const [lyrics, setLyrics] = useState([]); // Loaded lyrics
   const [page, setPage] = useState(1); // Track pagination
   const [hasMore, setHasMore] = useState(true); // Track if there's more data
@@ -32,7 +32,7 @@ const LyricsGrid = ({ fetchLyrics }) => {
     };
 
     loadLyrics();
-  }, [page, fetchLyrics, hasMore]); // Adding isLoading in the deps ensures it's managed well
+  }, [page, fetchLyrics, hasMore, isLoading]); // Adding isLoading in the deps ensures it's managed well
 
   // Intersection Observer for infinite scroll
   useEffect(() => {
@@ -41,7 +41,7 @@ const LyricsGrid = ({ fetchLyrics }) => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !isLoading) {
-          setPage((prevPage) => prevPage + 1);  // Increment page only when not loading
+          setPage((prevPage) => prevPage + 1); // Increment page only when not loading
         }
       },
       { threshold: 1.0 }
@@ -57,12 +57,26 @@ const LyricsGrid = ({ fetchLyrics }) => {
       {lyrics.map((lyric, index) => {
         return (
           <div key={index} className="m-0 p-0">
-            {isMobile ? <LyricsRow id={index} lyric={lyric} /> : <LyricsCard id={index} lyric={lyric} />}
+            {isMobile ? (
+              <LyricsRow id={index} lyric={lyric} />
+            ) : (
+              <LyricsCard id={index} lyric={lyric} />
+            )}
           </div>
         );
       })}
       <div ref={observerRef}></div>
-      {isLoading && <p>Loading more...</p>} {/* This is more accurate than showing "Loading more" on `hasMore` */}
+      {isLoading && (
+        <div className="text-center py-4 text-gray-500 flex items-center justify-center gap-2">
+          <BiSearch
+            style={{
+              display: "inline-block",
+              animation: "wave 3s infinite",
+            }}
+          />
+          Searching more lyrics...
+        </div>
+      )}{" "}
     </>
   );
 };

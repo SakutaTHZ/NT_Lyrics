@@ -9,10 +9,11 @@ const Normal_Button = ({
   return (
     <>
       <button
-        className={`flex gap-2 items-center justify-center p-2 rounded-md cursor-pointer border ${custom_class}`}
+        className={`w-fit flex gap-2 items-center justify-center p-2 rounded-md cursor-pointer border text-nowrap ${custom_class}`}
         onClick={onClick}
       >
-        {Icon && <Icon />} {text}
+        {Icon && <Icon />} 
+        {text!="" && <p>{text}</p>}
       </button>
     </>
   );
