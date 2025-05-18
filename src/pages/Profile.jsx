@@ -4,17 +4,8 @@ import Footer from "../components/common/Footer";
 import bgcover from "../assets/images/cover_bg.png";
 import { IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
-import LyricsGrid from "../components/special/LyricsGrid";
 import mockData from "../assets/data/mockSongs.json"
 import EmptyData from "../assets/images/Collection list is empty.jpg";
-
-const fetchUserLyrics = async (page, itemsPerBatch) => {
-  // const response = await fetch(`/api/user/saved-lyrics?page=${page}&limit=${itemsPerBatch}`);
-  // const data = await response.json();
-  // return data.lyrics;
-  const startIndex = (page - 1) * itemsPerBatch;
-  return Promise.resolve(mockData.slice(startIndex, startIndex + itemsPerBatch));
-};
 
 const Profile = () => {
   const [myCollection, setMyCollection] = useState(8);
@@ -110,7 +101,13 @@ const Profile = () => {
                 />
               </div>
             ) : (
-              <LyricsGrid fetchLyrics={fetchUserLyrics} />)}
+              <div className="w-full">
+                <img
+                  src={EmptyData}
+                  alt="No data Found"
+                  className="w-full opacity-50"
+                />
+              </div>)}
             </div>
           </div>
         </div>

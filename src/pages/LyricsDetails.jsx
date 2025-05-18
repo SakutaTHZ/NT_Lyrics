@@ -22,7 +22,8 @@ const LyricsDetails = () => {
 
   const [lyric,setLyrics] = useState(null);
 
-  const getLyric = async () => {
+  useEffect(() => {
+    const getLyric = async () => {
       try {
         const lyricData = await fetchLyricById(id);
         setLyrics(lyricData);
@@ -30,10 +31,9 @@ const LyricsDetails = () => {
         console.error("Error fetching user overview:", err);
       }
     };
-  
-    useEffect(() => {
-      getLyric();
-    }, [getLyric]);
+
+    getLyric();
+  }, [id]);
 
   if (!lyric) {
     return <p>Lyrics data not found.</p>;

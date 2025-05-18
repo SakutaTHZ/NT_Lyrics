@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { BsHeartFill } from "react-icons/bs";
 import { useInView } from "react-intersection-observer";
+import { addLyricsToCollection,removeLyricsFromCollection } from "../../assets/util/api";
 
 const LyricsRow = ({ id, lyric, isLast, lastUserRef }) => {
   const ref = isLast ? lastUserRef : null;
@@ -36,20 +37,34 @@ const LyricsRow = ({ id, lyric, isLast, lastUserRef }) => {
     navigate(`/NT_Lyrics/lyricsdetail/${id}`);
   };
 
-  const changeLyricsStatus = () => {
-    if (isInCollection) {
-      setMessageText("Lyrics has been removed from the collection");
-    } else {
-      setMessageText("Lyrics has been added to the collection");
+  const changeLyricsStatus = async (shouldAdd) => {
+    const token = localStorage.getItem("token");
+    const successMessage = shouldAdd
+      ? "Lyrics has been added to the collection"
+      : "Lyrics has been removed from the collection";
+  
+    try {
+      let res = null;
+      if (shouldAdd) {
+        // Add lyrics to collection
+        res = await addLyricsToCollection(id, token);
+      } else {
+        // Remove lyrics from collection
+        res = await removeLyricsFromCollection(id,"Default", token);
+      }
+      console.log("Response from API:", res);
+  
+      setIsInCollection(shouldAdd);
+      setMessageText(successMessage);
+    } catch (err) {
+      console.error("Error changing lyrics status:", err);
+      setMessageText("Failed to change lyrics status");
+    } finally {
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 2000);
     }
-
-    setIsInCollection(!isInCollection);
-    setShowMessage(true);
-
-    setTimeout(() => {
-      setShowMessage(false);
-    }, 2000);
   };
+  
 
   return (
     <>
@@ -89,7 +104,7 @@ const LyricsRow = ({ id, lyric, isLast, lastUserRef }) => {
               custom_class={`w-8 h-8 border-transparent shadow-sm bg-red-50 text-red-500 transition-all`}
               onClick={(e) => {
                 e.stopPropagation();
-                changeLyricsStatus();
+                changeLyricsStatus(false);
               }}
             />
           ) : (
@@ -99,7 +114,7 @@ const LyricsRow = ({ id, lyric, isLast, lastUserRef }) => {
               custom_class={`w-8 h-8 border-transparent shadow-sm bg-white transition-all`}
               onClick={(e) => {
                 e.stopPropagation();
-                changeLyricsStatus();
+                changeLyricsStatus(true);
               }}
             />
           )}

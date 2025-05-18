@@ -24,14 +24,14 @@ const Landing = () => {
   };
 
   const [popularLyrics, setPopularLyrics] = useState([]);
-    const getPopularLyrics = useCallback(async () => {
-      try {
-        const lyrics = await fetchPopularLyrics(localStorage.getItem("token"));
-        setPopularLyrics(lyrics);
-      } catch (err) {
-        console.error("Error fetching user overview:", err);
-      }
-    }, []);
+  const getPopularLyrics = useCallback(async () => {
+    try {
+      const lyrics = await fetchPopularLyrics(localStorage.getItem("token"));
+      setPopularLyrics(lyrics);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    }
+  }, []);
 
   useEffect(() => {
     getPopularLyrics();
@@ -79,11 +79,19 @@ const Landing = () => {
             </Link>
           </div>
 
-          <div className={`grid grid-cols-1 ${popularLyrics.length === 0 ? "md:grid-cols-1" : "md:grid-cols-4" }  py-4 gap-0 md:gap-12`}>
+          <div
+            className={`grid grid-cols-1 ${
+              popularLyrics.length === 0 ? "md:grid-cols-1" : "md:grid-cols-4"
+            }  py-4 gap-0 md:gap-12`}
+          >
             {/* <LyricsGrid fetchLyrics={fetchMockLyrics} /> */}
             {popularLyrics.length === 0 ? (
               <div className="w-full justify-center flex items-center">
-                <img src={EmptyData} alt="No data Found" className="h-42 opacity-50"/>
+                <img
+                  src={EmptyData}
+                  alt="No data Found"
+                  className="h-42 opacity-50"
+                />
               </div>
             ) : (
               popularLyrics
@@ -112,30 +120,27 @@ const Landing = () => {
             <div className="w-full aspect-video bg-gray-300 rounded-md">
               <iframe
                 className="w-full h-full rounded-md"
-                src="https://www.youtube.com/embed/VSrQi92AvF8?si=yjEmYeIRU9PET0kP"
+                src="https://www.youtube.com/embed/n_XxP4K1iYA?si=Bo-75TdZD02fZtAf"
                 title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
+                allowfullscreen
               ></iframe>
             </div>
             {/* Video Box */}
             <div className="w-full aspect-video bg-gray-300 rounded-md">
               <iframe
                 className="w-full h-full rounded-md"
-                src="https://www.youtube.com/embed/Tg9yLrJTmTc"
+                src="https://www.youtube.com/embed/n_XxP4K1iYA?si=Bo-75TdZD02fZtAf"
                 title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
+                allowfullscreen
               ></iframe>
             </div>
             {/* Video Box */}
             <div className="w-full aspect-video bg-gray-300 rounded-md">
               <iframe
                 className="w-full h-full rounded-md"
-                src="https://www.youtube.com/embed/rhTZTy1rZhw?si=P7LfdH2chUvsPFX3"
+                src="https://www.youtube.com/embed/n_XxP4K1iYA?si=Bo-75TdZD02fZtAf"
                 title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
+                allowfullscreen
               ></iframe>
             </div>
           </div>

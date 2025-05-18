@@ -233,3 +233,44 @@ export const fetchPopularLyrics = async (authToken) => {
     console.error("Error fetching lyric by ID:", err);
   }
 }
+
+// Collection
+export const addLyricsToCollection = async (lyricId, token) => {
+
+  const response = await fetch(`${apiUrl}/collections/addToCollection`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ lyricsId: lyricId }), // double check this key name
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.errors?.[0]?.message || "Failed to add/remove lyric");
+  }
+
+  return data;
+};
+
+export const removeLyricsFromCollection = async (lyricId,group, token) => {
+
+  const response = await fetch(`${apiUrl}/collections/removeFromGroup`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ lyricsId: lyricId,group: group }), // double check this key name
+  });
+
+  const data = await response.json();
+  
+  if (!response.ok) {
+    throw new Error(data.errors?.[0]?.message || "Failed to add/remove lyric");
+  }
+
+  return data;
+};

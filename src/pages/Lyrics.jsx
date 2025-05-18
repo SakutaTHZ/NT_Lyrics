@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { BiSearch } from "react-icons/bi";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState, Suspense } from "react";
 import { AutoComplete } from "primereact/autocomplete";
@@ -57,7 +56,7 @@ const Lyrics = () => {
   }, []);
 
   const search = (event) => {
-    const filteredTitles = mockData // Use the correct data (no `.lyrics` property)
+    const filteredTitles = lyrics
       .filter(
         (item) => item.title.toLowerCase().includes(event.query.toLowerCase()) // Search by title
       )
@@ -117,7 +116,16 @@ const Lyrics = () => {
             page,
             limit: 20,
             type: searchMethod,
-            keyword: searchMethod === "all" ? debouncedSearchTerm : "",
+            keyword:
+              searchMethod === "all"
+                ? debouncedSearchTerm
+                : searchMethod === "singer"
+                ? selectedArtist?._id
+                : searchMethod === "writer"
+                ? selectedWriters?._id
+                : searchMethod === "key"
+                ? selectedKey
+                : debouncedSearchTerm,
           },
         });
 
@@ -142,7 +150,7 @@ const Lyrics = () => {
         setLoading(false);
       }
     },
-    [searchMethod, debouncedSearchTerm, page]
+    [searchMethod, debouncedSearchTerm, selectedArtist, selectedWriters, selectedKey, page]
   );
 
   useEffect(() => {
@@ -251,7 +259,10 @@ const Lyrics = () => {
                 <>
                   <Dropdown
                     value={selectedArtist}
-                    onChange={(e) => setSelectedArtist(e.value)}
+                    onChange={(e) => {
+                      setSelectedArtist(e.value);
+                      console.log(selectedArtist);
+                    }}
                     options={singers}
                     optionLabel="name"
                     placeholder="တေးဆိုရှာကြမယ်"
@@ -281,10 +292,6 @@ const Lyrics = () => {
                   className="w-full"
                 />
               )}
-
-              <button className=" p-2 bg-blue-500 rounded-md cursor-pointer">
-                <BiSearch size={20} className="text-white" />
-              </button>
             </div>
           </div>
 
