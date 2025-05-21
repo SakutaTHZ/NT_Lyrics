@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import PropTypes from "prop-types";
-import { MultiSelect } from "primereact/multiselect";
-import { Dropdown } from "primereact/dropdown";
+import InputField from "../../../components/common/InputField";
+import DropdownField from "../../../components/common/DropdownField";
+import MultiSelectField from "../../../components/common/MultiSelectField";
 import ModalPortal from "../../../components/special/ModalPortal";
 
 import {
@@ -69,7 +70,6 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
 
   const validateForm = () => {
     if (!title.trim()) return "Title is required.";
-    if (!albumName.trim()) return "Album name is required.";
     if (!selectedGenres.length) return "Select at least one genre.";
     if (!selectedMajorKey) return "Please choose a major key.";
     if (!selectedSingers.length) return "Select at least one singer.";
@@ -136,14 +136,14 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
 
   return (
     <ModalPortal>
-      <div className="fixed inset-0 z-[100] flex justify-center items-center">
+      <div className="fixed inset-0 z-[110] flex justify-center items-center">
         <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
         <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[1000px]">
           <h2 className="text-xl font-bold mb-4">Add New Lyric</h2>
           <form>
             <div className="flex flex-wrap md:flex-nowrap gap-4">
               <div className="flex flex-col w-full gap-4">
-                <InputField label="Title" value={title} onChange={setTitle} placeholder="Enter lyric title" />
+                <InputField label="Title" value={title} onChange={setTitle} placeholder="Enter lyric title" required={true} />
                 <InputField label="Album Name" value={albumName} onChange={setAlbumName} placeholder="Enter album name" />
                 <div className="flex gap-4">
                   <MultiSelectField label="Genres" value={selectedGenres} options={genreOptions} onChange={setSelectedGenres} />
@@ -152,7 +152,7 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
               </div>
 
               <div className="flex flex-col w-full gap-4">
-                <MultiSelectField label="Singers" value={selectedSingers} options={singers} onChange={setSelectedSingers} />
+                <MultiSelectField label="Singers" value={selectedSingers} options={singers} onChange={setSelectedSingers} required={true}/>
                 <MultiSelectField label="Writers" value={selectedWriters} options={writers} onChange={setSelectedWriters} />
                 <MultiSelectField label="Features" value={selectedFeatures} options={features} onChange={setSelectedFeatures} />
               </div>
@@ -164,7 +164,7 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
 
 
             <div className="mt-6">
-              <label className="block mb-2 text-sm font-medium text-gray-700">Upload Lyric File</label>
+              <label className="block mb-2 text-sm font-medium text-gray-700">Upload Lyric File<span className="pl-1 text-red-500">*</span></label>
               <input
                 type="file"
                 onChange={(e) => setUploadedFile(e.target.files[0])}
@@ -205,78 +205,11 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
   );
 };
 
-// 🔍 Input Components
-const InputField = ({ label, value, onChange, placeholder }) => (
-  <div>
-    <label className="block mb-1 text-sm font-medium text-gray-700">{label}</label>
-    <input
-      type="text"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      className="w-full p-2 border border-gray-300 rounded-md"
-    />
-  </div>
-);
-
-export const MultiSelectField = ({ label, value, options, onChange }) => (
-  <div className="w-full">
-    <label className="block mb-1 text-sm font-medium text-gray-700">{label}</label>
-    <MultiSelect
-      value={value}
-      options={options}
-      onChange={(e) => onChange(e.value)}
-      optionLabel="name"
-      placeholder={`Select ${label}`}
-      className="w-full"
-      maxSelectedLabels={3}
-      filter
-      filterPlaceholder="Choose one..."
-    />
-  </div>
-);
-
-export const DropdownField = ({ label, value, options, onChange }) => (
-  <div className="w-full">
-    <label className="block mb-1 text-sm font-medium text-gray-700">{label}</label>
-    <Dropdown
-      value={value}
-      options={options}
-      onChange={(e) => onChange(e.value)}
-      optionLabel="name"
-      placeholder="Choose one ..."
-      className="w-full"
-      showClear
-    />
-  </div>
-);
-
 // 🧪 PropTypes
 AddLyric.propTypes = {
   onClose: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
   showNewMessage: PropTypes.func.isRequired,
-};
-
-InputField.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
-};
-
-MultiSelectField.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.array.isRequired,
-  options: PropTypes.array.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
-
-DropdownField.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.any.isRequired,
-  options: PropTypes.array.isRequired,
-  onChange: PropTypes.func.isRequired,
 };
 
 export default AddLyric;

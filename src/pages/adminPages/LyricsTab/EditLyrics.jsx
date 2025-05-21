@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import PropTypes from "prop-types";
-import { MultiSelect } from "primereact/multiselect";
-import { Dropdown } from "primereact/dropdown";
+import InputField from "../../../components/common/InputField";
+import DropdownField from "../../../components/common/DropdownField";
+import MultiSelectField from "../../../components/common/MultiSelectField";
 import ModalPortal from "../../../components/special/ModalPortal";
 import useModalEscClose from "../../../components/hooks/useModalEscClose";
 import { ConfirmPopup } from "primereact/confirmpopup";
@@ -175,7 +176,6 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
 
   const validateForm = () => {
     if (!title.trim()) return "Title is required.";
-    if (!albumName.trim()) return "Album name is required.";
     if (!selectedGenres.length) return "Select at least one genre.";
     if (!selectedMajorKey) return "Please choose a major key.";
     if (!selectedSingers.length) return "Select at least one singer.";
@@ -237,7 +237,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
 
   return (
     <ModalPortal>
-      <div className="fixed bottom-0 left-0 w-screen h-screen z-[100] flex justify-center items-center">
+      <div className="fixed bottom-0 left-0 w-screen h-screen z-[110] flex justify-center items-center">
         <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
         <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[1000px]">
           <div className="flex justify-between items-center mb-4">
@@ -254,7 +254,8 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
                   label="Title"
                   value={title}
                   onChange={setTitle}
-                  placeholder="Enter lyric title"
+                  placeholder="Enter lyric title" 
+                  required={true} 
                 />
                 <InputField
                   label="Album Name"
@@ -283,6 +284,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
                   value={selectedSingers}
                   options={singers}
                   onChange={setSelectedSingers}
+                  required={true} 
                 />
                 <MultiSelectField
                   label="Writers"
@@ -305,13 +307,13 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
 
             <div className="mt-6 flex gap-4 items-center w-full relative">
               <img
-                className="h-16 hover:h-128 transition-all absolute bottom-0 shadow-md"
+                className="w-12 hover:w-72 transition-all absolute bottom-0 shadow-md"
                 src={previewUrl}
                 alt=""
               />
               <div className="w-full ml-16">
                 <label className="block mb-2 text-sm font-medium text-gray-700">
-                  Upload Lyric File
+                  Upload Lyric File<span className="pl-1 text-red-500">*</span>
                 </label>
                 <input
                   type="file"
@@ -390,82 +392,11 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
   );
 };
 
-const InputField = ({ label, value, onChange, placeholder }) => (
-  <div>
-    <label className="block mb-1 text-sm font-medium text-gray-700">
-      {label}
-    </label>
-    <input
-      type="text"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      className="w-full p-2 border border-gray-300 rounded-md"
-    />
-  </div>
-);
-
-export const MultiSelectField = ({ label, value, options, onChange }) => (
-  <div className="w-full">
-    <label className="block mb-1 text-sm font-medium text-gray-700">
-      {label}
-    </label>
-    <MultiSelect
-      value={value}
-      options={options}
-      onChange={(e) => onChange(e.value)}
-      optionLabel="name"
-      placeholder={`Select ${label}`}
-      className="w-full"
-      maxSelectedLabels={3}
-      filter
-      filterPlaceholder="Choose one..."
-    />
-  </div>
-);
-
-export const DropdownField = ({ label, value, options, onChange }) => (
-  <div className="w-full">
-    <label className="block mb-1 text-sm font-medium text-gray-700">
-      {label}
-    </label>
-    <Dropdown
-      value={value}
-      options={options}
-      onChange={(e) => onChange(e.value)}
-      optionLabel="name"
-      placeholder="Choose one ..."
-      className="w-full"
-    />
-  </div>
-);
-
 EditLyric.propTypes = {
   onClose: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
   showNewMessage: PropTypes.func.isRequired,
   lyric: PropTypes.object.isRequired,
-};
-
-InputField.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
-};
-
-MultiSelectField.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.array.isRequired,
-  options: PropTypes.array.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
-
-DropdownField.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.any.isRequired,
-  options: PropTypes.array.isRequired,
-  onChange: PropTypes.func.isRequired,
 };
 
 export default EditLyric;
