@@ -218,13 +218,14 @@ export const fetchPopularLyrics = async (authToken) => {
     return data;
   };
 
-  export const fetchLyricById = async (lyricId) => {
+  export const fetchLyricById = async (lyricId,token) => {
   try {
     const res = await axios.get(
       `${apiUrl}/lyrics/getLyricsById/${lyricId}`,
       {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       }
     );

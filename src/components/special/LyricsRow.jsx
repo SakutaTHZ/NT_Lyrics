@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { FaRegHeart } from "react-icons/fa6";
 import Normal_Button from "../../components/common/Normal_Button";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import MessagePopup from "../common/MessagePopup";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -22,22 +22,13 @@ const LyricsRow = ({
   const ref = isLast ? lastUserRef : null;
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
-  const [isInCollection, setIsInCollection] = useState(false);
+  const [isInCollection, setIsInCollection] = useState(lyric.isFavourite);
 
   // IntersectionObserver hook
   const { ref: inViewRef, inView } = useInView({
     triggerOnce: true, // Trigger only once when it first comes into view
     threshold: 0.5, // 50% of the element should be in view
   });
-
-  const checkIfInCollection = () => {
-    // Check if the lyrics are in User's Collection
-    return setIsInCollection(false);
-  };
-
-  useEffect(() => {
-    checkIfInCollection();
-  }, []);
 
   const navigate = useNavigate();
 

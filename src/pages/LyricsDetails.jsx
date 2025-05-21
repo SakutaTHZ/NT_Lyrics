@@ -19,20 +19,22 @@ import {
 const LyricsDetails = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
-  const [isInCollection, setIsInCollection] = useState(false);
 
   const navigate = useNavigate();
   const { id } = useParams();
 
   const [lyric, setLyrics] = useState(null);
+  const [isInCollection, setIsInCollection] = useState(false);
 
   useEffect(() => {
     const getLyric = async () => {
       try {
-        const lyricData = await fetchLyricById(id);
-        setLyrics(lyricData);
+        const { lyrics } = await fetchLyricById(id,localStorage.getItem("token"));
+        setLyrics(lyrics); // only the actual lyrics object
+        console.log("Fetched lyric:", lyrics);
+        setIsInCollection(lyrics.isFavourite);
       } catch (err) {
-        console.error("Error fetching user overview:", err);
+        console.error("Error fetching lyric:", err);
       }
     };
 
@@ -42,6 +44,7 @@ const LyricsDetails = () => {
   if (!lyric) {
     return <p>Lyrics data not found.</p>;
   }
+  
 
   const goToArtist = (id) => {
     navigate(`/NT_Lyrics/artist/${id}`);
@@ -110,15 +113,17 @@ const LyricsDetails = () => {
         </div>
 
         {/* Video Box */}
+        {lyric.youTubeLink && (
         <div className="w-full md:w-122 aspect-video bg-gray-300 rounded-md">
           <iframe
             className="w-full h-full rounded-md"
-            src={lyric.video_link}
+            src={lyric.youTubeLink}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           ></iframe>
         </div>
+        )}
 
         {/* Details Section */}
         <div className="animate-down-start w-full md:w-122 h-full bg-white rounded-lg shadow-lg p-4 md:p-8 border border-gray-200">

@@ -111,7 +111,10 @@ const Lyrics = () => {
   const fetchLyrics = useCallback(
     async (pageNum, override = false) => {
       setLoading(true);
+
       try {
+        const token = localStorage.getItem("userToken"); // or however you're storing it
+
         const res = await axios.get(`${apiUrl}/lyrics/searchLyrics`, {
           params: {
             page,
@@ -128,9 +131,14 @@ const Lyrics = () => {
                 ? selectedKey
                 : debouncedSearchTerm,
           },
+          headers: {
+            "Content-Type": "application/json",
+            ...(token && { Authorization: `Bearer ${token}` }), // 🔐 Include the token
+          },
         });
 
         const data = res.data.lyrics;
+        console.log("Fetched lyrics:", data);
 
         if (!Array.isArray(data)) {
           console.error("Expected array, got:", data);
@@ -138,9 +146,7 @@ const Lyrics = () => {
         }
 
         setLyrics((prev) =>
-          override || pageNum === 1
-            ? res.data.lyrics
-            : [...prev, ...res.data.lyrics]
+          override || pageNum === 1 ? data : [...prev, ...data]
         );
         setTotalPages(res.data.totalPages);
         setInitialLoadDone(true);
