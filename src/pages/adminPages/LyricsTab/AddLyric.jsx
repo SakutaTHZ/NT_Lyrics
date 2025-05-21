@@ -18,6 +18,7 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
   const [albumName, setAlbumName] = useState("");
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedMajorKey, setSelectedMajorKey] = useState(null);
+  const [youtubeLink, setYoutubeLink] = useState("");
 
   const [singers, setSingers] = useState([]);
   const [writers, setWriters] = useState([]);
@@ -97,6 +98,7 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
     appendArrayToFormData(formData, "singers[]", selectedSingers);
     appendArrayToFormData(formData, "writers[]", selectedWriters);
     appendArrayToFormData(formData, "featureArtists[]", selectedFeatures);
+    formData.append("youTubeLink", youtubeLink);
     formData.append("lyricsPhoto", uploadedFile);
 
     setIsLoading(true);
@@ -155,6 +157,11 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
                 <MultiSelectField label="Features" value={selectedFeatures} options={features} onChange={setSelectedFeatures} />
               </div>
             </div>
+
+            <div className="mt-6">
+              <InputField label="Youtube Link (in Embed code)" value={youtubeLink} onChange={setYoutubeLink} placeholder="Enter Youtube embed link" />
+            </div>
+
 
             <div className="mt-6">
               <label className="block mb-2 text-sm font-medium text-gray-700">Upload Lyric File</label>

@@ -23,6 +23,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
   const [albumName, setAlbumName] = useState(lyric.albumName || "");
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedMajorKey, setSelectedMajorKey] = useState(null);
+  const [youtubeLink, setYoutubeLink] = useState(lyric.youTubeLink);
   const [singers, setSingers] = useState([]);
   const [writers, setWriters] = useState([]);
   const [features, setFeatures] = useState([]);
@@ -197,6 +198,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
     selectedSingers.forEach((s) => formData.append("singers[]", s._id));
     selectedWriters.forEach((w) => formData.append("writers[]", w._id));
     selectedFeatures.forEach((f) => formData.append("featureArtists[]", f._id));
+    formData.append("youTubeLink", youtubeLink);
 
     if (uploadedFile) {
       formData.append("lyricsPhoto", uploadedFile);
@@ -295,6 +297,10 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
                   onChange={setSelectedFeatures}
                 />
               </div>
+            </div>
+
+            <div className="mt-6">
+              <InputField label="Youtube Link (in Embed code)" value={youtubeLink} onChange={setYoutubeLink} placeholder="Enter Youtube embed link" />
             </div>
 
             <div className="mt-6 flex gap-4 items-center w-full relative">
