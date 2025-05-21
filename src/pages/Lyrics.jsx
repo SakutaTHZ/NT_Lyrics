@@ -113,7 +113,7 @@ const Lyrics = () => {
       setLoading(true);
 
       try {
-        const token = localStorage.getItem("userToken"); // or however you're storing it
+        const token = localStorage.getItem("token"); // or however you're storing it
 
         const res = await axios.get(`${apiUrl}/lyrics/searchLyrics`, {
           params: {

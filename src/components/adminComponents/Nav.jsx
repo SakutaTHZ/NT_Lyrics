@@ -33,16 +33,15 @@ const Nav = () => {
           <BiMenu size={24} />
         </button>
 
-        <div className="md:flex hidden items-center gap-2">
-          <Link
-            to="/NT_Lyrics/login"
+        <div className="md:flex hidden items-center gap-2" onClick={logOut}>
+          <p
             className={`${mobileNavStyle} border-transparent ${isActive(
               "/NT_Lyrics/login"
             )}`}
           >
             <LuLogIn className="flex-shrink-0" size={18} />
             Log Out
-          </Link>
+          </p>
         </div>
 
         {isHamburgerOpen && (
