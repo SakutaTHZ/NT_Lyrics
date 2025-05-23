@@ -72,7 +72,7 @@ const LyricsRow = ({
         <MessagePopup message_type={"success"} message_text={messageText} />
       )}
       <motion.div
-        className="relative flex items-center w-full border-b last:border-0  border-dashed border-gray-200"
+        className="relative flex items-center w-full border-b last:border-0 border-dashed border-gray-200 py-2"
         onClick={goToLyricsDetails}
         ref={(node) => {
           // Combine refs for IntersectionObserver and lastUserRef

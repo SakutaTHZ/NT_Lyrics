@@ -1,22 +1,42 @@
 import { useEffect, useState, Suspense } from "react";
 import Nav from "../components/common/Nav";
 import Footer from "../components/common/Footer";
-import bgcover from "../assets/images/cover_bg.png";
 import { IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
-import mockData from "../assets/data/mockSongs.json"
+import mockData from "../assets/data/mockSongs.json";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
+import { fetchCollectionOverview } from "../assets/util/api";
+import { useCallback } from "react";
 
 const Profile = () => {
-  const [myCollection, setMyCollection] = useState(8);
+  //const [myCollection, setMyCollection] = useState(8);
   const [showEdit, setShowEdit] = useState(false);
 
-  const getCollection = () => {
-    let collection = localStorage.getItem("collection");
-    if (collection) {
-      setMyCollection(collection);
+  const [collection, setCollection] = useState([]);
+
+  const getCollection = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const collections = await fetchCollectionOverview(token);
+
+      setCollection(collections);
+      console.log("Fetched:", collections);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    getCollection();
+  }, [getCollection]);
+
+  useEffect(() => {
+    console.log("Collection state updated:", collection);
+    console.log(
+      "Collection state length:",
+      collection.collections?.[0]?.count ?? "N/A"
+    );
+  }, [collection]);
 
   // Get User data here
   const getUser = () => {
@@ -36,12 +56,8 @@ const Profile = () => {
   };
   let user = getUser();
 
-  useEffect(() => {
-    getCollection;
-  }, []);
-
-  const [username,setUsername] = useState(user.name)
-  const [email,setEmail] = useState(user.email)
+  const [username, setUsername] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -49,29 +65,31 @@ const Profile = () => {
         <Nav />
         {/* Lyrics */}
         <div className="relative flex flex-col gap-2 min-h-screen pt-12">
-          <div className="profileBanner animate-down-start w-full h-64 flex flex-col items-start justify-center px-4 md:px-24">
-            <div className="bannerImage w-full h-1/2 flex bg-amber-200 overflow-hidden">
-              <img
-                src={bgcover}
-                alt="Profile Banner"
-                className="object-cover w-full"
-              />
-            </div>
-            <div className="w-full h-1/2 border-b border-gray-300 py-18 pb-12 -translate-y-8 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="profileImageBox w-24 md:w-32 aspect-square rounded-full overflow-hidden border-8 border-white">
-                  <img
-                    src="https://i.pinimg.com/736x/c8/69/8a/c8698a586eb96d0ec43fbb712dcf668d.jpg"
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="profileInfo">
-                  <p className="font-bold text-2xl">{username}</p>
-                  <p className="text-gray-600">{email}</p>
-                </div>
+          <div className="animate-down-start w-full flex flex-col items-center justify-center customBackground rounded-b-4xl py-8">
+            <div className="flex items-center flex-col gap-4 w-full px-8 md:px-24">
+              <div className="relative profileImageBox flex items-center justify-center">
+                <img
+                  src="https://i.pinimg.com/736x/c8/69/8a/c8698a586eb96d0ec43fbb712dcf668d.jpg"
+                  className="object-cover w-24 md:w-32 aspect-square rounded-full border-2 border-white"
+                />
+                {user.role === "premium-user" ? (
+                  <span className="text-xs font-normal absolute bg-amber-200 px-2 py-0.5 -bottom-2.5 rounded-full text-gray-600">
+                    premium
+                  </span>
+                ) : (
+                  <span className="text-xs font-normal absolute bg-gray-200 px-2 py-0.5 -bottom-2.5 rounded-full text-gray-600">
+                    free
+                  </span>
+                )}
+              </div>
+              <div className="profileInfo shadow-md">
+                <p className="relative font-bold text-2xl text-white w-full text-center">
+                  {username}
+                </p>
+                <p className="relative text-white text-center">{email}</p>
               </div>
               <button
-                className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2"
+                className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2 absolute right-4 top-4"
                 onClick={() => setShowEdit(true)}
               >
                 <IoSettingsOutline
@@ -83,36 +101,62 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="flex gap-4 flex-col -translate-y-6">
-            <div className="flex gap-1 items-center md:gap-4 px-4 md:px-24">
-              <p className="font-bold text-lg italic">My Collection</p>
+          <div className="flex gap-2 flex-col py-2">
+            <div className="flex gap-1 items-center justify-between md:gap-4 px-4 md:px-24">
+              <p className="font-bold text-lg italic">Groups</p>
               <div className="border p-1 rounded-md px-3 border-gray-300 font-semibold">
-                {myCollection} <span className="text-gray-400">/ 20</span>
+                {collection.collections?.length}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12 px-4 md:px-24">
-            {mockData.length === 0 ? (
-              <div className="w-full">
-                <img
-                  src={EmptyData}
-                  alt="No data Found"
-                  className="w-full opacity-50"
-                />
+            <div className="flex gap-1 items-center justify-between md:gap-4 px-4 md:px-24">
+              <div className="border border-b-0 px-3 py-3 rounded-t-md border-gray-300 font-semibold">
+                Default
               </div>
-            ) : (
-              <div className="w-full">
-                <img
-                  src={EmptyData}
-                  alt="No data Found"
-                  className="w-full opacity-50"
-                />
-              </div>)}
+              <div className="px-3 w-full overflow-auto flex gap-2 py-1">
+                <span className="px-2 py-1 rounded-md border border-gray-300 font-semibold">Test</span>
+              </div>
+            </div>
+
+            {/*<div className="flex gap-1 items-center justify-between md:gap-4 px-4 md:px-24">
+              <p className="font-bold text-lg italic">My Collection</p>
+              <div className="border p-1 rounded-md px-3 border-gray-300 font-semibold">
+                {collection.collections?.[0]?.count ?? "N/A"}{" "}
+                <span className="text-gray-400">
+                  / {user.role === "premium-user" ? "∞" : "20"}
+                </span>
+              </div>
+            </div>*/}
+
+            <div className="grid grid-cols-1 md:grid-cols-4 mx-4 py-4 gap-4 md:gap-12 px-4 md:px-24 border border-gray-300 border-dashed rounded-md rounded-tl-none -translate-y-2">
+              {mockData.length === 0 ? (
+                <div className="w-full">
+                  <img
+                    src={EmptyData}
+                    alt="No data Found"
+                    className="w-full opacity-50"
+                  />
+                </div>
+              ) : (
+                <div className="w-full">
+                  <img
+                    src={EmptyData}
+                    alt="No data Found"
+                    className="w-full opacity-50"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {showEdit && <ProfileEdit usernameChange={setUsername} emailChange={setEmail} closeBox={() => setShowEdit(false)} />}
+        {showEdit && (
+          <ProfileEdit
+            usernameChange={setUsername}
+            emailChange={setEmail}
+            closeBox={() => setShowEdit(false)}
+          />
+        )}
 
         <Footer />
       </div>

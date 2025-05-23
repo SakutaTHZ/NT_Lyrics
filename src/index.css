@@ -5,6 +5,45 @@ html,body {
   overflow: hidden;
   overflow-y: auto;
 }
+
+.customBackground{
+  overflow: hidden;
+  position: relative;
+}
+.customBackground::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../src/assets/images/cover_bg.png');
+  background-size: cover;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../src/assets/images/musicbg.jpg');
+  background-size: 400px;
+  background-repeat: repeat;
+  opacity: 0.1;
+  z-index: -2;
+}
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, white 50%, transparent 100%);
+  z-index: -1;
+}
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;

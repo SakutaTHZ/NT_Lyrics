@@ -275,3 +275,20 @@ export const removeLyricsFromCollection = async (lyricId,group, token) => {
 
   return data;
 };
+
+export const fetchCollectionOverview = async (authToken) => {
+  try {
+    const res = await axios.get(
+      `${apiUrl}/collections/getCollectionOverview`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching user overview:", err);
+  }
+};

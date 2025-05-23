@@ -148,7 +148,7 @@ const Login = () => {
 
         {/* Google Login */}
         <Normal_Button
-          custom_class={`${inputClass} font-semibold`}
+          custom_class={`${inputClass} font-semibold w-full`}
           icon={FaGoogle}
           text="Sign In With Google"
           onClick={() => {

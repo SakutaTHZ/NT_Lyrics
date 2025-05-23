@@ -74,7 +74,7 @@ const Landing = () => {
         <div className="relative p-4 pb-0 md:px-24 ">
           <div className="flex justify-between">
             <p className="font-bold text-lg italic">Featured Lyrics</p>
-            <Link to={"/NT_Lyrics/lyrics"} className="text-blue-500">
+            <Link to={"/NT_Lyrics/lyrics"} className=" border border-gray-300 px-2 py-1 rounded-md text-sm text-gray-600 hover:bg-gray-100">
               See All
             </Link>
           </div>
@@ -98,7 +98,7 @@ const Landing = () => {
                 .sort((a, b) => b.view_count - a.view_count) // Sort by view_count (descending)
                 .slice(0, 4) // Get the top 4
                 .map((lyric, index) => (
-                  <div key={index} className="m-0 p-0">
+                  <div key={index} className="border-b border-gray-200 last:border-0 border-dashed">
                     {isMobile ? (
                       <LyricsRow id={lyric._id} lyric={lyric} hideCollection={true}/>
                     ) : (
@@ -116,24 +116,6 @@ const Landing = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 py-4 gap-4 md:gap-12">
-            {/* Video Box */}
-            <div className="w-full aspect-video bg-gray-300 rounded-md">
-              <iframe
-                className="w-full h-full rounded-md"
-                src="https://www.youtube-nocookie.com/embed/n_XxP4K1iYA?si=Bo-75TdZD02fZtAf"
-                title="YouTube video player"
-                allowFullScreen
-              ></iframe>
-            </div>
-            {/* Video Box */}
-            <div className="w-full aspect-video bg-gray-300 rounded-md">
-              <iframe
-                className="w-full h-full rounded-md"
-                src="https://www.youtube-nocookie.com/embed/n_XxP4K1iYA?si=Bo-75TdZD02fZtAf"
-                title="YouTube video player"
-                allowFullScreen
-              ></iframe>
-            </div>
             {/* Video Box */}
             <div className="w-full aspect-video bg-gray-300 rounded-md">
               <iframe

@@ -23,6 +23,14 @@ const Footer = React.lazy(() => import("../components/common/Footer"));
 const Lyrics = () => {
   const [searchParams] = useSearchParams();
 
+  const [hasToken, setHasToken] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setHasToken(true);
+    }
+  }, []);
+
   const isMobile = useIsMobile();
 
   const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
@@ -138,7 +146,6 @@ const Lyrics = () => {
         });
 
         const data = res.data.lyrics;
-        console.log("Fetched lyrics:", data);
 
         if (!Array.isArray(data)) {
           console.error("Expected array, got:", data);
@@ -308,7 +315,7 @@ const Lyrics = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 p-2 pb-4 gap-4 md:gap-12 px-4 md:px-24">
+          <div className="grid grid-cols-1 md:grid-cols-5 p-2 pb-4 gap-0 md:gap-12 px-4 md:px-24">
             {mockData.length === 0 ? (
               <div className="w-full">
                 <img
@@ -322,13 +329,14 @@ const Lyrics = () => {
                 {lyrics.map((lyric, index) => {
                   const isLast = index === lyrics.length - 1;
                   return (
-                    <div key={index} className="m-0 p-0">
+                    <div key={index} className="border-b border-gray-200 last:border-0 border-dashed">
                       {isMobile ? (
                         <LyricsRow
                           id={lyric._id}
                           lyric={lyric}
                           isLast={isLast}
                           lastUserRef={lastUserRef}
+                          hideCollection={!hasToken}
                         />
                       ) : (
                         <LyricsCard

@@ -12,7 +12,7 @@ import { useRef } from "react";
 import useDebounce from "../../../components/hooks/useDebounce";
 import LyricRow from "./LyricRow";
 import { keyOptions } from "../../../../src/assets/js/constantDatas";
-import { DropdownField } from "./AddLyric";
+import { DropdownField } from "../../../components/common/DropdownField";
 import { fetchSingers } from "../../../assets/util/api";
 import EditLyric from "./EditLyrics";
 

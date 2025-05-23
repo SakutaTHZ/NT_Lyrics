@@ -31,7 +31,6 @@ const LyricsDetails = () => {
       try {
         const { lyrics } = await fetchLyricById(id,localStorage.getItem("token"));
         setLyrics(lyrics); // only the actual lyrics object
-        console.log("Fetched lyric:", lyrics);
         setIsInCollection(lyrics.isFavourite);
       } catch (err) {
         console.error("Error fetching lyric:", err);
@@ -59,6 +58,14 @@ const LyricsDetails = () => {
 
   const changeLyricsStatus = async (shouldAdd) => {
     const token = localStorage.getItem("token");
+
+    if (!token) {
+      setMessageText("Please login to add to collection");
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 2000);
+      return;
+    }
+    
     const successMessage = shouldAdd
       ? "Lyrics has been added to the collection"
       : "Lyrics has been removed from the collection";
