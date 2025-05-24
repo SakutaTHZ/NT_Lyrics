@@ -88,6 +88,16 @@ const Profile = () => {
                 </p>
                 <p className="relative text-white text-center">{email}</p>
               </div>
+
+              <div className="relative w-full flex items-center justify-center md:gap-4 border p-2 rounded-full border-gray-300 bg-white px-4">
+                <div className="flex items-center gap-2 px-4">
+                  <p className="font-bold text-lg italic">Collected - {collection.collections?.length} </p>
+                </div>
+                <div className="flex items-center gap-2 px-4 border-l border-gray-300">
+                  <p className="font-bold text-lg italic">Groups - {collection.collections?.length}</p>
+                </div>
+              </div>
+
               <button
                 className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2 absolute right-4 top-4"
                 onClick={() => setShowEdit(true)}
@@ -101,20 +111,51 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="flex gap-2 flex-col py-2">
-            <div className="flex gap-1 items-center justify-between md:gap-4 px-4 md:px-24">
-              <p className="font-bold text-lg italic">Groups</p>
-              <div className="border p-1 rounded-md px-3 border-gray-300 font-semibold">
-                {collection.collections?.length}
-              </div>
-            </div>
-
-            <div className="flex gap-1 items-center justify-between md:gap-4 px-4 md:px-24">
-              <div className="border border-b-0 px-3 py-3 rounded-t-md border-gray-300 font-semibold">
-                Default
+          <div className="flex gap-2 flex-col py-2  px-4 md:px-24">
+            <div className="flex gap-1 items-center justify-between md:gap-4">
+              <div className="w-full max-w-36 border border-b-0 px-2 py-2 rounded-t-md border-gray-300 font-semibold flex items-center justify-between">
+                <p className="truncate text-nowrap overflow-hidden text-ellipsis pr-2 ">
+                  Collections
+                </p>
+                <p className="flex-shrink-0 border p-.5 rounded-md px-2 border-gray-100 bg-gray-100 font-semibold">
+                  2
+                </p>
               </div>
               <div className="px-3 w-full overflow-auto flex gap-2 py-1">
-                <span className="px-2 py-1 rounded-md border border-gray-300 font-semibold">Test</span>
+                <span className="px-2 py-1 rounded-md border border-gray-300 font-semibold">
+                  Test
+                </span>
+                <span className="px-2 py-1 rounded-md border border-gray-300 font-semibold">
+                  Test
+                </span>
+                <span className="px-2 py-1 rounded-md border border-gray-300 font-semibold">
+                  Test
+                </span>
+
+                <span className="px-2 py-1 rounded-md border border-gray-300 font-semibold">
+                  Test
+                </span>
+                <span className="px-2 py-1 rounded-md border border-gray-300 font-semibold">
+                  Test
+                </span>
+                <span className="px-2 py-1 rounded-md border border-gray-300 font-semibold">
+                  Test
+                </span>
+                <span className="px-2 py-1 rounded-md border border-gray-300 font-semibold">
+                  Test
+                </span>
+                <span className="px-2 py-1 rounded-md border border-gray-300 font-semibold">
+                  Test
+                </span>
+                <span className="px-2 py-1 rounded-md border border-gray-300 font-semibold">
+                  Test
+                </span>
+                <span className="px-2 py-1 rounded-md border border-gray-300 font-semibold">
+                  Test
+                </span>
+                <span className="px-2 py-1 rounded-md border border-gray-300 font-semibold">
+                  Test
+                </span>
               </div>
             </div>
 
@@ -128,7 +169,7 @@ const Profile = () => {
               </div>
             </div>*/}
 
-            <div className="grid grid-cols-1 md:grid-cols-4 mx-4 py-4 gap-4 md:gap-12 px-4 md:px-24 border border-gray-300 border-dashed rounded-md rounded-tl-none -translate-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12 border border-gray-300 border-dashed rounded-md rounded-tl-none -translate-y-2">
               {mockData.length === 0 ? (
                 <div className="w-full">
                   <img
