@@ -138,7 +138,7 @@ const LyricsDetails = () => {
             <p className="text-lg font-semibold flex items-center">
               {lyric.title}{" "}
             </p>
-            {lyric.albumName!="?" &&(
+            {lyric.albumName!="?"||lyric.albumName!=""  &&(
             <p className="text-sm text-gray-600 pb-2">Album - {lyric.albumName}</p>)}
 
             {/* Genres */}
