@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import Nav from "../components/common/Nav";
 import { Link } from "react-router-dom";
 import Footer from "../components/common/Footer";
 import { BiArrowBack, BiSearch } from "react-icons/bi";
@@ -119,7 +118,6 @@ const Artist = () => {
   return (
     <>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
-        <Nav />
 
         <div className="relative p-4 py-2 md:px-24 pt-16 border-b border-dashed border-gray-300">
           <div className="flex items-center justify-between gap-4">

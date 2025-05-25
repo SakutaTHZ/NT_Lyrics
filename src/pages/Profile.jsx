@@ -1,5 +1,4 @@
 import { useEffect, useState, Suspense } from "react";
-import Nav from "../components/common/Nav";
 import Footer from "../components/common/Footer";
 import { IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
@@ -62,9 +61,8 @@ const Profile = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
-        <Nav />
         {/* Lyrics */}
-        <div className="relative flex flex-col gap-2 min-h-screen pt-12">
+        <div className="relative flex flex-col gap-2 min-h-screen md:pt-12">
           <div className="animate-down-start w-full flex flex-col items-center justify-center customBackground rounded-b-4xl py-8">
             <div className="flex items-center flex-col gap-4 w-full px-8 md:px-24">
               <div className="relative profileImageBox flex items-center justify-center">
@@ -91,10 +89,10 @@ const Profile = () => {
 
               <div className="relative w-full flex items-center justify-center md:gap-4 border p-2 rounded-full border-gray-300 bg-white px-4">
                 <div className="flex items-center gap-2 px-4">
-                  <p className="font-bold text-lg italic">Collected - {collection.collections?.length} </p>
+                  <p className="font-bold text-lg italic">Collected -  </p>
                 </div>
                 <div className="flex items-center gap-2 px-4 border-l border-gray-300">
-                  <p className="font-bold text-lg italic">Groups - {collection.collections?.length}</p>
+                  <p className="font-bold text-lg italic">Groups - </p>
                 </div>
               </div>
 

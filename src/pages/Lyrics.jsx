@@ -17,7 +17,6 @@ import LyricsRow from "../components/special/LyricsRow";
 import { useRef } from "react";
 import { BiSearch } from "react-icons/bi";
 
-const Nav = React.lazy(() => import("../components/common/Nav"));
 const Footer = React.lazy(() => import("../components/common/Footer"));
 
 const Lyrics = () => {
@@ -186,7 +185,6 @@ const Lyrics = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
-        <Nav />
         <div className="relative flex flex-col w-screen min-h-screen pt-16">
           <div className="flex justify-between px-4 md:px-24">
             <p className="font-bold text-lg italic">Song List</p>

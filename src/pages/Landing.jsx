@@ -1,4 +1,3 @@
-import Nav from "../components/common/Nav";
 import cover from "../assets/images/cover_bg.png";
 import { BiSearch } from "react-icons/bi";
 import { Link } from "react-router-dom";
@@ -40,16 +39,15 @@ const Landing = () => {
   return (
     <>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
-        <Nav />
         {/* Hero Section */}
-        <div className="relative hero h-2/5 overflow-hidden w-screen bg-red-100 flex justify-center items-center px-6">
+        <div className="relative hero h-2/6 md:h-2/5 overflow-hidden w-screen bg-red-100 flex justify-center items-center px-6">
           <img
             src={cover}
             loading="lazy"
             className="absolute inset-0 sm:h-full md:w-full object-fill"
           />
 
-          <div className="bg-white z-10 w-full md:w-96 p-4 rounded-md shadow-md flex flex-col gap-3  translate-y-12">
+          <div className="bg-white z-10 w-full md:w-96 p-4 rounded-md shadow-md flex flex-col gap-3  md:translate-y-12">
             <p className="text-lg font-semibold">သီချင်းရှာကြမယ် ...</p>
             <div className="border border-gray-300 rounded-md p-2 flex items-center gap-2">
               <input

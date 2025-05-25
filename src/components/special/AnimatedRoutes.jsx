@@ -184,7 +184,7 @@ const AnimatedRoutes = () => {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="page-container"
+          className="page-container w-screen h-screen relative"
         >
           <Routes location={location}>
             <Route path="/NT_Lyrics" element={<Landing />} />

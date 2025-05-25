@@ -1,4 +1,3 @@
-import Nav from "../components/common/Nav";
 import Footer from "../components/common/Footer";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
@@ -98,7 +97,6 @@ const LyricsDetails = () => {
       {showMessage && (
         <MessagePopup message_type={"success"} message_text={messageText} />
       )}
-      <Nav />
 
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 md:gap-8 pt-16 px-6 md:px-24">
         <button className="w-full" onClick={goBack}>

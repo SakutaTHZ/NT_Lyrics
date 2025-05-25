@@ -8,12 +8,14 @@ import { PrimeReactProvider } from "primereact/api";
 import { ScrollTop } from 'primereact/scrolltop';
 
 import AuthProvider from "./components/hooks/AuthProvider";
+import Nav from "./components/common/Nav";
 
 function App() {
   return (
     <PrimeReactProvider>
       <Router>
-        <AuthProvider> 
+        <AuthProvider>
+          <Nav/>
           <AnimatedRoutes />
         </AuthProvider>
       </Router>
