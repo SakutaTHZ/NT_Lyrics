@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useMemo } from "react";
 import React, { Suspense } from "react";
 import "../../../src/App.css";
+import ErrorBoundary from "../../components/common/ErrorBoundary";
 
 // Dynamically importing pages
 const Landing = React.lazy(() => import("../../../src/pages/Landing"));
@@ -25,7 +26,7 @@ const RequireAdmin = React.lazy(() =>
 
 // Animations to randomly pick from
 const animations = [
-  {
+  /*{
     initial: {
       opacity: 0,
       scale: 0.95,
@@ -123,7 +124,7 @@ const animations = [
       scale: 0.8,
       transition: { duration: 0.2, ease: "easeIn" },
     },
-  }, // Bounce
+  }, // Bounce*/
 
   {
     initial: {
@@ -187,19 +188,72 @@ const AnimatedRoutes = () => {
           className="page-container w-screen h-screen relative"
         >
           <Routes location={location}>
-            <Route path="/NT_Lyrics" element={<Landing />} />
-            <Route path="/NT_Lyrics/oauth/success" element={<OAuthSuccess />} />
-            <Route path="/NT_Lyrics/login" element={<Login />} />
-            <Route path="/NT_Lyrics/signup" element={<SignUp />} />
+            <Route
+              path="/NT_Lyrics"
+              element={
+                <ErrorBoundary fallback={<Not_Found />}>
+                  <Landing />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/NT_Lyrics/oauth/success"
+              element={
+                <ErrorBoundary fallback={<Not_Found />}>
+                  <OAuthSuccess />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/NT_Lyrics/login"
+              element={
+                <ErrorBoundary fallback={<Not_Found />}>
+                  <Login />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/NT_Lyrics/signup"
+              element={
+                <ErrorBoundary fallback={<Not_Found />}>
+                  <SignUp />
+                </ErrorBoundary>
+              }
+            />
             <Route path="*" element={<Not_Found />} />
             {/* User */}
-            <Route path="/NT_Lyrics/lyrics" element={<Lyrics />} />
+            <Route
+              path="/NT_Lyrics/lyrics"
+              element={
+                <ErrorBoundary fallback={<Not_Found />}>
+                  <Lyrics />
+                </ErrorBoundary>
+              }
+            />
             <Route
               path="/NT_Lyrics/lyricsdetail/:id"
-              element={<LyricsDetails />}
+              element={
+                <ErrorBoundary fallback={<Not_Found />}>
+                  <LyricsDetails />
+                </ErrorBoundary>
+              }
             />
-            <Route path="/NT_Lyrics/artist/:name" element={<Artist />} />
-            <Route path="/NT_Lyrics/profile" element={<Profile />} />
+            <Route
+              path="/NT_Lyrics/artist/:name"
+              element={
+                <ErrorBoundary fallback={<Not_Found />}>
+                  <Artist />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/NT_Lyrics/profile"
+              element={
+                <ErrorBoundary fallback={<Not_Found />}>
+                  <Profile />
+                </ErrorBoundary>
+              }
+            />
             {/* Admin */}
             <Route
               path="/NT_Lyrics/admin"

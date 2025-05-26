@@ -57,10 +57,6 @@ const Nav = () => {
           </button>
         )}
       </nav>
-
-      <div className="fixed bottom-0 left-0 right-0 h-12 bg-white shadow-sm flex justify-center items-center z-[99] md:hidden">
-
-      </div>
     </>
   );
 };

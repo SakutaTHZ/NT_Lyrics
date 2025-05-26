@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 #root,
-html,body {
+html,
+body {
   overflow: hidden;
   overflow-y: auto;
 }
@@ -11,18 +12,18 @@ html,body {
   justify-content: center;
 }
 
-.customBackground{
+.customBackground {
   overflow: hidden;
   position: relative;
 }
-.customBackground::before{
-  content: '';
+.customBackground::before {
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('../src/assets/images/cover_bg.png');
+  background: url("../src/assets/images/cover_bg.png");
   background-size: cover;
 }
 
@@ -33,7 +34,7 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../src/assets/images/musicbg.jpg');
+  background-image: url("../src/assets/images/musicbg.jpg");
   background-size: 400px;
   background-repeat: repeat;
   opacity: 0.1;
@@ -53,8 +54,8 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
-img{
-  max-width:none !important;
+img {
+  max-width: none !important;
 }
 
 @keyframes move-out {
@@ -115,7 +116,8 @@ img{
 
 .animate-left {
   animation: loadLeft 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}.animate-left-normal {
+}
+.animate-left-normal {
   animation: loadLeft 1s linear;
 }
 @keyframes loadLeft {
@@ -131,7 +133,8 @@ img{
 
 .animate-right {
   animation: loadRight 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}.animate-right-normal {
+}
+.animate-right-normal {
   animation: loadRight 1s linear;
 }
 @keyframes loadRight {
@@ -157,6 +160,11 @@ img{
   }
 }
 
-.gradient-overlay{
-  background: linear-gradient(transparent,rgba(255, 255, 255,.5),white);
+.gradient-overlay {
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.5), white);
+}
+
+.meshBg {
+  background: #38BDF8;
+  background: radial-gradient(circle,#60a5fa 19%, #60a5fa 31%, #3b82f6 85%);
 }

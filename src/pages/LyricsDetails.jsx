@@ -98,7 +98,7 @@ const LyricsDetails = () => {
         <MessagePopup message_type={"success"} message_text={messageText} />
       )}
 
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4 md:gap-8 pt-16 px-6 md:px-24">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 md:gap-8 md:pt-16 pt-4 px-6 md:px-24">
         <button className="w-full" onClick={goBack}>
           <BiArrowBack size={20} />
         </button>
