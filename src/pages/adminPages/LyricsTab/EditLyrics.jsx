@@ -191,10 +191,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
     formData.append("title", title);
     formData.append("albumName", albumName);
     formData.append("majorKey", selectedMajorKey?.name || selectedMajorKey);
-    formData.append(
-      "genre[]",
-      selectedGenres.map((s) => s.name)
-    );
+    selectedGenres.forEach((genre) => formData.append("genre[]", genre.name));
     selectedSingers.forEach((s) => formData.append("singers[]", s._id));
     selectedWriters.forEach((w) => formData.append("writers[]", w._id));
     selectedFeatures.forEach((f) => formData.append("featureArtists[]", f._id));
