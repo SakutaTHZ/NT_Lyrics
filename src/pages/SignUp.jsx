@@ -197,7 +197,7 @@ const SignUp = () => {
             onClick={signUp}
           />
           <Normal_Button
-            custom_class={`${inputClass} font-semibold`}
+            custom_class={`${inputClass} w-full font-semibold`}
             icon={FaGoogle}
             text="Sign Up With Google"
             onClick={() => {
