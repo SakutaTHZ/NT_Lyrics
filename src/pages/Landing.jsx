@@ -56,7 +56,7 @@ const Landing = () => {
 
     return popularLyrics
       .sort((a, b) => b.view_count - a.view_count)
-      .slice(0, 5)
+      .slice(0, 4)
       .map((lyric) => (
         <div
           key={lyric._id}
@@ -65,7 +65,7 @@ const Landing = () => {
           {isMobile ? (
             <LyricsRow id={lyric._id} lyric={lyric} hideCollection />
           ) : (
-            <LyricsCard id={lyric._id} lyric={lyric} />
+            <LyricsCard id={lyric._id} lyric={lyric}  hideCollection />
           )}
         </div>
       ));
