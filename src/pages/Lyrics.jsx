@@ -4,7 +4,6 @@ import { useEffect, useState, Suspense } from "react";
 import { AutoComplete } from "primereact/autocomplete";
 import { RadioButton } from "primereact/radiobutton";
 import { Dropdown } from "primereact/dropdown";
-import mockData from "../assets/data/mockSongs.json";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
 import { fetchSingers } from "../assets/util/api";
 import { majorkeys } from "../assets/js/constantDatas";
@@ -314,7 +313,7 @@ const Lyrics = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-5 p-2 pb-4 gap-0 md:gap-12 px-4 md:px-24">
-            {mockData.length === 0 ? (
+            {lyrics.length === 0 ? (
               <div className="w-full">
                 <img
                   src={EmptyData}

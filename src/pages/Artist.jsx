@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Footer from "../components/common/Footer";
 import { BiArrowBack, BiSearch } from "react-icons/bi";
-import mockData from "../assets/data/mockSongs.json";
 import { AutoComplete } from "primereact/autocomplete";
 import { useState, useEffect } from "react";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
@@ -34,7 +33,7 @@ const Artist = () => {
 
   const [items, setItems] = useState([]);
   const search = (event) => {
-    const filteredTitles = mockData
+    const filteredTitles = lyrics
       .filter(
         (item) => item.title.toLowerCase().includes(event.query.toLowerCase()) // Search by title
       )
@@ -166,7 +165,7 @@ const Artist = () => {
         {/* Featured Lyrics */}
         <div className="min-h-5/6 relative p-4 py-2 pt-0 md:px-24">
           <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12">
-            {mockData.length === 0 ? (
+            {lyrics.length === 0 ? (
               <div className="w-full">
                 <img
                   src={EmptyData}

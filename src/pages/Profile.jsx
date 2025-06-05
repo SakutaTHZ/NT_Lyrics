@@ -2,7 +2,6 @@ import { useEffect, useState, Suspense } from "react";
 import Footer from "../components/common/Footer";
 import { IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
-import mockData from "../assets/data/mockSongs.json";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
 import { fetchCollectionOverview } from "../assets/util/api";
 import { useCallback } from "react";
@@ -15,6 +14,8 @@ const Profile = () => {
 
   const token = localStorage.getItem("token");
   console.log("Token in localStorage:", token);
+
+  const [lyrics,] = useState();
 
   const getCollection = useCallback(async () => {
     try {
@@ -170,7 +171,7 @@ const Profile = () => {
             </div>*/}
 
             <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12 border border-gray-300 border-dashed rounded-md rounded-tl-none -translate-y-2">
-              {mockData.length === 0 ? (
+              {lyrics.length === 0 ? (
                 <div className="w-full">
                   <img
                     src={EmptyData}
