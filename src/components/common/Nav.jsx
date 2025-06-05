@@ -18,7 +18,7 @@ const HIDDEN_PATHS = [
 
 const NAV_LINKS = [
   {
-    path: "/NT_Lyrics",
+    path: "/NT_Lyrics/",
     label: "Home",
     icon: <GoHome size={18} className="transition-all" />,
   },
@@ -59,7 +59,7 @@ const Nav = () => {
       : "-translate-y-3";
 
   const mobileNavStyle =
-    "p-2 px-4 hover:bg-blue-100 h-fit border-b border-gray-200 md:rounded-md transition-all flex items-center gap-4 md:gap-2";
+    "p-2 px-4 hover:bg-blue-100 h-fit border-b md:border-b-0 border-gray-200 md:rounded-md transition-all flex items-center gap-4 md:gap-2";
 
   if (isHidden) return null;
 
@@ -68,7 +68,7 @@ const Nav = () => {
       {/* Desktop Nav */}
       {!isMobile ? (
         <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-24 bg-white z-[100]">
-          <Link to="/NT_Lyrics" className="font-bold text-lg italic">
+          <Link to="/NT_Lyrics/" className="font-bold text-lg italic">
             NT Lyrics & Chords
           </Link>
 

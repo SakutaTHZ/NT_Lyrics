@@ -16,6 +16,7 @@ import LyricsRow from "../components/special/LyricsRow";
 
 // Utils
 import { fetchPopularLyrics } from "../assets/util/api";
+import LoadingBox from "../components/common/LoadingBox";
 
 const Landing = () => {
   const isMobile = useIsMobile();
@@ -31,14 +32,20 @@ const Landing = () => {
     }
   };
 
+  
+  const [loading, setLoading] = useState(false);
+
   const getPopularLyrics = useCallback(async () => {
     try {
+      setLoading(true)
       const token = localStorage.getItem("token");
       const lyrics = await fetchPopularLyrics(token);
       setPopularLyrics(lyrics);
     } catch (err) {
       console.error("Error fetching popular lyrics:", err);
     }
+
+    setLoading(false)
   }, []);
 
   useEffect(() => {
@@ -46,6 +53,9 @@ const Landing = () => {
   }, [getPopularLyrics]);
 
   const renderLyrics = () => {
+    if(loading){
+      return <LoadingBox/>
+    }
     if (popularLyrics.length === 0) {
       return (
         <div className="w-full flex justify-center items-center">

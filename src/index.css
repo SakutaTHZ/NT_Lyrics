@@ -168,3 +168,41 @@ img {
   background: #38BDF8;
   background: radial-gradient(circle,#60a5fa 19%, #60a5fa 31%, #3b82f6 85%);
 }
+
+.loading-animation{
+  position: relative;
+  overflow: hidden;
+}
+.loading-animation::before{
+  content: '';
+  position: absolute;
+  width: 15%;
+  height: 100%;
+  top: 0;
+  background: rgb(255, 255, 255);
+  filter: blur(10px);
+  transform: skew(-10deg);
+  animation: loadingData 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+}
+
+@keyframes loadingData {
+  from {
+    left:-10%;
+  }
+  to {
+    left: 110%;
+  }
+}
+
+.loading-box{
+  animation: LoadingBox 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) alternate infinite;
+}
+
+@keyframes LoadingBox {
+  from {
+    opacity: .5;
+  }
+  to {
+    opacity: 1;
+  }
+}

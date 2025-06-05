@@ -15,8 +15,8 @@ const RequireAdmin = ({ children }) => {
     }
   }, [user, navigate]);
 
-  if (!user) return <Navigate to="/NT_Lyrics" replace />;
-  if (user.role !== "admin") return <Navigate to="/NT_Lyrics" replace />;
+  if (!user) return <Navigate to="/NT_Lyrics/" replace />;
+  if (user.role !== "admin") return <Navigate to="/NT_Lyrics/" replace />;
 
   return children;
 };

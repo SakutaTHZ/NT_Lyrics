@@ -63,7 +63,7 @@ const Login = () => {
       className="flex w-screen h-screen justify-center items-center overflow-hidden"
       id="main-content"
     >
-      <Link to={"/NT_Lyrics"}>
+      <Link to={"/NT_Lyrics/"}>
         <BiArrowBack
           className="absolute bottom-2 right-2 rounded-full shadow-md p-2 w-10 h-10"
           size={20}

@@ -140,7 +140,7 @@ const Artist = () => {
                 </div>
               </div>
             </div>
-            <Link to="/NT_Lyrics" className="text-blue-500">
+            <Link to="/NT_Lyrics/" className="text-blue-500">
               <BiArrowBack size={20} />
             </Link>
           </div>

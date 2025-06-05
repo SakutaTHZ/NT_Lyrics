@@ -14,7 +14,7 @@ import useIsMobile from "../components/hooks/useIsMobile";
 import LyricsCard from "../components/special/LyricsCard";
 import LyricsRow from "../components/special/LyricsRow";
 import { useRef } from "react";
-import { BiSearch } from "react-icons/bi";
+import LoadingBox from "../components/common/LoadingBox";
 
 const Footer = React.lazy(() => import("../components/common/Footer"));
 
@@ -312,58 +312,64 @@ const Lyrics = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 p-2 pb-4 gap-0 md:gap-12 px-4 md:px-24">
-            {lyrics.length === 0 ? (
-              <div className="w-full">
-                <img
-                  src={EmptyData}
-                  alt="No data Found"
-                  className="w-full opacity-50"
-                />
-              </div>
-            ) : (
-              <>
-                {lyrics.map((lyric, index) => {
-                  const isLast = index === lyrics.length - 1;
-                  return (
-                    <div key={index} className="border-b border-gray-200 last:border-0 border-dashed">
-                      {isMobile ? (
-                        <LyricsRow
-                          id={lyric._id}
-                          lyric={lyric}
-                          isLast={isLast}
-                          lastUserRef={lastUserRef}
-                          hideCollection={!hasToken}
-                        />
-                      ) : (
-                        <LyricsCard
-                          id={lyric._id}
-                          lyric={lyric}
-                          lastUserRef={lastUserRef}
-                          isLast={isLast}
-                        />
-                      )}
-                    </div>
-                  );
-                })}
-                {loading && (
-                  <div className="text-center py-4 text-gray-500 flex items-center justify-center gap-2">
-                    <BiSearch
-                      style={{
-                        display: "inline-block",
-                        animation: "wave 3s infinite",
-                      }}
+          <div
+            className={`grid ${
+              loading || lyrics.length > 0
+                ? "md:grid-cols-5 md:place-items-center"
+                : "grid-cols-1"
+            } p-2 pb-4 gap-0 md:gap-12 px-4 md:px-24`}
+          >
+            {(() => {
+              if (loading) {
+                return <LoadingBox />;
+              }
+
+              if (lyrics.length === 0) {
+                return (
+                  <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
+                    {initialLoadDone && (
+                      <p className="italic">No lyrics found.</p>
+                    )}
+                    <img
+                      src={EmptyData}
+                      alt="No data Found"
+                      className="w-full md:w-96 opacity-50"
                     />
-                    Searching more lyrics...
                   </div>
-                )}
-                {!loading && lyrics.length === 0 && initialLoadDone && (
-                  <div className="text-center py-4 text-gray-400 italic">
-                    No lyrics found.
-                  </div>
-                )}
-              </>
-            )}
+                );
+              }
+
+              return (
+                <>
+                  {lyrics.map((lyric, index) => {
+                    const isLast = index === lyrics.length - 1;
+                    return (
+                      <div
+                        key={lyric._id}
+                        className="border-b border-gray-200 last:border-0 border-dashed"
+                      >
+                        {isMobile ? (
+                          <LyricsRow
+                            id={lyric._id}
+                            lyric={lyric}
+                            isLast={isLast}
+                            lastUserRef={lastUserRef}
+                            hideCollection={!hasToken}
+                          />
+                        ) : (
+                          <LyricsCard
+                            id={lyric._id}
+                            lyric={lyric}
+                            lastUserRef={lastUserRef}
+                            isLast={isLast}
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
+                </>
+              );
+            })()}
           </div>
         </div>
 
