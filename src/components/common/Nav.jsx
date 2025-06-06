@@ -35,7 +35,6 @@ const NAV_LINKS = [
 ];
 
 const Nav = () => {
-  console.log("NAV RENDERED");
   const location = useLocation();
   const isMobile = useIsMobile();
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
@@ -43,7 +42,6 @@ const Nav = () => {
   const isHidden = HIDDEN_PATHS.some((path) =>
     location.pathname.startsWith(path)
   );
-  console.log(isHidden, location.pathname);
 
   const { user } = useContext(AuthContext);
   const isLoggedIn = user !== null && typeof user === "object";

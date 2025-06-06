@@ -123,7 +123,7 @@ const Lyrics = () => {
 
         const res = await axios.get(`${apiUrl}/lyrics/searchLyrics`, {
           params: {
-            page,
+            page: pageNum,
             limit: 20,
             type: searchMethod,
             keyword:
@@ -150,9 +150,17 @@ const Lyrics = () => {
           return [];
         }
 
-        setLyrics((prev) =>
-          override || pageNum === 1 ? data : [...prev, ...data]
-        );
+        const newData = data;
+
+        setLyrics((prev) => {
+          const merged =
+            override || pageNum === 1 ? newData : [...prev, ...newData];
+          const unique = Array.from(
+            new Map(merged.map((item) => [item._id, item])).values()
+          );
+          return unique;
+        });
+
         setTotalPages(res.data.totalPages);
         setInitialLoadDone(true);
       } catch (error) {
@@ -168,7 +176,6 @@ const Lyrics = () => {
       selectedArtist,
       selectedWriters,
       selectedKey,
-      page,
     ]
   );
 
