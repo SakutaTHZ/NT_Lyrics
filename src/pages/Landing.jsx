@@ -32,12 +32,11 @@ const Landing = () => {
     }
   };
 
-  
   const [loading, setLoading] = useState(false);
 
   const getPopularLyrics = useCallback(async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const token = localStorage.getItem("token");
       const lyrics = await fetchPopularLyrics(token);
       setPopularLyrics(lyrics);
@@ -45,7 +44,7 @@ const Landing = () => {
       console.error("Error fetching popular lyrics:", err);
     }
 
-    setLoading(false)
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -53,20 +52,30 @@ const Landing = () => {
   }, [getPopularLyrics]);
 
   const renderLyrics = () => {
-    if(loading){
-      return <LoadingBox/>
+    if (loading) {
+      return (
+    <>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <LoadingBox key={index} />
+      ))}
+    </>
+  );
     }
     if (popularLyrics.length === 0) {
       return (
         <div className="w-full flex justify-center items-center">
-          <img src={EmptyData} alt="No data Found" className="h-42 opacity-50" />
+          <img
+            src={EmptyData}
+            alt="No data Found"
+            className="h-42 opacity-50"
+          />
         </div>
       );
     }
 
     return popularLyrics
       .sort((a, b) => b.view_count - a.view_count)
-      .slice(0, 4)
+      .slice(0, 5)
       .map((lyric) => (
         <div
           key={lyric._id}
@@ -75,7 +84,7 @@ const Landing = () => {
           {isMobile ? (
             <LyricsRow id={lyric._id} lyric={lyric} hideCollection />
           ) : (
-            <LyricsCard id={lyric._id} lyric={lyric}  hideCollection />
+            <LyricsCard id={lyric._id} lyric={lyric} hideCollection />
           )}
         </div>
       ));
@@ -126,9 +135,11 @@ const Landing = () => {
         </div>
 
         <div
-          className={`grid grid-cols-1 ${
-            popularLyrics.length === 0 ? "md:grid-cols-1" : "md:grid-cols-4"
-          } py-4 gap-0 md:gap-12`}
+          className={`grid ${
+            loading || popularLyrics.length > 0
+              ? "md:grid-cols-5 md:place-items-center"
+              : "grid-cols-1"
+          } pt-4  pb-4 gap-0 md:gap-12`}
         >
           {renderLyrics()}
         </div>

@@ -321,7 +321,13 @@ const Lyrics = () => {
           >
             {(() => {
               if (loading) {
-                return <LoadingBox />;
+                return (
+                  <>
+                    {Array.from({ length: 12 }).map((_, index) => (
+                      <LoadingBox key={index} />
+                    ))}
+                  </>
+                );
               }
 
               if (lyrics.length === 0) {
@@ -362,6 +368,7 @@ const Lyrics = () => {
                             lyric={lyric}
                             lastUserRef={lastUserRef}
                             isLast={isLast}
+                            hideCollection={!hasToken}
                           />
                         )}
                       </div>

@@ -55,8 +55,8 @@ const Nav = () => {
 
   const isActiveIcon = (path) =>
     location.pathname === path
-      ? "transform -translate-y-6 scale-125 bg-white text-blue-500 rounded-full shadow-md"
-      : "-translate-y-3";
+      ? "transform -translate-y-6 scale-125 bg-white text-blue-500 rounded-full shadow-md transition-transform"
+      : "-translate-y-3 text-white";
 
   const mobileNavStyle =
     "p-2 px-4 hover:bg-blue-100 h-fit border-b md:border-b-0 border-gray-200 md:rounded-md transition-all flex items-center gap-4 md:gap-2";
@@ -161,11 +161,11 @@ const Nav = () => {
                 )} w-full p-2 flex items-center justify-center flex-col`}
               >
                 <div
-                  className={`absolute flex-shrink-0 p-2 ${isActiveIcon(path)}`}
+                  className={`absolute  flex-shrink-0 p-2 ${isActiveIcon(path)}`}
                 >
                   {icon}
                 </div>
-                <p className="text-sm translate-y-2">{label}</p>
+                <p className="text-white drop-shadow-sm  text-sm translate-y-2">{label}</p>
               </Link>
             ))}
             {isLoggedIn ? (
@@ -180,9 +180,9 @@ const Nav = () => {
                     "/NT_Lyrics/profile"
                   )}`}
                 >
-                  <CgProfile size={20} />
+                  <CgProfile size={20} className=" text-white "/>
                 </div>
-                <p className="text-sm translate-y-2">Profile</p>
+                <p className="text-white drop-shadow-sm  text-sm translate-y-2">Profile</p>
               </Link>
             ) : (
               <Link
@@ -196,9 +196,9 @@ const Nav = () => {
                     "/NT_Lyrics/login"
                   )}`}
                 >
-                  <LuLogIn size={20} />
+                  <LuLogIn size={20} className=" text-white "/>
                 </div>
-                <p className="text-sm translate-y-2">Login</p>
+                <p className="text-white drop-shadow-sm text-sm translate-y-2">Login</p>
               </Link>
             )}
           </div>
