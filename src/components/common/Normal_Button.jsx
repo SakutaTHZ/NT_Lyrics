@@ -12,8 +12,8 @@ const Normal_Button = ({
         className={`w-fit flex gap-2 items-center justify-center p-2 rounded-md cursor-pointer border text-nowrap ${custom_class}`}
         onClick={onClick}
       >
-        {Icon && <Icon />} 
-        {text!="" && <p>{text}</p>}
+        {Icon && <Icon className='w-fit'/>} 
+        {text!="" && <p className="w-full truncate">{text}</p>}
       </button>
     </>
   );

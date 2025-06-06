@@ -22,6 +22,7 @@ const LyricsCard = ({
   const ref = isLast ? lastUserRef : null;
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
+  const [messageType, setMessageType] = useState("success");
   const [isInCollection, setIsInCollection] = useState(lyric.isFavourite);
 
   // IntersectionObserver hook
@@ -39,7 +40,7 @@ const LyricsCard = ({
 
   const changeLyricsStatus = async (shouldAdd) => {
     const token = localStorage.getItem("token");
-    const successMessage = shouldAdd
+    const message = shouldAdd
       ? "Lyrics has been added to the collection"
       : "Lyrics has been removed from the collection";
 
@@ -48,13 +49,15 @@ const LyricsCard = ({
       if (shouldAdd) {
         // Add lyrics to collection
         res = await addLyricsToCollection(id, token);
+        setMessageType("success");
       } else {
         // Remove lyrics from collection
         res = await removeLyricsFromCollection(id, "Default", token);
+        setMessageType("error");
       }
 
       setIsInCollection(shouldAdd);
-      setMessageText(successMessage);
+      setMessageText(message);
 
       return res;
     } catch (err) {
@@ -69,7 +72,7 @@ const LyricsCard = ({
   return (
     <>
       {showMessage && (
-        <MessagePopup message_type={"success"} message_text={messageText} />
+        <MessagePopup message_type={messageType} message_text={messageText} />
       )}
       <motion.div
         className="relative cursor-pointer flex items-center w-full border-b last:border-0  border-dashed border-gray-50 hover:border-blue-300 hover:border-2 transition-all rounded-md"
