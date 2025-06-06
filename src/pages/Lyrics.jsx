@@ -327,7 +327,7 @@ const Lyrics = () => {
             } p-2 pb-4 gap-0 md:gap-12 px-4 md:px-24`}
           >
             {(() => {
-              if (loading) {
+              if (loading && !initialLoadDone) {
                 return (
                   <>
                     {Array.from({ length: 12 }).map((_, index) => (
@@ -340,9 +340,6 @@ const Lyrics = () => {
               if (lyrics.length === 0) {
                 return (
                   <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
-                    {initialLoadDone && (
-                      <p className="italic">No lyrics found.</p>
-                    )}
                     <img
                       src={EmptyData}
                       alt="No data Found"

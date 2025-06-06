@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { FaRegHeart } from "react-icons/fa6";
 import Normal_Button from "../../components/common/Normal_Button";
-import { useState} from "react";
+import { useState } from "react";
 import MessagePopup from "../common/MessagePopup";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -22,6 +22,7 @@ const LyricsRow = ({
   const ref = isLast ? lastUserRef : null;
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
+  const [messageType, setMessageType] = useState("success");
   const [isInCollection, setIsInCollection] = useState(lyric.isFavourite);
 
   // IntersectionObserver hook
@@ -39,7 +40,7 @@ const LyricsRow = ({
 
   const changeLyricsStatus = async (shouldAdd) => {
     const token = localStorage.getItem("token");
-    const successMessage = shouldAdd
+    const message = shouldAdd
       ? "Lyrics has been added to the collection"
       : "Lyrics has been removed from the collection";
 
@@ -48,13 +49,15 @@ const LyricsRow = ({
       if (shouldAdd) {
         // Add lyrics to collection
         res = await addLyricsToCollection(id, token);
+        setMessageType("success");
       } else {
         // Remove lyrics from collection
         res = await removeLyricsFromCollection(id, "Default", token);
+        setMessageType("error");
       }
 
       setIsInCollection(shouldAdd);
-      setMessageText(successMessage);
+      setMessageText(message);
 
       return res;
     } catch (err) {
@@ -69,19 +72,19 @@ const LyricsRow = ({
   return (
     <>
       {showMessage && (
-        <MessagePopup message_type={"success"} message_text={messageText} />
+        <MessagePopup message_type={messageType} message_text={messageText} />
       )}
       <motion.div
         className="relative flex items-center w-full border-b last:border-0 border-dashed border-gray-200 py-2"
         onClick={goToLyricsDetails}
         ref={(node) => {
-          // Combine refs for IntersectionObserver and lastUserRef
+          // Combine your refs (still valid)
           if (ref) ref(node);
           inViewRef(node);
         }}
-        initial={{ scale: 0, opacity: 0, x: 0 }}
-        animate={inView ? { scale: 1, opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.4 }}
+        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+        animate={inView ? { scale: 1, opacity: 1, y: 0 } : false} // <- this is key
+        transition={{ duration: 0.35, ease: "easeOut" }}
       >
         <img src={lyric.lyricsPhoto} className="w-12 h-12 object-contain" />
         <div className="flex justify-between items-center w-full p-2 pl-4">

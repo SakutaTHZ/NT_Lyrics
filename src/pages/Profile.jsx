@@ -171,7 +171,7 @@ const Profile = () => {
             </div>*/}
 
             <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12 border border-gray-300 border-dashed rounded-md rounded-tl-none -translate-y-2">
-              {lyrics.length === 0 ? (
+              {/* {lyrics.length === 0 ? (
                 <div className="w-full">
                   <img
                     src={EmptyData}
@@ -187,7 +187,7 @@ const Profile = () => {
                     className="w-full opacity-50"
                   />
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>
