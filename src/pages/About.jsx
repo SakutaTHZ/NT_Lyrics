@@ -74,7 +74,7 @@ const About = () => {
               <p>We accept donations via <strong>KBZPay</strong>:</p>
               <ul className="list-disc list-inside ml-4">
                 <li><strong>Phone Number:</strong> 09-xxxxxxx</li>
-                <li><strong>Scan QR:</strong> (Replace this with a real QR image below)</li>
+                <li><strong>Scan QR:</strong></li>
               </ul>
 
               <div className="mt-4">
@@ -105,7 +105,8 @@ const About = () => {
           <section>
             <h2 className="font-bold text-2xl italic mb-2">👥 Team & Credits</h2>
             <ul className="list-disc list-inside space-y-1">
-              <li><strong>Sakuta:</strong> UI/UX Designer & Developer</li>
+              <li><strong>Sakuta:</strong> UI/UX Designer & FrontEnd Developer</li>
+              <li><strong>Talia:</strong> ackEnd Developer</li>
               <li><strong>NT:</strong> Founder & Curator</li>
               <li><strong>Contributors:</strong> All musicians and users who’ve submitted lyrics and chords over the years — thank you!</li>
             </ul>
