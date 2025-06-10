@@ -92,6 +92,10 @@ const SignUp = () => {
         throw new Error(
           `Signup failed: ${response.statusText}, ${JSON.stringify(errorData)}`
         );
+      }else{
+        const res = await response.json();
+        showNewMessage("success", "Signup successful! Please Verify your Email.");
+        console.log("Signup successful:", res);
       }
       loginAction({ email, password });
     } catch (error) {

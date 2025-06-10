@@ -5,6 +5,7 @@ import React, { Suspense } from "react";
 import "../../../src/App.css";
 import ErrorBoundary from "../../components/common/ErrorBoundary";
 import About from "../../pages/About";
+import ResetPassword from "../../pages/ResetPassword";
 
 // Dynamically importing pages
 const Landing = React.lazy(() => import("../../../src/pages/Landing"));
@@ -210,6 +211,14 @@ const AnimatedRoutes = () => {
               element={
                 <ErrorBoundary fallback={<Not_Found />}>
                   <Login />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/NT_Lyrics/reset-password/:token"
+              element={
+                <ErrorBoundary fallback={<Not_Found />}>
+                  <ResetPassword />
                 </ErrorBoundary>
               }
             />

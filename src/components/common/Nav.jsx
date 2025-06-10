@@ -14,6 +14,7 @@ const HIDDEN_PATHS = [
   "/NT_Lyrics/login",
   "/NT_Lyrics/signup",
   "/NT_Lyrics/admin",
+  "/NT_Lyrics/reset-password",
 ];
 
 const NAV_LINKS = [

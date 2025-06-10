@@ -11,6 +11,9 @@ import Preview from "../assets/images/Landing_Page.png";
 import { useAuth } from "../components/hooks/authContext";
 import { siteUrl } from "../assets/util/api";
 
+import { Dialog } from "primereact/dialog";
+import { Button } from "primereact/button";
+
 const Login = () => {
   const labelClass = "text-gray-700 font-semibold";
   const inputClass = "p-2 border border-gray-300 rounded-md";
@@ -24,7 +27,6 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState(""); // Store API error messages
 
   const [isRemember, setIsRemember] = useState(false);
-    
 
   // Validate Email
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -55,6 +57,46 @@ const Login = () => {
 
     if (response?.success === false) {
       setErrorMessage(response.message || "Login failed. Try again.");
+    }
+  };
+
+  const [forgotDialogVisible, setForgotDialogVisible] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotEmailError, setForgotEmailError] = useState("");
+  const [forgotSuccessMsg, setForgotSuccessMsg] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+
+  const handleForgotPassword = async () => {
+    if (!isValidEmail(forgotEmail)) {
+      setForgotEmailError("Please enter a valid email.");
+      return;
+    }
+
+    setForgotLoading(true);
+    try {
+      const res = await fetch(
+        "http://localhost:3000/api/users/forgotPassword",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: forgotEmail }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to send reset link.");
+      }
+
+      setForgotSuccessMsg("Reset link sent! Check your email.");
+      setForgotEmailError("");
+    } catch (err) {
+      setForgotEmailError(err.message || "Something went wrong.");
+    } finally {
+      setForgotLoading(false);
     }
   };
 
@@ -127,16 +169,19 @@ const Login = () => {
               type="checkbox"
               id="remember"
               className="cursor-pointer"
-              onChange={()=>setIsRemember(!isRemember)}
+              onChange={() => setIsRemember(!isRemember)}
               checked={isRemember}
             />
             <label htmlFor="remember" className={labelClass}>
               Remember for 30 days
             </label>
           </div>
-          <a href="*" className="font-semibold text-blue-500">
+          <button
+            className="font-semibold text-blue-500"
+            onClick={() => setForgotDialogVisible(true)}
+          >
             Forgot password
-          </a>
+          </button>
         </div>
 
         {/* Login Button */}
@@ -177,6 +222,54 @@ const Login = () => {
           alt="Preview"
         />
       </div>
+
+      <Dialog
+        header="Reset Password"
+        visible={forgotDialogVisible}
+        style={{ width: "90vw", maxWidth: "400px" }}
+        onHide={() => {
+          setForgotDialogVisible(false);
+          setForgotEmail("");
+          setForgotEmailError("");
+          setForgotSuccessMsg("");
+          setForgotLoading(false);
+        }}
+        position="bottom"
+        className="p-fluid"
+        modal
+      >
+        <div className="flex flex-col gap-2">
+          <label htmlFor="forgotEmail" className="font-semibold">
+            Enter your email
+          </label>
+          <input
+            type="email"
+            id="forgotEmail"
+            value={forgotEmail}
+            onChange={(e) => {
+              setForgotEmail(e.target.value);
+              setForgotEmailError("");
+              setForgotSuccessMsg("");
+            }}
+            className="p-2 border border-gray-300 rounded-md"
+            placeholder="user@example.com"
+          />
+          {forgotEmailError && (
+            <small className="text-red-500">{forgotEmailError}</small>
+          )}
+          {forgotSuccessMsg && (
+            <small className="flex justify-between  items-center bg-green-200 p-2 rounded-md text-green-600">{forgotSuccessMsg}<a href="https://mail.google.com" className="bg-white p-2 py-1 rounded-md" target="_blank">Open Gmail</a></small>
+          )}
+          <div className="flex justify-end mt-2 gap-2">
+            <Button
+              label="Send Reset Link"
+              loading={forgotLoading}
+              onClick={handleForgotPassword}
+              className="h-10"
+            />
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };

@@ -2,7 +2,6 @@ import { useEffect, useState, Suspense } from "react";
 import Footer from "../components/common/Footer";
 import { IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
-import EmptyData from "../assets/images/Collection list is empty.jpg";
 import { fetchCollectionOverview } from "../assets/util/api";
 import { useCallback } from "react";
 
@@ -15,7 +14,6 @@ const Profile = () => {
   const token = localStorage.getItem("token");
   console.log("Token in localStorage:", token);
 
-  const [lyrics,] = useState();
 
   const getCollection = useCallback(async () => {
     try {
