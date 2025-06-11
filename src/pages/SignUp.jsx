@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import Preview from "../assets/images/Landing_Page.png";
 import { useState } from "react";
-import { BiArrowBack } from "react-icons/bi";
 import PasswordInput from "../components/common/Password_Input";
 import { useAuth } from "../components/hooks/authContext";
 import { apiUrl, siteUrl } from "../assets/util/api";
 import MessagePopup from "../components/common/MessagePopup";
+import { GoHome } from "react-icons/go";
 
 const SignUp = () => {
   const labelClass = "text-gray-700 font-semibold";
@@ -93,9 +93,7 @@ const SignUp = () => {
           `Signup failed: ${response.statusText}, ${JSON.stringify(errorData)}`
         );
       }else{
-        const res = await response.json();
         showNewMessage("success", "Signup successful! Please Verify your Email.");
-        console.log("Signup successful:", res);
       }
       loginAction({ email, password });
     } catch (error) {
@@ -115,7 +113,7 @@ const SignUp = () => {
         id="main-content"
       >
         <Link to={"/NT_Lyrics/"}>
-          <BiArrowBack
+          <GoHome
             className="absolute bottom-2 right-2 rounded-full shadow-md p-2 w-10 h-10"
             size={20}
           />

@@ -12,7 +12,6 @@ const Profile = () => {
   const [collection, setCollection] = useState([]);
 
   const token = localStorage.getItem("token");
-  console.log("Token in localStorage:", token);
 
 
   const getCollection = useCallback(async () => {
@@ -20,7 +19,6 @@ const Profile = () => {
       const collections = await fetchCollectionOverview(token);
 
       setCollection(collections);
-      console.log("Fetched:", collections);
     } catch (err) {
       console.error("Error fetching user overview:", err);
     }
@@ -31,11 +29,6 @@ const Profile = () => {
   }, [getCollection]);
 
   useEffect(() => {
-    console.log("Collection state updated:", collection);
-    console.log(
-      "Collection state length:",
-      collection.collections?.[0]?.count ?? "N/A"
-    );
   }, [collection]);
 
   // Get User data here

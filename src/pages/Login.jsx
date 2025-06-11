@@ -4,7 +4,7 @@ import {
   //  useNavigate
 } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
-import { BiArrowBack } from "react-icons/bi";
+import { GoHome } from "react-icons/go";
 import Normal_Button from "../components/common/Normal_Button";
 import PasswordInput from "../components/common/Password_Input";
 import Preview from "../assets/images/Landing_Page.png";
@@ -106,7 +106,7 @@ const Login = () => {
       id="main-content"
     >
       <Link to={"/NT_Lyrics/"}>
-        <BiArrowBack
+        <GoHome
           className="absolute bottom-2 right-2 rounded-full shadow-md p-2 w-10 h-10"
           size={20}
         />
@@ -238,7 +238,7 @@ const Login = () => {
         className="p-fluid"
         modal
       >
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 pt-4">
           <label htmlFor="forgotEmail" className="font-semibold">
             Enter your email
           </label>
@@ -258,7 +258,16 @@ const Login = () => {
             <small className="text-red-500">{forgotEmailError}</small>
           )}
           {forgotSuccessMsg && (
-            <small className="flex justify-between  items-center bg-green-200 p-2 rounded-md text-green-600">{forgotSuccessMsg}<a href="https://mail.google.com" className="bg-white p-2 py-1 rounded-md" target="_blank">Open Gmail</a></small>
+            <small className="flex justify-between  items-center bg-green-200 p-2 rounded-md text-green-600">
+              {forgotSuccessMsg}
+              <a
+                href="https://mail.google.com"
+                className="bg-white p-2 py-1 rounded-md text-nowrap"
+                target="_blank"
+              >
+                Open Gmail
+              </a>
+            </small>
           )}
           <div className="flex justify-end mt-2 gap-2">
             <Button

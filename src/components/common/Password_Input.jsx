@@ -1,8 +1,13 @@
 import { useState } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 
-const PasswordInput = ({ value, onChange, placeholder = "Enter Password" }) => {
+const PasswordInput = ({
+  value,
+  onChange,
+  disabled,
+  placeholder = "Enter Password",
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -10,9 +15,15 @@ const PasswordInput = ({ value, onChange, placeholder = "Enter Password" }) => {
       <input
         type={showPassword ? "text" : "password"}
         placeholder={placeholder}
-        className="w-full border border-gray-300 p-2 rounded-md pr-10 my-1"
+        className={`w-full border p-2 rounded-md pr-10 my-1 
+    ${
+      disabled
+        ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+        : "border-gray-300 text-black"
+    }`}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        disabled={disabled}
       />
       <button
         type="button"
@@ -26,10 +37,10 @@ const PasswordInput = ({ value, onChange, placeholder = "Enter Password" }) => {
 };
 
 PasswordInput.propTypes = {
-    value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    placeholder: PropTypes.string,
-    };
-
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  disabled: PropTypes.bool,
+};
 
 export default PasswordInput;
