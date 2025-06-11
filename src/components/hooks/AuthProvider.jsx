@@ -28,7 +28,7 @@ const AuthProvider = ({ children }) => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Invalid credentials");
+        throw new Error(errorData.errors[0].message);
       }
 
       const res = await response.json();
@@ -56,7 +56,7 @@ const AuthProvider = ({ children }) => {
         throw new Error("Invalid response from server");
       }
     } catch (err) {
-      console.error("Login failed:", err.message);
+      console.error("Login failed:", err);
       return { success: false, message: err.message };
     }
   };

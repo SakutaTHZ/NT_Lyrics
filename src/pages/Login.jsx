@@ -13,6 +13,7 @@ import { siteUrl } from "../assets/util/api";
 
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
+import EmailVerificationDialog from "../components/common/EmailVerificationDialog";
 
 const Login = () => {
   const labelClass = "text-gray-700 font-semibold";
@@ -27,6 +28,9 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState(""); // Store API error messages
 
   const [isRemember, setIsRemember] = useState(false);
+
+  // State for showing the resend email dialog
+  const [showResendDialog, setShowResendDialog] = useState(false);
 
   // Validate Email
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -56,6 +60,10 @@ const Login = () => {
     });
 
     if (response?.success === false) {
+      console.error("Login failed:", response.message);
+      if(response.message === "Email not verified. Please verify first.") {
+        setShowResendDialog(true); 
+      }
       setErrorMessage(response.message || "Login failed. Try again.");
     }
   };
@@ -159,7 +167,7 @@ const Login = () => {
 
         {/* Show API Error */}
         {errorMessage && (
-          <p className="text-sm text-red-500 mt-1">{errorMessage}</p>
+          <p className="text-sm bg-red-100 p-2 rounded-md text-red-500">{errorMessage}</p>
         )}
 
         {/* Remember Me & Forgot Password */}
@@ -234,7 +242,7 @@ const Login = () => {
           setForgotSuccessMsg("");
           setForgotLoading(false);
         }}
-        position="bottom"
+        // position="bottom"
         className="p-fluid"
         modal
       >
@@ -279,6 +287,13 @@ const Login = () => {
           </div>
         </div>
       </Dialog>
+
+      {/* Dialog rendered conditionally */}
+      <EmailVerificationDialog
+        visible={showResendDialog}
+        onHide={() => setShowResendDialog(false)}
+        userEmail={email}
+      />
     </div>
   );
 };
