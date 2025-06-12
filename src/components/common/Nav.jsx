@@ -179,7 +179,7 @@ const Nav = () => {
                     "/NT_Lyrics/profile"
                   )}`}
                 >
-                  <CgProfile size={20} className=" text-white "/>
+                  <CgProfile size={20} className={location.pathname === '/NT_Lyrics/profile' ? 'text-blue-500' : 'text-white'} />
                 </div>
                 <p className="text-white drop-shadow-sm  text-sm translate-y-2">Profile</p>
               </Link>

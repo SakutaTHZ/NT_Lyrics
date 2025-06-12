@@ -292,3 +292,20 @@ export const fetchCollectionOverview = async (authToken) => {
     console.error("Error fetching user overview:", err);
   }
 };
+
+export const fetchLyricsByGroup = async (group, authToken) => {
+  try {
+    const res = await axios.get(
+      `${apiUrl}/collections/getLyricsByGroup?group=${group}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    return res.data.lyrics;
+  } catch (err) {
+    console.error("Error fetching lyrics by group:", err);
+  }
+}
