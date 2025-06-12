@@ -12,6 +12,7 @@ import axios from "axios";
 import { apiUrl } from "../assets/util/api";
 import { BiEdit } from "react-icons/bi";
 import { CgAdd } from "react-icons/cg";
+import EditGroup from "../components/common/EditGroup";
 
 const Profile = () => {
   const isMobile = useIsMobile();
@@ -150,6 +151,8 @@ const Profile = () => {
     getLyricsByGroup(defaultGroup);
   }, [collection, getLyricsByGroup]);
 
+  const [showGroupEdit, setShowGroupEdit] = useState(false);
+  
   if (loading) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
@@ -157,6 +160,7 @@ const Profile = () => {
       </div>
     );
   }
+
 
   return (
     <div className="w-screen h-screen overflow-hidden overflow-y-auto">
@@ -251,7 +255,7 @@ const Profile = () => {
 
                 <button
                   className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2 flex items-center gap-2"
-                  onClick={() => console.log("Create Group")}
+                  onClick={() => setShowGroupEdit(true)}
                 >
                   <BiEdit size={20} className="text-gray-500" />
                 </button>
@@ -386,6 +390,10 @@ const Profile = () => {
           </div>
         )}
       </div>
+
+      {showGroupEdit && (
+        <EditGroup groupName={selectedGroup} onClose={() => setShowGroupEdit(false)} />
+      )}
 
       {showEdit && (
         <ProfileEdit
