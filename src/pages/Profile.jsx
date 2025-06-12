@@ -1,13 +1,42 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback,useRef } from "react";
 import Footer from "../components/common/Footer";
 import { IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
 import {
   fetchCollectionOverview,
-  fetchLyricsByGroup,
 } from "../assets/util/api";
+import LoadingBox from "../components/common/LoadingBox";
+import EmptyData from "../assets/images/Collection list is empty.jpg";
+import LyricsRow from "../components/special/LyricsRow";
+import LyricsCard from "../components/special/LyricsCard";
+import useIsMobile from "../components/hooks/useIsMobile";
+import axios from "axios";
+import { apiUrl } from "../assets/util/api";
 
 const Profile = () => {
+  const isMobile = useIsMobile();
+  const [page, setPage] = useState(1);
+  const observer = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
+
+  const lastUserRef = useCallback(
+      (node) => {
+        if (loading || page >= totalPages) return;
+        if (observer.current) observer.current.disconnect();
+  
+        observer.current = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            setPage((prevPage) => prevPage + 1);
+          }
+        });
+  
+        if (node) observer.current.observe(node);
+      },
+      [loading, totalPages, page]
+    );
+
   // Fallback or mock user
   const getUser = () => {
     const user = localStorage.getItem("user");
@@ -28,7 +57,6 @@ const Profile = () => {
 
   const [showEdit, setShowEdit] = useState(false);
   const [collection, setCollection] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   const token = localStorage.getItem("token");
 
@@ -58,13 +86,49 @@ const Profile = () => {
   };
 
   const getLyricsByGroup = useCallback(
-    async (group) => {
+    async (group,pageNum, override = false) => {
       console.log("Sending token:", token);
+      setLoading(true);
+
       try {
-        const lyrics = await fetchLyricsByGroup(group, token);
-        setSelectedGroupLyrics(lyrics);
-      } catch (err) {
-        console.error("Error fetching lyrics by group:", err);
+        const token = localStorage.getItem("token"); // or however you're storing it
+
+        const res = await axios.get(`${apiUrl}/collections/getLyricsByGroup?group=${group}`, {
+          params: {
+            page: pageNum,
+            limit: 20,
+          },
+          headers: {
+            "Content-Type": "application/json",
+            ...(token && { Authorization: `Bearer ${token}` }), // 🔐 Include the token
+          },
+        });
+
+        const data = res.data.lyrics;
+
+        if (!Array.isArray(data)) {
+          console.error("Expected array, got:", data);
+          return [];
+        }
+
+        const newData = data;
+
+        setSelectedGroupLyrics((prev) => {
+          const merged =
+            override || pageNum === 1 ? newData : [...prev, ...newData];
+          const unique = Array.from(
+            new Map(merged.map((item) => [item._id, item])).values()
+          );
+          return unique;
+        });
+
+        setTotalPages(res.data.totalPages);
+        setInitialLoadDone(true);
+      } catch (error) {
+        console.error("Failed to fetch lyrics:", error);
+        return [];
+      } finally {
+        setLoading(false);
       }
     },
     [token]
@@ -170,30 +234,67 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12 border border-gray-300 border-dashed rounded-md rounded-tl-none -translate-y-2">
-              {/* Display user’s collected lyrics, or empty state here */}
-              {selectedGroupLyrics.length > 0 ? (
-                selectedGroupLyrics.map((lyric, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-col items-center justify-center p-4 bg-white rounded-md shadow-sm"
-                  >
+            <div
+            className={`grid ${
+              loading || selectedGroupLyrics.length > 0
+                ? "md:grid-cols-5 md:place-items-center"
+                : "grid-cols-1"
+            } p-2 py-4 gap-0 md:gap-12 px-4 md:px-24 border border-gray-200 rounded-b-md  -translate-y-2`}
+          >
+            {(() => {
+              if (loading && !initialLoadDone) {
+                return (
+                  <>
+                    {Array.from({ length: 12 }).map((_, index) => (
+                      <LoadingBox key={index} />
+                    ))}
+                  </>
+                );
+              }
+
+              if (selectedGroupLyrics.length === 0) {
+                return (
+                  <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
                     <img
-                      src={
-                        lyric.coverImage || "https://via.placeholder.com/150"
-                      }
-                      alt={lyric.title}
-                      className="w-24 h-24 object-cover rounded-md mb-2"
+                      src={EmptyData}
+                      alt="No data Found"
+                      className="w-full md:w-96 opacity-50"
                     />
-                    <p className="font-semibold text-center">{lyric.title}</p>
                   </div>
-                ))
-              ) : (
-                <p className="col-span-full text-center text-gray-500">
-                  No lyrics found in this group.
-                </p>
-              )}
-            </div>
+                );
+              }
+
+              return (
+                <>
+                  {selectedGroupLyrics.map((lyric, index) => {
+                    const isLast = index === selectedGroupLyrics.length - 1;
+                    return (
+                      <div
+                        key={lyric._id}
+                        className="border-b border-gray-200 last:border-0 border-dashed"
+                      >
+                        {isMobile ? (
+                          <LyricsRow
+                            id={lyric._id}
+                            lyric={lyric}
+                            isLast={isLast}
+                            lastUserRef={lastUserRef}
+                          />
+                        ) : (
+                          <LyricsCard
+                            id={lyric._id}
+                            lyric={lyric}
+                            lastUserRef={lastUserRef}
+                            isLast={isLast}
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
+                </>
+              );
+            })()}
+          </div>
           </div>
         ):(
           <div className="px-3 w-full overflow-auto flex gap-2 py-1">
