@@ -1,10 +1,8 @@
-import { useEffect, useState, useCallback,useRef } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Footer from "../components/common/Footer";
 import { IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
-import {
-  fetchCollectionOverview,
-} from "../assets/util/api";
+import { fetchCollectionOverview } from "../assets/util/api";
 import LoadingBox from "../components/common/LoadingBox";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
 import LyricsRow from "../components/special/LyricsRow";
@@ -12,6 +10,8 @@ import LyricsCard from "../components/special/LyricsCard";
 import useIsMobile from "../components/hooks/useIsMobile";
 import axios from "axios";
 import { apiUrl } from "../assets/util/api";
+import { BiEdit } from "react-icons/bi";
+import { CgAdd } from "react-icons/cg";
 
 const Profile = () => {
   const isMobile = useIsMobile();
@@ -22,20 +22,20 @@ const Profile = () => {
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
   const lastUserRef = useCallback(
-      (node) => {
-        if (loading || page >= totalPages) return;
-        if (observer.current) observer.current.disconnect();
-  
-        observer.current = new IntersectionObserver((entries) => {
-          if (entries[0].isIntersecting) {
-            setPage((prevPage) => prevPage + 1);
-          }
-        });
-  
-        if (node) observer.current.observe(node);
-      },
-      [loading, totalPages, page]
-    );
+    (node) => {
+      if (loading || page >= totalPages) return;
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [loading, totalPages, page]
+  );
 
   // Fallback or mock user
   const getUser = () => {
@@ -82,27 +82,29 @@ const Profile = () => {
   const handleGroupChange = (group) => {
     if (!group) return;
     setSelectedGroup(group);
-    getLyricsByGroup(group);
+    getLyricsByGroup(group,1,true);
   };
 
   const getLyricsByGroup = useCallback(
-    async (group,pageNum, override = false) => {
-      console.log("Sending token:", token);
+    async (group, pageNum, override = false) => {
       setLoading(true);
 
       try {
         const token = localStorage.getItem("token"); // or however you're storing it
 
-        const res = await axios.get(`${apiUrl}/collections/getLyricsByGroup?group=${group}`, {
-          params: {
-            page: pageNum,
-            limit: 20,
-          },
-          headers: {
-            "Content-Type": "application/json",
-            ...(token && { Authorization: `Bearer ${token}` }), // 🔐 Include the token
-          },
-        });
+        const res = await axios.get(
+          `${apiUrl}/collections/getLyricsByGroup?group=${group}`,
+          {
+            params: {
+              page: pageNum,
+              limit: 20,
+            },
+            headers: {
+              "Content-Type": "application/json",
+              ...(token && { Authorization: `Bearer ${token}` }), // 🔐 Include the token
+            },
+          }
+        );
 
         const data = res.data.lyrics;
 
@@ -131,8 +133,9 @@ const Profile = () => {
         setLoading(false);
       }
     },
-    [token]
+    []
   );
+
   useEffect(() => {
     getCollection();
   }, [getCollection]);
@@ -186,15 +189,17 @@ const Profile = () => {
 
             <div className="relative w-full flex items-center justify-center md:gap-4 border p-2 rounded-full border-gray-300 bg-white px-4">
               <div className="flex items-center gap-2 px-4">
-                <p className="font-bold text-lg italic">Collected -</p>
+                <p className=" text-lg">Collected -</p>
                 <span className="font-semibold">{defaultGroupCount}</span>
               </div>
-              <div className="flex items-center gap-2 px-4 border-l border-gray-300">
-                <p className="font-bold text-lg italic">Groups -</p>
-                <span className="font-semibold">
-                  {collection?.collections?.length ?? 0}
-                </span>
-              </div>
+              {user.role === "premium-user" && (
+                <div className="flex items-center gap-2 px-4 border-l border-gray-300">
+                  <p className=" text-lg">Groups -</p>
+                  <span className="font-semibold">
+                    {collection?.collections?.length ?? 0}
+                  </span>
+                </div>
+              )}
             </div>
 
             <button
@@ -206,40 +211,124 @@ const Profile = () => {
           </div>
         </div>
         {user.role === "premium-user" ? (
-          <div className="flex gap-2 flex-col py-2 px-4 md:px-24">
-            <div className="flex gap-1 items-center justify-between md:gap-4">
-              <div className="w-full max-w-36 border border-b-0 px-2 py-2 rounded-t-md border-gray-300 font-semibold flex items-center justify-between">
-                <p className="truncate text-nowrap overflow-hidden text-ellipsis pr-2">
-                  {selectedGroup}
-                </p>
-                <p className="flex-shrink-0 border p-.5 rounded-md px-2 border-gray-100 bg-gray-100 font-semibold">
-                  {collection?.collections?.find(
-                    (item) => item.group === selectedGroup
-                  )?.count || 0}
-                </p>
+          <div className="flex flex-col py-2 px-4 md:px-24">
+            <div className="flex flex-col items-center justify-between md:gap-4  sticky top-0  z-20">
+              {/* Groups */}
+              <div className="w-full flex items-center justify-between gap-2 bg-white">
+
+                <button
+                  className=" bg-gray-100 rounded-md cursor-pointer p-2 flex items-center gap-2"
+                  onClick={() => console.log("Create Group")}
+                >
+                  <CgAdd size={20} className="text-gray-500" />
+                </button>
+                <div className="w-full bg-white sticky top-0 overflow-auto flex gap-2 py-3">
+                  {(collection?.collections || []).map((col, idx) => (
+                    <span
+                      key={idx}
+                      className={`px-2 py-1 rounded-md border border-gray-300 font-semibold cursor-pointer ${
+                        selectedGroup === col.group ? "bg-gray-200" : ""
+                      }`}
+                      onClick={() => handleGroupChange(col.group)}
+                    >
+                      {col.group}
+                    </span>
+                  ))}
+                </div>
               </div>
 
-              <div className="px-3 w-full overflow-auto flex gap-2 py-1">
-                {(collection?.collections || []).map((col, idx) => (
-                  <span
-                    key={idx}
-                    className={`px-2 py-1 rounded-md border border-gray-300 font-semibold cursor-pointer ${
-                      selectedGroup === col.group ? "bg-gray-200" : ""
-                    }`}
-                    onClick={() => handleGroupChange(col.group)}
-                  >
-                    {col.group}
+              <div className="w-full border border-b-0 px-2 py-2 rounded-t-md bg-white border-gray-300 font-semibold flex items-center justify-between">
+                <p>
+                  <span className="truncate text-nowrap overflow-hidden text-ellipsis pr-2">
+                    {selectedGroup}
                   </span>
-                ))}
+                  <span className="flex-shrink-0 border p-.5 rounded-md px-2 border-gray-100 bg-gray-100 font-semibold">
+                    {collection?.collections?.find(
+                      (item) => item.group === selectedGroup
+                    )?.count || 0}
+                  </span>
+                </p>
+
+                <button
+                  className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2 flex items-center gap-2"
+                  onClick={() => console.log("Create Group")}
+                >
+                  <BiEdit size={20} className="text-gray-500" />
+                </button>
               </div>
             </div>
 
             <div
+              className={`grid ${
+                loading || selectedGroupLyrics.length > 0
+                  ? "md:grid-cols-5 md:place-items-center"
+                  : "grid-cols-1"
+              } p-2 py-4 gap-0 md:gap-12 px-4 md:px-24 border border-gray-200 rounded-b-md`}
+            >
+              {(() => {
+                if (loading && !initialLoadDone) {
+                  return (
+                    <>
+                      {Array.from({ length: 12 }).map((_, index) => (
+                        <LoadingBox key={index} />
+                      ))}
+                    </>
+                  );
+                }
+
+                if (selectedGroupLyrics.length === 0) {
+                  return (
+                    <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
+                      <img
+                        src={EmptyData}
+                        alt="No data Found"
+                        className="w-full md:w-96 opacity-50"
+                      />
+                    </div>
+                  );
+                }
+
+                return (
+                  <>
+                    {selectedGroupLyrics.map((lyric, index) => {
+                      const isLast = index === selectedGroupLyrics.length - 1;
+                      return (
+                        <div
+                          key={lyric._id}
+                          className="border-b border-gray-200 last:border-0 border-dashed"
+                        >
+                          {isMobile ? (
+                            <LyricsRow
+                              id={lyric._id}
+                              lyric={lyric}
+                              isLast={isLast}
+                              lastUserRef={lastUserRef}
+                              hideCollection={true}
+                            />
+                          ) : (
+                            <LyricsCard
+                              id={lyric._id}
+                              lyric={lyric}
+                              lastUserRef={lastUserRef}
+                              isLast={isLast}
+                              hideCollection={true}
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </>
+                );
+              })()}
+            </div>
+          </div>
+        ) : (
+          <div
             className={`grid ${
               loading || selectedGroupLyrics.length > 0
                 ? "md:grid-cols-5 md:place-items-center"
                 : "grid-cols-1"
-            } p-2 py-4 gap-0 md:gap-12 px-4 md:px-24 border border-gray-200 rounded-b-md  -translate-y-2`}
+            } p-2 py-4 gap-0 md:gap-12 px-4 md:px-24`}
           >
             {(() => {
               if (loading && !initialLoadDone) {
@@ -294,10 +383,6 @@ const Profile = () => {
                 </>
               );
             })()}
-          </div>
-          </div>
-        ):(
-          <div className="px-3 w-full overflow-auto flex gap-2 py-1">
           </div>
         )}
       </div>
