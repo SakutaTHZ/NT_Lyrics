@@ -324,3 +324,96 @@ export const validateUser = async (id,token) => {
     throw err; // optionally let the caller handle this
   }
 }
+
+export const addLyricToGroups = async (lyricId, groups, token) => {
+  if (!Array.isArray(groups) || groups.length === 0) {
+    throw new Error("Groups must be a non-empty array");
+  }
+  if (!lyricId || typeof lyricId !== "string") {
+    throw new Error("Invalid lyricId");
+  }
+  if (!token || typeof token !== "string") {
+    throw new Error("Invalid token");
+  }
+
+  const results = [];
+
+  for (const group of groups) {
+    const response = await fetch(`${apiUrl}/collections/addToGroup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ lyricsId: lyricId, group: group }), // Send one group at a time
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.errors?.[0]?.message || `Failed to add lyric to group: ${group}`);
+    }
+
+    results.push(data);
+  }
+
+  return results;
+};
+
+export const removeLyricFromGroups = async (lyricId, groups, token) => {
+  if (!Array.isArray(groups) || groups.length === 0) {
+    throw new Error("Groups must be a non-empty array");
+  }
+  if (!lyricId || typeof lyricId !== "string") {
+    throw new Error("Invalid lyricId");
+  }
+  if (!token || typeof token !== "string") {
+    throw new Error("Invalid token");
+  }
+
+  const results = [];
+
+  for (const group of groups) {
+    const response = await fetch(`${apiUrl}/collections/removeFromGroup`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ lyricsId: lyricId, group: group }), // Send one group at a time
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.errors?.[0]?.message || `Failed to remove lyric from group: ${group}`);
+    }
+
+    results.push(data);
+  }
+
+  return results;
+}
+
+export const lookForGroups = async (lyricId, token) => {
+  if (!lyricId || !token) {
+    throw new Error("Missing lyricId or token");
+  }
+
+  const collectionOverview = await fetchCollectionOverview(token);
+  const groupNames = collectionOverview?.collections?.map((c) => c.group) || [];
+
+  const matchedGroups = [];
+
+  for (const group of groupNames) {
+    const lyrics = await fetchLyricsByGroup(group, token);
+    if (Array.isArray(lyrics)) {
+      const found = lyrics.some((lyric) => lyric._id === lyricId);
+      if (found) {
+        matchedGroups.push(group);
+      }
+    }
+  }
+
+  return matchedGroups;
+};

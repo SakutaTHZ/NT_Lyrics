@@ -127,6 +127,7 @@ const LyricRowPremium = ({
 
         {addToCollection && (
           <AddToCollectionBox
+            id={id}
             addToCollection={addToCollection}
             close={() => setAddToCollection(false)}
           />

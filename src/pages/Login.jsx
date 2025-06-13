@@ -263,7 +263,7 @@ const Login = () => {
             placeholder="user@example.com"
           />
           {forgotEmailError && (
-            <small className="text-red-500">{forgotEmailError}</small>
+            <small className="flex justify-between  items-center bg-red-200 p-2 rounded-md text-red-600">{forgotEmailError}</small>
           )}
           {forgotSuccessMsg && (
             <small className="flex justify-between  items-center bg-green-200 p-2 rounded-md text-green-600">
