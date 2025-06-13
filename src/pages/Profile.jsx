@@ -83,7 +83,7 @@ const Profile = () => {
   const handleGroupChange = (group) => {
     if (!group) return;
     setSelectedGroup(group);
-    getLyricsByGroup(group,1,true);
+    getLyricsByGroup(group, 1, true);
   };
 
   const getLyricsByGroup = useCallback(
@@ -152,7 +152,7 @@ const Profile = () => {
   }, [collection, getLyricsByGroup]);
 
   const [showGroupEdit, setShowGroupEdit] = useState(false);
-  
+
   if (loading) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
@@ -160,7 +160,6 @@ const Profile = () => {
       </div>
     );
   }
-
 
   return (
     <div className="w-screen h-screen overflow-hidden overflow-y-auto">
@@ -216,117 +215,117 @@ const Profile = () => {
         </div>
         {user.role === "premium-user" ? (
           collection?.collections?.length > 0 && (
-          <div className="flex flex-col py-2 px-4 md:px-24">
-            <div className="flex flex-col items-center justify-between md:gap-4  sticky top-0  z-20">
-              {/* Groups */}
-              <div className="w-full flex items-center justify-between gap-2 bg-white">
+            <div className="flex flex-col py-2 px-4 md:px-24">
+              <div className="flex flex-col items-center justify-between md:gap-4  sticky top-0  z-20">
+                {/* Groups */}
+                <div className="w-full flex items-center justify-between gap-2 bg-white">
+                  <button
+                    className=" bg-gray-100 rounded-md cursor-pointer p-2 flex items-center gap-2"
+                    onClick={() => console.log("Create Group")}
+                  >
+                    <CgAdd size={20} className="text-gray-500" />
+                  </button>
+                  <div className="w-full bg-white sticky top-0 overflow-auto flex gap-2 py-3">
+                    {(collection?.collections || []).map((col, idx) => (
+                      <span
+                        key={idx}
+                        className={`px-2 py-1 rounded-md border border-gray-300 font-semibold cursor-pointer ${
+                          selectedGroup === col.group ? "bg-gray-200" : ""
+                        }`}
+                        onClick={() => handleGroupChange(col.group)}
+                      >
+                        {col.group}
+                      </span>
+                    ))}
+                  </div>
+                </div>
 
-                <button
-                  className=" bg-gray-100 rounded-md cursor-pointer p-2 flex items-center gap-2"
-                  onClick={() => console.log("Create Group")}
-                >
-                  <CgAdd size={20} className="text-gray-500" />
-                </button>
-                <div className="w-full bg-white sticky top-0 overflow-auto flex gap-2 py-3">
-                  {(collection?.collections || []).map((col, idx) => (
-                    <span
-                      key={idx}
-                      className={`px-2 py-1 rounded-md border border-gray-300 font-semibold cursor-pointer ${
-                        selectedGroup === col.group ? "bg-gray-200" : ""
-                      }`}
-                      onClick={() => handleGroupChange(col.group)}
-                    >
-                      {col.group}
+                <div className="w-full border border-b-0 px-2 py-2 rounded-t-md bg-white border-gray-300 font-semibold flex items-center justify-between">
+                  <p>
+                    <span className="truncate text-nowrap overflow-hidden text-ellipsis pr-2">
+                      {selectedGroup}
                     </span>
-                  ))}
+                    <span className="flex-shrink-0 border p-.5 rounded-md px-2 border-gray-100 bg-gray-100 font-semibold">
+                      {collection?.collections?.find(
+                        (item) => item.group === selectedGroup
+                      )?.count || 0}
+                    </span>
+                  </p>
+
+                  <button
+                    className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2 flex items-center gap-2"
+                    onClick={() => setShowGroupEdit(true)}
+                  >
+                    <BiEdit size={20} className="text-gray-500" />
+                  </button>
                 </div>
               </div>
 
-              <div className="w-full border border-b-0 px-2 py-2 rounded-t-md bg-white border-gray-300 font-semibold flex items-center justify-between">
-                <p>
-                  <span className="truncate text-nowrap overflow-hidden text-ellipsis pr-2">
-                    {selectedGroup}
-                  </span>
-                  <span className="flex-shrink-0 border p-.5 rounded-md px-2 border-gray-100 bg-gray-100 font-semibold">
-                    {collection?.collections?.find(
-                      (item) => item.group === selectedGroup
-                    )?.count || 0}
-                  </span>
-                </p>
+              <div
+                className={`grid ${
+                  loading || selectedGroupLyrics.length > 0
+                    ? "md:grid-cols-5 md:place-items-center"
+                    : "grid-cols-1"
+                } p-2 py-4 gap-0 md:gap-12 px-4 md:px-24 border border-gray-200 rounded-b-md`}
+              >
+                {(() => {
+                  if (loading && !initialLoadDone) {
+                    return (
+                      <>
+                        {Array.from({ length: 12 }).map((_, index) => (
+                          <LoadingBox key={index} />
+                        ))}
+                      </>
+                    );
+                  }
 
-                <button
-                  className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2 flex items-center gap-2"
-                  onClick={() => setShowGroupEdit(true)}
-                >
-                  <BiEdit size={20} className="text-gray-500" />
-                </button>
-              </div>
-            </div>
+                  if (selectedGroupLyrics.length === 0) {
+                    return (
+                      <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
+                        <img
+                          src={EmptyData}
+                          alt="No data Found"
+                          className="w-full md:w-96 opacity-50"
+                        />
+                      </div>
+                    );
+                  }
 
-            <div
-              className={`grid ${
-                loading || selectedGroupLyrics.length > 0
-                  ? "md:grid-cols-5 md:place-items-center"
-                  : "grid-cols-1"
-              } p-2 py-4 gap-0 md:gap-12 px-4 md:px-24 border border-gray-200 rounded-b-md`}
-            >
-              {(() => {
-                if (loading && !initialLoadDone) {
                   return (
                     <>
-                      {Array.from({ length: 12 }).map((_, index) => (
-                        <LoadingBox key={index} />
-                      ))}
+                      {selectedGroupLyrics.map((lyric, index) => {
+                        const isLast = index === selectedGroupLyrics.length - 1;
+                        return (
+                          <div
+                            key={lyric._id}
+                            className="border-b border-gray-200 last:border-0 border-dashed"
+                          >
+                            {isMobile ? (
+                              <LyricsRow
+                                id={lyric._id}
+                                lyric={lyric}
+                                isLast={isLast}
+                                lastUserRef={lastUserRef}
+                                hideCollection={true}
+                              />
+                            ) : (
+                              <LyricsCard
+                                id={lyric._id}
+                                lyric={lyric}
+                                lastUserRef={lastUserRef}
+                                isLast={isLast}
+                                hideCollection={true}
+                              />
+                            )}
+                          </div>
+                        );
+                      })}
                     </>
                   );
-                }
-
-                if (selectedGroupLyrics.length === 0) {
-                  return (
-                    <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
-                      <img
-                        src={EmptyData}
-                        alt="No data Found"
-                        className="w-full md:w-96 opacity-50"
-                      />
-                    </div>
-                  );
-                }
-
-                return (
-                  <>
-                    {selectedGroupLyrics.map((lyric, index) => {
-                      const isLast = index === selectedGroupLyrics.length - 1;
-                      return (
-                        <div
-                          key={lyric._id}
-                          className="border-b border-gray-200 last:border-0 border-dashed"
-                        >
-                          {isMobile ? (
-                            <LyricsRow
-                              id={lyric._id}
-                              lyric={lyric}
-                              isLast={isLast}
-                              lastUserRef={lastUserRef}
-                              hideCollection={true}
-                            />
-                          ) : (
-                            <LyricsCard
-                              id={lyric._id}
-                              lyric={lyric}
-                              lastUserRef={lastUserRef}
-                              isLast={isLast}
-                              hideCollection={true}
-                            />
-                          )}
-                        </div>
-                      );
-                    })}
-                  </>
-                );
-              })()}
+                })()}
+              </div>
             </div>
-          </div>)
+          )
         ) : (
           <div
             className={`grid ${
@@ -393,7 +392,10 @@ const Profile = () => {
       </div>
 
       {showGroupEdit && (
-        <EditGroup groupName={selectedGroup} onClose={() => setShowGroupEdit(false)} />
+        <EditGroup
+          groupName={selectedGroup}
+          onClose={() => setShowGroupEdit(false)}
+        />
       )}
 
       {showEdit && (
