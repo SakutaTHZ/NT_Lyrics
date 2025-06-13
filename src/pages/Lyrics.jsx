@@ -117,7 +117,7 @@ const Lyrics = () => {
       setLoading(true);
 
       try {
-        const token = localStorage.getItem("token"); // or however you're storing it
+        const token = localStorage.getItem("token");
 
         const res = await axios.get(`${apiUrl}/lyrics/searchLyrics`, {
           params: {
@@ -137,11 +137,12 @@ const Lyrics = () => {
           },
           headers: {
             "Content-Type": "application/json",
-            ...(token && { Authorization: `Bearer ${token}` }), // 🔐 Include the token
+            ...(token && { Authorization: `Bearer ${token}` }),
           },
         });
 
         const data = res.data.lyrics;
+        console.log("Fetched lyrics:", data);
 
         if (!Array.isArray(data)) {
           console.error("Expected array, got:", data);
