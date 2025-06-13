@@ -8,8 +8,8 @@ import { useInView } from "react-intersection-observer";
 import {
   addLyricsToCollection,
   removeLyricsFromCollection,
-} from "../../assets/util/api";
-import { Dialog } from "primereact/dialog"; // Assuming you're using PrimeReact for Dialog
+} from "../../assets/util/api"; // Assuming you're using PrimeReact for Dialog
+import AddToCollectionBox from "./AddToCollectionBox";
 
 const LyricRowPremium = ({
   id,
@@ -39,6 +39,7 @@ const LyricRowPremium = ({
     navigate(`/NT_Lyrics/lyricsdetail/${id}`);
   };
 
+  // eslint-disable-next-line no-unused-vars
   const changeLyricsStatus = async (shouldAdd) => {
     const token = localStorage.getItem("token");
     const message = shouldAdd
@@ -92,7 +93,7 @@ const LyricRowPremium = ({
           {isInCollection && (
             <BsHeartFill
               size={10}
-              className="text-red-500 inline -translate-y-2 absolute left-0 top-0 translate-x-1/2 -rotate-45"
+              className="text-red-500 inline -translate-y-2 absolute left-0 top-0 translate-x-1/2"
             />
           )}
         </div>
@@ -124,37 +125,12 @@ const LyricRowPremium = ({
           )}
         </div>
 
-        <Dialog
-        header="Add to Collection"
-          visible={addToCollection}
-          style={{ width: "90vw", maxWidth: "400px" }}
-          onHide={() => {
-            if (!addToCollection) return;
-            setAddToCollection(false);
-          }}
-          position="bottom"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          pt={{
-            header: {
-              className: "customHeader h-fit border-none flex items-center", // Small padding, short height, no border
-            },
-            content: {
-              className: "customContent p-4",
-            },
-          }}
-        >
-          <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-        </Dialog>
+        {addToCollection && (
+          <AddToCollectionBox
+            addToCollection={addToCollection}
+            close={() => setAddToCollection(false)}
+          />
+        )}
       </motion.div>
     </>
   );

@@ -204,7 +204,6 @@ const Lyrics = () => {
         const userData = await validateUser(id, token);
         if (!userData) throw new Error("No user returned");
         setUser(userData.user);
-        console.log("User fetched:", userData);
       } catch (err) {
         console.error("Failed to fetch user:", err);
       } finally {
