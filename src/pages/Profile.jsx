@@ -215,6 +215,7 @@ const Profile = () => {
           </div>
         </div>
         {user.role === "premium-user" ? (
+          collection?.collections?.length > 0 && (
           <div className="flex flex-col py-2 px-4 md:px-24">
             <div className="flex flex-col items-center justify-between md:gap-4  sticky top-0  z-20">
               {/* Groups */}
@@ -325,7 +326,7 @@ const Profile = () => {
                 );
               })()}
             </div>
-          </div>
+          </div>)
         ) : (
           <div
             className={`grid ${
