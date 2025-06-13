@@ -5,7 +5,7 @@ import { AutoComplete } from "primereact/autocomplete";
 import { RadioButton } from "primereact/radiobutton";
 import { Dropdown } from "primereact/dropdown";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
-import { fetchSingers } from "../assets/util/api";
+import { fetchSingers, validateUser } from "../assets/util/api";
 import { majorkeys } from "../assets/js/constantDatas";
 import { apiUrl } from "../assets/util/api";
 import axios from "axios";
@@ -13,6 +13,7 @@ import useDebounce from "../components/hooks/useDebounce";
 import useIsMobile from "../components/hooks/useIsMobile";
 import LyricsCard from "../components/special/LyricsCard";
 import LyricsRow from "../components/special/LyricsRow";
+import LyricsRowPremium from "../components/special/LyricRowPremium";
 import { useRef } from "react";
 import LoadingBox from "../components/common/LoadingBox";
 
@@ -22,12 +23,9 @@ const Lyrics = () => {
   const [searchParams] = useSearchParams();
 
   const [hasToken, setHasToken] = useState(false);
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setHasToken(true);
-    }
-  }, []);
+
+  const [user, setUser] = useState(null);
+  const [userLoaded, setUserLoaded] = useState(false);
 
   const isMobile = useIsMobile();
 
@@ -182,11 +180,40 @@ const Lyrics = () => {
   useEffect(() => {
     fetchLyrics(1, true);
   }, [fetchLyrics]);
+
   useEffect(() => {
     if (page > 1) {
       fetchLyrics(page, false); // append mode
     }
   }, [page, fetchLyrics]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setHasToken(true);
+    }
+
+    const id = JSON.parse(localStorage.getItem("user") || "{}")?.id;
+    if (!id) {
+      console.error("User ID not found in localStorage");
+      return;
+    }
+
+    const getUser = async () => {
+      try {
+        const userData = await validateUser(id, token);
+        if (!userData) throw new Error("No user returned");
+        setUser(userData.user);
+        console.log("User fetched:", userData);
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
+      } finally {
+        setUserLoaded(true);
+      }
+    };
+
+    getUser();
+  }, []);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -319,69 +346,84 @@ const Lyrics = () => {
             </div>
           </div>
 
-          <div
-            className={`grid ${
-              loading || lyrics.length > 0
-                ? "md:grid-cols-5 md:place-items-center"
-                : "grid-cols-1"
-            } p-2 pb-4 gap-0 md:gap-12 px-4 md:px-24`}
-          >
-            {(() => {
-              if (loading && !initialLoadDone) {
+          {userLoaded && (
+            <div
+              className={`grid ${
+                loading || lyrics.length > 0
+                  ? "md:grid-cols-5 md:place-items-center"
+                  : "grid-cols-1"
+              } p-2 pb-4 gap-0 md:gap-12 px-4 md:px-24`}
+            >
+              {(() => {
+                if (loading && !initialLoadDone) {
+                  return (
+                    <>
+                      {Array.from({ length: 12 }).map((_, index) => (
+                        <LoadingBox key={index} />
+                      ))}
+                    </>
+                  );
+                }
+
+                if (lyrics.length === 0) {
+                  return (
+                    <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
+                      <img
+                        src={EmptyData}
+                        alt="No data Found"
+                        className="w-full md:w-96 opacity-50"
+                      />
+                    </div>
+                  );
+                }
+
                 return (
                   <>
-                    {Array.from({ length: 12 }).map((_, index) => (
-                      <LoadingBox key={index} />
-                    ))}
+                    {userLoaded &&
+                      lyrics.map((lyric, index) => {
+                        const isLast = index === lyrics.length - 1;
+                        return (
+                          <div
+                            key={lyric._id}
+                            className="border-b border-gray-200 last:border-0 border-dashed"
+                          >
+                            {isMobile ? (
+                              user?.role === "premium-user" ? (
+                                <>
+                                  <LyricsRowPremium
+                                    id={lyric._id}
+                                    lyric={lyric}
+                                    isLast={isLast}
+                                    lastUserRef={lastUserRef}
+                                    hideCollection={!hasToken}
+                                  />
+                                </>
+                              ) : (
+                                <LyricsRow
+                                  id={lyric._id}
+                                  lyric={lyric}
+                                  isLast={isLast}
+                                  lastUserRef={lastUserRef}
+                                  hideCollection={!hasToken}
+                                />
+                              )
+                            ) : (
+                              <LyricsCard
+                                id={lyric._id}
+                                lyric={lyric}
+                                lastUserRef={lastUserRef}
+                                isLast={isLast}
+                                hideCollection={!hasToken}
+                              />
+                            )}
+                          </div>
+                        );
+                      })}
                   </>
                 );
-              }
-
-              if (lyrics.length === 0) {
-                return (
-                  <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
-                    <img
-                      src={EmptyData}
-                      alt="No data Found"
-                      className="w-full md:w-96 opacity-50"
-                    />
-                  </div>
-                );
-              }
-
-              return (
-                <>
-                  {lyrics.map((lyric, index) => {
-                    const isLast = index === lyrics.length - 1;
-                    return (
-                      <div
-                        key={lyric._id}
-                        className="border-b border-gray-200 last:border-0 border-dashed"
-                      >
-                        {isMobile ? (
-                          <LyricsRow
-                            id={lyric._id}
-                            lyric={lyric}
-                            isLast={isLast}
-                            lastUserRef={lastUserRef}
-                            hideCollection={!hasToken}
-                          />
-                        ) : (
-                          <LyricsCard
-                            id={lyric._id}
-                            lyric={lyric}
-                            lastUserRef={lastUserRef}
-                            isLast={isLast}
-                            hideCollection={!hasToken}
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
-                </>
-              );
-            })()}
-          </div>
+              })()}
+            </div>
+          )}
         </div>
 
         <Footer />

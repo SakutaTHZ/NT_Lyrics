@@ -30,3 +30,15 @@
     75% { transform: rotate(5deg); }
     100% { transform: rotate(0deg); }
   }
+
+  .customHeader{
+    padding: .75rem 1.5rem !important;
+    border: none !important;
+    .p-dialog-header-icons{
+      align-self: center !important;
+    }
+  }
+  .customContent{
+    padding:  .75rem 1.5rem !important;
+    border: none !important;
+  }

@@ -309,3 +309,18 @@ export const fetchLyricsByGroup = async (group, authToken) => {
     console.error("Error fetching lyrics by group:", err);
   }
 }
+
+export const validateUser = async (id,token) => {
+  try {
+    const res = await axios.get(`${apiUrl}/users/userProfile/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Error validating user:", err);
+    throw err; // optionally let the caller handle this
+  }
+}
