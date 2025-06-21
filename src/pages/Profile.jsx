@@ -154,6 +154,13 @@ const Profile = () => {
 
   const [showGroupEdit, setShowGroupEdit] = useState(false);
 
+  const handleCollectionStatusChange = useCallback(() => {
+    if (selectedGroup) {
+      getLyricsByGroup(selectedGroup, 1, true); // refresh lyrics
+      getCollection(); // refresh counts
+    }
+  }, [selectedGroup, getLyricsByGroup, getCollection]);
+
   if (loading) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
@@ -194,7 +201,23 @@ const Profile = () => {
             <div className="relative w-full flex items-center justify-center md:gap-4 border p-2 rounded-full border-gray-300 bg-white px-4">
               <div className="flex items-center gap-2 px-4">
                 <p className=" text-lg">Collected -</p>
-                <span className="font-semibold">{defaultGroupCount}</span>
+                <p>
+                  <span
+                    className={`${
+                      user.role != "premium-user" &&
+                      defaultGroupCount === 20 &&
+                      "text-red-500"
+                    } font-semibold mr-1`}
+                  >
+                    {defaultGroupCount}
+                  </span>
+                  {user.role != "premium-user" && (
+                    <span>
+                      <span className="font-normal mr-1">/</span>
+                      <span className="font-normal">20</span>
+                    </span>
+                  )}
+                </p>
               </div>
               {user.role === "premium-user" && (
                 <div className="flex items-center gap-2 px-4 border-l border-gray-300">
@@ -203,6 +226,14 @@ const Profile = () => {
                     {collection?.collections?.length ?? 0}
                   </span>
                 </div>
+              )}
+            </div>
+
+            <div className="relative">
+              {user.role != "premium-user" && defaultGroupCount === 20 && (
+                <button className="bg-amber-200 px-5 py-1 rounded-full w-full">
+                  More features in Premium <span className="text-blue-700 animate-pulse">Learn more ...</span>
+                </button>
               )}
             </div>
 
@@ -308,6 +339,9 @@ const Profile = () => {
                                 isLast={isLast}
                                 lastUserRef={lastUserRef}
                                 hideCollection={true}
+                                onCollectionStatusChange={() =>
+                                  getLyricsByGroup(selectedGroup, 1, true)
+                                }
                               />
                             ) : (
                               <LyricsCard
@@ -373,6 +407,9 @@ const Profile = () => {
                             lyric={lyric}
                             isLast={isLast}
                             lastUserRef={lastUserRef}
+                            onCollectionStatusChange={
+                              handleCollectionStatusChange
+                            }
                           />
                         ) : (
                           <LyricsCard
