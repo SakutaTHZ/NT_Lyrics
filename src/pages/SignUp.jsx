@@ -18,6 +18,7 @@ const SignUp = () => {
   const [isNameCorrect, setIsNameCorrect] = useState(true);
   const [isEmailCorrect, setIsEmailCorrect] = useState(true);
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
   //Check Errors for textboxes
   //Check Name
@@ -75,16 +76,13 @@ const SignUp = () => {
     };
 
     try {
-      const response = await fetch(
-        `${apiUrl}/users/registerUser`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData),
-        }
-      );
+      const response = await fetch(`${apiUrl}/users/registerUser`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -92,22 +90,24 @@ const SignUp = () => {
         throw new Error(
           `Signup failed: ${response.statusText}, ${JSON.stringify(errorData)}`
         );
-      }else{
-        showNewMessage("success", "Signup successful! Please Verify your Email.");
+      } else {
+        showNewMessage(
+          "success",
+          "Signup successful! Please Verify your Email."
+        );
       }
       loginAction({ email, password });
     } catch (error) {
       console.error(error.message.errors);
+        setErrorMessage("Signup failed. Try again.");
     }
   };
-
-  
 
   return (
     <>
       {showMessage && (
-            <MessagePopup message_type={messageType} message_text={messageText} />
-          )}
+        <MessagePopup message_type={messageType} message_text={messageText} />
+      )}
       <div
         className="flex w-screen h-screen justify-center items-center overflow-hidden"
         id="main-content"
@@ -191,6 +191,14 @@ const SignUp = () => {
               characters.
             </p>
           </div>
+
+          {/* Show API Error */}
+          {errorMessage && (
+            <p className="text-sm bg-red-100 p-2 rounded-md text-red-500">
+              {errorMessage}
+            </p>
+          )}
+
           <Normal_Button
             custom_class={
               "w-full bg-blue-500 border-transparent text-white font-medium"

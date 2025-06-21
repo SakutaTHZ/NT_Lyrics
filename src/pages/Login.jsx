@@ -64,7 +64,7 @@ const Login = () => {
       if(response.message === "Email not verified. Please verify first.") {
         setShowResendDialog(true); 
       }
-      setErrorMessage(response.message || "Login failed. Try again.");
+      setErrorMessage("Login failed. Try again.");
     }
   };
 
