@@ -108,6 +108,7 @@ const Profile = () => {
         );
 
         const data = res.data.lyrics;
+        console.log("Fetched lyrics:", data);
 
         if (!Array.isArray(data)) {
           console.error("Expected array, got:", data);

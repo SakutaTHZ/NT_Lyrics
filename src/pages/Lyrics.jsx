@@ -142,7 +142,8 @@ const Lyrics = () => {
         });
 
         const data = res.data.lyrics;
-        console.log("Fetched lyrics:", data);
+
+        console.log("Fetched lyrics data:", data);
 
         if (!Array.isArray(data)) {
           console.error("Expected array, got:", data);
@@ -196,7 +197,7 @@ const Lyrics = () => {
 
     const id = JSON.parse(localStorage.getItem("user") || "{}")?.id;
     if (!id) {
-      console.error("User ID not found in localStorage");
+      setUserLoaded(true);
       return;
     }
 
