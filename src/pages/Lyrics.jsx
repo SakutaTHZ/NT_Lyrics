@@ -122,7 +122,7 @@ const Lyrics = () => {
         const res = await axios.get(`${apiUrl}/lyrics/searchLyrics`, {
           params: {
             page: pageNum,
-            limit: 20,
+            limit: 8,
             type: searchMethod,
             keyword:
               searchMethod === "all"
@@ -351,9 +351,9 @@ const Lyrics = () => {
             <div
               className={`grid ${
                 loading || lyrics.length > 0
-                  ? "md:grid-cols-5 md:place-items-center"
-                  : "grid-cols-1"
-              } p-2 pb-4 gap-0 md:gap-12 px-4 md:px-24`}
+                  ? "md:grid-cols-5 md:place-items-center md:gap-6"
+                  : "grid-cols-1 md:gap-12"
+              } p-2 pb-4 gap-0 px-4 md:px-24`}
             >
               {(() => {
                 if (loading && !initialLoadDone) {

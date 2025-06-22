@@ -18,6 +18,8 @@ const LyricsCard = ({
   isLast,
   lastUserRef,
   hideCollection = false,
+  // variable pass to parent if collection status is changed
+  onCollectionStatusChange = () => {},
 }) => {
   const ref = isLast ? lastUserRef : null;
   const [showMessage, setShowMessage] = useState(false);
@@ -58,14 +60,16 @@ const LyricsCard = ({
 
       setIsInCollection(shouldAdd);
       setMessageText(message);
+      onCollectionStatusChange(); // Notify parent about the change
 
       return res;
     } catch (err) {
-      console.error("Error changing lyrics status:", err);
-      setMessageText("Failed to change lyrics status");
+      console.log(err.message);
+      setMessageType('error')
+      setMessageText(err.message + "\nTry Premium for more features.");
     } finally {
       setShowMessage(true);
-      setTimeout(() => setShowMessage(false), 2000);
+      setTimeout(() => setShowMessage(false), 4000);
     }
   };
 
@@ -132,6 +136,7 @@ LyricsCard.propTypes = {
   lastUserRef: PropTypes.object,
   isLast: PropTypes.bool,
   hideCollection: PropTypes.bool,
+  onCollectionStatusChange: PropTypes.func,
 };
 
 export default LyricsCard;

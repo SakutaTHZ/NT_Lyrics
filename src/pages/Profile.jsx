@@ -296,9 +296,9 @@ const Profile = () => {
               <div
                 className={`grid ${
                   loading || selectedGroupLyrics.length > 0
-                    ? "md:grid-cols-5 md:place-items-center"
-                    : "grid-cols-1"
-                } p-2 py-4 gap-0 md:gap-12 px-4 md:px-24 border border-gray-200 rounded-b-md`}
+                    ? "md:grid-cols-5 md:place-items-center md:gap-6"
+                    : "grid-cols-1 md:gap-12"
+                } p-2 py-4 gap-0 px-4 md:px-24 border border-gray-200 rounded-b-md`}
               >
                 {(() => {
                   if (loading && !initialLoadDone) {
@@ -365,9 +365,9 @@ const Profile = () => {
           <div
             className={`grid ${
               loading || selectedGroupLyrics.length > 0
-                ? "md:grid-cols-5 md:place-items-center"
-                : "grid-cols-1"
-            } p-2 py-4 gap-0 md:gap-12 px-4 md:px-24`}
+                ? "md:grid-cols-5 md:place-items-center md:gap-6"
+                : "grid-cols-1 md:gap-12"
+            } p-2 py-4 gap-0 px-4 md:px-24`}
           >
             {(() => {
               if (loading && !initialLoadDone) {
@@ -417,6 +417,9 @@ const Profile = () => {
                             lyric={lyric}
                             lastUserRef={lastUserRef}
                             isLast={isLast}
+                            onCollectionStatusChange={
+                              handleCollectionStatusChange
+                            }
                           />
                         )}
                       </div>
