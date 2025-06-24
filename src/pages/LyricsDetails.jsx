@@ -50,7 +50,6 @@ const LyricsDetails = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log(token);
     if (token) setHasToken(true);
 
     const id = JSON.parse(localStorage.getItem("user") || "{}")?.id;
@@ -69,6 +68,11 @@ const LyricsDetails = () => {
     };
     getUser();
   }, []);
+
+  useEffect(() => {
+    console.log("User");
+    console.log(user);
+  }, [user]);
 
   if (!lyric) {
     return <p>Lyrics data not found.</p>;
@@ -140,20 +144,13 @@ const LyricsDetails = () => {
               transitionDuration={400}
               zoomMargin={20}
             >
-              <div className="relative w-full max-w-md">
-                <img
-                  src={lyric.lyricsPhoto}
-                  className="w-full rounded-lg shadow-lg"
-                  alt="Lyrics"
-                />
-                {user?.role === "free-user" && (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <p className="text-white text-2xl font-bold opacity-30 rotate-[-20deg] select-none">
-                      FREE USER
-                    </p>
-                  </div>
-                )}
-              </div>
+              <img
+                src={lyric.lyricsPhoto}
+                alt="Lyrics"
+                className={`w-full rounded-lg shadow-lg relative ${
+                  user?.role === "free-user" ? "watermarked" : ""
+                }`}
+              />
             </Zoom>
           </div>
 
@@ -300,7 +297,10 @@ const LyricsDetails = () => {
                   )
                 ) : (
                   <>
-                    <Link to="/NT_Lyrics/login" className={` flex items-center gap-2 border px-2 py-1 rounded-xl border-gray-300`}>
+                    <Link
+                      to="/NT_Lyrics/login"
+                      className={` flex items-center gap-2 border px-2 py-1 rounded-xl border-gray-300`}
+                    >
                       <LuLogIn size={18} />
                       Login to try Collections
                     </Link>

@@ -206,3 +206,22 @@ img {
     opacity: 1;
   }
 }
+
+.watermarked {
+  position: relative;
+}
+
+.watermarked::after {
+  content: "FREE USER";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: black;
+  opacity: 1;
+  transform: rotate(-20deg);
+  pointer-events: none;
+}
