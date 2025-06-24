@@ -144,13 +144,24 @@ const LyricsDetails = () => {
               transitionDuration={400}
               zoomMargin={20}
             >
-              <img
-                src={lyric.lyricsPhoto}
-                alt="Lyrics"
-                className={`w-full rounded-lg shadow-lg relative ${
-                  user?.role === "free-user" ? "watermarked" : ""
+              <div
+                className={`relative w-full max-w-md rounded-lg shadow-lg overflow-hidden ${
+                  user?.role === "free-user" ? "watermark-wrapper" : ""
                 }`}
-              />
+              >
+                <img
+                  src={lyric.lyricsPhoto}
+                  alt="Lyrics"
+                  className="w-full h-auto object-cover"
+                />
+                {user?.role === "free-user" && (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                    <span className="text-white text-3xl md:text-4xl font-bold opacity-30 rotate-[-20deg] select-none">
+                      FREE USER
+                    </span>
+                  </div>
+                )}
+              </div>
             </Zoom>
           </div>
 
