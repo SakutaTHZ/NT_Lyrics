@@ -1,6 +1,11 @@
-import React, { useCallback } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  Suspense,
+} from "react";
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState, Suspense } from "react";
 import { AutoComplete } from "primereact/autocomplete";
 import { RadioButton } from "primereact/radiobutton";
 import { Dropdown } from "primereact/dropdown";
@@ -14,115 +19,59 @@ import useIsMobile from "../components/hooks/useIsMobile";
 import LyricsCard from "../components/special/LyricsCard";
 import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
-import { useRef } from "react";
 import LoadingBox from "../components/common/LoadingBox";
 
 const Footer = React.lazy(() => import("../components/common/Footer"));
 
 const Lyrics = () => {
   const [searchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
+  const debouncedSearchTerm = useDebounce(searchTerm);
+
+  const [lyrics, setLyrics] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [searchMethod, setSearchMethod] = useState("all");
+  const [selectedKey, setSelectedKey] = useState("C");
+  const [selectedWriters, setSelectedWriters] = useState("");
+  const [selectedArtist, setSelectedArtist] = useState("");
+  const [items, setItems] = useState([]);
+
+  const [singers, setSingers] = useState([]);
+  const [writers, setWriters] = useState([]);
 
   const [hasToken, setHasToken] = useState(false);
-
   const [user, setUser] = useState(null);
   const [userLoaded, setUserLoaded] = useState(false);
 
   const isMobile = useIsMobile();
-
-  const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
-  const debouncedSearchTerm = useDebounce(searchTerm);
-  const [items, setItems] = useState([]);
-
-  const [selectedKey, setSelectedKey] = useState("C");
-  const [selectedWriters, setSelectedWriters] = useState("");
-  const [selectedArtist, setSelectedArtist] = useState("");
-
-  const [searchMethod, setSearchMethod] = useState("all");
-
-  const [writers, setWriters] = useState([]);
-  const [singers, setSingers] = useState([]);
-
-  useEffect(() => {
-    const getArtists = async () => {
-      try {
-        const [singerData, writerData] = await Promise.all([
-          fetchSingers("singer"),
-          fetchSingers("writer"),
-        ]);
-
-        setSingers(singerData);
-        setWriters(writerData);
-      } catch (err) {
-        console.error("Error fetching artists:", err);
-      }
-    };
-
-    getArtists();
-  }, []);
-
-  const search = (event) => {
-    const filteredTitles = lyrics
-      .filter(
-        (item) => item.title.toLowerCase().includes(event.query.toLowerCase()) // Search by title
-      )
-      .map((item) => item.title); // Return titles
-    setItems(filteredTitles); // Set filtered titles
-  };
-
-  const valueTemplate = (option) => {
-    if (!option) return <span>Selected None</span>;
-    const displayText = option.name || "Unknown"; // Handle both dropdowns
-    return (
-      <div className="flex items-center gap-2">
-        <span>{displayText}</span>
-      </div>
-    );
-  };
-
-  const itemTemplate = (option) => {
-    const displayText = option.name || "Unknown";
-    return (
-      <div className="flex items-center gap-2 p-2">
-        <span>{displayText}</span>
-      </div>
-    );
-  };
-
-  const [lyrics, setLyrics] = useState([]);
-
-  const [page, setPage] = useState(1);
   const observer = useRef(null);
-  const [loading, setLoading] = useState(false);
-  const [totalPages, setTotalPages] = useState(0);
-  const [initialLoadDone, setInitialLoadDone] = useState(false);
 
-  const lastUserRef = useCallback(
-    (node) => {
-      if (loading || page >= totalPages) return;
-      if (observer.current) observer.current.disconnect();
+  const lastUserRef = useCallback((node) => {
+    if (loading || page >= totalPages) return;
+    if (observer.current) observer.current.disconnect();
 
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          setPage((prevPage) => prevPage + 1);
-        }
-      });
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setPage((prev) => prev + 1);
+      }
+    });
 
-      if (node) observer.current.observe(node);
-    },
-    [loading, totalPages, page]
-  );
+    if (node) observer.current.observe(node);
+  }, [loading, totalPages, page]);
 
   const fetchLyrics = useCallback(
     async (pageNum, override = false) => {
       setLoading(true);
-
       try {
         const token = localStorage.getItem("token");
-
         const res = await axios.get(`${apiUrl}/lyrics/searchLyrics`, {
           params: {
             page: pageNum,
-            limit: 8,
+            limit: 20,
             type: searchMethod,
             keyword:
               searchMethod === "all"
@@ -143,8 +92,6 @@ const Lyrics = () => {
 
         const data = res.data.lyrics;
 
-        console.log("Fetched lyrics data:", data);
-
         if (!Array.isArray(data)) {
           console.error("Expected array, got:", data);
           return [];
@@ -153,8 +100,7 @@ const Lyrics = () => {
         const newData = data;
 
         setLyrics((prev) => {
-          const merged =
-            override || pageNum === 1 ? newData : [...prev, ...newData];
+          const merged = override || pageNum === 1 ? newData : [...prev, ...newData];
           const unique = Array.from(
             new Map(merged.map((item) => [item._id, item])).values()
           );
@@ -163,31 +109,79 @@ const Lyrics = () => {
 
         setTotalPages(res.data.totalPages);
         setInitialLoadDone(true);
-      } catch (error) {
-        console.error("Failed to fetch lyrics:", error);
+      } catch (err) {
+        console.error("Failed to fetch lyrics:", err);
         return [];
       } finally {
         setLoading(false);
       }
     },
-    [
-      searchMethod,
-      debouncedSearchTerm,
-      selectedArtist,
-      selectedWriters,
-      selectedKey,
-    ]
+    [searchMethod, debouncedSearchTerm, selectedArtist, selectedWriters, selectedKey]
   );
+
+  // 🔄 Reset lyrics when search method changes
+  useEffect(() => {
+    setLyrics([]);
+    setPage(1);
+    fetchLyrics(1, true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchMethod]);
 
   useEffect(() => {
     fetchLyrics(1, true);
   }, [fetchLyrics]);
 
   useEffect(() => {
-    if (page > 1) {
-      fetchLyrics(page, false); // append mode
-    }
-  }, [page, fetchLyrics]);
+    if (page > 1) fetchLyrics(page);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
+  useEffect(() => {
+    const getArtists = async () => {
+      try {
+        const [singerData, writerData] = await Promise.all([
+          fetchSingers("singer"),
+          fetchSingers("writer"),
+        ]);
+        setSingers(singerData);
+        setWriters(writerData);
+      } catch (err) {
+        console.error("Error fetching artists:", err);
+      }
+    };
+    getArtists();
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) setHasToken(true);
+
+    const id = JSON.parse(localStorage.getItem("user") || "{}")?.id;
+    if (!id) return setUserLoaded(true);
+
+    const getUser = async () => {
+      try {
+        const userData = await validateUser(id, token);
+        if (!userData) throw new Error("No user returned");
+        setUser(userData.user);
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
+      } finally {
+        setUserLoaded(true);
+      }
+    };
+    getUser();
+  }, []);
+
+  const search = (event) => {
+    const filtered = lyrics
+      .filter((item) => item.title.toLowerCase().includes(event.query.toLowerCase()))
+      .map((item) => item.title);
+    setItems(filtered);
+  };
+
+  const valueTemplate = (option) => <span>{option?.name || "Unknown"}</span>;
+  const itemTemplate = (option) => <div className="p-2">{option?.name || "Unknown"}</div>;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
