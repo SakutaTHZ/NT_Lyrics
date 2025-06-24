@@ -70,6 +70,7 @@ const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit, isDisabled }) => {
       </td>
       <td className="px-4 py-3 font-semibold">{lyric.majorKey}</td>
       <td className="px-4 py-3">{lyric.viewCount}</td>
+      <td className="px-4 py-3">free</td>
       <td className="px-4 py-3">
         <button
           onClick={() => {

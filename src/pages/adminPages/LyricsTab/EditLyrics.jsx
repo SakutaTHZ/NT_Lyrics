@@ -32,6 +32,8 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
   const [selectedWriters, setSelectedWriters] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
 
+  const [tier, setSelectedTier] = useState("free");
+
   const [previewUrl, setPreviewUrl] = useState(lyric.lyricsPhoto);
   const [uploadedFile, setUploadedFile] = useState(null);
 
@@ -115,22 +117,21 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
     }
   }, [lyric.featureArtists, features]);
 
-  
   const deleteLyric = async () => {
     if (!lyric?._id) {
       console.error("Missing lyric ID");
       return;
     }
-  
+
     if (!token) {
       console.error("Missing auth token");
       return;
     }
 
     setIsDeleting(true);
-  
+
     try {
-        const response = await fetch(
+      const response = await fetch(
         `${apiUrl}/lyrics/deleteLyrics/${lyric._id}`,
         {
           method: "DELETE",
@@ -140,19 +141,22 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
           },
         }
       );
-  
+
       if (!response.ok) {
         const errorData = await response.json();
-        showNewMessage("error", errorData.errors?.[0]?.message || "Delete failed");
+        showNewMessage(
+          "error",
+          errorData.errors?.[0]?.message || "Delete failed"
+        );
         throw new Error(errorData.message || "Failed to delete lyric");
       }
-  
+
       showNewMessage("success", "Lyric deleted successfully");
       onClose();
       onUpdate();
     } catch (err) {
       console.error("Delete error:", err);
-    }finally {
+    } finally {
       setIsDeleting(false);
     }
   };
@@ -172,7 +176,6 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
       },
     });
   };
-
 
   const validateForm = () => {
     if (!title.trim()) return "Title is required.";
@@ -204,14 +207,11 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
     setIsLoading(true);
 
     try {
-      const res = await fetch(
-        `${apiUrl}/lyrics/updateLyrics/${lyric._id}`,
-        {
-          method: "PUT",
-          headers: { Authorization: `Bearer ${token}` },
-          body: formData,
-        }
-      );
+      const res = await fetch(`${apiUrl}/lyrics/updateLyrics/${lyric._id}`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
 
       const contentType = res.headers.get("content-type");
       const data = contentType?.includes("application/json")
@@ -251,8 +251,8 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
                   label="Title"
                   value={title}
                   onChange={setTitle}
-                  placeholder="Enter lyric title" 
-                  required={true} 
+                  placeholder="Enter lyric title"
+                  required={true}
                 />
                 <InputField
                   label="Album Name"
@@ -281,7 +281,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
                   value={selectedSingers}
                   options={singers}
                   onChange={setSelectedSingers}
-                  required={true} 
+                  required={true}
                 />
                 <MultiSelectField
                   label="Writers"
@@ -299,7 +299,12 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
             </div>
 
             <div className="mt-6">
-              <InputField label="Youtube Link (in Embed code)" value={youtubeLink} onChange={setYoutubeLink} placeholder="Enter Youtube embed link" />
+              <InputField
+                label="Youtube Link (in Embed code)"
+                value={youtubeLink}
+                onChange={setYoutubeLink}
+                placeholder="Enter Youtube embed link"
+              />
             </div>
 
             <div className="mt-6 flex gap-4 items-center w-full relative">
@@ -325,6 +330,14 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
                   className="w-full p-2 border border-gray-300 rounded-md"
                 />
               </div>
+
+              <DropdownField
+                required={true}
+                label="Tier"
+                value={tier}
+                options={["Free", "Normal", "Premium"]}
+                onChange={setSelectedTier}
+              />
             </div>
 
             <div className="flex justify-end gap-2 mt-6">
@@ -369,21 +382,21 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
               onClick={handleDelete}
             >
               {isDeleting ? (
-                  <div className="flex justify-center items-center gap-2">
-                    <AiOutlineLoading3Quarters
-                      size={16}
-                      className="animate-spin text-2xl text-red-800"
-                    />
-                    Deleting...
-                  </div>
-                ) : (
-                  "Delete"
-                )}
+                <div className="flex justify-center items-center gap-2">
+                  <AiOutlineLoading3Quarters
+                    size={16}
+                    className="animate-spin text-2xl text-red-800"
+                  />
+                  Deleting...
+                </div>
+              ) : (
+                "Delete"
+              )}
             </button>
           </div>
         </div>
       </div>
-      
+
       <ConfirmPopup />
     </ModalPortal>
   );

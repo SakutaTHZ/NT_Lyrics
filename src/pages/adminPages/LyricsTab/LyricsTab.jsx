@@ -369,7 +369,8 @@ const LyricsTab = () => {
               <th className="px-4 py-3">Features</th>
               <th className="px-4 py-3">Writers</th>
               <th className="px-4 py-3">Key</th>
-              <th className="px-4 py-3">View Count</th>
+              <th className="px-4 py-3">Views</th>
+              <th className="px-4 py-3">Tier</th>
               <th className="px-4 py-3">isEnabled</th>
               <th className="px-4 py-3">Action</th>
             </tr>
