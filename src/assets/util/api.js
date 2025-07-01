@@ -17,6 +17,7 @@ export const fetchTop10Artists = async (authToken) => {
     );
 
     return res.data.topArtists.map((artist) => ({
+      id: artist._id,
       photoLink: artist.photoLink,
       name: artist.name,
       searchCount: artist.searchCount,

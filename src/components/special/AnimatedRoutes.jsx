@@ -6,6 +6,7 @@ import "../../../src/App.css";
 import ErrorBoundary from "../../components/common/ErrorBoundary";
 import About from "../../pages/About";
 import ResetPassword from "../../pages/ResetPassword";
+import Artists from "../../pages/Artists";
 
 // Dynamically importing pages
 const Landing = React.lazy(() => import("../../../src/pages/Landing"));
@@ -261,6 +262,14 @@ const AnimatedRoutes = () => {
               element={
                 <ErrorBoundary fallback={<Not_Found />}>
                   <Artist />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/NT_Lyrics/artists"
+              element={
+                <ErrorBoundary fallback={<Not_Found />}>
+                  <Artists />
                 </ErrorBoundary>
               }
             />

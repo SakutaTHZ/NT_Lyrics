@@ -68,7 +68,7 @@ const Nav = () => {
       {!isMobile ? (
         <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-24 bg-white z-[100]">
           <Link to="/NT_Lyrics/" className="font-bold text-lg italic">
-            NT Lyrics & Chords
+            NT Lyric & Chord
           </Link>
 
           <button
