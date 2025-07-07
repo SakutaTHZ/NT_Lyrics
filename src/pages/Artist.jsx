@@ -242,7 +242,7 @@ const Artist = () => {
                       </div>
                     );
                   })}
-                {!loading && (
+                {loading && (
                   <div className="text-center py-4 text-gray-500 flex items-center justify-center gap-2">
                     <BiSearch
                       style={{
