@@ -9,6 +9,7 @@ import { LuLogIn } from "react-icons/lu";
 import useIsMobile from "../hooks/useIsMobile";
 import { useContext } from "react";
 import { AuthContext } from "../hooks/AuthProvider";
+import { BsPeople } from "react-icons/bs";
 
 const HIDDEN_PATHS = [
   "/NT_Lyrics/login",
@@ -27,6 +28,11 @@ const NAV_LINKS = [
     path: "/NT_Lyrics/lyrics",
     label: "Lyrics",
     icon: <MdOutlineLyrics size={18} className="transition-all" />,
+  },
+  {
+    path: "/NT_Lyrics/artists",
+    label: "Artists",
+    icon: <BsPeople size={18} className="transition-all" />,
   },
   {
     path: "/NT_Lyrics/about",

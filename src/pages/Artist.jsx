@@ -8,12 +8,13 @@ import EmptyData from "../assets/images/Collection list is empty.jpg";
 import { useCallback } from "react";
 import axios from "axios";
 import useIsMobile from "../components/hooks/useIsMobile";
-import { apiUrl, fetchArtistById } from "../assets/util/api";
+import { apiUrl, fetchArtistById, validateUser } from "../assets/util/api";
 import useDebounce from "../components/hooks/useDebounce";
 import { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import LyricsCard from "../components/special/LyricsCard";
 import LyricsRow from "../components/special/LyricsRow";
+import LyricsRowPremium from "../components/special/LyricRowPremium";
 
 const Artist = () => {
   const { name } = useParams();
@@ -105,6 +106,37 @@ const Artist = () => {
     [debouncedSearchTerm, name, page]
   );
 
+  const [hasToken, setHasToken] = useState(false);
+  const [user, setUser] = useState(null);
+  const [userLoaded, setUserLoaded] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setHasToken(true);
+    }
+
+    const id = JSON.parse(localStorage.getItem("user") || "{}")?.id;
+    if (!id) {
+      setUserLoaded(true);
+      return;
+    }
+
+    const getUser = async () => {
+      try {
+        const userData = await validateUser(id, token);
+        if (!userData) throw new Error("No user returned");
+        setUser(userData.user);
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
+      } finally {
+        setUserLoaded(true);
+      }
+    };
+
+    getUser();
+  }, []);
+
   useEffect(() => {
     fetchLyrics(1, true);
     getArtist();
@@ -117,8 +149,7 @@ const Artist = () => {
   return (
     <>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
-
-        <div className="relative p-4 py-2 md:px-24 pt-16 border-b border-dashed border-gray-300">
+        <div className="relative p-4 py-2 md:px-24 pt-4 md:pt-16 border-b border-dashed border-gray-300">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <img
@@ -129,14 +160,14 @@ const Artist = () => {
               />
               <div>
                 {artist ? (
-                  <p className="font-bold text-xl italic">
-                    {artist.name}&apos;s
-                  </p>
+                  <p className="font-bold text-xl italic">{artist.name}</p>
                 ) : (
                   <p className="text-gray-400 italic">Loading artist...</p>
                 )}
                 <div className="flex items-center gap-4">
-                  <p className="text-gray-500">Collection [20]</p>
+                  <p className="text-gray-500">
+                    {lyrics.length} {lyrics.length > 1 ? "songs" : "song"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -146,7 +177,7 @@ const Artist = () => {
           </div>
         </div>
 
-        <div className="flex justify-between gap-2 py-4 px-4 md:px-24 sticky top-12 bg-white  z-10">
+        <div className="flex justify-between gap-2 py-4 px-4 md:px-24 sticky top-0 md:top-12 bg-white  z-10">
           <AutoComplete
             value={searchTerm}
             suggestions={items}
@@ -163,8 +194,8 @@ const Artist = () => {
           />
         </div>
         {/* Featured Lyrics */}
-        <div className="min-h-5/6 relative p-4 py-2 pt-0 md:px-24">
-          <div className="grid grid-cols-1 md:grid-cols-4 py-4 gap-4 md:gap-12">
+        <div className="min-h-5/6 relative p-4 py-0 md:py-2 pt-0 md:px-24">
+          <div className="grid grid-cols-1 md:grid-cols-4 py-0 md:py-2 gap-4 md:gap-12">
             {lyrics.length === 0 ? (
               <div className="w-full">
                 <img
@@ -175,28 +206,42 @@ const Artist = () => {
               </div>
             ) : (
               <>
-                {lyrics.map((lyric, index) => {
-                  const isLast = index === lyrics.length - 1;
-                  return (
-                    <div key={index} className="m-0 p-0">
-                      {isMobile ? (
-                        <LyricsRow
-                          id={lyric._id}
-                          lyric={lyric}
-                          isLast={isLast}
-                          lastUserRef={lastUserRef}
-                        />
-                      ) : (
-                        <LyricsCard
-                          id={lyric._id}
-                          lyric={lyric}
-                          lastUserRef={lastUserRef}
-                          isLast={isLast}
-                        />
-                      )}
-                    </div>
-                  );
-                })}
+                {userLoaded &&
+                  lyrics.map((lyric, index) => {
+                    const isLast = index === lyrics.length - 1;
+                    return (
+                      <div key={index} className="m-0 p-0">
+                        {isMobile ? (
+                          user?.role === "premium-user" ? (
+                            <>
+                              <LyricsRowPremium
+                                id={lyric._id}
+                                lyric={lyric}
+                                isLast={isLast}
+                                lastUserRef={lastUserRef}
+                                hideCollection={!hasToken}
+                              />
+                            </>
+                          ) : (
+                            <LyricsRow
+                              id={lyric._id}
+                              lyric={lyric}
+                              isLast={isLast}
+                              lastUserRef={lastUserRef}
+                              hideCollection={!hasToken}
+                            />
+                          )
+                        ) : (
+                          <LyricsCard
+                            id={lyric._id}
+                            lyric={lyric}
+                            lastUserRef={lastUserRef}
+                            isLast={isLast}
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
                 {!loading && (
                   <div className="text-center py-4 text-gray-500 flex items-center justify-center gap-2">
                     <BiSearch
