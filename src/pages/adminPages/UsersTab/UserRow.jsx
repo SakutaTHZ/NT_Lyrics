@@ -15,7 +15,7 @@ const RoleTab = ({ role }) => {
     case "free-user":
       return (
         <span
-          className={`px-2 py-1 text-xs rounded-full font-semibold bg-gray-100 text-gray-600`}
+          className={`px-2 py-1 text-xs rounded-full font-semibold bg-blue-100 text-blue-600`}
         >
           Free
         </span>
@@ -23,14 +23,14 @@ const RoleTab = ({ role }) => {
     case "premium-user":
       return (
         <span
-          className={`px-2 py-1 text-xs rounded-full font-semibold bg-yellow-100 text-yellow-600`}
+          className={`px-2 py-1 text-xs rounded-full font-semibold bg-green-100 text-green-600`}
         >
           Premium
         </span>
       );
     default:
       <span
-        className={`px-2 py-1 text-xs rounded-full font-semibold bg-blue-100 text-blue-600`}
+        className={`px-2 py-1 text-xs rounded-full font-semibold bg-gray-100 text-gray-600`}
       >
         Unknown
       </span>;

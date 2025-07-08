@@ -24,6 +24,9 @@ const LyricsTab = () => {
     countDiff: 0,
     enabledCount: 0,
     disabledCount: 0,
+    countForFreeTier: 0,
+    countForGuestTier: 0,
+    countForPremiumTier: 0,
   });
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -44,7 +47,7 @@ const LyricsTab = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
-  const [isEnabled, setIsEnabled] = useState("");
+  const [isEnabled, setIsEnabled] = useState(true);
 
   const [singers, setSingers] = useState([]);
   const [writers, setWriters] = useState([]);
@@ -148,12 +151,12 @@ const LyricsTab = () => {
 
   //   Chart Data
   const chartData = {
-    labels: ["Disabled", "Enabled"],
+    labels: ["Guest", "Free", "Premium"],
     datasets: [
       {
-        data: [lyricsCount.disabledCount, lyricsCount.enabledCount],
-        backgroundColor: ["#eab308", "#66BB6A"],
-        hoverBackgroundColor: ["#eab308", "#81C784"],
+        data: [lyricsCount.countForGuestTier, lyricsCount.countForFreeTier, lyricsCount.countForPremiumTier],
+        backgroundColor: ["#9ca3af", "#60a5fa","#facc15"],
+        hoverBackgroundColor: ["#6b7280", "#3b82f6","#eab308"],
       },
     ],
   };
@@ -175,6 +178,7 @@ const LyricsTab = () => {
   const getLyricOverview = async () => {
     try {
       const counts = await fetchLyricOverview(localStorage.getItem("token"));
+      console.log("Lyric Overview Data:", counts);
       setLyricsCount(counts);
     } catch (err) {
       console.error("Error fetching user overview:", err);
@@ -216,8 +220,8 @@ const LyricsTab = () => {
             Total Lyrics
           </p>
           <div className="p-5 h-fit flex flex-col md:flex-row gap-2 items-center justify-between">
-            <div className="flex flex-wrap h-full w-full">
-              <div>
+            <div className="flex flex-col md:flex-row h-full w-full">
+              <div className="flex flex-col items-start justify-center p-2">
                 <p className="font-extrabold text-3xl text-gray-800">
                   {lyricsCount.totalCount}
                 </p>
@@ -228,19 +232,43 @@ const LyricsTab = () => {
                   </span>
                 </p>
               </div>
-              <div className="md:ml-4 flex flex-wrap gap-2 p-2 rounded-md md:border-l-2 border-gray-200">
-                <div className="flex items-center md:px-4 gap-3">
-                  <p className="min-w-16 text-center text-green-500 text-2xl font-bold bg-green-50 p-3 rounded-md">
+
+              <div className="md:ml-4 flex flex-row md:flex-col gap-2 p-2 rounded-md md:border-l-2 border-gray-200">
+                <div className="w-full md:w-auto flex flex-col md:flex-row items-center md:px-4 gap-3">
+                  <p className="w-full md:min-w-16 text-center text-green-500 text-xl font-bold bg-green-50 p-1 rounded-md">
                     {lyricsCount.enabledCount}
                   </p>
                   <div className="flex items-center">Enabled</div>
                 </div>
 
-                <div className="flex items-center md:px-4 gap-3">
-                  <p className="min-w-16 text-center text-yellow-500 text-2xl font-bold bg-yellow-50 p-3 rounded-md">
+                <div className="w-full md:w-auto flex flex-col md:flex-row items-center md:px-4 gap-3">
+                  <p className="w-full md:min-w-16 text-center text-red-500 text-xl font-bold bg-red-50 p-1 rounded-md">
                     {lyricsCount.disabledCount}
                   </p>
                   <div className="flex items-center">Disabled</div>
+                </div>
+              </div>
+
+              <div className="md:ml-4 flex flex-wrap gap-2 p-2 rounded-md md:border-l-2 border-gray-200">
+                <div className="flex items-center md:px-4 gap-3">
+                  <p className="min-w-16 text-center text-gray-500 text-2xl font-bold bg-gray-50 p-3 rounded-md">
+                    {lyricsCount.countForGuestTier}
+                  </p>
+                  <div className="flex items-center">Guest</div>
+                </div>
+
+                <div className="flex items-center md:px-4 gap-3">
+                  <p className="min-w-16 text-center text-blue-500 text-2xl font-bold bg-blue-50 p-3 rounded-md">
+                    {lyricsCount.countForFreeTier}
+                  </p>
+                  <div className="flex items-center">Free</div>
+                </div>
+
+                <div className="flex items-center md:px-4 gap-3">
+                  <p className="min-w-16 text-center text-yellow-500 text-2xl font-bold bg-yellow-50 p-3 rounded-md">
+                    {lyricsCount.countForPremiumTier}
+                  </p>
+                  <div className="flex items-center">Premium</div>
                 </div>
               </div>
             </div>
