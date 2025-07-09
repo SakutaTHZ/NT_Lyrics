@@ -32,7 +32,8 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
   const [selectedWriters, setSelectedWriters] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
 
-  const [tier, setSelectedTier] = useState("free");
+  const tiers = ["guest", "free", "premium"];
+  const [tier, setSelectedTier] = useState(lyric.tier); // Default to "premium"
 
   const [previewUrl, setPreviewUrl] = useState(lyric.lyricsPhoto);
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -199,6 +200,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
     selectedWriters.forEach((w) => formData.append("writers[]", w._id));
     selectedFeatures.forEach((f) => formData.append("featureArtists[]", f._id));
     formData.append("youTubeLink", youtubeLink);
+    formData.append("tier", tier);
 
     if (uploadedFile) {
       formData.append("lyricsPhoto", uploadedFile);
@@ -334,9 +336,14 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
               <DropdownField
                 required={true}
                 label="Tier"
-                value={tier}
-                options={["Free", "Normal", "Premium"]}
-                onChange={setSelectedTier}
+                value={tiers[tier]} // Show label
+                options={tiers}
+                onChange={(label) => {
+                  const index = tiers.indexOf(label);
+                  setSelectedTier(index);
+                  console.log("Selected tier:", index);
+                  console.log("Selected tier label:", label);
+                }}
               />
             </div>
 

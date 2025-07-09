@@ -178,7 +178,6 @@ const LyricsTab = () => {
   const getLyricOverview = async () => {
     try {
       const counts = await fetchLyricOverview(localStorage.getItem("token"));
-      console.log("Lyric Overview Data:", counts);
       setLyricsCount(counts);
     } catch (err) {
       console.error("Error fetching user overview:", err);

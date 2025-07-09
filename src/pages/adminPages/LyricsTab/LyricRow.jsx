@@ -1,10 +1,50 @@
 // components/UserRow.jsx
 import { MdEdit } from "react-icons/md";
 import PropTypes from "prop-types";
-import { changeLyricsEnableFlag} from "../../../assets/util/api";
+import { changeLyricsEnableFlag } from "../../../assets/util/api";
+
+function tierPill(tier) {
+  const TIER_LABELS = {
+    0: "guest",
+    1: "free",
+    2: "premium",
+    guest: "guest",
+    free: "free",
+    premium: "premium",
+  };
+
+  const label = TIER_LABELS[tier];
+
+  if (!label) return (
+    <span
+      className={`px-2 py-1 rounded-full text-sm border bg-red-50 border-red-500 text-red-500`}
+    >
+      null
+    </span>
+  );
+
+  // Return a styled pill, or just the label for now
+  return (
+    <span
+      className={`px-2 py-1 rounded-full text-sm border ${
+        label === "guest"
+          ? "bg-gray-50 border-gray-500 text-gray-500"
+          : label === "free"
+          ? "bg-blue-50 border-blue-500 text-blue-500"
+          : label === "premium"
+          ? "bg-yellow-50 border-yellow-500 text-yellow-500"
+          : "bg-red-50 border-red-500 text-red-500"
+      }`}
+    >
+      {label}
+    </span>
+  );
+}
 
 const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit, isDisabled }) => {
   const ref = isLast ? lastUserRef : null;
+
+  console.log(lyric);
 
   return (
     <tr
@@ -70,7 +110,7 @@ const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit, isDisabled }) => {
       </td>
       <td className="px-4 py-3 font-semibold">{lyric.majorKey}</td>
       <td className="px-4 py-3">{lyric.viewCount}</td>
-      <td className="px-4 py-3">free</td>
+      <td className="px-4 py-3">{tierPill(lyric.tier)}</td>
       <td className="px-4 py-3">
         <button
           onClick={() => {
@@ -83,7 +123,7 @@ const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit, isDisabled }) => {
 
             const token = localStorage.getItem("token");
 
-            const apiCall = changeLyricsEnableFlag(lyric._id, token)
+            const apiCall = changeLyricsEnableFlag(lyric._id, token);
 
             apiCall
               .then(() => {
@@ -104,7 +144,11 @@ const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit, isDisabled }) => {
       </td>
       <td className="px-4 py-3">
         <button
-          className={`w-full flex items-center justify-center p-2 rounded-md ${lyric.isEnable ? "text-blue-600 bg-blue-50":"text-gray-400 bg-gray-50"}  hover:underline text-sm cursor-pointer`}
+          className={`w-full flex items-center justify-center p-2 rounded-md ${
+            lyric.isEnable
+              ? "text-blue-600 bg-blue-50"
+              : "text-gray-400 bg-gray-50"
+          }  hover:underline text-sm cursor-pointer`}
           onClick={() => onEdit(lyric)}
           disabled={!lyric.isEnable}
         >

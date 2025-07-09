@@ -29,6 +29,9 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
   const [selectedWriters, setSelectedWriters] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
 
+  const tiers = ["guest", "free", "premium"];
+  const [tier, setSelectedTier] = useState(2); // Default to "premium"
+
   const [uploadedFile, setUploadedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -100,6 +103,7 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
     appendArrayToFormData(formData, "featureArtists[]", selectedFeatures);
     formData.append("youTubeLink", youtubeLink);
     formData.append("lyricsPhoto", uploadedFile);
+    formData.append("tier", tier);
 
     setIsLoading(true);
 
@@ -143,32 +147,90 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
           <form>
             <div className="flex flex-wrap md:flex-nowrap gap-4">
               <div className="flex flex-col w-full gap-4">
-                <InputField label="Title" value={title} onChange={setTitle} placeholder="Enter lyric title" required={true} />
-                <InputField label="Album Name" value={albumName} onChange={setAlbumName} placeholder="Enter album name" />
+                <InputField
+                  label="Title"
+                  value={title}
+                  onChange={setTitle}
+                  placeholder="Enter lyric title"
+                  required={true}
+                />
+                <InputField
+                  label="Album Name"
+                  value={albumName}
+                  onChange={setAlbumName}
+                  placeholder="Enter album name"
+                />
                 <div className="flex gap-4">
-                  <MultiSelectField label="Genres" value={selectedGenres} options={genreOptions} onChange={setSelectedGenres} />
-                  <DropdownField label="Key" value={selectedMajorKey} options={keyOptions} onChange={setSelectedMajorKey} />
+                  <MultiSelectField
+                    label="Genres"
+                    value={selectedGenres}
+                    options={genreOptions}
+                    onChange={setSelectedGenres}
+                  />
+                  <DropdownField
+                    label="Key"
+                    value={selectedMajorKey}
+                    options={keyOptions}
+                    onChange={setSelectedMajorKey}
+                  />
                 </div>
               </div>
 
               <div className="flex flex-col w-full gap-4">
-                <MultiSelectField label="Singers" value={selectedSingers} options={singers} onChange={setSelectedSingers} required={true}/>
-                <MultiSelectField label="Writers" value={selectedWriters} options={writers} onChange={setSelectedWriters} />
-                <MultiSelectField label="Features" value={selectedFeatures} options={features} onChange={setSelectedFeatures} />
+                <MultiSelectField
+                  label="Singers"
+                  value={selectedSingers}
+                  options={singers}
+                  onChange={setSelectedSingers}
+                  required={true}
+                />
+                <MultiSelectField
+                  label="Writers"
+                  value={selectedWriters}
+                  options={writers}
+                  onChange={setSelectedWriters}
+                />
+                <MultiSelectField
+                  label="Features"
+                  value={selectedFeatures}
+                  options={features}
+                  onChange={setSelectedFeatures}
+                />
               </div>
             </div>
 
             <div className="mt-6">
-              <InputField label="Youtube Link (in Embed code)" value={youtubeLink} onChange={setYoutubeLink} placeholder="Enter Youtube embed link" />
+              <InputField
+                label="Youtube Link (in Embed code)"
+                value={youtubeLink}
+                onChange={setYoutubeLink}
+                placeholder="Enter Youtube embed link"
+              />
             </div>
 
+            <div className="flex flex-col md:flex-row items-center mt-6 gap-4">
+              <div className="w-full">
+                <label className="block mb-2 text-sm font-medium text-gray-700">
+                  Upload Lyric File<span className="pl-1 text-red-500">*</span>
+                </label>
+                <input
+                  type="file"
+                  onChange={(e) => setUploadedFile(e.target.files[0])}
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                />
+              </div>
 
-            <div className="mt-6">
-              <label className="block mb-2 text-sm font-medium text-gray-700">Upload Lyric File<span className="pl-1 text-red-500">*</span></label>
-              <input
-                type="file"
-                onChange={(e) => setUploadedFile(e.target.files[0])}
-                className="w-full p-2 border border-gray-300 rounded-md"
+              <DropdownField
+                required={true}
+                label="Tier"
+                value={tiers[tier]} // Show label
+                options={tiers}
+                onChange={(label) => {
+                  const index = tiers.indexOf(label);
+                  setSelectedTier(index);
+                  console.log("Selected tier:", index);
+                  console.log("Selected tier label:", label);
+                }}
               />
             </div>
 
@@ -177,13 +239,18 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
                 type="submit"
                 disabled={isLoading}
                 className={`w-full font-semibold px-4 py-2 rounded ${
-                  isLoading ? "bg-green-100 text-green-500 cursor-not-allowed" : "bg-green-200 text-green-700"
+                  isLoading
+                    ? "bg-green-100 text-green-500 cursor-not-allowed"
+                    : "bg-green-200 text-green-700"
                 }`}
                 onClick={handleSubmit}
               >
                 {isLoading ? (
                   <div className="flex justify-center items-center gap-2">
-                    <AiOutlineLoading3Quarters className="animate-spin text-2xl text-green-700" size={16} />
+                    <AiOutlineLoading3Quarters
+                      className="animate-spin text-2xl text-green-700"
+                      size={16}
+                    />
                     Saving...
                   </div>
                 ) : (

@@ -10,7 +10,7 @@ export const DropdownField = ({ label, value, options, onChange,required  }) => 
       onChange={(e) => onChange(e.value)}
       optionLabel="name"
       placeholder="Choose one ..."
-      className="w-full"
+      className="w-full capitalize-first-letter"
       showClear
     />
   </div>
