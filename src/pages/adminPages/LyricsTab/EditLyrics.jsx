@@ -16,6 +16,7 @@ import {
 import { apiUrl, fetchSingers } from "../../../assets/util/api";
 
 const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
+  console.log("EditLyric component rendered with lyric:", lyric);
   useModalEscClose(onClose);
 
   const token = localStorage.getItem("token");

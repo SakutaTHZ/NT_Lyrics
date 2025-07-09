@@ -44,8 +44,6 @@ function tierPill(tier) {
 const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit, isDisabled }) => {
   const ref = isLast ? lastUserRef : null;
 
-  console.log(lyric);
-
   return (
     <tr
       key={lyric._id || idx}
