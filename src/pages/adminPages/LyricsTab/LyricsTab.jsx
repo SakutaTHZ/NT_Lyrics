@@ -107,8 +107,8 @@ const LyricsTab = () => {
   const getArtists = async () => {
     try {
       const [singerData, writerData] = await Promise.all([
-        fetchSingers("singer"),
-        fetchSingers("writer"),
+        fetchSingers("both"),
+        fetchSingers("both"),
       ]);
       setSingers(singerData);
       setWriters(writerData);
