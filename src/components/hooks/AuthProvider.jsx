@@ -50,7 +50,7 @@ const AuthProvider = ({ children }) => {
         if(res.user.role === "admin"){
           navigate("/NT_Lyrics/admin");
         }else{
-          navigate("/NT_Lyrics/");
+          navigate("/");
         }
       } else {
         throw new Error("Invalid response from server");
@@ -66,7 +66,7 @@ const AuthProvider = ({ children }) => {
     setToken("");
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    navigate("/NT_Lyrics/");
+    navigate("/");
   };
 
   return (

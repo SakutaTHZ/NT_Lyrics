@@ -192,7 +192,7 @@ const AnimatedRoutes = () => {
         >
           <Routes location={location}>
             <Route
-              path="/NT_Lyrics/"
+              path="/"
               element={
                 <ErrorBoundary fallback={<Not_Found />}>
                   <Landing />

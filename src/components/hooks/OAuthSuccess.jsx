@@ -12,7 +12,7 @@ const OAuthSuccess = () => {
 
     // If token and user are already stored in localStorage, skip setting again
     if (token && user) {
-      navigate(user.role === "admin" ? "/NT_Lyrics/admin" : "/NT_Lyrics/");
+      navigate(user.role === "admin" ? "/NT_Lyrics/admin" : "/");
       return;  // Prevent further execution if data is already set
     }
 
@@ -42,7 +42,7 @@ const OAuthSuccess = () => {
         setUser(userObj);
 
         // Redirect based on role
-        navigate(userObj.role === "admin" ? "/NT_Lyrics/admin" : "/NT_Lyrics/");
+        navigate(userObj.role === "admin" ? "/NT_Lyrics/admin" : "/");
       } catch (error) {
         console.error('Error decoding or parsing user data:', error);
         navigate("/login");
