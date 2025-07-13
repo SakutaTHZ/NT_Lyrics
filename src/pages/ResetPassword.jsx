@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import PasswordInput from "../components/common/Password_Input";
 import MessagePopup from "../components/common/MessagePopup";
+import { apiUrl } from "../assets/util/api";
 
 const labelClass = "text-gray-700 mb-2 font-semibold";
 
@@ -68,7 +69,7 @@ const ResetPassword = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/api/users/resetPassword/${token}`,
+        `${apiUrl}/users/resetPassword/${token}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

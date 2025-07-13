@@ -9,7 +9,7 @@ import Normal_Button from "../components/common/Normal_Button";
 import PasswordInput from "../components/common/Password_Input";
 import Preview from "../assets/images/Landing_Page.png";
 import { useAuth } from "../components/hooks/authContext";
-import { siteUrl } from "../assets/util/api";
+import { siteUrl,apiUrl } from "../assets/util/api";
 
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
@@ -83,7 +83,7 @@ const Login = () => {
     setForgotLoading(true);
     try {
       const res = await fetch(
-        "http://localhost:3000/api/users/forgotPassword",
+        `${apiUrl}/users/forgotPassword`,
         {
           method: "POST",
           headers: {
