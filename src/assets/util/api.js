@@ -327,6 +327,21 @@ export const validateUser = async (id,token) => {
   }
 }
 
+export const checkUserStatus = async (token) => {
+  try {
+    const res = await axios.get(`${apiUrl}/users/getcurrentUser`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Error validating user:", err);
+    throw err; // optionally let the caller handle this
+  }
+}
+
 export const addLyricToGroups = async (lyricId, groups, token) => {
   if (!Array.isArray(groups) || groups.length === 0) {
     throw new Error("Groups must be a non-empty array");
