@@ -22,7 +22,7 @@ const LyricsRow = ({
   // variable pass to parent if collection status is changed
   onCollectionStatusChange = () => {},
 }) => {
-   const { vibrate,  } = useVibration();
+  const { vibrateOnce } = useVibration();
 
   const ref = isLast ? lastUserRef : null;
   const [showMessage, setShowMessage] = useState(false);
@@ -68,7 +68,7 @@ const LyricsRow = ({
       return res;
     } catch (err) {
       console.log(err.message);
-      setMessageType('error')
+      setMessageType("error");
       setMessageText(err.message + "\nTry Premium for more features.");
     } finally {
       setShowMessage(true);
@@ -115,7 +115,7 @@ const LyricsRow = ({
                 custom_class={`w-8 h-8 border-transparent shadow-sm bg-red-50 text-red-500 transition-all`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  vibrate(100);
+                  vibrateOnce();
                   changeLyricsStatus(false);
                 }}
               />
@@ -126,7 +126,7 @@ const LyricsRow = ({
                 custom_class={`w-8 h-8 border-transparent shadow-sm bg-white transition-all`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  vibrate(100);
+                  vibrateOnce();
                   changeLyricsStatus(true);
                 }}
               />

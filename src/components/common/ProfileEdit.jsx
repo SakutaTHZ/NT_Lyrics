@@ -5,8 +5,11 @@ import PasswordInput from "./Password_Input";
 import { BiCheck } from "react-icons/bi";
 import { useAuth } from "../../components/hooks/authContext";
 import { apiUrl } from "../../assets/util/api"; // Adjust the import path as necessary
+import { useVibration } from "./../hooks/useVibration";
 
 const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
+  const { vibratePattern } = useVibration();
+
   const { logOut } = useAuth();
   const labelClass = "text-gray-700 font-semibold";
   const inputClass = "p-2 border border-gray-400 rounded-md";
@@ -86,17 +89,14 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
     }
 
     try {
-      const response = await fetch(
-        `${apiUrl}/users/${user.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Modify as needed
-          },
-          body: JSON.stringify(updatedUser),
-        }
-      );
+      const response = await fetch(`${apiUrl}/users/${user.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Modify as needed
+        },
+        body: JSON.stringify(updatedUser),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to update user");
@@ -175,7 +175,7 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
               <input
                 type="text"
                 id="email"
-                className={`${user?.isOAuth && 'bg-gray-100'} `+inputClass}
+                className={`${user?.isOAuth && "bg-gray-100"} ` + inputClass}
                 placeholder="Enter your Email"
                 value={email}
                 onChange={(e) => checkEmail(e.target.value)}
@@ -187,7 +187,7 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
             </div>
             {/* Password */}
 
-            <div className={`w-full ${user?.isOAuth && 'hidden'} `}>
+            <div className={`w-full ${user?.isOAuth && "hidden"} `}>
               <label
                 htmlFor="Change Password"
                 className={`${labelClass} flex justify-between items-center`}
@@ -239,6 +239,7 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
               <button
                 className="w-full bg-blue-500 px-4 text-white font-semibold p-2 rounded-md"
                 onClick={() => {
+                  vibratePattern("doubleTap");
                   updateUser();
                   closeBox();
                 }}
@@ -256,7 +257,10 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
             {/* Log Out */}
             <button
               className="w-full bg-red-500 px-4 text-white font-semibold p-2 rounded-md"
-              onClick={logOut}
+              onClick={() => {
+                logOut();
+                vibratePattern("long");
+              }}
             >
               Log Out
             </button>

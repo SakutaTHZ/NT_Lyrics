@@ -1,20 +1,52 @@
-// useVibration.js
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
-/**
- * Custom hook to trigger device vibration.
- * Supports both single duration and vibration patterns.
- */
-export function useVibration() {
-  const isSupported = typeof navigator !== 'undefined' && 'vibrate' in navigator;
+const VIBRATION_PATTERNS = {
+  short: 50,
+  long: 300,
+  doubleTap: [50, 100, 50],
+  errorBuzz: [100, 50, 100, 50, 100],
+};
 
-  const vibrate = useCallback((pattern = 200) => {
-    if (isSupported) {
-      navigator.vibrate(pattern);
-    } else {
-      console.warn('Vibration API not supported on this device/browser.');
-    }
-  }, [isSupported]);
+function isMobileDevice() {
+  if (typeof navigator === 'undefined') return false;
+  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
 
-  return { vibrate, isSupported };
+export function useVibration({ fallback = false } = {}) {
+  const isSupported = useMemo(
+    () => typeof navigator !== 'undefined' && 'vibrate' in navigator && isMobileDevice(),
+    []
+  );
+
+  const vibrateOnce = useCallback(
+    (duration = VIBRATION_PATTERNS.short) => {
+      if (isSupported) {
+        navigator.vibrate(duration);
+      } else if (fallback) {
+        console.log('[Fallback] Trigger haptic effect:', duration);
+        // Optionally trigger fallback animation or sound here
+        // e.g., play a soft click sound
+      }
+    },
+    [isSupported, fallback]
+  );
+
+  const vibratePattern = useCallback(
+    (patternName) => {
+      const pattern = VIBRATION_PATTERNS[patternName];
+      if (!pattern) {
+        console.warn(`Unknown vibration pattern: ${patternName}`);
+        return;
+      }
+      vibrateOnce(pattern);
+    },
+    [vibrateOnce]
+  );
+
+  return {
+    vibrateOnce,
+    vibratePattern,
+    isSupported,
+    presets: VIBRATION_PATTERNS,
+  };
 }
