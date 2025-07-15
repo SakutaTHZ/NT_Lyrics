@@ -5,6 +5,7 @@ const VIBRATION_PATTERNS = {
   long: 300,
   doubleTap: [50, 100, 50],
   errorBuzz: [100, 50, 100, 50, 100],
+  dandadan: [100, 50, 100, 200, 300, 100, 100, 100, 150],
 };
 
 function isMobileDevice() {

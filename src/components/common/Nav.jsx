@@ -10,6 +10,7 @@ import useIsMobile from "../hooks/useIsMobile";
 import { useContext } from "react";
 import { AuthContext } from "../hooks/AuthProvider";
 import { BsPeople } from "react-icons/bs";
+import { useVibration } from "../hooks/useVibration";
 
 const HIDDEN_PATHS = [
   "/NT_Lyrics/login",
@@ -42,6 +43,7 @@ const NAV_LINKS = [
 ];
 
 const Nav = () => {
+  const { vibratePattern } = useVibration();
   const location = useLocation();
   const isMobile = useIsMobile();
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
@@ -87,6 +89,7 @@ const Nav = () => {
           <div className="md:flex hidden items-center gap-2">
             {NAV_LINKS.map(({ path, label, icon }) => (
               <Link
+                onClick={() => vibratePattern("short")}
                 key={path}
                 to={path}
                 className={`${mobileNavStyle} ${isActive(path)}`}
@@ -97,6 +100,7 @@ const Nav = () => {
             ))}
             {isLoggedIn ? (
               <Link
+                onClick={() => vibratePattern("short")}
                 to="/NT_Lyrics/profile"
                 className={`${mobileNavStyle} ${isActive(
                   "/NT_Lyrics/profile"
@@ -107,6 +111,7 @@ const Nav = () => {
               </Link>
             ) : (
               <Link
+                onClick={() => vibratePattern("dandadan")}
                 to="/NT_Lyrics/login"
                 className={`${mobileNavStyle} ${isActive("/NT_Lyrics/login")}`}
               >
@@ -121,6 +126,7 @@ const Nav = () => {
             <div className="animate-down flex flex-col absolute top-12 shadow-sm w-full left-0 z-[99] bg-white">
               {[...NAV_LINKS].map(({ path, label, icon }) => (
                 <Link
+                  onClick={() => vibratePattern("short")}
                   key={path}
                   to={path}
                   className={`${mobileNavStyle} ${isActive(path)}`}
@@ -131,6 +137,7 @@ const Nav = () => {
               ))}
               {isLoggedIn ? (
                 <Link
+                  onClick={() => vibratePattern("short")}
                   to="/NT_Lyrics/profile"
                   className={`${mobileNavStyle} ${isActive(
                     "/NT_Lyrics/profile"
@@ -141,6 +148,7 @@ const Nav = () => {
                 </Link>
               ) : (
                 <Link
+                  onClick={() => vibratePattern("dandadan")}
                   to="/NT_Lyrics/login"
                   className={`${mobileNavStyle} ${isActive(
                     "/NT_Lyrics/login"
@@ -166,11 +174,15 @@ const Nav = () => {
                 )} w-full p-2 flex items-center justify-center flex-col`}
               >
                 <div
-                  className={`absolute  flex-shrink-0 p-2 ${isActiveIcon(path)}`}
+                  className={`absolute  flex-shrink-0 p-2 ${isActiveIcon(
+                    path
+                  )}`}
                 >
                   {icon}
                 </div>
-                <p className="text-white drop-shadow-sm  text-sm translate-y-2">{label}</p>
+                <p className="text-white drop-shadow-sm  text-sm translate-y-2">
+                  {label}
+                </p>
               </Link>
             ))}
             {isLoggedIn ? (
@@ -185,9 +197,18 @@ const Nav = () => {
                     "/NT_Lyrics/profile"
                   )}`}
                 >
-                  <CgProfile size={20} className={location.pathname === '/NT_Lyrics/profile' ? 'text-blue-500' : 'text-white'} />
+                  <CgProfile
+                    size={20}
+                    className={
+                      location.pathname === "/NT_Lyrics/profile"
+                        ? "text-blue-500"
+                        : "text-white"
+                    }
+                  />
                 </div>
-                <p className="text-white drop-shadow-sm  text-sm translate-y-2">Profile</p>
+                <p className="text-white drop-shadow-sm  text-sm translate-y-2">
+                  Profile
+                </p>
               </Link>
             ) : (
               <Link
@@ -201,9 +222,11 @@ const Nav = () => {
                     "/NT_Lyrics/login"
                   )}`}
                 >
-                  <LuLogIn size={20} className=" text-white "/>
+                  <LuLogIn size={20} className=" text-white " />
                 </div>
-                <p className="text-white drop-shadow-sm text-sm translate-y-2">Login</p>
+                <p className="text-white drop-shadow-sm text-sm translate-y-2">
+                  Login
+                </p>
               </Link>
             )}
           </div>
