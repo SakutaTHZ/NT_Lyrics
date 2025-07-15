@@ -1,15 +1,14 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { BiMenu } from "react-icons/bi";
 import { GoHome } from "react-icons/go";
 import { MdOutlineLyrics } from "react-icons/md";
 import { GrInfo } from "react-icons/gr";
 import { CgProfile } from "react-icons/cg";
 import { LuLogIn } from "react-icons/lu";
-import useIsMobile from "../hooks/useIsMobile";
-import { useContext } from "react";
-import { AuthContext } from "../hooks/AuthProvider";
 import { BsPeople } from "react-icons/bs";
+import useIsMobile from "../hooks/useIsMobile";
+import { AuthContext } from "../hooks/AuthProvider";
 import { useVibration } from "../hooks/useVibration";
 
 const HIDDEN_PATHS = [
@@ -23,37 +22,42 @@ const NAV_LINKS = [
   {
     path: "/",
     label: "Home",
-    icon: <GoHome size={18} className="transition-all" />,
+    icon: <GoHome size={18} />,
   },
   {
     path: "/NT_Lyrics/lyrics",
     label: "Lyrics",
-    icon: <MdOutlineLyrics size={18} className="transition-all" />,
+    icon: <MdOutlineLyrics size={18} />,
   },
   {
     path: "/NT_Lyrics/artists",
     label: "Artists",
-    icon: <BsPeople size={18} className="transition-all" />,
+    icon: <BsPeople size={18} />,
   },
   {
     path: "/NT_Lyrics/about",
     label: "About",
-    icon: <GrInfo size={18} className="transition-all" />,
+    icon: <GrInfo size={18} />,
   },
 ];
 
 const Nav = () => {
-  const { vibratePattern } = useVibration();
+  const navigate = useNavigate();
   const location = useLocation();
+  const { vibratePattern } = useVibration();
   const isMobile = useIsMobile();
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
+  const { user } = useContext(AuthContext);
 
+  const isLoggedIn = user !== null && typeof user === "object";
   const isHidden = HIDDEN_PATHS.some((path) =>
     location.pathname.startsWith(path)
   );
 
-  const { user } = useContext(AuthContext);
-  const isLoggedIn = user !== null && typeof user === "object";
+  const handleNav = (path, pattern = "short") => {
+    vibratePattern(pattern);
+    setTimeout(() => navigate(path), 80); // slight delay for haptic to register
+  };
 
   const isActive = (path) =>
     location.pathname === path
@@ -75,9 +79,12 @@ const Nav = () => {
       {/* Desktop Nav */}
       {!isMobile ? (
         <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-24 bg-white z-[100]">
-          <Link to="/" className="font-bold text-lg italic">
+          <button
+            onClick={() => handleNav("/")}
+            className="font-bold text-lg italic"
+          >
             NT Lyric & Chord
-          </Link>
+          </button>
 
           <button
             className="md:hidden"
@@ -88,75 +95,68 @@ const Nav = () => {
 
           <div className="md:flex hidden items-center gap-2">
             {NAV_LINKS.map(({ path, label, icon }) => (
-              <Link
-                onClick={() => vibratePattern("short")}
+              <button
                 key={path}
-                to={path}
+                onClick={() => handleNav(path)}
                 className={`${mobileNavStyle} ${isActive(path)}`}
               >
                 {icon}
                 {label}
-              </Link>
+              </button>
             ))}
             {isLoggedIn ? (
-              <Link
-                onClick={() => vibratePattern("short")}
-                to="/NT_Lyrics/profile"
+              <button
+                onClick={() => handleNav("/NT_Lyrics/profile")}
                 className={`${mobileNavStyle} ${isActive(
                   "/NT_Lyrics/profile"
                 )}`}
               >
                 <CgProfile size={18} />
                 Profile
-              </Link>
+              </button>
             ) : (
-              <Link
-                onClick={() => vibratePattern("dandadan")}
-                to="/NT_Lyrics/login"
+              <button
+                onClick={() => handleNav("/NT_Lyrics/login", "dandadan")}
                 className={`${mobileNavStyle} ${isActive("/NT_Lyrics/login")}`}
               >
                 <LuLogIn size={18} />
                 Login
-              </Link>
+              </button>
             )}
           </div>
 
-          {/* Mobile hamburger dropdown */}
           {isHamburgerOpen && (
             <div className="animate-down flex flex-col absolute top-12 shadow-sm w-full left-0 z-[99] bg-white">
               {[...NAV_LINKS].map(({ path, label, icon }) => (
-                <Link
-                  onClick={() => vibratePattern("short")}
+                <button
                   key={path}
-                  to={path}
+                  onClick={() => handleNav(path)}
                   className={`${mobileNavStyle} ${isActive(path)}`}
                 >
                   {icon}
                   {label}
-                </Link>
+                </button>
               ))}
               {isLoggedIn ? (
-                <Link
-                  onClick={() => vibratePattern("short")}
-                  to="/NT_Lyrics/profile"
+                <button
+                  onClick={() => handleNav("/NT_Lyrics/profile")}
                   className={`${mobileNavStyle} ${isActive(
                     "/NT_Lyrics/profile"
                   )}`}
                 >
                   <CgProfile size={18} />
                   Profile
-                </Link>
+                </button>
               ) : (
-                <Link
-                  onClick={() => vibratePattern("dandadan")}
-                  to="/NT_Lyrics/login"
+                <button
+                  onClick={() => handleNav("/NT_Lyrics/login", "dandadan")}
                   className={`${mobileNavStyle} ${isActive(
                     "/NT_Lyrics/login"
                   )}`}
                 >
                   <LuLogIn size={18} />
                   Login
-                </Link>
+                </button>
               )}
             </div>
           )}
@@ -166,28 +166,24 @@ const Nav = () => {
         <div className="fixed bottom-0 w-11/12 h-16 translate-y-2 meshBg shadow-sm rounded-t-4xl flex justify-center items-center z-[999] md:hidden">
           <div className="flex items-center w-full">
             {NAV_LINKS.map(({ path, label, icon }) => (
-              <Link
+              <button
                 key={path}
-                to={path}
+                onClick={() => handleNav(path)}
                 className={`${isActive(
                   path
                 )} w-full p-2 flex items-center justify-center flex-col`}
               >
-                <div
-                  className={`absolute  flex-shrink-0 p-2 ${isActiveIcon(
-                    path
-                  )}`}
-                >
+                <div className={`absolute p-2 ${isActiveIcon(path)}`}>
                   {icon}
                 </div>
-                <p className="text-white drop-shadow-sm  text-sm translate-y-2">
+                <p className="text-white drop-shadow-sm text-sm translate-y-2">
                   {label}
                 </p>
-              </Link>
+              </button>
             ))}
             {isLoggedIn ? (
-              <Link
-                to="/NT_Lyrics/profile"
+              <button
+                onClick={() => handleNav("/NT_Lyrics/profile")}
                 className={`${isActive(
                   "/NT_Lyrics/profile"
                 )} w-full p-2 flex items-center justify-center flex-col`}
@@ -206,13 +202,13 @@ const Nav = () => {
                     }
                   />
                 </div>
-                <p className="text-white drop-shadow-sm  text-sm translate-y-2">
+                <p className="text-white drop-shadow-sm text-sm translate-y-2">
                   Profile
                 </p>
-              </Link>
+              </button>
             ) : (
-              <Link
-                to="/NT_Lyrics/login"
+              <button
+                onClick={() => handleNav("/NT_Lyrics/login", "dandadan")}
                 className={`${isActive(
                   "/NT_Lyrics/login"
                 )} w-full p-2 flex items-center justify-center flex-col`}
@@ -222,12 +218,12 @@ const Nav = () => {
                     "/NT_Lyrics/login"
                   )}`}
                 >
-                  <LuLogIn size={20} className=" text-white " />
+                  <LuLogIn size={20} className="text-white" />
                 </div>
                 <p className="text-white drop-shadow-sm text-sm translate-y-2">
                   Login
                 </p>
-              </Link>
+              </button>
             )}
           </div>
         </div>
