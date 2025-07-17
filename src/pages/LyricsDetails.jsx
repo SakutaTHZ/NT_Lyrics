@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
 import { useParams, Link } from "react-router-dom";
 import { fetchLyricById } from "../assets/util/api";
+import charcoal from '../assets/images/charcoal.jpg';
 import {
   addLyricsToCollection,
   removeLyricsFromCollection,
@@ -148,10 +149,22 @@ const LyricsDetails = () => {
                 className={`relative w-full max-w-md rounded-lg shadow-lg overflow-hidden ${
                   user?.role === "free-user" ? "watermark-wrapper" : ""
                 }`}
-              >
+              > <img
+                  src={charcoal}
+                  alt="Lyrics"
+                  className="absolute h-full object-cover opacity-0"
+                  onContextMenu={(e) => e.preventDefault()}
+                  draggable={false}
+                  loading="lazy"
+                  style={{pointerEvents: "none",userSelect: "none"}}
+                />
                 <img
                   src={lyric.lyricsPhoto}
                   alt="Lyrics"
+                  onContextMenu={(e) => e.preventDefault()}
+                  draggable={false}
+                  loading="lazy"
+                  style={{pointerEvents: "none",userSelect: "none"}}
                   className="w-full h-auto object-cover"
                 />
                 {user?.role === "free-user" && (

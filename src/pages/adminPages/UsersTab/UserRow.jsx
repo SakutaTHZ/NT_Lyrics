@@ -55,6 +55,12 @@ const UserRow = ({ user, idx, isLast, lastUserRef, onEdit }) => {
       <td className="px-4 py-3 capitalize">
         <RoleTab role={user.role} />
       </td>
+      
+      <td className="px-4 py-3">{user.premiumStartDate ? new Date(user.premiumStartDate).toISOString().slice(0, 10) : "-"}</td>
+      
+      <td className="px-4 py-3">{user.premiumEndDate ? new Date(user.premiumEndDate).toISOString().slice(0, 10) : "-"}</td>
+      
+      <td className="px-4 py-3">{(user.createdAt).slice(0, 10)}</td>
       <td className="px-4 py-3">
         <span
           className={`px-2 py-1 text-xs rounded-full font-semibold ${

@@ -58,6 +58,7 @@ const UsersTab = () => {
       });
 
       const fetchedUsers = res.data.users;
+      console.log("Fetched users:", fetchedUsers);
       setUsers((prev) =>
         override || pageNum === 1 ? fetchedUsers : [...prev, ...fetchedUsers]
       );
@@ -248,6 +249,9 @@ const UsersTab = () => {
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Email</th>
               <th className="px-4 py-3">Role</th>
+              <th className="px-4 py-3">Start</th>
+              <th className="px-4 py-3">End</th>
+              <th className="px-4 py-3">Created At</th>
               <th className="px-4 py-3">Is Active</th>
               <th className="px-4 py-3">Actions</th>
             </tr>
