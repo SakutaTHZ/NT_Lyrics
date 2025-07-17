@@ -179,7 +179,7 @@ const LyricsDetails = () => {
           </div>
 
           {/* Video Box */}
-          {(lyric.youTubeLink && user.role == "premium") && (
+          {(lyric.youTubeLink && user.role == "premium-user") && (
             <div className="w-full md:w-122 aspect-video bg-gray-300 rounded-md">
               <iframe
                 className="w-full h-full rounded-md"

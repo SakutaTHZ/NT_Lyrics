@@ -23,7 +23,7 @@ export default defineConfig({
         theme_color: "#ffffff",
         background_color: "#ffffff",
         display: "standalone",
-        start_url: "/",
+        start_url: ".",
         icons: [
           {
             src: "pwa-192x192.png",
@@ -48,5 +48,18 @@ export default defineConfig({
   base: "/",
   server: {
     host: "127.0.0.1",
+    port: 5173,
+    open: true,
+  },
+  build: {
+    outDir: 'dist',
+  },
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
+  preview: {
+    port: 4173,
   },
 });

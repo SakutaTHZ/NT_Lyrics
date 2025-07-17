@@ -151,7 +151,7 @@ const Landing = () => {
           <p className="font-bold text-lg italic">Featured Lyrics</p>
           <Link
             to="/NT_Lyrics/lyrics"
-            className="border border-gray-300 px-2 py-1 rounded-md text-sm text-gray-600 hover:bg-gray-100"
+            className="border border-gray-300 px-2 py-1 rounded-md text-sm text-white bg-blue-500 hover:bg-blue-600"
           >
             See All
           </Link>
@@ -174,7 +174,7 @@ const Landing = () => {
           <p className="font-bold text-lg italic">Popular Artists</p>
           <Link
             to="/NT_Lyrics/artists"
-            className="border border-gray-300 px-2 py-1 rounded-md text-sm text-gray-600 hover:bg-gray-100"
+            className="border border-gray-300 px-2 py-1 rounded-md text-sm text-white bg-blue-500  hover:bg-blue-600 "
           >
             See All
           </Link>
