@@ -9,6 +9,8 @@ import useModalEscClose from "../../../components/hooks/useModalEscClose";
 import { ConfirmPopup } from "primereact/confirmpopup";
 import { confirmPopup } from "primereact/confirmpopup";
 
+import imageCompression from "browser-image-compression";
+
 import {
   genreOptions,
   keyOptions,
@@ -312,7 +314,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
 
             <div className="mt-6 flex gap-4 items-center w-full relative">
               <img
-                className="w-12 hover:w-72 transition-all absolute bottom-0 shadow-md"
+                className="w-12 hover:w-80 transition-all absolute bottom-0 shadow-md"
                 src={previewUrl}
                 alt=""
               />
@@ -323,10 +325,48 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => {
+                  // onChange={(e) => setUploadedFile(e.target.files[0])}
+                  onChange={async (e) => {
                     const file = e.target.files[0];
                     if (!file) return;
 
+                    const fileSizeMB = file.size / 1024 / 1024;
+                    // console.log("Original file size:", fileSizeMB.toFixed(2), "MB");
+
+                    // If already less than or equal to 3MB, skip compression
+                    if (fileSizeMB <= 1) {
+                      // console.log("File size under 3MB — skipping compression");
+                      setUploadedFile(file);
+                      return;
+                    }
+
+                    const options = {
+                      maxSizeMB: 1,
+                      maxWidthOrHeight: 1920, // Optional: Resize large images
+                      useWebWorker: true,
+                    };
+
+                    try {
+                      const compressedFile = await imageCompression(
+                        file,
+                        options
+                      );
+                      setUploadedFile(compressedFile);
+
+                      // console.log(
+                      //   "Original size:",
+                      //   fileSizeMB.toFixed(2),
+                      //   "MB"
+                      // );
+                      // console.log(
+                      //   "Compressed size:",
+                      //   (compressedFile.size / 1024 / 1024).toFixed(2),
+                      //   "MB"
+                      // );
+                    } catch (error) {
+                      console.error("Image compression failed:", error);
+                    }
+                    
                     setUploadedFile(file); // for uploading
                     setPreviewUrl(URL.createObjectURL(file)); // for previewing
                   }}

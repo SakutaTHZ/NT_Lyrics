@@ -145,6 +145,13 @@ const Landing = () => {
         </div>
       </div>
 
+      {/* Announcement Board */}
+      <div className="relative p-4 md:px-24">
+        <p className="bg-blue-50 rounded-md p-2 text-blue-950 text-sm md:text-base border border-dashed border-blue-200">
+          <b>Announcement :</b> New features coming soon!
+        </p>
+      </div>
+
       {/* Featured Lyrics */}
       <div className="relative p-4 pb-0 md:px-24">
         <div className="flex justify-between">
@@ -191,7 +198,7 @@ const Landing = () => {
             <div
               key={artist.name}
               className="border-b md:border border-gray-200 last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
-              onClick={()=>navigate(`/NT_Lyrics/artist/${artist.id}`)}
+              onClick={() => navigate(`/NT_Lyrics/artist/${artist.id}`)}
             >
               <img
                 src={artist.photoLink}
