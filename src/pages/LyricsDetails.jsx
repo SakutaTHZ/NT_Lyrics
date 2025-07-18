@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
 import { useParams, Link } from "react-router-dom";
 import { fetchLyricById } from "../assets/util/api";
-import charcoal from '../assets/images/charcoal.jpg';
+import charcoal from "../assets/images/charcoal.jpg";
 import {
   addLyricsToCollection,
   removeLyricsFromCollection,
@@ -19,6 +19,8 @@ import {
 import { validateUser } from "../assets/util/api";
 
 const LyricsDetails = () => {
+  const [imageError, setImageError] = useState(false);
+
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
 
@@ -134,10 +136,7 @@ const LyricsDetails = () => {
           <MessagePopup message_type={"success"} message_text={messageText} />
         )}
 
-        <div className="min-h-screen flex flex-col items-center justify-center gap-4 md:gap-8 md:pt-16 pt-4 px-6 md:px-24">
-          <button className="w-full" onClick={goBack}>
-            <BiArrowBack size={20} />
-          </button>
+        <div className="flex flex-col items-center justify-center gap-4 md:gap-8 md:pt-16 pt-4 px-6 md:px-24">
           {/* Image Section */}
           <div className="flex justify-center items-center w-full">
             <Zoom
@@ -149,24 +148,33 @@ const LyricsDetails = () => {
                 className={`relative w-full max-w-md rounded-lg shadow-lg overflow-hidden ${
                   user?.role === "free-user" ? "watermark-wrapper" : ""
                 }`}
-              > <img
+              >
+                {" "}
+                <img
                   src={charcoal}
                   alt="Lyrics"
                   className="absolute h-full object-cover opacity-0"
                   onContextMenu={(e) => e.preventDefault()}
                   draggable={false}
                   loading="lazy"
-                  style={{pointerEvents: "none",userSelect: "none"}}
+                  style={{ pointerEvents: "none", userSelect: "none" }}
                 />
-                <img
-                  src={lyric.lyricsPhoto}
-                  alt="Lyrics"
-                  onContextMenu={(e) => e.preventDefault()}
-                  draggable={false}
-                  loading="lazy"
-                  style={{pointerEvents: "none",userSelect: "none"}}
-                  className="w-full h-auto object-cover"
-                />
+                {!imageError ? (
+                  <img
+                    src={lyric.lyricsPhoto}
+                    alt="Lyrics"
+                    onError={() => setImageError(true)}
+                    onContextMenu={(e) => e.preventDefault()}
+                    draggable={false}
+                    loading="lazy"
+                    style={{ pointerEvents: "none", userSelect: "none" }}
+                    className="w-full h-auto object-cover"
+                  />
+                ) : (
+                  <div className="p-4 w-full md:w-122 bg-red-100 text-red-700 rounded border border-red-300 text-left">
+                    🎶 The lyric image hit a wrong note and vanished! <br/>Our backstage crew is tuning things up.
+                  </div>
+                )}
                 {user?.role === "free-user" && (
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
                     <span className="text-white text-3xl md:text-4xl font-bold opacity-30 rotate-[-20deg] select-none">
@@ -179,7 +187,7 @@ const LyricsDetails = () => {
           </div>
 
           {/* Video Box */}
-          {(lyric.youTubeLink && user.role == "premium-user") && (
+          {lyric.youTubeLink && user.role == "premium-user" && (
             <div className="w-full md:w-122 aspect-video bg-gray-300 rounded-md">
               <iframe
                 className="w-full h-full rounded-md"
@@ -333,6 +341,13 @@ const LyricsDetails = () => {
               </div>
             </div>
           </div>
+
+          <button
+            className="w-full md:w-122 border p-2 flex gap-2 items-center meshBg rounded-md text-white border-gray-100 shadow-2xl"
+            onClick={goBack}
+          >
+            <BiArrowBack size={20} /> <p>Back To Lyrics</p>
+          </button>
         </div>
 
         <Footer />

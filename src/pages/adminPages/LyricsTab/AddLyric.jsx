@@ -225,14 +225,14 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
                     // console.log("Original file size:", fileSizeMB.toFixed(2), "MB");
 
                     // If already less than or equal to 3MB, skip compression
-                    if (fileSizeMB <= 1) {
+                    if (fileSizeMB <= 3) {
                       // console.log("File size under 3MB — skipping compression");
                       setUploadedFile(file);
                       return;
                     }
 
                     const options = {
-                      maxSizeMB: 1,
+                      maxSizeMB: 3,
                       maxWidthOrHeight: 1920, // Optional: Resize large images
                       useWebWorker: true,
                     };
