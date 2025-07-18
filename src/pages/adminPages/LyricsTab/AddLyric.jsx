@@ -5,6 +5,7 @@ import InputField from "../../../components/common/InputField";
 import DropdownField from "../../../components/common/DropdownField";
 import MultiSelectField from "../../../components/common/MultiSelectField";
 import ModalPortal from "../../../components/special/ModalPortal";
+import imageCompression from "browser-image-compression";
 
 import {
   genreOptions,
@@ -215,7 +216,48 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
                 </label>
                 <input
                   type="file"
-                  onChange={(e) => setUploadedFile(e.target.files[0])}
+                  // onChange={(e) => setUploadedFile(e.target.files[0])}
+                  onChange={async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const fileSizeMB = file.size / 1024 / 1024;
+                    // console.log("Original file size:", fileSizeMB.toFixed(2), "MB");
+
+                    // If already less than or equal to 3MB, skip compression
+                    if (fileSizeMB <= 1) {
+                      // console.log("File size under 3MB — skipping compression");
+                      setUploadedFile(file);
+                      return;
+                    }
+
+                    const options = {
+                      maxSizeMB: 1,
+                      maxWidthOrHeight: 1920, // Optional: Resize large images
+                      useWebWorker: true,
+                    };
+
+                    try {
+                      const compressedFile = await imageCompression(
+                        file,
+                        options
+                      );
+                      setUploadedFile(compressedFile);
+
+                      // console.log(
+                      //   "Original size:",
+                      //   fileSizeMB.toFixed(2),
+                      //   "MB"
+                      // );
+                      // console.log(
+                      //   "Compressed size:",
+                      //   (compressedFile.size / 1024 / 1024).toFixed(2),
+                      //   "MB"
+                      // );
+                    } catch (error) {
+                      console.error("Image compression failed:", error);
+                    }
+                  }}
                   className="w-full p-2 border border-gray-300 rounded-md"
                 />
               </div>
