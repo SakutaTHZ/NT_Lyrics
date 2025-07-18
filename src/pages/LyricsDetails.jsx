@@ -176,8 +176,8 @@ const LyricsDetails = () => {
                   </div>
                 )}
                 {user?.role === "free-user" && (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                    <span className="text-white text-3xl md:text-4xl font-bold opacity-30 rotate-[-20deg] select-none">
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10  opacity-30 ">
+                    <span className="text-white text-3xl md:text-7xlxl font-bold rotate-[-20deg] select-none">
                       FREE USER
                     </span>
                   </div>
