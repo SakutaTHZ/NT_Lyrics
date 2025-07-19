@@ -4,47 +4,39 @@ import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-    VitePWA({
-      registerType: "autoUpdate",
-      includeAssets: [
-        "favicon.svg",
-        "favicon.ico",
-        "robots.txt",
-        "apple-touch-icon.png",
-      ],
-      manifest: {
-        name: "Your App Name",
-        short_name: "AppName",
-        description: "Your app description",
-        theme_color: "#ffffff",
-        background_color: "#ffffff",
-        display: "standalone",
-        start_url: "/",
-        icons: [
-          {
-            src: "pwa-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
+export default defineConfig(({ mode }) => {
+  const isDev = mode === "development";
+
+  return {
+    plugins: [
+      react(),
+      tailwindcss(),
+      !isDev &&
+        VitePWA({
+          registerType: "autoUpdate",
+          includeAssets: ["favicon.svg", "favicon.ico", "robots.txt", "apple-touch-icon.png"],
+          manifest: {
+            name: "NT Lyrics & Chords",
+            short_name: "NTLyrics",
+            start_url: "/",
+            display: "standalone",
+            background_color: "#ffffff",
+            theme_color: "#3367D6",
+            icons: [
+              {
+                src: "pwa-192x192.png",
+                type: "image/png",
+                sizes: "192x192",
+              },
+              {
+                src: "pwa-512x512.png",
+                type: "image/png",
+                sizes: "512x512",
+              },
+            ],
           },
-          {
-            src: "pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-          },
-          {
-            src: "pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "any maskable",
-          },
-        ],
-      },
-    }),
-  ],
+        }),
+    ].filter(Boolean),
   base: "/",
   server: {
     host: "127.0.0.1",
@@ -62,4 +54,5 @@ export default defineConfig({
   preview: {
     port: 4173,
   },
+  };
 });

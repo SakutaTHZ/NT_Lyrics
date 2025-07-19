@@ -143,7 +143,7 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
     <ModalPortal>
       <div className="fixed inset-0 z-[110] flex justify-center items-center">
         <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
-        <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[1000px]">
+        <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-screen md:w-[1000px] max-h-screen md:h-auto overflow-y-auto">
           <h2 className="text-xl font-bold mb-4">Add New Lyric</h2>
           <form>
             <div className="flex flex-wrap md:flex-nowrap gap-4">
@@ -161,7 +161,7 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
                   onChange={setAlbumName}
                   placeholder="Enter album name"
                 />
-                <div className="flex gap-4">
+                <div className="flex flex-col md:flex-row gap-4">
                   <MultiSelectField
                     label="Genres"
                     value={selectedGenres}
