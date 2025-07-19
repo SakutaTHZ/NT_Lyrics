@@ -22,23 +22,22 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
   }, []);
 
   const [role, setRole] = useState(user.role || "free-user");
+  const [duration, setDuration] = useState(3);
   const [isValid, setIsValid] = useState(user.isValid || false);
 
   const changeUserRole = async (userId, role, token) => {
-    const response = await fetch(
-      `${apiUrl}/users/changeUserRole`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          userId: userId,
-          userRole: role,
-        }),
-      }
-    );
+    const response = await fetch(`${apiUrl}/users/changeUserRole`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        userId: userId,
+        userRole: role,
+        duration: role === "premium-user" ? duration : undefined,
+      }),
+    });
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -48,9 +47,7 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
 
   const changeUserValidity = async (userId, isValid, token) => {
     const response = await fetch(
-      `${apiUrl}/users/${userId}?type=${
-        isValid ? "activate" : "deactivate"
-      }`,
+      `${apiUrl}/users/${userId}?type=${isValid ? "activate" : "deactivate"}`,
       {
         method: "DELETE",
         headers: {
@@ -124,6 +121,22 @@ const AddNewUser = ({ onClose, user, onUpdate, showNewMessage }) => {
                   disabled={!isValid}
                 />
               </div>
+              
+
+              {role === "premium-user" && (
+                <div className="row">
+                  <label className="block my-2 text-sm font-medium text-gray-700">
+                    Premium Months
+                  </label>
+                  <input
+                    type="number"
+                    value={duration}
+                    placeholder="Enter number of months"
+                    className="w-full p-2 py-2 border border-gray-300 rounded-md"
+                    onChange={(e) => setDuration(e.target.value)}
+                  />
+                </div>
+              )}
 
               <div className="row">
                 <label className="block my-2 text-sm font-medium text-gray-700">
