@@ -117,7 +117,7 @@ const Artists = () => {
 
               {/* Artists */}
               {artists.map((artist, idx) => {
-                const isLast = idx === artists.length - 1;
+                const isLast = idx === artists.length - 5;
                 return (
                     <div
                       key={idx}

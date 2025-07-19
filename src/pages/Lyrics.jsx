@@ -71,7 +71,7 @@ const Lyrics = () => {
         const res = await axios.get(`${apiUrl}/lyrics/searchLyrics`, {
           params: {
             page: pageNum,
-            limit: 20,
+            limit: 10,
             type: searchMethod,
             keyword:
               searchMethod === "all"
@@ -376,7 +376,7 @@ const Lyrics = () => {
                   <>
                     {userLoaded &&
                       lyrics.map((lyric, index) => {
-                        const isLast = index === lyrics.length - 1;
+                        const isLast = index === lyrics.length - 3;
                         return (
                           <div
                             key={lyric._id}

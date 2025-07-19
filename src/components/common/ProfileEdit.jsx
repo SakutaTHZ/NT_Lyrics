@@ -22,7 +22,7 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
   const [isUsernameCorrect, setIsUsernameCorrect] = useState(true);
   const checkUsername = (input) => {
     setUsername(input);
-    if (input.length < 3) {
+    if (input.length < 3 || input.length > 20) {
       setIsUsernameCorrect(false);
     } else {
       setIsUsernameCorrect(true);
