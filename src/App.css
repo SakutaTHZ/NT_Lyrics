@@ -1,44 +1,75 @@
 
-[data-rmiz-modal-overlay="visible"]{
-    background-color: rgba(0, 0, 0, 0.3) !important;
-    backdrop-filter: blur(5px);
-  }
+[data-rmiz-modal-overlay="visible"] {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(5px);
+}
 
-  .lyrics-searchBox{
-    .p-autocomplete-input{
-      width: 100%;
-    }
+.lyrics-searchBox {
+  .p-autocomplete-input {
+    width: 100%;
   }
+}
 
-  .custom-checkbox .p-checkbox-box {
-    width: 1.5rem;  /* Adjust checkbox size */
-    height: 1.5rem;
-    border-radius: 4px;
-  }
-  
-  .custom-checkbox.p-checkbox-checked .p-checkbox-box {
-    background-color: var(--role-color) !important;
-    border-color: var(--role-color) !important;
-  }
+.custom-checkbox .p-checkbox-box {
+  width: 1.5rem; /* Adjust checkbox size */
+  height: 1.5rem;
+  border-radius: 4px;
+}
 
-  @keyframes wave {
-    0% { transform: rotate(0deg); }
-    15% { transform: rotate(15deg); }
-    30% { transform: rotate(-10deg); }
-    45% { transform: rotate(10deg); }
-    60% { transform: rotate(-5deg); }
-    75% { transform: rotate(5deg); }
-    100% { transform: rotate(0deg); }
-  }
+.custom-checkbox.p-checkbox-checked .p-checkbox-box {
+  background-color: var(--role-color) !important;
+  border-color: var(--role-color) !important;
+}
 
-  .customHeader{
-    padding: .75rem 1.5rem !important;
-    border: none !important;
-    .p-dialog-header-icons{
-      align-self: center !important;
-    }
+@keyframes wave {
+  0% {
+    transform: rotate(0deg);
   }
-  .customContent{
-    padding:  .75rem 1.5rem !important;
-    border: none !important;
+  15% {
+    transform: rotate(15deg);
   }
+  30% {
+    transform: rotate(-10deg);
+  }
+  45% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.customHeader {
+  padding: 0.75rem 1.5rem !important;
+  border: none !important;
+  .p-dialog-header-icons {
+    align-self: center !important;
+  }
+}
+.customContent {
+  padding: 0.75rem 1.5rem !important;
+  border: none !important;
+}
+
+.glitching {
+  /* animation: glitching 5s infinite; */
+}
+
+@keyframes glitching {
+  0%,5%,10%,15%,20%,25%,30%{
+    transform: translateX(-1px);
+  }
+  2%,7%,12%,17%,22%,27%,32% {
+    transform: translateX(1px);
+  }
+  50%,
+  100% {
+    transform: translateX(0);
+  }
+}

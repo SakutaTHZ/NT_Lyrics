@@ -171,15 +171,8 @@ const LyricsDetails = () => {
                     className="w-full h-auto object-cover"
                   />
                 ) : (
-                  <div className="p-4 w-full md:w-122 bg-red-100 text-red-700 rounded border border-red-300 text-left">
+                  <div className="flex p-4 w-full md:w-122 bg-red-100 text-red-700 rounded border border-red-300 text-left">
                     🎶 The lyric image hit a wrong note and vanished! <br/>Our backstage crew is tuning things up.
-                  </div>
-                )}
-                {user?.role === "free-user" && (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10  opacity-30 ">
-                    <span className="text-white text-3xl md:text-7xlxl font-bold rotate-[-20deg] select-none">
-                      FREE USER
-                    </span>
                   </div>
                 )}
               </div>

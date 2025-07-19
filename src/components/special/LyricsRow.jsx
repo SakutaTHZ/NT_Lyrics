@@ -12,6 +12,7 @@ import {
   removeLyricsFromCollection,
 } from "../../assets/util/api";
 import { useVibration } from "../hooks/useVibration";
+import { TbError404 } from "react-icons/tb";
 
 const LyricsRow = ({
   id,
@@ -23,6 +24,7 @@ const LyricsRow = ({
   onCollectionStatusChange = () => {},
 }) => {
   const { vibrateOnce } = useVibration();
+  const [imageError, setImageError] = useState(false);
 
   const ref = isLast ? lastUserRef : null;
   const [showMessage, setShowMessage] = useState(false);
@@ -82,7 +84,7 @@ const LyricsRow = ({
         <MessagePopup message_type={messageType} message_text={messageText} />
       )}
       <motion.div
-        className="relative flex items-center w-full border-b last:border-0 border-dashed border-gray-200 py-2"
+        className={`relative flex items-center w-full border-b last:border-0 border-dashed border-gray-200 py-2 hover:bg-gray-50 cursor-pointer ${imageError && "opacity-50 text-gray-500"}`}
         onClick={goToLyricsDetails}
         ref={(node) => {
           // Combine your refs (still valid)
@@ -93,9 +95,27 @@ const LyricsRow = ({
         animate={inView ? { scale: 1, opacity: 1, y: 0 } : false} // <- this is key
         transition={{ duration: 0.35, ease: "easeOut" }}
       >
-        <img src={lyric.lyricsPhoto} className="w-12 h-12 object-contain" />
+        {!imageError ? (
+          <img
+            src={lyric.lyricsPhoto}
+            alt="Lyrics"
+            onError={() => setImageError(true)}
+            onContextMenu={(e) => e.preventDefault()}
+            draggable={false}
+            loading="lazy"
+            style={{ pointerEvents: "none", userSelect: "none" }}
+            className="w-12 h-12 object-contain"
+          />
+        ) : (
+          <div
+            style={{ pointerEvents: "none", userSelect: "none" }}
+            className="w-12 h-12 object-contain bg-gray-50 roundedd-md flex items-center justify-center"
+          >
+            <TbError404 size={24} className="text-gray-400"/>
+          </div>
+        )}
         <div className="flex justify-between items-center w-full p-2 pl-4">
-          <div className="flex flex-col gap-2">
+          <div className={`flex flex-col gap-2 ${imageError && 'glitching'}`}>
             <p className="font-semibold">{lyric?.title ?? "Sample Title"}</p>
             <p className="text-sm text-gray-500">
               {lyric.singers.map((singer, index) => (
@@ -123,7 +143,7 @@ const LyricsRow = ({
               <Normal_Button
                 icon={FaRegHeart}
                 text=""
-                custom_class={`w-8 h-8 border-transparent shadow-sm bg-white transition-all`}
+                custom_class={`w-8 h-8 border-transparent shadow-sm bg-white text-black transition-all`}
                 onClick={(e) => {
                   e.stopPropagation();
                   vibrateOnce();
