@@ -13,6 +13,7 @@ import {
   apiUrl,
 } from "../../../assets/util/api";
 import { BiSearch } from "react-icons/bi";
+import { MdExpandLess } from "react-icons/md";
 
 const ArtistsTab = () => {
   const [artists, setArtists] = useState([]);
@@ -180,6 +181,8 @@ const ArtistsTab = () => {
 
   const closeAddArtistModal = () => setOpenAddArtistModal(false);
 
+  const [showStats, setShowStats] = useState(true);
+
   return (
     <>
       {showMessage && (
@@ -189,10 +192,18 @@ const ArtistsTab = () => {
       {/* Stats */}
       <div className="w-full flex flex-col md:flex-row gap-2 md:gap-4">
         <div className="relative border border-gray-200 rounded-lg shadow-sm w-full bg-white">
-          <p className="p-3 bg-gray-100 text-gray-600 font-medium rounded-t-lg">
+          <p className="p-3 bg-gray-100 text-gray-600 font-medium rounded-t-lg flex items-center justify-between">
             Total Artists
+            <button onClick={() => setShowStats(!showStats)}>
+              <MdExpandLess
+                size={20}
+                className={`transition-all cursor-pointer ${
+                  showStats ? "rotate-0" : "rotate-180"
+                }`}
+              />
+            </button>
           </p>
-          <div className="p-5 h-fit flex flex-col md:flex-row gap-2 items-center justify-between">
+          <div className={`${showStats ? "p-5 h-fit" : "p-0 h-0"} transition-all overflow-hidden flex flex-col md:flex-row gap-2 items-center justify-between`}>
             <div className="flex flex-wrap h-full w-full">
               <div>
                 <p className="font-extrabold text-3xl text-gray-800">
