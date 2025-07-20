@@ -18,30 +18,48 @@ const AddArtist = ({ onClose, onUpdate, showNewMessage }) => {
     };
   }, []);
 
-  const [name, setName] = useState();
-  const [bio, setBio] = useState();
-  const [photoLink, setPhotoLink] = useState();
+  const checkNameWithApi = async (name) => {
+    const response = await fetch(
+      `${apiUrl}/artists/checkArtistExist?keyword=${name}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      const errorData = await response.json();
+      showNewMessage("error", errorData.errors[0].message);
+      throw new Error(errorData.errors[0].message);
+    }
+    const data = await response.json();
+    console.log("Check Artist Response:", data.isExist);
+    return data.isExist;
+  };
+
+  const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
+  const [photoLink, setPhotoLink] = useState("");
   const [type, setType] = useState("singer");
 
   const token = localStorage.getItem("token");
 
   const addArtist = async () => {
-    const response = await fetch(
-      `${apiUrl}/artists/createArtist`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name: name,
-          bio: bio,
-          photoLink: photoLink,
-          type: type,
-        }),
-      }
-    );
+    const response = await fetch(`${apiUrl}/artists/createArtist`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: name,
+        bio: bio,
+        photoLink: photoLink,
+        type: type,
+      }),
+    });
     if (!response.ok) {
       const errorData = await response.json();
       showNewMessage("error", errorData.errors[0].message);
@@ -52,6 +70,8 @@ const AddArtist = ({ onClose, onUpdate, showNewMessage }) => {
     const data = await response.json();
     return data;
   };
+
+  const [showDuplicateError, setShowDuplicateError] = useState(false);
 
   return (
     <>
@@ -67,12 +87,27 @@ const AddArtist = ({ onClose, onUpdate, showNewMessage }) => {
               <div className="row">
                 <label className="block my-2 text-sm font-medium text-gray-700">
                   Name
+                  {showDuplicateError && (
+                    <span className="ml-2 border px-1 py-0.5 text-xs rounded-md border-red-300 bg-red-50 text-red-600">
+                      This Artist already exists
+                    </span>
+                  )}
                 </label>
                 <input
                   type="text"
                   value={name}
                   className="w-full p-2 py-2 border border-gray-300 rounded-md"
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={async (e) => {
+                    const newName = e.target.value;
+                    setName(newName);
+
+                    try {
+                      const isExist = await checkNameWithApi(newName);
+                      setShowDuplicateError(isExist);
+                    } catch (err) {
+                      console.error("Error checking artist name:", err);
+                    }
+                  }}
                   placeholder="Enter artist name"
                 />
               </div>
