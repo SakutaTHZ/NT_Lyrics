@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import PropTypes from "prop-types";
 import InputField from "../../../components/common/InputField";
@@ -139,12 +139,60 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
     }
   };
 
+  const checkTitleWithApi = useCallback(
+    async (name) => {
+      const response = await fetch(
+        `${apiUrl}/lyrics/checkLyricsExist?keyword=${name}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        const errorData = await response.json();
+        showNewMessage("error", errorData.errors[0].message);
+        throw new Error(errorData.errors[0].message);
+      }
+      const data = await response.json();
+      console.log("Check Title Response:", data.isExist);
+      return data.isExist;
+    },
+    [showNewMessage]
+  );
+  const [showDuplicateError, setShowDuplicateError] = useState(false);
+
+  useEffect(() => {
+    const checkTitle = async () => {
+      if (!title.trim()) {
+        setShowDuplicateError(false);
+        return;
+      }
+      try {
+        const isExist = await checkTitleWithApi(title);
+        setShowDuplicateError(isExist);
+      } catch (err) {
+        console.error("Error checking title:", err);
+      }
+    };
+    checkTitle();
+  }, [title, checkTitleWithApi]);
+
   return (
     <ModalPortal>
       <div className="fixed inset-0 z-[110] flex justify-center items-center">
         <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
         <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-screen md:w-[1000px] max-h-screen md:h-auto overflow-y-auto">
-          <h2 className="text-xl font-bold mb-4">Add New Lyric</h2>
+          <h2 className="text-xl font-bold mb-4">
+            Add New Lyric
+            {showDuplicateError && (
+              <span className="ml-2 border px-1 py-0.5 text-xs rounded-md border-red-300 bg-red-50 text-red-600">
+                This Title already exists
+              </span>
+            )}
+          </h2>
           <form>
             <div className="flex flex-wrap md:flex-nowrap gap-4">
               <div className="flex flex-col w-full gap-4">
