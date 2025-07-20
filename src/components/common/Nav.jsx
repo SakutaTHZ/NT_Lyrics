@@ -126,13 +126,13 @@ const Nav = () => {
             {user?.role === "admin" && (
               <button
                 onClick={() => handleNav("/NT_Lyrics/admin")}
-                className={`${mobileNavStyle} ${isActive("/NT_Lyrics/admin")} hover:bg-red-100`}
+                className={`${mobileNavStyle} ${isActive(
+                  "/NT_Lyrics/admin"
+                )} hover:bg-red-100`}
               >
                 <span className="text-red-500">Admin</span>
               </button>
-            )
-
-            }
+            )}
           </div>
 
           {isHamburgerOpen && (

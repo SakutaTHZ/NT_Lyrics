@@ -156,7 +156,7 @@ const Lyrics = () => {
 
   const shouldHideCollection = (lyricTier = 0) => {
     console.log(`User Tier: ${userTier}, Lyric Tier: ${lyricTier}`);
-    return userTier > lyricTier; // hide if user tier is lower
+    return userTier >= lyricTier; // hide if user tier is lower
   };
 
   return (
