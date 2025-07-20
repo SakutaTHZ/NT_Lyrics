@@ -20,9 +20,12 @@ const LyricsRow = ({
   isLast,
   lastUserRef,
   hideCollection = false,
+  access,
   // variable pass to parent if collection status is changed
   onCollectionStatusChange = () => {},
 }) => {
+  console.log("LyricsRow Rendered", id, lyric);
+  console.log("Access Level:", access);
   const { vibrateOnce } = useVibration();
   const [imageError, setImageError] = useState(false);
 
@@ -84,8 +87,15 @@ const LyricsRow = ({
         <MessagePopup message_type={messageType} message_text={messageText} />
       )}
       <motion.div
-        className={`relative flex items-center w-full border-b last:border-0 border-dashed border-gray-200 py-2 hover:bg-gray-50 cursor-pointer ${imageError && "opacity-50 text-gray-500"}`}
-        onClick={goToLyricsDetails}
+        className={`relative flex items-center w-full border-b last:border-0 border-dashed border-gray-200 py-2 hover:bg-gray-50 cursor-pointer ${access ? "opacity-100" : "opacity-50 text-gray-500"} ${
+          imageError && "opacity-50 text-gray-500"
+        }`}
+        onClick={access ? goToLyricsDetails : () => {
+          setMessageText("You don't have access to this lyrics.");
+          setMessageType("error");
+          setShowMessage(true);
+          setTimeout(() => setShowMessage(false), 4000);
+        }}
         ref={(node) => {
           // Combine your refs (still valid)
           if (ref) ref(node);
@@ -111,14 +121,12 @@ const LyricsRow = ({
             style={{ pointerEvents: "none", userSelect: "none" }}
             className="w-12 h-12 object-contain bg-gray-50 roundedd-md flex items-center justify-center"
           >
-            <TbError404 size={24} className="text-gray-400"/>
+            <TbError404 size={24} className="text-gray-400" />
           </div>
         )}
         <div className="flex justify-between items-center w-full p-2 pl-4">
-          <div className={`flex flex-col gap-2 ${imageError && 'glitching'}`}>
-            <p className="font-semibold">
-              {lyric?.title ?? "Sample Title"}
-              </p>
+          <div className={`flex flex-col gap-2 ${imageError && "glitching"}`}>
+            <p className="font-semibold">{lyric?.title ?? "Sample Title"}</p>
             <p className="text-sm text-gray-500 flex items-center gap-1">
               {lyric.singers.map((singer, index) => (
                 <span key={index}>
@@ -126,11 +134,16 @@ const LyricsRow = ({
                   {index < lyric.singers.length - 1 ? ", " : ""}
                 </span>
               ))}
-              {imageError && <span className="border px-1 py-0.5 text-xs rounded-md border-gray-300 bg-gray-100">Coming Soon</span>}
+              {imageError && (
+                <span className="border px-1 py-0.5 text-xs rounded-md border-gray-300 bg-gray-100">
+                  Coming Soon
+                </span>
+              )}
             </p>
           </div>
 
-          {!hideCollection &&
+          {access &&
+            !hideCollection &&
             (isInCollection ? (
               <Normal_Button
                 icon={BsHeartFill}
@@ -168,6 +181,7 @@ LyricsRow.propTypes = {
   isLast: PropTypes.bool,
   hideCollection: PropTypes.bool,
   onCollectionStatusChange: PropTypes.func,
+  access: PropTypes.bool, // Access level for the lyrics
 };
 
 export default LyricsRow;

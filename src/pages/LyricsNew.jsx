@@ -139,6 +139,26 @@ const Lyrics = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
+  const tierMap = {
+    guest: 0,
+    free: 1,
+    premium: 2,
+  };
+
+  const getUserType = () => {
+    if (!user) return "guest";
+    if (user.role === "premium-user") return "premium";
+    return "free";
+  };
+
+  const userType = getUserType(); // "guest", "free", or "premium"
+  const userTier = tierMap[userType]; // 0, 1, or 2
+
+  const shouldHideCollection = (lyricTier = 0) => {
+  console.log(`User Tier: ${userTier}, Lyric Tier: ${lyricTier}`);
+  return userTier < lyricTier; // hide if user tier is lower
+};
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="w-screen h-screen">
@@ -196,7 +216,7 @@ const Lyrics = () => {
                   <>
                     {userLoaded &&
                       lyrics.map((lyric, index) => {
-                        const isLast = index === lyrics.length - 15;
+                        const isLast = index === lyrics.length - 5;
                         return (
                           <div
                             key={lyric._id}
@@ -220,6 +240,7 @@ const Lyrics = () => {
                                   isLast={isLast}
                                   lastUserRef={lastUserRef}
                                   hideCollection={!hasToken}
+                                  access={shouldHideCollection(lyric.tier)}
                                 />
                               )
                             ) : (
