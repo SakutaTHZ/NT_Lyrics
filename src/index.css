@@ -207,7 +207,7 @@ img {
   }
 }
 
-.watermarked {
+/* .watermarked {
   position: relative;
 }
 
@@ -223,4 +223,4 @@ img {
   opacity: 1;
   pointer-events: none;
   z-index: 10;
-}
+} */
