@@ -10,7 +10,8 @@ import Artists from "../../pages/Artists";
 
 // Dynamically importing pages
 const Landing = React.lazy(() => import("../../../src/pages/Landing"));
-const Lyrics = React.lazy(() => import("../../../src/pages/Lyrics"));
+// const Lyrics = React.lazy(() => import("../../../src/pages/Lyrics"));
+const LyricsNew = React.lazy(() => import("../../../src/pages/LyricsNew"));
 const Profile = React.lazy(() => import("../../../src/pages/Profile"));
 const Login = React.lazy(() => import("../../../src/pages/Login"));
 const Not_Found = React.lazy(() => import("../../../src/pages/Not_Found"));
@@ -245,7 +246,8 @@ const AnimatedRoutes = () => {
               path="/NT_Lyrics/lyrics"
               element={
                 <ErrorBoundary fallback={<Not_Found />}>
-                  <Lyrics />
+                  {/* <Lyrics /> */}
+                  <LyricsNew />
                 </ErrorBoundary>
               }
             />

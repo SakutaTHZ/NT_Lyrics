@@ -116,14 +116,17 @@ const LyricsRow = ({
         )}
         <div className="flex justify-between items-center w-full p-2 pl-4">
           <div className={`flex flex-col gap-2 ${imageError && 'glitching'}`}>
-            <p className="font-semibold">{lyric?.title ?? "Sample Title"}</p>
-            <p className="text-sm text-gray-500">
+            <p className="font-semibold">
+              {lyric?.title ?? "Sample Title"}
+              </p>
+            <p className="text-sm text-gray-500 flex items-center gap-1">
               {lyric.singers.map((singer, index) => (
                 <span key={index}>
                   {singer.name}
                   {index < lyric.singers.length - 1 ? ", " : ""}
                 </span>
               ))}
+              {imageError && <span className="border px-1 py-0.5 text-xs rounded-md border-gray-300 bg-gray-100">Coming Soon</span>}
             </p>
           </div>
 
