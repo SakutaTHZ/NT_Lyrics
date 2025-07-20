@@ -155,9 +155,9 @@ const Lyrics = () => {
   const userTier = tierMap[userType]; // 0, 1, or 2
 
   const shouldHideCollection = (lyricTier = 0) => {
-  console.log(`User Tier: ${userTier}, Lyric Tier: ${lyricTier}`);
-  return userTier < lyricTier; // hide if user tier is lower
-};
+    console.log(`User Tier: ${userTier}, Lyric Tier: ${lyricTier}`);
+    return userTier > lyricTier; // hide if user tier is lower
+  };
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
