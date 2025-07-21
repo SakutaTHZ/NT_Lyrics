@@ -14,6 +14,8 @@ import {
 import { useVibration } from "../hooks/useVibration";
 import { TbError404 } from "react-icons/tb";
 
+import { useMemo } from "react";
+
 const LyricsRow = ({
   id,
   lyric,
@@ -24,8 +26,11 @@ const LyricsRow = ({
   // variable pass to parent if collection status is changed
   onCollectionStatusChange = () => {},
 }) => {
-  console.log("LyricsRow Rendered", id, lyric);
-  console.log("Access Level:", access);
+
+  const bustedImageUrl = useMemo(() => {
+  return `${lyric.lyricsPhoto}?v=${Date.now()}`;
+}, [lyric.lyricsPhoto]);
+
   const { vibrateOnce } = useVibration();
   const [imageError, setImageError] = useState(false);
 
@@ -107,7 +112,7 @@ const LyricsRow = ({
       >
         {!imageError ? (
           <img
-            src={lyric.lyricsPhoto}
+            src={bustedImageUrl}
             alt="Lyrics"
             onError={() => setImageError(true)}
             onContextMenu={(e) => e.preventDefault()}
