@@ -12,6 +12,7 @@ import { BiArrowBack } from "react-icons/bi";
 import { useParams, Link } from "react-router-dom";
 import { fetchLyricById } from "../assets/util/api";
 import charcoal from "../assets/images/charcoal.jpg";
+import loading from "../assets/images/playing.png";
 import {
   addLyricsToCollection,
   removeLyricsFromCollection,
@@ -78,7 +79,7 @@ const LyricsDetails = () => {
   }, [user]);
 
   if (!lyric) {
-    return <p>Lyrics data not found.</p>;
+    return <div className="w-screen h-screen flex items-center justify-center"><img src={loading} alt="Loading..." className="w-1/2 mx-auto" /></div>;
   }
 
   const goToArtist = (id) => {
