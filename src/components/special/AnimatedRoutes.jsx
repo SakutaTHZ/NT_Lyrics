@@ -16,7 +16,9 @@ const Profile = React.lazy(() => import("../../../src/pages/Profile"));
 const Login = React.lazy(() => import("../../../src/pages/Login"));
 const Not_Found = React.lazy(() => import("../../../src/pages/Not_Found"));
 const SignUp = React.lazy(() => import("../../../src/pages/SignUp"));
-const LyricsDetails = React.lazy(() => import("../../pages/LyricsDetails"));
+
+import LyricsDetails from "../../pages/LyricsDetails";
+
 const Artist = React.lazy(() => import("../../pages/Artist"));
 const AdminPanel = React.lazy(() =>
   import("../../pages/adminPages/AdminPanel")
