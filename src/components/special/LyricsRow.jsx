@@ -14,8 +14,6 @@ import {
 import { useVibration } from "../hooks/useVibration";
 // import { TbError404 } from "react-icons/tb";
 
-import { useMemo } from "react";
-
 const LyricsRow = ({
   id,
   lyric,
@@ -26,9 +24,6 @@ const LyricsRow = ({
   // variable pass to parent if collection status is changed
   onCollectionStatusChange = () => {},
 }) => {
-  const bustedImageUrl = useMemo(() => {
-    return `${lyric.lyricsPhoto}?v=${Date.now()}`;
-  }, [lyric.lyricsPhoto]);
 
   const { vibrateOnce } = useVibration();
   const [imageError, setImageError] = useState(false);
@@ -135,7 +130,7 @@ const LyricsRow = ({
 
         {/* Invisible image just for checking if lyrics is ready */}
         <img
-          src={bustedImageUrl}
+          src={lyric.lyricsPhoto}
           alt="lyrics hidden checker"
           onError={() => setImageError(true)}
           onLoad={() => setImageError(false)}
@@ -151,11 +146,6 @@ const LyricsRow = ({
                   {index < lyric.singers.length - 1 ? ", " : ""}
                 </span>
               ))}
-              {imageError && (
-                <span className="border px-1 py-0.5 text-xs rounded-md border-gray-300 bg-gray-100">
-                  Coming Soon
-                </span>
-              )}
             </p>
           </div>
 
