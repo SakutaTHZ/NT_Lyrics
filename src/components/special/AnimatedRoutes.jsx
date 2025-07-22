@@ -1,34 +1,26 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMemo } from "react";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import "../../../src/App.css";
 import ErrorBoundary from "../../components/common/ErrorBoundary";
 import About from "../../pages/About";
 import ResetPassword from "../../pages/ResetPassword";
 import Artists from "../../pages/Artists";
 
-// Dynamically importing pages
-const Landing = React.lazy(() => import("../../../src/pages/Landing"));
-// const Lyrics = React.lazy(() => import("../../../src/pages/Lyrics"));
-const LyricsNew = React.lazy(() => import("../../../src/pages/LyricsNew"));
-const Profile = React.lazy(() => import("../../../src/pages/Profile"));
-const Login = React.lazy(() => import("../../../src/pages/Login"));
-const Not_Found = React.lazy(() => import("../../../src/pages/Not_Found"));
-const SignUp = React.lazy(() => import("../../../src/pages/SignUp"));
 
 import LyricsDetails from "../../pages/LyricsDetails";
 
-const Artist = React.lazy(() => import("../../pages/Artist"));
-const AdminPanel = React.lazy(() =>
-  import("../../pages/adminPages/AdminPanel")
-);
-const OAuthSuccess = React.lazy(() =>
-  import("../../components/hooks/OAuthSuccess")
-);
-const RequireAdmin = React.lazy(() =>
-  import("../../components/hooks/RequireAdmin")
-);
+import Landing from "../../../src/pages/Landing";
+import LyricsNew from "../../../src/pages/LyricsNew";
+import Profile from "../../../src/pages/Profile";
+import Login from "../../../src/pages/Login";
+import Not_Found from "../../../src/pages/Not_Found";
+import SignUp from "../../../src/pages/SignUp";
+import Artist from "../../pages/Artist";
+import AdminPanel from "../../pages/adminPages/AdminPanel";
+import OAuthSuccess from "../../components/hooks/OAuthSuccess";
+import RequireAdmin from "../../components/hooks/RequireAdmin";
 
 // Animations to randomly pick from
 const animations = [
