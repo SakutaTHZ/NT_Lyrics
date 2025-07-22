@@ -173,7 +173,7 @@ const LyricsDetails = () => {
               }`}
             >
               <button
-                className="absolute md:hidden bottom-2 right-2 z-10 p-3 bg-blue-500 text-white rounded-full shadow-md hover:bg-gray-100 transition-all"
+                className={`absolute md:hidden bottom-2 right-2 z-10 p-3 bg-blue-500 text-white rounded-full shadow-md hover:bg-gray-100 transition-all ${imageError && "hidden"}`}
                 onClick={() => setShowGallery(true)}
               >
                 <CgMaximize size={20} />

@@ -146,6 +146,11 @@ const LyricsRow = ({
                   {index < lyric.singers.length - 1 ? ", " : ""}
                 </span>
               ))}
+              {imageError && (
+                <span className="border px-1 py-0.5 text-xs rounded-md border-gray-300 bg-gray-100">
+                  Coming Soon
+                </span>
+              )}
             </p>
           </div>
 
