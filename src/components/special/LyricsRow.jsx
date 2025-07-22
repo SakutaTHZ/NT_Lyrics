@@ -12,7 +12,7 @@ import {
   removeLyricsFromCollection,
 } from "../../assets/util/api";
 import { useVibration } from "../hooks/useVibration";
-import { TbError404 } from "react-icons/tb";
+// import { TbError404 } from "react-icons/tb";
 
 import { useMemo } from "react";
 
@@ -26,10 +26,9 @@ const LyricsRow = ({
   // variable pass to parent if collection status is changed
   onCollectionStatusChange = () => {},
 }) => {
-
   const bustedImageUrl = useMemo(() => {
-  return `${lyric.lyricsPhoto}?v=${Date.now()}`;
-}, [lyric.lyricsPhoto]);
+    return `${lyric.lyricsPhoto}?v=${Date.now()}`;
+  }, [lyric.lyricsPhoto]);
 
   const { vibrateOnce } = useVibration();
   const [imageError, setImageError] = useState(false);
@@ -92,15 +91,19 @@ const LyricsRow = ({
         <MessagePopup message_type={messageType} message_text={messageText} />
       )}
       <motion.div
-        className={`relative flex items-center w-full border-b last:border-0 border-dashed border-gray-200 py-2 hover:bg-gray-50 cursor-pointer ${access ? "opacity-100" : "opacity-50 text-gray-500"} ${
-          imageError && "opacity-50 text-gray-500"
-        }`}
-        onClick={access ? goToLyricsDetails : () => {
-          setMessageText("You don't have access to this lyrics.");
-          setMessageType("error");
-          setShowMessage(true);
-          setTimeout(() => setShowMessage(false), 4000);
-        }}
+        className={`relative flex items-center w-full border-b last:border-0 border-dashed border-gray-200 py-2 hover:bg-gray-50 cursor-pointer ${
+          access ? "opacity-100" : "opacity-50 text-gray-500"
+        } ${imageError && "opacity-50 text-gray-500"}`}
+        onClick={
+          access
+            ? goToLyricsDetails
+            : () => {
+                setMessageText("You don't have access to this lyrics.");
+                setMessageType("error");
+                setShowMessage(true);
+                setTimeout(() => setShowMessage(false), 4000);
+              }
+        }
         ref={(node) => {
           // Combine your refs (still valid)
           if (ref) ref(node);
@@ -110,7 +113,7 @@ const LyricsRow = ({
         animate={inView ? { scale: 1, opacity: 1, y: 0 } : false} // <- this is key
         transition={{ duration: 0.35, ease: "easeOut" }}
       >
-        {!imageError ? (
+        {/* {!imageError ? (
           <img
             src={bustedImageUrl}
             alt="Lyrics"
@@ -128,8 +131,17 @@ const LyricsRow = ({
           >
             <TbError404 size={24} className="text-gray-400" />
           </div>
-        )}
-        <div className="flex justify-between items-center w-full p-2 pl-4">
+        )} */}
+
+        {/* Invisible image just for checking if lyrics is ready */}
+        <img
+          src={bustedImageUrl}
+          alt="lyrics hidden checker"
+          onError={() => setImageError(true)}
+          onLoad={() => setImageError(false)}
+          className="hidden"
+        />
+        <div className="flex justify-between items-center w-full p-2">
           <div className={`flex flex-col gap-2 ${imageError && "glitching"}`}>
             <p className="font-semibold">{lyric?.title ?? "Sample Title"}</p>
             <p className="text-sm text-gray-500 flex items-center gap-1">

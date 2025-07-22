@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import MessagePopup from "../common/MessagePopup";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -71,6 +71,12 @@ const LyricRowPremium = ({
     }
   };
 
+  const bustedImageUrl = useMemo(() => {
+    return `${lyric.lyricsPhoto}?v=${Date.now()}`;
+  }, [lyric.lyricsPhoto]);
+
+  const [imageError, setImageError] = useState(false);
+
   return (
     <>
       {showMessage && (
@@ -89,17 +95,25 @@ const LyricRowPremium = ({
         transition={{ duration: 0.35, ease: "easeOut" }}
       >
         <div className="relative flex items-center justify-center">
-          <img src={lyric.lyricsPhoto} className="w-12 h-12 object-contain" />
-          {isInCollection && (
-            <BsHeartFill
-              size={10}
-              className="text-red-500 inline -translate-y-2 absolute left-0 top-0 translate-x-1/2"
-            />
-          )}
+          <img
+            src={bustedImageUrl}
+            alt="lyrics hidden checker"
+            onError={() => setImageError(true)}
+            onLoad={() => setImageError(false)}
+            className="hidden"
+          />
         </div>
         <div className="flex justify-between items-center w-full p-2 pl-4">
-          <div className="flex flex-col gap-2">
-            <p className="font-semibold">{lyric?.title ?? "Sample Title"}</p>
+          <div className="relative flex flex-col gap-2">
+            <p className="font-semibold">
+              {lyric?.title ?? "Sample Title"}{" "}
+              {isInCollection && (
+                <BsHeartFill
+                  size={16}
+                  className="text-red-500 inline -translate-y-0.5 ml-1"
+                />
+              )}
+            </p>
             <p className="text-sm text-gray-500">
               {lyric.singers.map((singer, index) => (
                 <span key={index}>
@@ -107,6 +121,12 @@ const LyricRowPremium = ({
                   {index < lyric.singers.length - 1 ? ", " : ""}
                 </span>
               ))}
+
+              {imageError && (
+                <span className="border ml-2 px-1 py-0.5 text-xs rounded-md border-gray-300 bg-gray-100">
+                  Coming Soon
+                </span>
+              )}
             </p>
           </div>
 

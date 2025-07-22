@@ -11,9 +11,7 @@ import axios from "axios";
 import { apiUrl } from "../assets/util/api";
 import { validateUser } from "../assets/util/api";
 import LoadingBox from "../components/common/LoadingBox";
-import useIsMobile from "../components/hooks/useIsMobile";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
-import LyricsCard from "../components/special/LyricsCard";
 import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 
@@ -35,7 +33,6 @@ const Lyrics = () => {
   const [hasToken, setHasToken] = useState(false);
   const [page, setPage] = useState(1);
 
-  const isMobile = useIsMobile();
   const observer = useRef(null);
 
   const lastUserRef = useCallback(
@@ -168,7 +165,7 @@ const Lyrics = () => {
           </div>
 
           {/* Search input for lyrics */}
-          <div className="py-4 px-4 md:px-24 sticky md:top-12 top-0 bg-white z-10">
+          <div className="py-2 px-4 md:px-24 sticky md:top-12 top-0 bg-white z-10">
             <div className="flex justify-between gap-2">
               <input
                 type="text"
@@ -185,9 +182,9 @@ const Lyrics = () => {
             <div
               className={`grid ${
                 loading || lyrics.length > 0
-                  ? "md:grid-cols-5 md:place-items-center md:gap-6"
-                  : "grid-cols-1 md:gap-12"
-              } p-2 pb-16 gap-0 px-4 md:px-24`}
+                  ? ""
+                  : "grid-cols-1"
+              } pb-16 gap-0 px-4 md:px-24`}
             >
               {(() => {
                 if (loading && !initialLoadDone) {
@@ -222,7 +219,7 @@ const Lyrics = () => {
                             key={lyric._id}
                             className="border-b border-gray-200 last:border-0 border-dashed"
                           >
-                            {isMobile ? (
+                            { (
                               user?.role === "premium-user" ? (
                                 <>
                                   <LyricsRowPremium
@@ -243,15 +240,7 @@ const Lyrics = () => {
                                   access={shouldHideCollection(lyric.tier)}
                                 />
                               )
-                            ) : (
-                              <LyricsCard
-                                id={lyric._id}
-                                lyric={lyric}
-                                lastUserRef={lastUserRef}
-                                isLast={isLast}
-                                hideCollection={!hasToken}
-                              />
-                            )}
+                            ) }
                           </div>
                         );
                       })}

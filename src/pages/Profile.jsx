@@ -6,16 +6,14 @@ import { fetchCollectionOverview } from "../assets/util/api";
 import LoadingBox from "../components/common/LoadingBox";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
 import LyricsRow from "../components/special/LyricsRow";
-import LyricsCard from "../components/special/LyricsCard";
-import useIsMobile from "../components/hooks/useIsMobile";
 import axios from "axios";
 import { apiUrl } from "../assets/util/api";
 import { BiEdit } from "react-icons/bi";
 import { CgAdd } from "react-icons/cg";
 import EditGroup from "../components/common/EditGroup";
+import LyricsRowPremium from "../components/special/LyricRowPremium";
 
 const Profile = () => {
-  const isMobile = useIsMobile();
   const [page, setPage] = useState(1);
   const observer = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -84,6 +82,26 @@ const Profile = () => {
     if (!group) return;
     setSelectedGroup(group);
     getLyricsByGroup(group, 1, true);
+  };
+
+  const tierMap = {
+    guest: 0,
+    free: 1,
+    premium: 2,
+  };
+
+  const getUserType = () => {
+    if (!user) return "guest";
+    if (user.role === "premium-user") return "premium";
+    return "free";
+  };
+
+  const userType = getUserType(); // "guest", "free", or "premium"
+  const userTier = tierMap[userType]; // 0, 1, or 2
+
+  const shouldHideCollection = (lyricTier = 0) => {
+    console.log(`User Tier: ${userTier}, Lyric Tier: ${lyricTier}`);
+    return userTier >= lyricTier; // hide if user tier is lower
   };
 
   const getLyricsByGroup = useCallback(
@@ -232,7 +250,10 @@ const Profile = () => {
             <div className="relative">
               {user.role != "premium-user" && defaultGroupCount === 20 && (
                 <button className="bg-amber-200 px-5 py-1 rounded-full w-full">
-                  More features in Premium <span className="text-blue-700 animate-pulse">Learn more ...</span>
+                  More features in Premium{" "}
+                  <span className="text-blue-700 animate-pulse">
+                    Learn more ...
+                  </span>
                 </button>
               )}
             </div>
@@ -332,26 +353,15 @@ const Profile = () => {
                             key={lyric._id}
                             className="border-b border-gray-200 last:border-0 border-dashed"
                           >
-                            {isMobile ? (
-                              <LyricsRow
-                                id={lyric._id}
-                                lyric={lyric}
-                                isLast={isLast}
-                                lastUserRef={lastUserRef}
-                                hideCollection={true}
-                                onCollectionStatusChange={() =>
-                                  getLyricsByGroup(selectedGroup, 1, true)
-                                }
-                              />
-                            ) : (
-                              <LyricsCard
-                                id={lyric._id}
-                                lyric={lyric}
-                                lastUserRef={lastUserRef}
-                                isLast={isLast}
-                                hideCollection={true}
-                              />
-                            )}
+                            {
+                              
+                                                                <LyricsRowPremium
+                                                                  id={lyric._id}
+                                                                  lyric={lyric}
+                                                                  isLast={isLast}
+                                                                  lastUserRef={lastUserRef}
+                                                                />
+                            }
                           </div>
                         );
                       })}
@@ -401,7 +411,7 @@ const Profile = () => {
                         key={lyric._id}
                         className="border-b border-gray-200 last:border-0 border-dashed"
                       >
-                        {isMobile ? (
+                        {
                           <LyricsRow
                             id={lyric._id}
                             lyric={lyric}
@@ -410,18 +420,9 @@ const Profile = () => {
                             onCollectionStatusChange={
                               handleCollectionStatusChange
                             }
+                            access={shouldHideCollection(lyric.tier)}
                           />
-                        ) : (
-                          <LyricsCard
-                            id={lyric._id}
-                            lyric={lyric}
-                            lastUserRef={lastUserRef}
-                            isLast={isLast}
-                            onCollectionStatusChange={
-                              handleCollectionStatusChange
-                            }
-                          />
-                        )}
+                        }
                       </div>
                     );
                   })}

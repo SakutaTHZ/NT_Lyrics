@@ -73,3 +73,36 @@
     transform: translateX(0);
   }
 }
+
+.lyrics-wrapper {
+  padding-left: 1.5rem; /* base = 24px */
+  padding-right: 1.5rem;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Tablet (768px and up) */
+@media (min-width: 768px) {
+  .lyrics-wrapper {
+    padding-left: 1rem;  /* 16px */
+    padding-right: 1rem;
+    padding-top: 4rem;
+    gap: 2rem;
+  }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .lyrics-width{
+    width: 100%;
+    max-width: 800px; /* Adjust as needed */
+  }
+  .lyrics-wrapper {
+    padding-left: 6rem;  /* 96px */
+    padding-right: 6rem;
+  }
+}

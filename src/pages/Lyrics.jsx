@@ -347,7 +347,7 @@ const Lyrics = () => {
                 loading || lyrics.length > 0
                   ? "md:grid-cols-5 md:place-items-center md:gap-6"
                   : "grid-cols-1 md:gap-12"
-              } p-2 pb-4 gap-0 px-4 md:px-24`}
+              } pb-4 gap-0 px-4 md:px-24`}
             >
               {(() => {
                 if (loading && !initialLoadDone) {

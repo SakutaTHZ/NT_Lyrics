@@ -1,8 +1,7 @@
 import Footer from "../components/common/Footer";
-import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import Normal_Button from "../components/common/Normal_Button";
-import { CgRemove } from "react-icons/cg";
+import { CgClose, CgMaximize, CgRemove } from "react-icons/cg";
 import { FaRegHeart, FaEye } from "react-icons/fa6";
 import { LuLogIn } from "react-icons/lu";
 import MessagePopup from "../components/common/MessagePopup";
@@ -21,6 +20,8 @@ import { validateUser } from "../assets/util/api";
 
 const LyricsDetails = () => {
   const [imageError, setImageError] = useState(false);
+
+  const [showGallery, setShowGallery] = useState(false);
 
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
@@ -79,7 +80,11 @@ const LyricsDetails = () => {
   }, [user]);
 
   if (!lyric) {
-    return <div className="w-screen h-screen flex items-center justify-center"><img src={loading} alt="Loading..." className="w-1/2 mx-auto" /></div>;
+    return (
+      <div className="w-screen h-screen flex items-center justify-center">
+        <img src={loading} alt="Loading..." className="w-1/2 mx-auto" />
+      </div>
+    );
   }
 
   const goToArtist = (id) => {
@@ -137,47 +142,69 @@ const LyricsDetails = () => {
           <MessagePopup message_type={"success"} message_text={messageText} />
         )}
 
-        <div className="flex flex-col items-center justify-center gap-4 md:gap-8 md:pt-16 pt-4 px-6 md:px-24">
+        {showGallery && (
+          <div className="animate-appear fixed inset-0 bg-[#00000090] backdrop-blur-md bg-opacity-50 flex items-center justify-center z-[10000] p-2">
+            <button
+              className="absolute flex justify-center items-center top-2 right-2 text-white bg-[#ffffff20] rounded-full p-2 hover:bg-red-600 transition-all"
+              onClick={() => setShowGallery(false)}
+            >
+              <CgClose size={24} />
+            </button>
+
+            <img
+              src={lyric.lyricsPhoto}
+              alt="Lyrics"
+              onError={() => setImageError(true)}
+              onContextMenu={(e) => e.preventDefault()}
+              draggable={false}
+              loading="lazy"
+              style={{ pointerEvents: "none", userSelect: "none" }}
+              className="w-full h-auto object-cover animate-down"
+            />
+          </div>
+        )}
+
+        <div className="lyrics-wrapper">
           {/* Image Section */}
           <div className="flex justify-center items-center w-full">
-            <Zoom
-              overlayBgColorEnd="rgba(0, 0, 0, 0.8)"
-              transitionDuration={400}
-              zoomMargin={20}
+            <div
+              className={`relative w-full lyrics-width rounded-lg shadow-lg overflow-hidden ${
+                user?.role === "free-user" ? "watermark-wrapper" : ""
+              }`}
             >
-              <div
-                className={`relative w-full max-w-md rounded-lg shadow-lg overflow-hidden ${
-                  user?.role === "free-user" ? "watermark-wrapper" : ""
-                }`}
+              <button
+                className="absolute md:hidden bottom-2 right-2 z-10 p-3 bg-blue-500 text-white rounded-full shadow-md hover:bg-gray-100 transition-all"
+                onClick={() => setShowGallery(true)}
               >
-                {" "}
+                <CgMaximize size={20} />
+              </button>{" "}
+              <img
+                src={charcoal}
+                alt="Lyrics"
+                className="absolute h-full object-cover opacity-0"
+                onContextMenu={(e) => e.preventDefault()}
+                draggable={false}
+                loading="lazy"
+                style={{ pointerEvents: "none", userSelect: "none" }}
+              />
+              {!imageError ? (
                 <img
-                  src={charcoal}
+                  src={lyric.lyricsPhoto}
                   alt="Lyrics"
-                  className="absolute h-full object-cover opacity-0"
+                  onError={() => setImageError(true)}
                   onContextMenu={(e) => e.preventDefault()}
                   draggable={false}
                   loading="lazy"
                   style={{ pointerEvents: "none", userSelect: "none" }}
+                  className="w-full h-auto object-cover"
                 />
-                {!imageError ? (
-                  <img
-                    src={lyric.lyricsPhoto}
-                    alt="Lyrics"
-                    onError={() => setImageError(true)}
-                    onContextMenu={(e) => e.preventDefault()}
-                    draggable={false}
-                    loading="lazy"
-                    style={{ pointerEvents: "none", userSelect: "none" }}
-                    className="w-full h-auto object-cover"
-                  />
-                ) : (
-                  <div className="flex p-4 w-full md:w-122 bg-red-100 text-red-700 rounded border border-red-300 text-left">
-                    🎶 The lyric image hit a wrong note and vanished! <br/>Our backstage crew is tuning things up.
-                  </div>
-                )}
-              </div>
-            </Zoom>
+              ) : (
+                <div className="flex p-4 w-full md:w-122 bg-red-100 text-red-700 rounded border border-red-300 text-left">
+                  🎶 The lyric image hit a wrong note and vanished! <br />
+                  Our backstage crew is tuning things up.
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Video Box */}
@@ -194,7 +221,7 @@ const LyricsDetails = () => {
           )}
 
           {/* Details Section */}
-          <div className="animate-down-start w-full md:w-122 h-full bg-white rounded-lg shadow-lg p-4 md:p-8 border border-gray-200">
+          <div className="lyrics-width animate-down-start w-full md:w-122 h-full bg-white rounded-lg shadow-lg p-4 md:p-8 border border-gray-200">
             <div className="flex flex-col justify-center items-start ml-4 gap-2">
               <p className="text-lg font-semibold flex items-center">
                 {lyric.title}{" "}
