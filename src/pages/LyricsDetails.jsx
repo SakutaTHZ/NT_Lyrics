@@ -75,6 +75,18 @@ const LyricsDetails = () => {
   }, []);
 
   useEffect(() => {
+  if (showGallery) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [showGallery]);
+
+  useEffect(() => {
     console.log("User");
     console.log(user);
   }, [user]);
@@ -97,6 +109,8 @@ const LyricsDetails = () => {
   const goBack = () => {
     navigate(-1);
   };
+
+  
 
   const changeLyricsStatus = async (shouldAdd) => {
     const token = localStorage.getItem("token");
@@ -135,9 +149,11 @@ const LyricsDetails = () => {
     }
   };
 
+  
+
   return (
     userLoaded && (
-      <div className="w-screen min-h-screen">
+      <div className="w-screen min-h-screen h-screen overflow-hidden overflow-y-auto">
         {showMessage && (
           <MessagePopup message_type={"success"} message_text={messageText} />
         )}
