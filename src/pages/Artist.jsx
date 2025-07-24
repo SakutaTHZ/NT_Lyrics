@@ -74,7 +74,7 @@ const Artist = () => {
           {
             params: {
               page: pageNum,
-              limit: 8,
+              limit: 20,
               keyword: debouncedSearchTerm,
             },
           }
