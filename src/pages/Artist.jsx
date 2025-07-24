@@ -145,6 +145,25 @@ const Artist = () => {
       fetchLyrics(page, false); // append mode
     }
   }, [page, fetchLyrics]);
+
+  const tierMap = {
+    guest: 0,
+    free: 1,
+    premium: 2,
+  };
+
+  const getUserType = () => {
+    if (!user) return "guest";
+    if (user.role === "premium-user") return "premium";
+    return "free";
+  };
+
+  const userType = getUserType(); // "guest", "free", or "premium"
+  const userTier = tierMap[userType]; // 0, 1, or 2
+
+  const shouldHideCollection = (lyricTier = 0) => {
+    return userTier >= lyricTier; 
+  };
   
 
   return (
@@ -230,6 +249,7 @@ const Artist = () => {
                               isLast={isLast}
                               lastUserRef={lastUserRef}
                               hideCollection={!hasToken}
+                              access={shouldHideCollection(lyric.tier)}
                             />
                           )}
                       </div>
@@ -243,7 +263,7 @@ const Artist = () => {
                         animation: "wave 3s infinite",
                       }}
                     />
-                    Searching more artists...
+                    Searching more lyrics...
                   </div>
                 )}
                 {!loading && lyrics.length === 0 && initialLoadDone && (
