@@ -7,18 +7,15 @@ import { useState, useEffect } from "react";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
 import { useCallback } from "react";
 import axios from "axios";
-import useIsMobile from "../components/hooks/useIsMobile";
 import { apiUrl, fetchArtistById, validateUser } from "../assets/util/api";
 import useDebounce from "../components/hooks/useDebounce";
 import { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
-import LyricsCard from "../components/special/LyricsCard";
 import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 
 const Artist = () => {
   const { name } = useParams();
-  const isMobile = useIsMobile();
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
   const debouncedSearchTerm = useDebounce(searchTerm);
@@ -33,6 +30,7 @@ const Artist = () => {
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
   const [items, setItems] = useState([]);
+
   const search = (event) => {
     const filteredTitles = lyrics
       .filter(
@@ -75,8 +73,8 @@ const Artist = () => {
           `${apiUrl}/lyrics/getLyricsByArtist?artistId=${name}`,
           {
             params: {
-              page,
-              limit: 20,
+              page: pageNum,
+              limit: 8,
               keyword: debouncedSearchTerm,
             },
           }
@@ -103,7 +101,7 @@ const Artist = () => {
         setLoading(false);
       }
     },
-    [debouncedSearchTerm, name, page]
+    [debouncedSearchTerm, name]
   );
 
   const [hasToken, setHasToken] = useState(false);
@@ -141,11 +139,14 @@ const Artist = () => {
     fetchLyrics(1, true);
     getArtist();
   }, [fetchLyrics, getArtist]);
+
   useEffect(() => {
     if (page > 1) {
       fetchLyrics(page, false); // append mode
     }
   }, [page, fetchLyrics]);
+  
+
   return (
     <>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
@@ -211,7 +212,7 @@ const Artist = () => {
                     const isLast = index === lyrics.length - 1;
                     return (
                       <div key={index} className="m-0 p-0">
-                        {isMobile ? (
+                        {
                           user?.role === "premium-user" ? (
                             <>
                               <LyricsRowPremium
@@ -230,15 +231,7 @@ const Artist = () => {
                               lastUserRef={lastUserRef}
                               hideCollection={!hasToken}
                             />
-                          )
-                        ) : (
-                          <LyricsCard
-                            id={lyric._id}
-                            lyric={lyric}
-                            lastUserRef={lastUserRef}
-                            isLast={isLast}
-                          />
-                        )}
+                          )}
                       </div>
                     );
                   })}

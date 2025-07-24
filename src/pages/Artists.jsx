@@ -40,8 +40,6 @@ const Artists = () => {
           },
         });
 
-        console.log(res.data.artists);
-
         setArtists((prev) =>
           override || pageNum === 1
             ? res.data.artists
