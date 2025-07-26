@@ -39,6 +39,7 @@ const LyricsDetails = () => {
           id,
           localStorage.getItem("token")
         );
+        console.log(lyrics);
         setLyrics(lyrics); // only the actual lyrics object
         setIsInCollection(lyrics.isFavourite);
       } catch (err) {
@@ -75,21 +76,16 @@ const LyricsDetails = () => {
   }, []);
 
   useEffect(() => {
-  if (showGallery) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "";
-  }
+    if (showGallery) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
 
-  return () => {
-    document.body.style.overflow = "";
-  };
-}, [showGallery]);
-
-  useEffect(() => {
-    console.log("User");
-    console.log(user);
-  }, [user]);
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showGallery]);
 
   if (!lyric) {
     return (
@@ -109,8 +105,6 @@ const LyricsDetails = () => {
   const goBack = () => {
     navigate(-1);
   };
-
-  
 
   const changeLyricsStatus = async (shouldAdd) => {
     const token = localStorage.getItem("token");
@@ -148,8 +142,6 @@ const LyricsDetails = () => {
       setTimeout(() => setShowMessage(false), 2000);
     }
   };
-
-  
 
   return (
     userLoaded && (
@@ -189,7 +181,9 @@ const LyricsDetails = () => {
               }`}
             >
               <button
-                className={`absolute md:hidden bottom-2 right-2 z-10 p-3 bg-blue-500 text-white rounded-full shadow-md hover:bg-gray-100 transition-all ${imageError && "hidden"}`}
+                className={`absolute md:hidden bottom-2 right-2 z-10 p-3 bg-blue-500 text-white rounded-full shadow-md hover:bg-gray-100 transition-all ${
+                  imageError && "hidden"
+                }`}
                 onClick={() => setShowGallery(true)}
               >
                 <CgMaximize size={20} />
@@ -242,7 +236,7 @@ const LyricsDetails = () => {
               <p className="text-lg font-semibold flex items-center">
                 {lyric.title}{" "}
               </p>
-              {(lyric.albumName != "?" || lyric.albumName != "") && (
+              {lyric.albumName && lyric.albumName !== "?" && (
                 <p className="text-sm text-gray-600 pb-2">
                   Album - {lyric.albumName}
                 </p>
