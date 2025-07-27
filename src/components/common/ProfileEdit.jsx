@@ -134,8 +134,8 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
 
   return (
     <div className="fixed flex justify-center items-center top-0 left-0 w-full h-full bg-[#00000080] z-50">
-      <div className="animate-down-start w-screen md:w-96 h-screen py-6 bg-white rounded-md flex flex-col">
-        <div className="w-full flex items-center justify-center border-b border-gray-200 pb-2 mb-2">
+      <div className="animate-down-start w-screen md:w-96 h-screen py-6 bg-gray-100 flex flex-col">
+        <div className="w-full flex items-center justify-center pb-2 mb-2">
           {/* <div className="profileImageBox w-24 aspect-square rounded-full overflow-hidden border-8 border-white">
             
             <img
@@ -143,15 +143,21 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
               className="object-cover w-full h-full"
             />
           </div> */}
-          <p className="w-full px-8 font-bold text-lg italic">Settings</p>
+          <p className="w-full px-6 font-bold text-lg italic">Settings</p>
         </div>
-        <div className="w-full px-8 flex flex-col items-center justify-center gap-4">
-          <div className="w-full flex flex-col items-center gap-2">
+        <div className="w-full px-6 flex flex-col items-center justify-center gap-4">
+          <div className="w-full flex flex-col items-center gap-2 border-t border-gray-300 pt-2 border-dashed">
+            {/* Premium Info */}
+            <div className="bg-white w-full p-4 rounded-md flex flex-col gap-4">
+              <p>Your Account is <span className="bg-yellow-100 py-1 px-2 rounded-md border border-yellow-200">Premium</span></p>
+            </div>
+            
             {/* Profile Datas */}
             <div className="w-full flex flex-col items-center pb-2 gap-2">
-              <p className="w-full font-semibold text-md italic text-blue-500">
-                Profile Data
+              <p className="w-full font-semibold text-md italic text-gray-500">
+                INFO
               </p>
+              <div className="bg-white w-full p-4 rounded-md flex flex-col gap-4">
               {/* name */}
               <div className="flex flex-col w-full">
                 <label htmlFor="name" className={`${labelClass}`}>
@@ -243,20 +249,22 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
                   </>
                 )}
               </div>
+              </div>
             </div>
 
             {/* App Data */}
-            <div className="w-full flex flex-col items-center pb-2 gap-2 border-t dashed border-gray-300 pt-2">
-              <p className="w-full font-semibold text-md italic text-blue-500">
-                App Data
+            <div className="w-full flex flex-col items-center pb-2 gap-2 border-t border-dashed border-gray-300 pt-2">
+              <p className="w-full font-semibold text-md italic text-gray-500">
+                APP
               </p>
+              <div className="bg-white w-full p-4 rounded-md flex flex-col gap-4">
               {/* Language */}
               <div className="flex flex-col w-full py-1">
                 <label htmlFor="language" className={`${labelClass}`}>
                   Language
                 </label>
 
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-3 pt-2">
                   <div className="flex align-items-center">
                     <RadioButton
                       inputId="language"
@@ -290,7 +298,7 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
                   Theme
                 </label>
 
-                <div className="flex flex-wrap gap-3 py-1">
+                <div className="flex flex-wrap gap-3 pt-2">
                   <div className="flex align-items-center">
                     <RadioButton
                       inputId="theme"
@@ -317,10 +325,11 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
                   </div>
                 </div>
               </div>
+              </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="w-full flex flex-col items-center gap-2">
+            <div className="w-full flex flex-col items-center gap-2 border-t border-dashed border-gray-300 pt-2">
               <div className="w-full flex items-center gap-2 mt-2">
                 <button
                   className="w-full bg-blue-500 px-4 text-white font-semibold p-2 rounded-md"

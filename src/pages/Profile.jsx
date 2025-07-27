@@ -1,8 +1,8 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, use } from "react";
 import Footer from "../components/common/Footer";
 import { IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
-import { fetchCollectionOverview } from "../assets/util/api";
+import { fetchCollectionOverview, validateUser } from "../assets/util/api";
 import LoadingBox from "../components/common/LoadingBox";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
 import LyricsRow from "../components/special/LyricsRow";
@@ -34,23 +34,42 @@ const Profile = () => {
     [loading, totalPages, page]
   );
 
-  // Fallback or mock user
-  const getUser = () => {
-    const user = localStorage.getItem("user");
-    return user
-      ? JSON.parse(user)
-      : {
-          username: "John Doe",
-          email: "johndoe@gmail.com",
-          profileImage:
-            "https://i.pinimg.com/736x/c8/69/8a/c8698a586eb96d0ec43fbb712dcf668d.jpg",
-          password: "password",
-        };
-  };
+  const [user, setUser] = useState(null);
+  const [userLoaded, setUserLoaded] = useState(false);
 
-  const user = getUser();
-  const [username, setUsername] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    const id = JSON.parse(localStorage.getItem("user") || "{}")?.id;
+    if (!id) {
+      setUserLoaded(true);
+      return;
+    }
+
+    const getUser = async () => {
+      try {
+        const userData = await validateUser(id, token);
+        if (!userData) throw new Error("No user returned");
+        console.log("User data:", userData);
+        setUser(userData.user);
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
+      } finally {
+        setUserLoaded(true);
+      }
+    };
+
+    getUser();
+  }, []);
+
+  const [username, setUsername] = useState(user?.name);
+  const [email, setEmail] = useState(user?.email);
+
+  useEffect(() => {
+    if (!user) return;
+    setUsername(user.name);
+    setEmail(user.email);
+  }, [user]);
 
   const [showEdit, setShowEdit] = useState(false);
   const [collection, setCollection] = useState(null);
@@ -185,6 +204,7 @@ const Profile = () => {
     );
   }
 
+  if (!userLoaded) return null;
   return (
     <div className="w-screen h-screen overflow-hidden overflow-y-auto">
       <div className="relative flex flex-col gap-2 min-h-screen md:pt-12">
@@ -339,13 +359,12 @@ const Profile = () => {
                             className="border-b border-gray-200 last:border-0 border-dashed"
                           >
                             {
-                              
-                                                                <LyricsRowPremium
-                                                                  id={lyric._id}
-                                                                  lyric={lyric}
-                                                                  isLast={isLast}
-                                                                  lastUserRef={lastUserRef}
-                                                                />
+                              <LyricsRowPremium
+                                id={lyric._id}
+                                lyric={lyric}
+                                isLast={isLast}
+                                lastUserRef={lastUserRef}
+                              />
                             }
                           </div>
                         );
