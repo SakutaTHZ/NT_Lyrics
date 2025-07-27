@@ -6,12 +6,13 @@ import { BiCheck } from "react-icons/bi";
 import { useAuth } from "../../components/hooks/authContext";
 import { apiUrl } from "../../assets/util/api"; // Adjust the import path as necessary
 import { useVibration } from "./../hooks/useVibration";
+import { RadioButton } from "primereact/radiobutton";
 
 const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
   const { vibratePattern } = useVibration();
 
   const { logOut } = useAuth();
-  const labelClass = "text-gray-700 font-semibold";
+  const labelClass = "text-gray-700 font-semibold pb-2";
   const inputClass = "p-2 border border-gray-400 rounded-md";
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
@@ -123,147 +124,233 @@ const ProfileEdit = ({ usernameChange, emailChange, closeBox }) => {
     }
   };
 
+  const [language, setLanguage] = useState("myanmar");
+  const [theme, setTheme] = useState("light");
+
   useEffect(() => {
     setUsername(user?.name || "");
     setEmail(user?.email || "");
   }, [user]);
 
   return (
-    <div className="fixed flex justify-center items-center px-4 top-0 left-0 w-full h-full bg-[#00000080] z-50">
-      <div className="animate-down-start w-full md:w-96 h-fit py-8 bg-white rounded-md">
-        <div className="w-full h-1/2 flex items-center justify-center">
-          <div className="profileImageBox w-24 aspect-square rounded-full overflow-hidden border-8 border-white">
-            {/* Current Image */}
+    <div className="fixed flex justify-center items-center top-0 left-0 w-full h-full bg-[#00000080] z-50">
+      <div className="animate-down-start w-screen md:w-96 h-screen py-6 bg-white rounded-md flex flex-col">
+        <div className="w-full flex items-center justify-center border-b border-gray-200 pb-2 mb-2">
+          {/* <div className="profileImageBox w-24 aspect-square rounded-full overflow-hidden border-8 border-white">
+            
             <img
               src="https://i.pinimg.com/736x/c8/69/8a/c8698a586eb96d0ec43fbb712dcf668d.jpg"
               className="object-cover w-full h-full"
             />
-          </div>
+          </div> */}
+          <p className="w-full px-8 font-bold text-lg italic">Settings</p>
         </div>
-        <div className="w-full h-1/2 px-8 flex flex-col items-center justify-center gap-4">
+        <div className="w-full px-8 flex flex-col items-center justify-center gap-4">
           <div className="w-full flex flex-col items-center gap-2">
-            {/* name */}
-            <div className="flex flex-col w-full">
-              <label htmlFor="name" className={`${labelClass}`}>
-                Name{" "}
-                {!isUsernameCorrect && (
-                  <span className="text-red-500 font-bold">*</span>
-                )}
-              </label>
-              <input
-                type="text"
-                id="name"
-                className={inputClass}
-                placeholder="Enter your name"
-                value={name}
-                onChange={(e) => checkUsername(e.target.value)}
-              />
-              {!isUsernameCorrect && (
-                <p className={`text-sm text-red-400 mt-1`}>
-                  Invalid User Name.
-                </p>
-              )}
-            </div>
-            {/* Email */}
-            <div className="flex flex-col w-full">
-              <label htmlFor="email" className={`${labelClass}`}>
-                Email{" "}
-                {!isEmailCorrect && (
-                  <span className="text-red-500 font-bold">*</span>
-                )}
-              </label>
-              <input
-                type="text"
-                id="email"
-                className={`${user?.isOAuth && "bg-gray-100"} ` + inputClass}
-                placeholder="Enter your Email"
-                value={email}
-                onChange={(e) => checkEmail(e.target.value)}
-                disabled={user?.isOAuth}
-              />
-              {!isEmailCorrect && (
-                <p className={`text-sm text-red-400 mt-1`}>Invalid Email.</p>
-              )}
-            </div>
-            {/* Password */}
-
-            <div className={`w-full ${user?.isOAuth && "hidden"} `}>
-              <label
-                htmlFor="Change Password"
-                className={`${labelClass} flex justify-between items-center`}
-              >
-                {passwordChange ? "Password" : "Change Password?"}
-                {!isCurrentPasswordCorrect && (
-                  <span className="text-red-500 font-bold">*</span>
-                )}
-                <input
-                  type="checkbox"
-                  id="password-toggle"
-                  className="hidden peer"
-                  onChange={() => setPasswordChange(!passwordChange)}
-                />
-                <label
-                  htmlFor="password-toggle"
-                  className="w-5 h-5 border border-gray-400 rounded-md flex items-center justify-center cursor-pointer peer-checked:bg-blue-500 peer-checked:border-blue-500 transition-all"
-                >
-                  <BiCheck className="text-white text-lg peer-checked:text-black " />
+            {/* Profile Datas */}
+            <div className="w-full flex flex-col items-center pb-2 gap-2">
+              <p className="w-full font-semibold text-md italic text-blue-500">
+                Profile Data
+              </p>
+              {/* name */}
+              <div className="flex flex-col w-full">
+                <label htmlFor="name" className={`${labelClass}`}>
+                  Name{" "}
+                  {!isUsernameCorrect && (
+                    <span className="text-red-500 font-bold">*</span>
+                  )}
                 </label>
-              </label>
-              {passwordChange && (
-                <>
-                  <PasswordInput
-                    value={currentPassword}
-                    onChange={checkCurrentPassword}
-                  />
+                <input
+                  type="text"
+                  id="name"
+                  className={inputClass}
+                  placeholder="Enter your name"
+                  value={name}
+                  onChange={(e) => checkUsername(e.target.value)}
+                />
+                {!isUsernameCorrect && (
+                  <p className={`text-sm text-red-400 mt-1`}>
+                    Invalid User Name.
+                  </p>
+                )}
+              </div>
+              {/* Email */}
+              <div className="flex flex-col w-full">
+                <label htmlFor="email" className={`${labelClass}`}>
+                  Email{" "}
+                  {!isEmailCorrect && (
+                    <span className="text-red-500 font-bold">*</span>
+                  )}
+                </label>
+                <input
+                  type="text"
+                  id="email"
+                  className={`${user?.isOAuth && "bg-gray-100"} ` + inputClass}
+                  placeholder="Enter your Email"
+                  value={email}
+                  onChange={(e) => checkEmail(e.target.value)}
+                  disabled={user?.isOAuth}
+                />
+                {!isEmailCorrect && (
+                  <p className={`text-sm text-red-400 mt-1`}>Invalid Email.</p>
+                )}
+              </div>
+              {/* Password */}
+              <div className={`w-full ${user?.isOAuth && "hidden"} `}>
+                <label
+                  htmlFor="Change Password"
+                  className={`${labelClass} flex justify-between items-center`}
+                >
+                  {passwordChange ? "Password" : "Change Password?"}
                   {!isCurrentPasswordCorrect && (
-                    <p className={`text-sm text-red-400 mt-1`}>
-                      Password must be less than 8 characters.
-                    </p>
+                    <span className="text-red-500 font-bold">*</span>
                   )}
-
-                  <PasswordInput
-                    value={newPassword}
-                    onChange={checkNewPassword}
+                  <input
+                    type="checkbox"
+                    id="password-toggle"
+                    className="hidden peer"
+                    onChange={() => setPasswordChange(!passwordChange)}
                   />
+                  <label
+                    htmlFor="password-toggle"
+                    className="w-5 h-5 border border-gray-400 rounded-md flex items-center justify-center cursor-pointer peer-checked:bg-blue-500 peer-checked:border-blue-500 transition-all"
+                  >
+                    <BiCheck className="text-white text-lg peer-checked:text-black " />
+                  </label>
+                </label>
+                {passwordChange && (
+                  <>
+                    <PasswordInput
+                      value={currentPassword}
+                      onChange={checkCurrentPassword}
+                    />
+                    {!isCurrentPasswordCorrect && (
+                      <p className={`text-sm text-red-400 mt-1`}>
+                        Password must be less than 8 characters.
+                      </p>
+                    )}
 
-                  {!isNewPasswordCorrect && (
-                    <p className={`text-sm text-red-400 mt-1`}>
-                      Password must be less than 8 characters.
-                    </p>
-                  )}
-                </>
-              )}
+                    <PasswordInput
+                      value={newPassword}
+                      onChange={checkNewPassword}
+                    />
+
+                    {!isNewPasswordCorrect && (
+                      <p className={`text-sm text-red-400 mt-1`}>
+                        Password must be less than 8 characters.
+                      </p>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
+
+            {/* App Data */}
+            <div className="w-full flex flex-col items-center pb-2 gap-2 border-t dashed border-gray-300 pt-2">
+              <p className="w-full font-semibold text-md italic text-blue-500">
+                App Data
+              </p>
+              {/* Language */}
+              <div className="flex flex-col w-full py-1">
+                <label htmlFor="language" className={`${labelClass}`}>
+                  Language
+                </label>
+
+                <div className="flex flex-wrap gap-3">
+                  <div className="flex align-items-center">
+                    <RadioButton
+                      inputId="language"
+                      name="language"
+                      value="myanmar"
+                      onChange={(e) => setLanguage(e.value)}
+                      checked={language === "myanmar"}
+                    />
+                    <label htmlFor="language" className="ml-2">
+                      Myanmar
+                    </label>
+                  </div>
+                  <div className="flex align-items-center">
+                    <RadioButton
+                      inputId="language"
+                      name="language"
+                      value="english"
+                      onChange={(e) => setLanguage(e.value)}
+                      checked={language === "english"}
+                    />
+                    <label htmlFor="language" className="ml-2">
+                      English
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Theme */}
+              <div className="flex flex-col w-full">
+                <label htmlFor="theme" className={`${labelClass}`}>
+                  Theme
+                </label>
+
+                <div className="flex flex-wrap gap-3 py-1">
+                  <div className="flex align-items-center">
+                    <RadioButton
+                      inputId="theme"
+                      name="theme"
+                      value="light"
+                      onChange={(e) => setTheme(e.value)}
+                      checked={theme === "light"}
+                    />
+                    <label htmlFor="theme" className="ml-2">
+                      Light
+                    </label>
+                  </div>
+                  <div className="flex align-items-center">
+                    <RadioButton
+                      inputId="theme"
+                      name="theme"
+                      value="dark"
+                      onChange={(e) => setTheme(e.value)}
+                      checked={theme === "dark"}
+                    />
+                    <label htmlFor="theme" className="ml-2">
+                      Dark
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Action Buttons */}
-            <div className="w-full flex items-center gap-2 mt-2">
+            <div className="w-full flex flex-col items-center gap-2">
+              <div className="w-full flex items-center gap-2 mt-2">
+                <button
+                  className="w-full bg-blue-500 px-4 text-white font-semibold p-2 rounded-md"
+                  onClick={() => {
+                    vibratePattern("doubleTap");
+                    updateUser();
+                    closeBox();
+                  }}
+                >
+                  Save
+                </button>
+                <button
+                  onClick={closeBox}
+                  className="w-full bg-gray-200 px-4 text-black font-semibold p-2 rounded-md"
+                >
+                  Cancel
+                </button>
+              </div>
+              <hr className="w-full border-dashed border-gray-300" />
+              {/* Log Out */}
               <button
-                className="w-full bg-blue-500 px-4 text-white font-semibold p-2 rounded-md"
+                className="w-full bg-red-500 px-4 text-white font-semibold p-2 rounded-md mb-8"
                 onClick={() => {
-                  vibratePattern("doubleTap");
-                  updateUser();
-                  closeBox();
+                  logOut();
+                  vibratePattern("long");
                 }}
               >
-                Save
-              </button>
-              <button
-                onClick={closeBox}
-                className="w-full bg-gray-200 px-4 text-black font-semibold p-2 rounded-md"
-              >
-                Cancel
+                Log Out
               </button>
             </div>
-            <hr className="w-full border-dashed border-gray-300" />
-            {/* Log Out */}
-            <button
-              className="w-full bg-red-500 px-4 text-white font-semibold p-2 rounded-md"
-              onClick={() => {
-                logOut();
-                vibratePattern("long");
-              }}
-            >
-              Log Out
-            </button>
           </div>
         </div>
       </div>
