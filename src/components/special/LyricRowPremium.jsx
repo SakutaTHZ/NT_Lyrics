@@ -106,13 +106,13 @@ const LyricRowPremium = ({
         <div className="flex justify-between items-center w-full p-2 pl-4">
           <div className="relative flex flex-col gap-2">
             <p className="font-semibold">
-              {lyric?.title ?? "Sample Title"}{" "}
               {isInCollection && (
                 <BsHeartFill
                   size={16}
-                  className="text-red-500 inline -translate-y-0.5 ml-1"
+                  className="text-red-500 inline mr-2"
                 />
               )}
+              {lyric?.title ?? "Sample Title"}{" "}
             </p>
             <p className="text-sm text-gray-500">
               {lyric.singers.map((singer, index) => (

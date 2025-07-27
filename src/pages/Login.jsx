@@ -27,7 +27,7 @@ const Login = () => {
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(true);
   const [errorMessage, setErrorMessage] = useState(""); // Store API error messages
 
-  const [isRemember, setIsRemember] = useState(false);
+  const [isRemember, setIsRemember] = useState(true);
 
   // State for showing the resend email dialog
   const [showResendDialog, setShowResendDialog] = useState(false);

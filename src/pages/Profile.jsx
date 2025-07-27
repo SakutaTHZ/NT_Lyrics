@@ -8,8 +8,6 @@ import EmptyData from "../assets/images/Collection list is empty.jpg";
 import LyricsRow from "../components/special/LyricsRow";
 import axios from "axios";
 import { apiUrl } from "../assets/util/api";
-import { BiEdit } from "react-icons/bi";
-import { CgAdd } from "react-icons/cg";
 import EditGroup from "../components/common/EditGroup";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 
@@ -272,12 +270,6 @@ const Profile = () => {
               <div className="flex flex-col items-center justify-between md:gap-4  sticky top-0  z-20">
                 {/* Groups */}
                 <div className="w-full flex items-center justify-between gap-2 bg-white">
-                  <button
-                    className=" bg-gray-100 rounded-md cursor-pointer p-2 flex items-center gap-2"
-                    onClick={() => console.log("Create Group")}
-                  >
-                    <CgAdd size={20} className="text-gray-500" />
-                  </button>
                   <div className="w-full bg-white sticky top-0 overflow-auto flex gap-2 py-3">
                     {(collection?.collections || []).map((col, idx) => (
                       <span
@@ -304,22 +296,15 @@ const Profile = () => {
                       )?.count || 0}
                     </span>
                   </p>
-
-                  <button
-                    className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2 flex items-center gap-2"
-                    onClick={() => setShowGroupEdit(true)}
-                  >
-                    <BiEdit size={20} className="text-gray-500" />
-                  </button>
                 </div>
               </div>
 
               <div
                 className={`grid ${
                   loading || selectedGroupLyrics.length > 0
-                    ? "md:grid-cols-5 md:place-items-center md:gap-6"
+                    ? "md:gap-6"
                     : "grid-cols-1 md:gap-12"
-                } p-2 py-4 gap-0 px-4 md:px-24 border border-gray-200 rounded-b-md`}
+                } p-2 py-4 gap-0 border border-gray-200 rounded-b-md`}
               >
                 {(() => {
                   if (loading && !initialLoadDone) {
@@ -375,7 +360,7 @@ const Profile = () => {
           <div
             className={`grid ${
               loading || selectedGroupLyrics.length > 0
-                ? "md:grid-cols-5 md:place-items-center md:gap-6"
+                ? "md:gap-6"
                 : "grid-cols-1 md:gap-12"
             } p-2 py-4 gap-0 px-4 md:px-24`}
           >
