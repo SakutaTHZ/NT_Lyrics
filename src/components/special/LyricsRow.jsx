@@ -24,7 +24,6 @@ const LyricsRow = ({
   // variable pass to parent if collection status is changed
   onCollectionStatusChange = () => {},
 }) => {
-
   const { vibrateOnce } = useVibration();
   const [imageError, setImageError] = useState(false);
 
@@ -137,17 +136,24 @@ const LyricsRow = ({
           className="hidden"
         />
         <div className="flex justify-between items-center w-full p-2">
-          <div className={`flex flex-col gap-2 ${imageError && "glitching"}`}>
+          <div
+            className={`flex flex-col gap-2 ${
+              imageError && "glitching"
+            }`}
+          >
             <p className="font-semibold">{lyric?.title ?? "Sample Title"}</p>
-            <p className="text-sm text-gray-500 flex items-center gap-1">
-              {lyric.singers.map((singer, index) => (
-                <span key={index}>
-                  {singer.name}
-                  {index < lyric.singers.length - 1 ? ", " : ""}
-                </span>
-              ))}
+            <p className="text-sm text-gray-500 flex items-center gap-1 max-w-64 overflow-hidden text-ellipsis whitespace-nowrap">
+              <span className="overflow-hidden text-ellipsis whitespace-nowrap">
+                {lyric.singers.map(
+                  (singer, index) =>
+                    `${singer.name}${
+                      index < lyric.singers.length - 1 ? ", " : ""
+                    }`
+                )}
+              </span>
+
               {imageError && (
-                <span className="border px-1 py-0.5 text-xs rounded-md border-gray-300 bg-gray-100">
+                <span className="border px-1 py-0.5 text-xs rounded-md border-gray-300 bg-gray-100 shrink-0">
                   Coming Soon
                 </span>
               )}

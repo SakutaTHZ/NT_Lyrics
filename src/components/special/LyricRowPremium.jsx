@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useMemo, useState } from "react";
+import {useState } from "react";
 import MessagePopup from "../common/MessagePopup";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -71,10 +71,6 @@ const LyricRowPremium = ({
     }
   };
 
-  const bustedImageUrl = useMemo(() => {
-    return `${lyric.lyricsPhoto}?v=${Date.now()}`;
-  }, [lyric.lyricsPhoto]);
-
   const [imageError, setImageError] = useState(false);
 
   return (
@@ -96,10 +92,10 @@ const LyricRowPremium = ({
       >
         <div className="relative flex items-center justify-center">
           <img
-            src={bustedImageUrl}
+            src={lyric.lyricsPhoto}
             alt="lyrics hidden checker"
-            onError={() => setImageError(true)}
             onLoad={() => setImageError(false)}
+            onError={() => setImageError(true)}
             className="hidden"
           />
         </div>
@@ -114,16 +110,18 @@ const LyricRowPremium = ({
               )}
               {lyric?.title ?? "Sample Title"}{" "}
             </p>
-            <p className="text-sm text-gray-500">
-              {lyric.singers.map((singer, index) => (
-                <span key={index}>
-                  {singer.name}
-                  {index < lyric.singers.length - 1 ? ", " : ""}
-                </span>
-              ))}
+            <p className="text-sm text-gray-500 flex items-center gap-1 max-w-64 overflow-hidden text-ellipsis whitespace-nowrap">
+              <span className="overflow-hidden text-ellipsis whitespace-nowrap">
+                {lyric.singers.map(
+                  (singer, index) =>
+                    `${singer.name}${
+                      index < lyric.singers.length - 1 ? ", " : ""
+                    }`
+                )}
+              </span>
 
               {imageError && (
-                <span className="border ml-2 px-1 py-0.5 text-xs rounded-md border-gray-300 bg-gray-100">
+                <span className="border px-1 py-0.5 text-xs rounded-md border-gray-300 bg-gray-100 shrink-0">
                   Coming Soon
                 </span>
               )}
