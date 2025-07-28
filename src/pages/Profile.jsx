@@ -446,6 +446,7 @@ const Profile = () => {
 
       {showEdit && (
         <ProfileEdit
+          userData={user}
           usernameChange={setUsername}
           emailChange={setEmail}
           closeBox={() => setShowEdit(false)}
