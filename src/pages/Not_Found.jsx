@@ -3,6 +3,10 @@ import Normal_Button from "../components/common/Normal_Button"
 import Guitar_Outline from "../assets/images/guitar-outline.png"
 
 const Not_Found = () =>{
+    // Remove the local storage data
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
     return (
         <>
             <div className="w-screen h-screen flex justify-center items-center flex-col gap-4">
