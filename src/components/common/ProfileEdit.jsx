@@ -370,7 +370,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
             </div>
 
             {/* Action Buttons */}
-            <div className="w-full flex flex-col items-center gap-2 border-t border-dashed border-gray-300 pt-2">
+            <div className="w-full flex flex-col items-center gap-2 border-t border-dashed border-gray-300 pt-2 pb-12">
               <div className="w-full flex items-center gap-2 mt-2">
                 <button
                   className="w-full bg-blue-500 px-4 text-white font-semibold p-2 rounded-md"
