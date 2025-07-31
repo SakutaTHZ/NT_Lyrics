@@ -58,7 +58,6 @@ const UsersTab = () => {
       });
 
       const fetchedUsers = res.data.users;
-      console.log("Fetched users:", fetchedUsers);
       setUsers((prev) =>
         override || pageNum === 1 ? fetchedUsers : [...prev, ...fetchedUsers]
       );

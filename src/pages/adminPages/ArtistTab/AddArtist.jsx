@@ -35,7 +35,6 @@ const AddArtist = ({ onClose, onUpdate, showNewMessage }) => {
       throw new Error(errorData.errors[0].message);
     }
     const data = await response.json();
-    console.log("Check Artist Response:", data.isExist);
     return data.isExist;
   };
 

@@ -39,7 +39,6 @@ const LyricsDetails = () => {
           id,
           localStorage.getItem("token")
         );
-        console.log(lyrics);
         setLyrics(lyrics); // only the actual lyrics object
         setIsInCollection(lyrics.isFavourite);
       } catch (err) {

@@ -157,7 +157,6 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
         throw new Error(errorData.errors[0].message);
       }
       const data = await response.json();
-      console.log("Check Title Response:", data.isExist);
       return data.isExist;
     },
     [showNewMessage]
@@ -270,11 +269,9 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
                     if (!file) return;
 
                     const fileSizeMB = file.size / 1024 / 1024;
-                    // console.log("Original file size:", fileSizeMB.toFixed(2), "MB");
 
                     // If already less than or equal to 3MB, skip compression
                     if (fileSizeMB <= 3) {
-                      // console.log("File size under 3MB — skipping compression");
                       setUploadedFile(file);
                       return;
                     }
@@ -291,17 +288,6 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
                         options
                       );
                       setUploadedFile(compressedFile);
-
-                      // console.log(
-                      //   "Original size:",
-                      //   fileSizeMB.toFixed(2),
-                      //   "MB"
-                      // );
-                      // console.log(
-                      //   "Compressed size:",
-                      //   (compressedFile.size / 1024 / 1024).toFixed(2),
-                      //   "MB"
-                      // );
                     } catch (error) {
                       console.error("Image compression failed:", error);
                     }
@@ -318,8 +304,6 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
                 onChange={(label) => {
                   const index = tiers.indexOf(label);
                   setSelectedTier(index);
-                  console.log("Selected tier:", index);
-                  console.log("Selected tier label:", label);
                 }}
               />
             </div>

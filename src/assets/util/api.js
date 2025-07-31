@@ -121,14 +121,13 @@ export const fetchPopularLyrics = async (authToken) => {
   };
   
  export const fetchSingers = async (type) => {
-  console.log("Fetching singers with type:", type);
     try {
       const res = await fetch(`${apiUrl}/artists/getArtistsByType`);
       const data = await res.json();
       if (data.artists) {
         return data.artists
       } else {
-        console.warn("No artists found in response:", data);
+        console.warn("No artists found in response:", data, type);
         return null
       }
     } catch (error) {

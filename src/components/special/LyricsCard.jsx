@@ -64,7 +64,7 @@ const LyricsCard = ({
 
       return res;
     } catch (err) {
-      console.log(err.message);
+      console.error(err.message);
       setMessageType('error')
       setMessageText(err.message + "\nTry Premium for more features.");
     } finally {

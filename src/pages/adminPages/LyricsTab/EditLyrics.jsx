@@ -18,7 +18,6 @@ import {
 import { apiUrl, fetchSingers } from "../../../assets/util/api";
 
 const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
-  console.log("EditLyric component rendered with lyric:", lyric);
   useModalEscClose(onClose);
 
   const token = localStorage.getItem("token");
@@ -331,11 +330,9 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
                     if (!file) return;
 
                     const fileSizeMB = file.size / 1024 / 1024;
-                    // console.log("Original file size:", fileSizeMB.toFixed(2), "MB");
 
                     // If already less than or equal to 3MB, skip compression
                     if (fileSizeMB <= 3) {
-                      // console.log("File size under 3MB — skipping compression");
                       setUploadedFile(file);
                       return;
                     }
@@ -352,17 +349,6 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
                         options
                       );
                       setUploadedFile(compressedFile);
-
-                      // console.log(
-                      //   "Original size:",
-                      //   fileSizeMB.toFixed(2),
-                      //   "MB"
-                      // );
-                      // console.log(
-                      //   "Compressed size:",
-                      //   (compressedFile.size / 1024 / 1024).toFixed(2),
-                      //   "MB"
-                      // );
                     } catch (error) {
                       console.error("Image compression failed:", error);
                     }
@@ -382,8 +368,6 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
                 onChange={(label) => {
                   const index = tiers.indexOf(label);
                   setSelectedTier(index);
-                  console.log("Selected tier:", index);
-                  console.log("Selected tier label:", label);
                 }}
               />
             </div>

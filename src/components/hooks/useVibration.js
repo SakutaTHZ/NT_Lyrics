@@ -24,9 +24,7 @@ export function useVibration({ fallback = false } = {}) {
       if (isSupported) {
         navigator.vibrate(duration);
       } else if (fallback) {
-        console.log('[Fallback] Trigger haptic effect:', duration);
-        // Optionally trigger fallback animation or sound here
-        // e.g., play a soft click sound
+        console.error('[Fallback] Trigger haptic effect:', duration);
       }
     },
     [isSupported, fallback]

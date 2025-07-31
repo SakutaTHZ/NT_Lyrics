@@ -50,7 +50,6 @@ const Profile = () => {
       try {
         const userData = await validateUser(id, token);
         if (!userData) throw new Error("No user returned");
-        console.log("User data:", userData);
         setUser(userData.user);
       } catch (err) {
         console.error("Failed to fetch user:", err);
@@ -117,7 +116,6 @@ const Profile = () => {
   const userTier = tierMap[userType]; // 0, 1, or 2
 
   const shouldHideCollection = (lyricTier = 0) => {
-    console.log(`User Tier: ${userTier}, Lyric Tier: ${lyricTier}`);
     return userTier >= lyricTier; // hide if user tier is lower
   };
 
@@ -143,7 +141,6 @@ const Profile = () => {
         );
 
         const data = res.data.lyrics;
-        console.log("Fetched lyrics:", data);
 
         if (!Array.isArray(data)) {
           console.error("Expected array, got:", data);

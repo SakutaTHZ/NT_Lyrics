@@ -135,7 +135,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
   return (
     <div className="fixed flex justify-center items-center top-0 left-0 w-full h-full bg-[#00000080] z-50">
       <div className="animate-down-start w-screen h-screen md:h-fit min-h-screen md:pt-52 py-6 md:px-18 bg-gray-100 flex flex-col">
-        <div className="w-full flex items-center justify-center pb-2 mb-2">
+        <div className="w-full flex items-center justify-center md:mt-32 pb-2 mb-2">
           {/* <div className="profileImageBox w-24 aspect-square rounded-full overflow-hidden border-8 border-white">
             
             <img
@@ -370,7 +370,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
             </div>
 
             {/* Action Buttons */}
-            <div className="w-full flex flex-col items-center gap-2 border-t border-dashed border-gray-300 pt-2 pb-12">
+            <div className="w-full flex flex-col items-center gap-2 border-t border-dashed border-gray-300 pt-2 pb-12 md:pb-0">
               <div className="w-full flex items-center gap-2 mt-2">
                 <button
                   className="w-full bg-blue-500 px-4 text-white font-semibold p-2 rounded-md"
