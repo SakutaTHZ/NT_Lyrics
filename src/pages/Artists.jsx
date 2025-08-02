@@ -105,30 +105,38 @@ const Artists = () => {
                 Artists
               </p>
 
-              <input
-                type="text"
-                placeholder="Search by Artist Name"
-                className="border border-gray-300 rounded-md px-3 py-2 w-full h-[42px]"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+              {/* Search input for lyrics */}
+              <div className="py-2 md:px-24 sticky md:top-12 top-0 bg-white z-10">
+                <div className="flex justify-between gap-2">
+                  <input
+                    type="text"
+                    placeholder="Search by Artist Name"
+                    className="border border-gray-300 rounded-md px-3 py-2 w-full h-[42px]"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              </div>
 
               {/* Artists */}
               {artists.map((artist, idx) => {
                 const isLast = idx === artists.length - 5;
                 return (
-                    <div
-                      key={idx}
-                      className="border-b md:border border-gray-200 last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
-                      onClick={() => navigate(`/NT_Lyrics/artist/${artist._id}`)}
-                       ref={isLast ? lastUserRef : null}
-                    >
-                      <img
-                        src={artist?.photoLink || "https://i.pinimg.com/736x/54/75/6c/54756cbcfb2051c46f350ea33a0b78ef.jpg"}
-                        className="w-12 h-12 object-contain rounded-full"
-                      />
-                      {artist.name}
-                    </div>
+                  <div
+                    key={idx}
+                    className="border-b md:border border-gray-200 last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
+                    onClick={() => navigate(`/NT_Lyrics/artist/${artist._id}`)}
+                    ref={isLast ? lastUserRef : null}
+                  >
+                    <img
+                      src={
+                        artist?.photoLink ||
+                        "https://i.pinimg.com/736x/54/75/6c/54756cbcfb2051c46f350ea33a0b78ef.jpg"
+                      }
+                      className="w-12 h-12 object-contain rounded-full"
+                    />
+                    {artist.name}
+                  </div>
                 );
               })}
               {loading && (

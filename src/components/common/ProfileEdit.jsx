@@ -126,8 +126,8 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
     }
   };
 
-  const [language, setLanguage] = useState("myanmar");
-  const [theme, setTheme] = useState("light");
+  const [language, setLanguage] = useState(localStorage.getItem("language") || "myanmar");
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   useEffect(() => {
     setUsername(user?.name || "");

@@ -43,19 +43,15 @@ export const minorkeys = [
   "B",
 ];
 
-export const keys = [
-  { name: "C", value: "C" },
-  { name: "C#", value: "C%23" },
-  { name: "D", value: "D" },
-  { name: "D#", value: "D%23" },
-  { name: "E", value: "E" },
-  { name: "F", value: "F" },
-  { name: "F#", value: "F%23" },
-  { name: "G", value: "G" },
-  { name: "G#", value: "G%23" },
-  { name: "A", value: "A" },
-  { name: "A#", value: "A%23" },
-  { name: "B", value: "B" },
+const keyList = [
+  "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#",
+  "Ab", "Bb", "Db", "Eb", "Gb", "Am", "Bm", "Cm", "Dm", "Em", "Fm",
+  "Gm", "Abm", "Bbm", "Dbm", "Ebm", "Gbm", "None"
 ];
 
-export const keyOptions = Object.values(majorkeys).map((name) => ({ name }));
+export const keyOptions = keyList.map(key => ({
+  name: key,
+  value: key.replace(/#/g, '%23')
+}));
+
+// export const keyOptions = Object.values(keys).map((name) => ({ name }));
