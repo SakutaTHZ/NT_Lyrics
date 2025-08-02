@@ -8,7 +8,10 @@ import { apiUrl } from "../../assets/util/api"; // Adjust the import path as nec
 import { useVibration } from "./../hooks/useVibration";
 import { RadioButton } from "primereact/radiobutton";
 
+import { useTranslation } from "react-i18next";
+
 const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
+  const { t, i18n } = useTranslation();
   const { vibratePattern } = useVibration();
 
   const { logOut } = useAuth();
@@ -62,30 +65,28 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
 
   const updateUser = async () => {
     if (!user || !user._id) {
-      alert("User data is missing.");
+      alert(t("userDataMissing"));
       return;
     }
 
     if (name.trim() === "") {
-      alert("Name cannot be empty");
+      alert(t("nameRequired"));
       return;
     } else if (email.trim() === "") {
-      alert("Email cannot be empty");
+      alert(t("emailRequired"));
       return;
     }
 
-    // Prepare the updated user data
     let updatedUser = {
       name,
       email,
     };
 
-    // Include new password if applicable
     if (passwordChange && newPassword !== "") {
       updatedUser.oldPassword = currentPassword;
       updatedUser.newPassword = newPassword;
     } else if (passwordChange) {
-      alert("New Password cannot be empty");
+      alert(t("passwordRequired"));
       return;
     }
 
@@ -94,39 +95,42 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Modify as needed
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(updatedUser),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update user");
-      }
+      if (!response.ok) throw new Error("Update failed");
 
       const result = await response.json();
-
-      // Update local state and localStorage
       setUser(result);
-      const userDetails = {
-        id: result.user._id,
-        name: result.user.name,
-        email: result.user.email,
-        role: result.user.role,
-        isOAuth: user.isOAuth,
-      };
       usernameChange(result.user.name);
       emailChange(result.user.email);
 
-      localStorage.setItem("user", JSON.stringify(userDetails));
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          id: result.user._id,
+          name: result.user.name,
+          email: result.user.email,
+          role: result.user.role,
+          isOAuth: user.isOAuth,
+        })
+      );
       localStorage.setItem("language", language);
       localStorage.setItem("theme", theme);
+
+      i18n.changeLanguage(language);
     } catch (error) {
-      console.error("Error updating user:", error.errors[0].message);
-      alert("An error occurred while updating the profile.");
+      console.error("Error updating user:", error);
+      alert(t("updateFailed"));
     }
   };
 
-  const [language, setLanguage] = useState(localStorage.getItem("language") || "myanmar");
+  const [language, setLanguage] = useState(
+    localStorage.getItem("language") || "my"
+  );
+
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   useEffect(() => {
@@ -145,7 +149,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
               className="object-cover w-full h-full"
             />
           </div> */}
-          <p className="w-full px-6 font-bold text-lg italic">Settings</p>
+          <p className="w-full px-6 font-bold text-lg italic">{t("setting")}</p>
         </div>
         <div className="w-full px-6 flex flex-col items-center justify-center gap-4">
           <div className="w-full flex flex-col items-center gap-2 border-t border-gray-300 pt-2 border-dashed">
@@ -154,7 +158,9 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
             {user.role === "premium-user" ? (
               <div className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 w-full p-5 rounded-xl shadow-sm space-y-3">
                 <div className="flex items-center gap-2">
-                  <p className="text-gray-700 font-medium">Your Account is</p>
+                  <p className="text-gray-700 font-medium">
+                    {t("yourAccountIs")}
+                  </p>
                   <span className="text-sm bg-yellow-100 text-yellow-800 py-1 px-2 rounded-md border border-yellow-300 font-semibold">
                     Premium
                   </span>
@@ -162,31 +168,28 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
 
                 <div className="flex items-center gap-2 bg-gray-100 p-2 rounded-md">
                   <p className="text-gray-700 font-medium">
-                    Subscription ends on
+                    {t("subscriptionEndson")}
+                    <span className="text-sm text-blue-600 font-semibold pl-2 text-nowrap">
+                      {user?.premiumEndDate
+                        ? new Intl.DateTimeFormat("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          }).format(new Date(user.premiumEndDate))
+                        : "Unknown"}
+                    </span>
                   </p>
-                  <span className="text-sm text-blue-600 font-semibold">
-                    {user?.premiumEndDate
-                      ? new Intl.DateTimeFormat("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        }).format(new Date(user.premiumEndDate))
-                      : "Unknown"}
-                  </span>
                 </div>
               </div>
             ) : (
               <div className="bg-white w-full p-4 rounded-md flex flex-col gap-2">
                 <p>
-                  You are a{" "}
+                  {t("yourAccountIs")}
                   <span className="text-blue-500 font-semibold">Free</span>{" "}
-                  User.
                 </p>
-                <p className="text-gray-500">
-                  [Try Premium for more amazing features.]
-                </p>
+                <p className="text-gray-500">[{t("tryPremium")}]</p>
                 <button className="bg-blue-100 px-2 py-2 rounded-md">
-                  Learn more...
+                  {t("learnMore")}...
                 </button>
               </div>
             )}
@@ -194,13 +197,13 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
             {/* Profile Datas */}
             <div className="w-full flex flex-col items-center pb-2 gap-2">
               <p className="w-full font-semibold text-md italic text-gray-500">
-                INFO
+                {t("info")}
               </p>
               <div className="bg-white w-full p-4 rounded-md flex flex-col gap-4">
                 {/* name */}
                 <div className="flex flex-col w-full">
                   <label htmlFor="name" className={`${labelClass}`}>
-                    Name{" "}
+                    {t("name")}{" "}
                     {!isUsernameCorrect && (
                       <span className="text-red-500 font-bold">*</span>
                     )}
@@ -209,20 +212,20 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
                     type="text"
                     id="name"
                     className={inputClass}
-                    placeholder="Enter your name"
+                    placeholder={t("enterName")}
                     value={name}
                     onChange={(e) => checkUsername(e.target.value)}
                   />
                   {!isUsernameCorrect && (
                     <p className={`text-sm text-red-400 mt-1`}>
-                      Invalid User Name.
+                      {t("invalidName")}
                     </p>
                   )}
                 </div>
                 {/* Email */}
                 <div className="flex flex-col w-full">
                   <label htmlFor="email" className={`${labelClass}`}>
-                    Email{" "}
+                    {t("email")}{" "}
                     {!isEmailCorrect && (
                       <span className="text-red-500 font-bold">*</span>
                     )}
@@ -233,14 +236,14 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
                     className={
                       `${user?.isOAuth && "bg-gray-100"} ` + inputClass
                     }
-                    placeholder="Enter your Email"
+                    placeholder={t("enterEmail")}
                     value={email}
                     onChange={(e) => checkEmail(e.target.value)}
                     disabled={user?.isOAuth}
                   />
                   {!isEmailCorrect && (
                     <p className={`text-sm text-red-400 mt-1`}>
-                      Invalid Email.
+                      {t("invalidEmail")}
                     </p>
                   )}
                 </div>
@@ -250,10 +253,12 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
                     htmlFor="Change Password"
                     className={`${labelClass} flex justify-between items-center`}
                   >
-                    {passwordChange ? "Password" : "Change Password?"}
-                    {!isCurrentPasswordCorrect && (
-                      <span className="text-red-500 font-bold">*</span>
-                    )}
+                    <p>
+                      {passwordChange ? t("password") : t("changePassword")}{" "}
+                      {!isCurrentPasswordCorrect && (
+                        <span className="text-red-500 font-bold">*</span>
+                      )}
+                    </p>
                     <input
                       type="checkbox"
                       id="password-toggle"
@@ -272,21 +277,23 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
                       <PasswordInput
                         value={currentPassword}
                         onChange={checkCurrentPassword}
+                        placeholder={t("enterPassword")}
                       />
                       {!isCurrentPasswordCorrect && (
-                        <p className={`text-sm text-red-400 mt-1`}>
-                          Password must be less than 8 characters.
+                        <p className={`text-sm text-red-400 my-1 mb-2`}>
+                          {t("passwordMustBeAtLeast8Chars")}
                         </p>
                       )}
 
                       <PasswordInput
                         value={newPassword}
                         onChange={checkNewPassword}
+                        placeholder={t("enterPasswordAgain")}
                       />
 
                       {!isNewPasswordCorrect && (
                         <p className={`text-sm text-red-400 mt-1`}>
-                          Password must be less than 8 characters.
+                          {t("passwordMustBeAtLeast8Chars")}
                         </p>
                       )}
                     </>
@@ -298,13 +305,13 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
             {/* App Data */}
             <div className="w-full flex flex-col items-center pb-2 gap-2 border-t border-dashed border-gray-300 pt-2">
               <p className="w-full font-semibold text-md italic text-gray-500">
-                APP
+                {t("app")}
               </p>
               <div className="bg-white w-full p-4 rounded-md flex flex-col gap-4">
                 {/* Language */}
                 <div className="flex flex-col w-full py-1">
                   <label htmlFor="language" className={`${labelClass}`}>
-                    Language
+                    {t("language")}
                   </label>
 
                   <div className="flex flex-wrap gap-3 pt-2">
@@ -312,24 +319,24 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
                       <RadioButton
                         inputId="language"
                         name="language"
-                        value="myanmar"
+                        value="my"
                         onChange={(e) => setLanguage(e.value)}
-                        checked={language === "myanmar"}
+                        checked={language === "my"}
                       />
                       <label htmlFor="language" className="ml-2">
-                        Myanmar
+                        {t("myanmar")}
                       </label>
                     </div>
                     <div className="flex align-items-center">
                       <RadioButton
                         inputId="language"
                         name="language"
-                        value="english"
+                        value="en"
                         onChange={(e) => setLanguage(e.value)}
-                        checked={language === "english"}
+                        checked={language === "en"}
                       />
                       <label htmlFor="language" className="ml-2">
-                        English
+                        {t("english")}
                       </label>
                     </div>
                   </div>
@@ -338,7 +345,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
                 {/* Theme */}
                 <div className="flex flex-col w-full">
                   <label htmlFor="theme" className={`${labelClass}`}>
-                    Theme
+                    {t("theme")}
                   </label>
 
                   <div className="flex flex-wrap gap-3 pt-2">
@@ -382,13 +389,13 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
                     closeBox();
                   }}
                 >
-                  Save
+                  {t("save")}
                 </button>
                 <button
                   onClick={closeBox}
                   className="w-full bg-gray-200 px-4 text-black font-semibold p-2 rounded-md"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
               </div>
               <hr className="w-full border-dashed border-gray-300" />
@@ -400,7 +407,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
                   vibratePattern("long");
                 }}
               >
-                Log Out
+                {t("logOut")}
               </button>
             </div>
           </div>

@@ -47,7 +47,7 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("user", JSON.stringify(userDetails));
         localStorage.setItem("token", res.token);
         
-        localStorage.setItem("language", "myanmar");
+        localStorage.setItem("language", "my");
         localStorage.setItem("theme", "light");
         
         if(res.user.role === "admin"){
