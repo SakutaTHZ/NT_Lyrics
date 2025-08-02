@@ -185,7 +185,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
               <div className="bg-white w-full p-4 rounded-md flex flex-col gap-2">
                 <p>
                   {t("yourAccountIs")}
-                  <span className="text-blue-500 font-semibold">Free</span>{" "}
+                  <span className="text-blue-500 font-semibold pl-2">Free</span>{" "}
                 </p>
                 <p className="text-gray-500">[{t("tryPremium")}]</p>
                 <button className="bg-blue-100 px-2 py-2 rounded-md">
