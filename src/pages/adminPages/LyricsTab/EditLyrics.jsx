@@ -121,6 +121,8 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
   }, [lyric.featureArtists, features]);
 
   const deleteLyric = async () => {
+    console.log("Deleting lyric:", lyric);
+    
     if (!lyric?._id) {
       console.error("Missing lyric ID");
       return;

@@ -473,7 +473,6 @@ const LyricsTab = () => {
           onClose={closeModal}
           onUpdate={() => {
             getLyricOverview();
-            showNewMessage("success", "Lyric Updated Successfully!");
             setPage(1);
             fetchLyrics(1, true);
           }}
