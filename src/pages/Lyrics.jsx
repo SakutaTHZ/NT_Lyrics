@@ -20,10 +20,13 @@ import LyricsCard from "../components/special/LyricsCard";
 import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 import LoadingBox from "../components/common/LoadingBox";
+import { useTranslation } from "react-i18next";
 
 const Footer = React.lazy(() => import("../components/common/Footer"));
 
 const Lyrics = () => {
+  const { t } = useTranslation();
+
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
   const debouncedSearchTerm = useDebounce(searchTerm);
@@ -215,7 +218,7 @@ const Lyrics = () => {
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
         <div className="relative flex flex-col w-screen min-h-screen pt-4 md:pt-16">
           <div className="flex justify-between px-4 md:px-24">
-            <p className="font-bold text-lg italic">Song List</p>
+            <p className="font-bold text-lg italic">{t("songLyrics")}</p>
           </div>
           {}
           <div className="py-4 px-4 md:px-24 sticky md:top-12 top-0 bg-white shadow-2xs z-10">

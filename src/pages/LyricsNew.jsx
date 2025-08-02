@@ -17,7 +17,11 @@ import LyricsRowPremium from "../components/special/LyricRowPremium";
 
 const Footer = React.lazy(() => import("../components/common/Footer"));
 
+import { useTranslation } from "react-i18next";
+
 const Lyrics = () => {
+  const { t } = useTranslation();
+
   // Get parameters from the URL
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
@@ -160,7 +164,7 @@ const Lyrics = () => {
       <div className="w-screen h-screen">
         <div className="relative flex flex-col w-screen min-h-screen pt-4 md:pt-16">
           <div className="flex justify-between px-4 md:px-24">
-            <p className="font-bold text-lg italic">Song List</p>
+            <p className="font-bold text-lg italic">{t("songLyrics")}</p>
           </div>
 
           {/* Search input for lyrics */}
@@ -168,7 +172,7 @@ const Lyrics = () => {
             <div className="flex justify-between gap-2">
               <input
                 type="text"
-                placeholder="သီချင်းရှာကြမယ်..."
+                placeholder={t("searchSongs")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded"

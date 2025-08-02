@@ -11,6 +11,8 @@ import {
 } from "../../assets/util/api"; // Assuming you're using PrimeReact for Dialog
 import AddToCollectionBox from "./AddToCollectionBox";
 
+import { useTranslation } from "react-i18next";
+
 const LyricRowPremium = ({
   id,
   lyric,
@@ -18,6 +20,8 @@ const LyricRowPremium = ({
   lastUserRef,
   hideCollection = false,
 }) => {
+  const { t } = useTranslation();
+
   const ref = isLast ? lastUserRef : null;
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
@@ -43,8 +47,8 @@ const LyricRowPremium = ({
   const changeLyricsStatus = async (shouldAdd) => {
     const token = localStorage.getItem("token");
     const message = shouldAdd
-      ? "Lyrics has been added to the collection"
-      : "Lyrics has been removed from the collection";
+      ? t("lyricHasBeenAddedToCollection")
+      : t("lyricHasBeenRemovedFromCollection")
 
     try {
       let res = null;

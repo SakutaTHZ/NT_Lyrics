@@ -40,5 +40,10 @@
   "noLyricsFound": "သီချင်းစာသား မတွေ့ပါ",
   "popularArtists": "လူကြိုက်အများဆုံး အနုပညာရှင်များ",
   "featureVideos": "ထူးခြားဗီဒီယိုများ",
-  "Announcement": "ကြေညာချက်"
+  "Announcement": "ကြေညာချက်",
+
+  "songLyrics": "သီချင်းစာသားများ",
+  "lyricHasBeenAddedToCollection": "သီချင်းစာသားကို သင့်စုစည်းမှုထဲသို့ ထည့်ပြီးပါပြီ။",
+  "lyricHasBeenRemovedFromCollection": "သီချင်းစာသားကို သင့်စုစည်းမှုမှ ဖယ်ရှားပြီးပါပြီ။",
+  "lyricNotFound": "သီချင်းစာသား မတွေ့ပါ။"
 }

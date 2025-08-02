@@ -14,6 +14,8 @@ import {
 import { useVibration } from "../hooks/useVibration";
 // import { TbError404 } from "react-icons/tb";
 
+import { useTranslation } from "react-i18next";
+
 const LyricsRow = ({
   id,
   lyric,
@@ -24,6 +26,8 @@ const LyricsRow = ({
   // variable pass to parent if collection status is changed
   onCollectionStatusChange = () => {},
 }) => {
+  const { t } = useTranslation();
+
   const { vibrateOnce } = useVibration();
   const [imageError, setImageError] = useState(false);
 
@@ -49,8 +53,8 @@ const LyricsRow = ({
   const changeLyricsStatus = async (shouldAdd) => {
     const token = localStorage.getItem("token");
     const message = shouldAdd
-      ? "Lyrics has been added to the collection"
-      : "Lyrics has been removed from the collection";
+      ? t("lyricHasBeenAddedToCollection")
+      : t("lyricHasBeenRemovedFromCollection");
 
     try {
       let res = null;

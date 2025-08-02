@@ -40,5 +40,10 @@
   "noLyricsFound": "No lyrics found",
   "popularArtists": "Popular Artists",
   "featureVideos": "Feature Videos",
-  "Announcement": "Announcement"
+  "Announcement": "Announcement",
+
+  "songLyrics": "Song Lyrics",
+  "lyricHasBeenAddedToCollection": "The lyrics have been added to your collection.",
+  "lyricHasBeenRemovedFromCollection": "The lyrics have been removed from your collection.",
+  "lyricNotFound": "Lyrics not found."
 }
