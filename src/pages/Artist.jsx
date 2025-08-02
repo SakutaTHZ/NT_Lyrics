@@ -15,6 +15,7 @@ import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 
 const Artist = () => {
+  const AUTH_TOKEN = useRef(localStorage.getItem("token"));
   const { name } = useParams();
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
@@ -64,6 +65,29 @@ const Artist = () => {
       console.error("Error fetching user overview:", err);
     }
   }, [name]);
+
+  const [lyricsCount, setLyricsCount] = useState(0);
+
+  const getLyricsCountByArtist = useCallback(async () => {
+    try {
+      const res = await axios.get(
+        `${apiUrl}/lyrics/getLyricsCountByArtist?artistId=${name}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${AUTH_TOKEN.current}`,
+          },
+        }
+      );
+      setLyricsCount(res.data.lyricsCount);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    }
+  }, [name]);
+
+  useEffect(() => {
+      getLyricsCountByArtist();
+  }, [getLyricsCountByArtist]);
 
   const fetchLyrics = useCallback(
     async (pageNum, override = false) => {
@@ -186,7 +210,7 @@ const Artist = () => {
                 )}
                 <div className="flex items-center gap-4">
                   <p className="text-gray-500">
-                    {lyrics.length} {lyrics.length > 1 ? "songs" : "song"}
+                    {lyricsCount} {lyrics.length > 1 ? "songs" : "song"}
                   </p>
                 </div>
               </div>

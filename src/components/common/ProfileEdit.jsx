@@ -61,7 +61,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
   };
 
   const updateUser = async () => {
-    if (!user || !user.id) {
+    if (!user || !user._id) {
       alert("User data is missing.");
       return;
     }
@@ -90,7 +90,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
     }
 
     try {
-      const response = await fetch(`${apiUrl}/users/${user.id}`, {
+      const response = await fetch(`${apiUrl}/users/${user._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -118,6 +118,8 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
       emailChange(result.user.email);
 
       localStorage.setItem("user", JSON.stringify(userDetails));
+      localStorage.setItem("language", language);
+      localStorage.setItem("theme", theme);
     } catch (error) {
       console.error("Error updating user:", error.errors[0].message);
       alert("An error occurred while updating the profile.");

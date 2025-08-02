@@ -108,7 +108,7 @@ const Profile = () => {
 
   const getUserType = () => {
     if (!user) return "guest";
-    if (user.role === "premium-user") return "premium";
+    if (user?.role === "premium-user") return "premium";
     return "free";
   };
 
