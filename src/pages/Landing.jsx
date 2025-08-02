@@ -20,7 +20,11 @@ import {
 } from "../assets/util/api";
 import LoadingBox from "../components/common/LoadingBox";
 
+import { useTranslation } from "react-i18next";
+
 const Landing = () => {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -179,7 +183,7 @@ const Landing = () => {
               <div className="border border-gray-300 rounded-md p-2 flex items-center gap-2">
                 <input
                   type="text"
-                  placeholder="သီချင်းရှာကြမယ်"
+                  placeholder={t("searchSongs")}
                   className="w-full outline-0"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -198,19 +202,19 @@ const Landing = () => {
           {/* Announcement Board */}
           <div className="relative p-4 md:px-24">
             <p className="bg-blue-50 rounded-md p-2 text-blue-950 text-sm md:text-base border border-dashed border-blue-200">
-              <b>Announcement :</b> New features coming soon!
+              <b>{t("Announcement")} :</b> New features coming soon!
             </p>
           </div>
 
           {/* Featured Lyrics */}
           <div className="relative p-4 pb-0 md:px-24">
             <div className="flex justify-between">
-              <p className="font-bold text-lg italic">Featured Lyrics</p>
+              <p className="font-bold text-lg italic">{t("featureLyrics")}</p>
               <Link
                 to="/NT_Lyrics/lyrics"
                 className="border border-gray-300 px-2 py-1 rounded-md text-sm text-white bg-blue-500 hover:bg-blue-600"
               >
-                See All
+                {t("seeAll")}
               </Link>
             </div>
 
@@ -226,12 +230,12 @@ const Landing = () => {
           {/* Featured Songs */}
           <div className="relative p-4 pb-0 md:px-24">
             <div className="flex justify-between">
-              <p className="font-bold text-lg italic">Popular Artists</p>
+              <p className="font-bold text-lg italic">{t("popularArtists")}</p>
               <Link
                 to="/NT_Lyrics/artists"
                 className="border border-gray-300 px-2 py-1 rounded-md text-sm text-white bg-blue-500  hover:bg-blue-600 "
               >
-                See All
+                {t("seeAll")}
               </Link>
             </div>
 
@@ -261,7 +265,7 @@ const Landing = () => {
           {/* Featured Videos */}
           <div className="relative p-4 md:px-24">
             <div className="flex justify-between">
-              <p className="font-bold text-lg italic">Featured Videos</p>
+              <p className="font-bold text-lg italic">{t("featureVideos")}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 py-4 gap-4 md:gap-12">

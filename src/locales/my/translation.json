@@ -22,13 +22,23 @@
   "enterPassword": "စကားဝှက်ထည့်ရန်",
   "enterPasswordAgain": "စကားဝှက်ကို ထပ်မံထည့်ပါ",
   "changePassword": "စကားဝှက်ပြောင်းရန်",
-    "passwordMustBeAtLeast8Chars": "စကားဝှက်သည် အနည်းဆုံး ၈ လုံး ရှိရမည်။",
+  "passwordMustBeAtLeast8Chars": "စကားဝှက်သည် အနည်းဆုံး ၈ လုံး ရှိရမည်။",
   "save": "သိမ်းမည်",
   "cancel": "မလုပ်တော့ပါ",
   "deleteAccount": "အကောင့်ဖျက်ရန်",
   "logOut": "အကောင့်ထွက်မည်",
   "tryPremium": "ပိုမိုအံ့သြဖွယ်ကောင်းသော ဝန်ဆောင်မှုများအတွက် Premium ကို စမ်းသုံးကြည့်ပါ",
-    "learnMore": "ပိုမိုသိရှိရန်",
-    "myanmar": "မြန်မာ",
-  "english": "အင်္ဂလိပ်"
+  "learnMore": "ပိုမိုသိရှိရန်",
+  "myanmar": "မြန်မာ",
+  "english": "အင်္ဂလိပ်",
+
+  "haveFunWithSongs": "သီချင်းများနဲ့ ပျော်ရွှင်နိုင်ကြပါစေ",
+  "discoverLyrics": "သင့်အကြိုက်ဆုံး သီချင်းစာသားများကို ရှာဖွေပါ",
+  "searchSongs": "သီချင်းရှာကြမယ်",
+  "featureLyrics": "လူကြိုက်များသောသီချင်းများ",
+  "seeAll": "ကြည့်ရန်",
+  "noLyricsFound": "သီချင်းစာသား မတွေ့ပါ",
+  "popularArtists": "လူကြိုက်အများဆုံး အနုပညာရှင်များ",
+  "featureVideos": "ထူးခြားဗီဒီယိုများ",
+  "Announcement": "ကြေညာချက်"
 }

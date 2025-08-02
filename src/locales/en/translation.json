@@ -14,7 +14,7 @@
   "theme": "Theme",
   "name": "Name",
   "invalidName": "Invalid name",
-    "enterName": "Enter your name",
+  "enterName": "Enter your name",
   "invalidEmail": "Invalid email",
   "email": "Email",
   "enterEmail": "Enter your email",
@@ -29,6 +29,16 @@
   "logOut": "Log Out",
   "tryPremium": "Try Premium for more amazing features.",
   "learnMore": "Learn More",
-    "myanmar": "Myanmar",
-    "english": "English"
+  "myanmar": "Myanmar",
+  "english": "English",
+
+  "haveFunWithSongs": "Have fun with songs",
+  "discoverLyrics": "Discover lyrics of your favorite songs",
+  "searchSongs": "Search for songs",
+  "featureLyrics": "Popular lyrics",
+  "seeAll": "See All",
+  "noLyricsFound": "No lyrics found",
+  "popularArtists": "Popular Artists",
+  "featureVideos": "Feature Videos",
+  "Announcement": "Announcement"
 }
