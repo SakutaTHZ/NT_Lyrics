@@ -11,7 +11,7 @@ export const GenreEnum = {
   Blues: "Blues",
   None: "None",
   Other: "Other",
-  RocknRoll: "Rock 'n' Roll",
+  RocknRoll: "Rock N Roll",
 };
 
 export const genreOptions = Object.values(GenreEnum).map((name) => ({ name }));
