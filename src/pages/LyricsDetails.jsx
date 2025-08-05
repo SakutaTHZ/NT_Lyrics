@@ -263,7 +263,7 @@ const LyricsDetails = () => {
                 {/* Artist name */}
                 {lyric.singers.length > 0 && (
                   <div className="flex items-start gap-2">
-                    <p className={`text-sm text-gray-600  min-w-16 max-w-24 text-nowrap p-1`}>{t("artist")}:</p>
+                    <p className={`text-sm text-gray-600  min-w-16 max-w-24 p-1`}>{t("singer")}:</p>
 
                     <div className="w-1/2 flex flex-wrap gap-2">
                       {lyric.singers.map((artistData, index) => (
@@ -286,7 +286,7 @@ const LyricsDetails = () => {
                 {/* Feature Artist name */}
                 {lyric.featureArtists.length > 0 && (
                   <div className="flex items-start gap-2">
-                    <p className={`text-sm text-gray-600 min-w-16 max-w-24 text-nowrap p-1`}>
+                    <p className={`text-sm text-gray-600 min-w-16 max-w-24 p-1`}>
                       {t("featuring")}:
                     </p>
 
@@ -311,7 +311,7 @@ const LyricsDetails = () => {
                 {/* Writer name */}
                 {lyric.writers.length > 0 && (
                   <div className="flex items-start gap-2">
-                    <p className={`text-sm text-gray-600  min-w-16 max-w-24 text-nowrap p-1`}>{t("wrtier")}:</p>
+                    <p className={`text-sm text-gray-600  min-w-16 max-w-24 p-1`}>{t("wrtier")}:</p>
                     <div className="w-1/2 flex flex-wrap gap-2">
                       {lyric.writers.map((writerData, index) => (
                         <div
