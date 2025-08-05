@@ -18,7 +18,11 @@ import {
 } from "../assets/util/api";
 import { validateUser } from "../assets/util/api";
 
+import { useTranslation } from "react-i18next";
+
 const LyricsDetails = () => {
+  const { t } = useTranslation();
+
   const [imageError, setImageError] = useState(false);
 
   const [showGallery, setShowGallery] = useState(false);
@@ -237,7 +241,7 @@ const LyricsDetails = () => {
               </p>
               {lyric.albumName && lyric.albumName !== "?" && (
                 <p className="text-sm text-gray-600 pb-2">
-                  Album - {lyric.albumName}
+                  {t("album")} - {lyric.albumName}
                 </p>
               )}
 
@@ -259,7 +263,7 @@ const LyricsDetails = () => {
                 {/* Artist name */}
                 {lyric.singers.length > 0 && (
                   <div className="flex items-start gap-2">
-                    <p className={`text-sm text-gray-600 w-16 p-1`}>Artist:</p>
+                    <p className={`text-sm text-gray-600  min-w-16 max-w-24 text-nowrap p-1`}>{t("artist")}:</p>
 
                     <div className="w-1/2 flex flex-wrap gap-2">
                       {lyric.singers.map((artistData, index) => (
@@ -282,8 +286,8 @@ const LyricsDetails = () => {
                 {/* Feature Artist name */}
                 {lyric.featureArtists.length > 0 && (
                   <div className="flex items-start gap-2">
-                    <p className={`text-sm text-gray-600 w-16 p-1`}>
-                      Featuring:
+                    <p className={`text-sm text-gray-600 min-w-16 max-w-24 text-nowrap p-1`}>
+                      {t("featuring")}:
                     </p>
 
                     <div className="w-1/2 flex flex-wrap gap-2">
@@ -307,7 +311,7 @@ const LyricsDetails = () => {
                 {/* Writer name */}
                 {lyric.writers.length > 0 && (
                   <div className="flex items-start gap-2">
-                    <p className={`text-sm text-gray-600 w-16 p-1`}>Writer:</p>
+                    <p className={`text-sm text-gray-600  min-w-16 max-w-24 text-nowrap p-1`}>{t("wrtier")}:</p>
                     <div className="w-1/2 flex flex-wrap gap-2">
                       {lyric.writers.map((writerData, index) => (
                         <div
@@ -339,7 +343,7 @@ const LyricsDetails = () => {
                   isInCollection ? (
                     <Normal_Button
                       icon={CgRemove}
-                      text="Remove from Collection"
+                      text={t("removeFromCollection")}
                       custom_class={`w-8 h-8 border-transparent shadow-sm bg-red-50 text-red-500 transition-all`}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -349,7 +353,7 @@ const LyricsDetails = () => {
                   ) : (
                     <Normal_Button
                       icon={FaRegHeart}
-                      text="Add to Collection"
+                      text={t("addToCollection")}
                       custom_class={`w-8 h-8 border-transparent shadow-sm bg-white transition-all`}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -364,7 +368,7 @@ const LyricsDetails = () => {
                       className={` flex items-center gap-2 border px-2 py-1 rounded-xl border-gray-300`}
                     >
                       <LuLogIn size={18} />
-                      Login to try Collections
+                      {t("loginToTryCollection")}
                     </Link>
                   </>
                 )}
@@ -376,7 +380,7 @@ const LyricsDetails = () => {
             className="w-full md:w-122 border p-2 flex gap-2 items-center meshBg rounded-md text-white border-gray-100 shadow-2xl"
             onClick={goBack}
           >
-            <BiArrowBack size={20} /> <p>Back To Lyrics</p>
+            <BiArrowBack size={20} /> <p>{t("backtoLyrics")}</p>
           </button>
         </div>
 

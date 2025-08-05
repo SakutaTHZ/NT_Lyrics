@@ -45,5 +45,20 @@
   "songLyrics": "သီချင်းစာသားများ",
   "lyricHasBeenAddedToCollection": "သီချင်းစာသားကို သင့်စုစည်းမှုထဲသို့ ထည့်ပြီးပါပြီ။",
   "lyricHasBeenRemovedFromCollection": "သီချင်းစာသားကို သင့်စုစည်းမှုမှ ဖယ်ရှားပြီးပါပြီ။",
-  "lyricNotFound": "သီချင်းစာသား မတွေ့ပါ။"
+  "lyricNotFound": "သီချင်းစာသား မတွေ့ပါ။",
+
+  "artistsList": "အနုပညာရှင်များစာရင်း",
+  "artistDetails": "အနုပညာရှင်အသေးစိတ်",
+  "artistNotFound": "အနုပညာရှင် မတွေ့ပါ။",
+  "noArtistsFound": "အနုပညာရှင် မတွေ့ပါ။",
+  "searchforArtists": "အနုပညာရှင်များကို ရှာဖွေပါ",
+
+  "addToCollection": "သင့်စုစည်းမှုထဲသို့ ထည့်ပါ",
+  "removeFromCollection": "သင့်စုစည်းမှုမှ ဖယ်ရှားပြီးပါ",
+  "albumn": "အယ်လ်ဘမ်",
+  "artist": "အနုပညာရှင်",
+  "wrtier": "စာရေးဆရာ",
+  "featuring": "ပါဝင်သည့် အနုပညာရှင်",
+  "backtoLyrics": "သီချင်းစာသားများသို့ ပြန်သွားမည်",
+  "loginToTryCollection": "သင့်စုစည်းမှုကို စမ်းသုံးရန် အကောင့်ဝင်ပါ"
 }

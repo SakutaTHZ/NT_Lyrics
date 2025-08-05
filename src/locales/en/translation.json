@@ -45,5 +45,20 @@
   "songLyrics": "Song Lyrics",
   "lyricHasBeenAddedToCollection": "The lyrics have been added to your collection.",
   "lyricHasBeenRemovedFromCollection": "The lyrics have been removed from your collection.",
-  "lyricNotFound": "Lyrics not found."
+  "lyricNotFound": "Lyrics not found.",
+
+  "artistsList": "Artists List",
+  "artistDetails": "Artist Details",
+  "artistNotFound": "Artist not found.",
+  "noArtistsFound": "No artists found.",
+  "searchforArtists": "Search for artists",
+
+  "addToCollection": "Add to your collection",
+  "removeFromCollection": "Remove from your collection",
+  "albumn": "Album",
+  "artist": "Artist",
+  "wrtier": "Writer",
+  "featuring": "Featuring",
+  "backtoLyrics" : "Back to Lyrics",
+  "loginToTryCollection" : "Login to try Collections"
 }

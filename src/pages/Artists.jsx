@@ -6,7 +6,11 @@ import { BiArrowBack, BiSearch } from "react-icons/bi";
 import { apiUrl } from "../assets/util/api";
 import axios from "axios";
 
+import { useTranslation } from "react-i18next";
+
 const Artists = () => {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const goBack = () => {
     navigate(-1);
@@ -102,7 +106,7 @@ const Artists = () => {
                 <button onClick={goBack}>
                   <BiArrowBack size={20} />
                 </button>
-                Artists
+                {t("artistsList")}
               </p>
 
               {/* Search input for lyrics */}
@@ -110,7 +114,7 @@ const Artists = () => {
                 <div className="flex justify-between gap-2">
                   <input
                     type="text"
-                    placeholder="Search by Artist Name"
+                    placeholder={t("searchforArtists")}
                     className="border border-gray-300 rounded-md px-3 py-2 w-full h-[42px]"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
