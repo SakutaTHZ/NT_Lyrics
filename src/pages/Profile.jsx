@@ -35,6 +35,7 @@ const Profile = () => {
   );
 
   const [user, setUser] = useState(null);
+  const [userRole,setUserRole] = useState("free-user");
   const [userLoaded, setUserLoaded] = useState(false);
 
   useEffect(() => {
@@ -68,6 +69,7 @@ const Profile = () => {
     if (!user) return;
     setUsername(user.name);
     setEmail(user.email);
+    setUserRole(user.role)
   }, [user]);
 
   const [showEdit, setShowEdit] = useState(false);
@@ -108,7 +110,7 @@ const Profile = () => {
 
   const getUserType = () => {
     if (!user) return "guest";
-    if (user?.role === "premium-user") return "premium";
+    if (userRole === "premium-user") return "premium";
     return "free";
   };
 
@@ -217,12 +219,12 @@ const Profile = () => {
               />
               <span
                 className={`text-xs font-normal absolute px-2 py-0.5 -bottom-2.5 rounded-full ${
-                  user.role === "premium-user"
+                  userRole === "premium-user"
                     ? "bg-amber-200 text-gray-600"
                     : "bg-gray-200 text-gray-600"
                 }`}
               >
-                {user.role === "premium-user" ? "premium" : "free"}
+                {userRole === "premium-user" ? "premium" : "free"}
               </span>
             </div>
 
@@ -237,14 +239,14 @@ const Profile = () => {
                 <p>
                   <span
                     className={`${
-                      user.role != "premium-user" &&
+                      userRole != "premium-user" &&
                       defaultGroupCount === 20 &&
                       "text-red-500"
                     } font-semibold mr-1`}
                   >
                     {defaultGroupCount}
                   </span>
-                  {user.role != "premium-user" && (
+                  {userRole != "premium-user" && (
                     <span>
                       <span className="font-normal mr-1">/</span>
                       <span className="font-normal">20</span>
@@ -252,7 +254,7 @@ const Profile = () => {
                   )}
                 </p>
               </div>
-              {user.role === "premium-user" && (
+              {userRole === "premium-user" && (
                 <div className="flex items-center gap-2 px-4 border-l border-gray-300">
                   <p className=" text-lg">Groups -</p>
                   <span className="font-semibold">
@@ -263,7 +265,7 @@ const Profile = () => {
             </div>
 
             <div className="relative">
-              {user.role != "premium-user" && defaultGroupCount === 20 && (
+              {userRole != "premium-user" && defaultGroupCount === 20 && (
                 <button className="bg-amber-200 px-5 py-1 rounded-full w-full">
                   More features in Premium{" "}
                   <span className="text-blue-700 animate-pulse">
@@ -281,7 +283,7 @@ const Profile = () => {
             </button>
           </div>
         </div>
-        {user.role === "premium-user" ? (
+        {userRole === "premium-user" ? (
           collection?.collections?.length > 0 && (
             <div className="flex flex-col py-2 px-4 md:px-24">
               <div className="flex flex-col items-center justify-between md:gap-4  sticky top-0  z-20">
