@@ -293,7 +293,7 @@ const Profile = () => {
                     {(collection?.collections || []).map((col, idx) => (
                       <span
                         key={idx}
-                        className={`px-2 py-1 rounded-md border border-gray-300 font-semibold cursor-pointer ${
+                        className={`px-2 py-1 rounded-md border border-gray-300 font-semibold cursor-pointer text-nowrap ${
                           selectedGroup === col.group ? "bg-gray-200" : ""
                         }`}
                         onClick={() => handleGroupChange(col.group)}

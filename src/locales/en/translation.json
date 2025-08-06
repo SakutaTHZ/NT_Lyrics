@@ -61,5 +61,9 @@
   "wrtier": "Writer",
   "featuring": "Featuring",
   "backtoLyrics" : "Back to Lyrics",
-  "loginToTryCollection" : "Login to try Collections"
+  "loginToTryCollection" : "Login to try Collections",
+
+  "enterNewCollectionName": "Enter New Collection Name",
+  "createNewCollection": "Create New Collection",
+  "collections" : "Collections"
 }

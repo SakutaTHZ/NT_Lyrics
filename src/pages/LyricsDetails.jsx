@@ -19,6 +19,7 @@ import {
 import { validateUser } from "../assets/util/api";
 
 import { useTranslation } from "react-i18next";
+import AddToCollectionBox from "../components/special/AddToCollectionBox";
 
 const LyricsDetails = () => {
   const { t } = useTranslation();
@@ -52,6 +53,8 @@ const LyricsDetails = () => {
 
     getLyric();
   }, [id]);
+
+  const [addToCollection, setAddToCollection] = useState(false);
 
   const [hasToken, setHasToken] = useState(false);
   const [user, setUser] = useState(null);
@@ -263,7 +266,11 @@ const LyricsDetails = () => {
                 {/* Artist name */}
                 {lyric.singers.length > 0 && (
                   <div className="flex items-start gap-2">
-                    <p className={`text-sm text-gray-600  min-w-16 max-w-24 p-1`}>{t("singer")}:</p>
+                    <p
+                      className={`text-sm text-gray-600  min-w-16 max-w-24 p-1`}
+                    >
+                      {t("singer")}:
+                    </p>
 
                     <div className="w-1/2 flex flex-wrap gap-2">
                       {lyric.singers.map((artistData, index) => (
@@ -286,7 +293,9 @@ const LyricsDetails = () => {
                 {/* Feature Artist name */}
                 {lyric.featureArtists.length > 0 && (
                   <div className="flex items-start gap-2">
-                    <p className={`text-sm text-gray-600 min-w-16 max-w-24 p-1`}>
+                    <p
+                      className={`text-sm text-gray-600 min-w-16 max-w-24 p-1`}
+                    >
                       {t("featuring")}:
                     </p>
 
@@ -311,7 +320,11 @@ const LyricsDetails = () => {
                 {/* Writer name */}
                 {lyric.writers.length > 0 && (
                   <div className="flex items-start gap-2">
-                    <p className={`text-sm text-gray-600  min-w-16 max-w-24 p-1`}>{t("wrtier")}:</p>
+                    <p
+                      className={`text-sm text-gray-600  min-w-16 max-w-24 p-1`}
+                    >
+                      {t("wrtier")}:
+                    </p>
                     <div className="w-1/2 flex flex-wrap gap-2">
                       {lyric.writers.map((writerData, index) => (
                         <div
@@ -347,7 +360,9 @@ const LyricsDetails = () => {
                       custom_class={`w-8 h-8 border-transparent shadow-sm bg-red-50 text-red-500 transition-all`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        changeLyricsStatus(false);
+                        user?.role === "premium-user"
+                          ? setAddToCollection(true)
+                          : changeLyricsStatus(false);
                       }}
                     />
                   ) : (
@@ -357,7 +372,9 @@ const LyricsDetails = () => {
                       custom_class={`w-8 h-8 border-transparent shadow-sm bg-white transition-all`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        changeLyricsStatus(true);
+                        user?.role === "premium-user"
+                          ? setAddToCollection(true)
+                          : changeLyricsStatus(true);
                       }}
                     />
                   )
@@ -383,6 +400,14 @@ const LyricsDetails = () => {
             <BiArrowBack size={20} /> <p>{t("backtoLyrics")}</p>
           </button>
         </div>
+
+        {addToCollection && (
+          <AddToCollectionBox
+            id={id}
+            addToCollection={addToCollection}
+            close={() => setAddToCollection(false)}
+          />
+        )}
 
         <Footer />
       </div>

@@ -61,5 +61,9 @@
   "wrtier": "တေးရေး",
   "featuring": "ပါဝင်သည့် အနုပညာရှင်",
   "backtoLyrics": "သီချင်းစာသားများသို့ ပြန်သွားမည်",
-  "loginToTryCollection": "သင့်စုစည်းမှုကို စမ်းသုံးရန် အကောင့်ဝင်ပါ"
+  "loginToTryCollection": "သင့်စုစည်းမှုကို စမ်းသုံးရန် အကောင့်ဝင်ပါ",
+
+  "enterNewCollectionName": "စုစည်းမှုအမည်အသစ်ကို ထည့်သွင်းပါ။",
+  "createNewCollection": "စုစည်းမှုအသစ်ကို ဖန်တီးပါ။",
+  "collections" : "စုစည်းမှုများ"
 }

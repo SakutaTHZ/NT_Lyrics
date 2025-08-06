@@ -46,14 +46,17 @@
 }
 
 .customHeader {
-  padding: 0.75rem 1.5rem !important;
+  padding: 0.5rem 1rem !important;
   border: none !important;
+  .p-dialog-title{
+  font-size: medium !important;
+  }
   .p-dialog-header-icons {
     align-self: center !important;
   }
 }
 .customContent {
-  padding: 0.75rem 1.5rem !important;
+  padding: 0.75rem 1rem !important;
   border: none !important;
 }
 
@@ -104,5 +107,15 @@
   .lyrics-wrapper {
     padding-left: 6rem;  /* 96px */
     padding-right: 6rem;
+  }
+}
+
+.checkbox-fade {
+  opacity: 0;
+  animation: fadeIn 2s forwards;
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
   }
 }

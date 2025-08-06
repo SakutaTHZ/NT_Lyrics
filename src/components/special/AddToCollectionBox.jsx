@@ -10,7 +10,11 @@ import {
 import { Checkbox } from "primereact/checkbox";
 import { CgAdd } from "react-icons/cg";
 
+import { useTranslation } from "react-i18next";
+
 const AddToCollectionBox = ({ id, addToCollection, close }) => {
+  const { t } = useTranslation();
+
   const token = localStorage.getItem("token");
   const [collection, setCollection] = useState([]);
   const [newCollectionName, setNewCollectionName] = useState("");
@@ -99,42 +103,47 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
   };
 
   const handleCollectionsEdit = async () => {
-  const currentSet = new Set(currentCollections);
-  const selectedSet = new Set(selectedCollections);
+    const currentSet = new Set(currentCollections);
+    const selectedSet = new Set(selectedCollections);
 
-  const toAdd = selectedCollections.filter((group) => !currentSet.has(group));
-  const toRemove = currentCollections.filter(
-    (group) => !selectedSet.has(group)
-  );
+    const toAdd = selectedCollections.filter((group) => !currentSet.has(group));
+    const toRemove = currentCollections.filter(
+      (group) => !selectedSet.has(group)
+    );
 
-  try {
-    const token = localStorage.getItem("token");
-    const lyricId = id;
+    try {
+      const token = localStorage.getItem("token");
+      const lyricId = id;
 
-    if (toAdd.length > 0) {
-      await addLyricToGroups(lyricId, toAdd, token);
+      if (toAdd.length > 0) {
+        await addLyricToGroups(lyricId, toAdd, token);
+      }
+
+      if (toRemove.length > 0) {
+        await removeLyricFromGroups(lyricId, toRemove, token);
+      }
+
+      handleMessageTimer(t("lyricHasBeenAddedToCollection"), "success");
+
+      // Delay a bit to let the user see the message, then reload
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000); // 1 second delay to show success message
+    } catch (err) {
+      console.error("Error updating lyric collections:", err);
+      handleMessageTimer("Failed to update collections", "error");
     }
+  };
 
-    if (toRemove.length > 0) {
-      await removeLyricFromGroups(lyricId, toRemove, token);
-    }
-
-    handleMessageTimer("Lyric collections updated successfully", "success");
-
-    // Delay a bit to let the user see the message, then reload
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000); // 1 second delay to show success message
-
-  } catch (err) {
-    console.error("Error updating lyric collections:", err);
-    handleMessageTimer("Failed to update collections", "error");
-  }
-};
+  const sortedCollections = [...collection].sort((a, b) => {
+  if (a.group.toLowerCase() === "default") return -1;
+  if (b.group.toLowerCase() === "default") return 1;
+  return a.group.localeCompare(b.group); // optional: alphabetical sort
+});
 
   return (
     <Dialog
-      header="Add to Collection"
+      header={t("addToCollection")}
       visible={addToCollection}
       style={{ width: "90vw", maxWidth: "400px" }}
       onHide={close}
@@ -159,29 +168,43 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
             {message}
           </small>
         )}
-        <div className="flex items-center justify-between gap-2">
-          <input
-            type="text"
-            placeholder="Enter New Collection"
-            className="border border-gray-300 p-2 rounded w-full"
-            value={newCollectionName}
-            onChange={(e) => setNewCollectionName(e.target.value)}
-          />
-          <button onClick={handleAddNewCollection}>
-            <CgAdd size={24} />
-          </button>
+        <div className="flex flex-col items-start justify-between gap-2  bg-blue-50 border border-gray-100 rounded-md p-2">
+          <p className="font-semibold">{t("createNewCollection")}</p>
+          <div className="flex items-center justify-between gap-2 w-full">
+            <input
+              type="text"
+              placeholder="Enter New Collection"
+              className="border border-gray-200 p-2 rounded w-full bg-white"
+              value={newCollectionName}
+              onChange={(e) => setNewCollectionName(e.target.value)}
+            />
+            <button
+              onClick={handleAddNewCollection}
+              className="p-2 bg-blue-500 text-white rounded"
+            >
+              <CgAdd size={24} />
+            </button>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-3 max-h-60 overflow-y-auto">
-          {collection.map((col, i) => (
-            <div key={i} className="flex items-center justify-between">
-              {col.group}
-              <Checkbox
-                onChange={() => handleCheckboxChange(col.group)}
-                checked={selectedCollections.includes(col.group)}
-              />
-            </div>
-          ))}
+        <div className="flex flex-col gap-3 max-h-60 overflow-y-auto p-2">
+          <p className="font-semibold pb-2 border-b border-dashed border-gray-300">
+            {t("collections")}
+          </p>
+          {!sortedCollections.length ? (
+            <p className="text-sm text-gray-400">Loading...</p>
+          ) : (
+            sortedCollections.map((col, i) => (
+              <div key={i} className="flex items-center justify-between">
+                {col.group}
+                <Checkbox
+                  checked={selectedCollections.includes(col.group)}
+                  onChange={() => handleCheckboxChange(col.group)}
+                  className="checkbox-fade"
+                />
+              </div>
+            ))
+          )}
         </div>
 
         <button
