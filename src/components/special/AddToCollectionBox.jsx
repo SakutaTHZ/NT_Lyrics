@@ -188,7 +188,7 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
         </div>
 
         <div className="flex flex-col gap-3 max-h-60 overflow-y-auto p-2">
-          <p className="font-semibold pb-2 border-b border-dashed border-gray-300">
+          <p className="font-semibold pb-4 border-b border-dashed border-gray-300">
             {t("collections")}
           </p>
           {!sortedCollections.length ? (

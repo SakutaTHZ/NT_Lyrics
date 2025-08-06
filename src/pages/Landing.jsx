@@ -21,6 +21,7 @@ import {
 import LoadingBox from "../components/common/LoadingBox";
 
 import { useTranslation } from "react-i18next";
+import AnnouncementBoard from "../components/common/AnnouncementBoard";
 
 const Landing = () => {
   const { t } = useTranslation();
@@ -200,11 +201,7 @@ const Landing = () => {
           </div>
 
           {/* Announcement Board */}
-          <div className="relative p-4 md:px-24">
-            <p className="bg-blue-50 rounded-md p-2 text-blue-950 text-sm md:text-base border border-dashed border-blue-200">
-              <b>{t("Announcement")} :</b> New features coming soon!
-            </p>
-          </div>
+          <AnnouncementBoard/>
 
           {/* Featured Lyrics */}
           <div className="relative p-4 pb-0 md:px-24">
