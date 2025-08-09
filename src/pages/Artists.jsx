@@ -2,7 +2,7 @@ import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Footer from "../components/common/Footer";
 import useDebounce from "../components/hooks/useDebounce";
 import { useNavigate } from "react-router-dom";
-import { BiArrowBack, BiSearch } from "react-icons/bi";
+import {BiSearch } from "react-icons/bi";
 import { apiUrl } from "../assets/util/api";
 import axios from "axios";
 
@@ -12,9 +12,6 @@ const Artists = () => {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
-  const goBack = () => {
-    navigate(-1);
-  };
 
   const [artists, setArtists] = useState([]);
 
@@ -102,16 +99,13 @@ const Artists = () => {
         <div className="w-screen h-screen overflow-hidden overflow-y-auto">
           <div className="relative flex flex-col w-screen min-h-screen pt-4 md:pt-16">
             <div className="flex flex-col gap-2 px-4 md:px-24">
-              <p className="font-bold text-lg italic flex gap-2 items-center md:gap-4">
-                <button onClick={goBack}>
-                  <BiArrowBack size={20} />
-                </button>
+              <p className="font-bold text-xl italic flex gap-2 items-center md:gap-4 text-blue-500">
                 {t("artistsList")}
               </p>
 
               {/* Search input for lyrics */}
-              <div className="py-2 md:px-24 sticky md:top-12 top-0 bg-white z-10">
-                <div className="flex justify-between gap-2">
+              <div className="w-full py-2 sticky md:top-12 top-0 bg-white z-10">
+                <div className="flex justify-between gap-2 w-full">
                   <input
                     type="text"
                     placeholder={t("searchforArtists")}

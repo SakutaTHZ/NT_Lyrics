@@ -164,7 +164,7 @@ const Lyrics = () => {
       <div className="w-screen h-screen">
         <div className="relative flex flex-col w-screen min-h-screen pt-4 md:pt-16">
           <div className="flex justify-between px-4 md:px-24">
-            <p className="font-bold text-lg italic">{t("songLyrics")}</p>
+            <p className="font-bold text-xl italic text-blue-500 pb-2">{t("songLyrics")}</p>
           </div>
 
           {/* Search input for lyrics */}

@@ -140,7 +140,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
 
   return (
     <div className="fixed flex justify-center items-center top-0 left-0 w-full h-full bg-[#00000080] z-50">
-      <div className="animate-down-start w-screen h-screen md:h-fit min-h-screen md:pt-52 py-6 md:px-18 bg-gray-100 flex flex-col">
+      <div className="fixed inset-0 animate-down-start w-screen h-screen md:h-fit min-h-screen py-6 md:px-18 bg-gray-100 flex flex-col">
         <div className="w-full flex items-center justify-center md:mt-32 pb-2 mb-2">
           {/* <div className="profileImageBox w-24 aspect-square rounded-full overflow-hidden border-8 border-white">
             

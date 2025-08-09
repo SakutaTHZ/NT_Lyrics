@@ -145,8 +145,8 @@ const LyricsRow = ({
               imageError && "glitching"
             }`}
           >
-            <p className="font-semibold">{lyric?.title ?? "Sample Title"}</p>
-            <p className="text-sm text-gray-500 flex items-center gap-1 max-w-64 overflow-hidden text-ellipsis whitespace-nowrap">
+            <p className="font-semibold text-lg">{lyric?.title ?? "Sample Title"}</p>
+            <p className="text-md text-gray-500 flex items-center gap-1 max-w-64 overflow-hidden text-ellipsis whitespace-nowrap">
               <span className="overflow-hidden text-ellipsis whitespace-nowrap">
                 {lyric.singers.map(
                   (singer, index) =>

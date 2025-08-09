@@ -239,7 +239,7 @@ const Artist = () => {
         </div>
         {/* Featured Lyrics */}
         <div className="min-h-5/6 relative p-4 py-0 md:py-2 pt-0 md:px-24">
-          <div className="grid grid-cols-1 md:grid-cols-4 py-0 md:py-2 gap-4 md:gap-12">
+          <div className="grid grid-cols-1 py-0 md:py-2 gap-4 md:gap-12">
             {lyrics.length === 0 ? (
               <div className="w-full">
                 <img

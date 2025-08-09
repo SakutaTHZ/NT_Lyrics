@@ -218,7 +218,7 @@ const Lyrics = () => {
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
         <div className="relative flex flex-col w-screen min-h-screen pt-4 md:pt-16">
           <div className="flex justify-between px-4 md:px-24">
-            <p className="font-bold text-lg italic">{t("songLyrics")}</p>
+            <p className="font-bold text-xl italic text-blue-500">{t("songLyrics")}</p>
           </div>
           {}
           <div className="py-4 px-4 md:px-24 sticky md:top-12 top-0 bg-white shadow-2xs z-10">

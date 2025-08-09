@@ -78,10 +78,10 @@ const Nav = () => {
     <>
       {/* Desktop Nav */}
       {!isMobile ? (
-        <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-24 bg-white z-[100]">
+        <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-20 bg-white z-[100]">
           <button
             onClick={() => handleNav("/")}
-            className="font-bold text-lg italic"
+            className="font-bold text-lg italic w-full overflow-hidden text-ellipsis whitespace-nowrap"
           >
             NT Lyric & Chord
           </button>

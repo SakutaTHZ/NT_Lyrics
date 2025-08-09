@@ -163,7 +163,7 @@ const Landing = () => {
       {userLoaded && (
         <div className="w-screen h-screen overflow-hidden overflow-y-auto">
           {/* Hero Section */}
-          <div className=" relative hero h-2/6 md:h-2/5 w-screen overflow-hidden flex justify-center items-center px-6">
+          <div className=" relative hero h-2/6 md:h-2/5 w-screen overflow-hidden flex justify-center items-center px-6 rounded-b-lg">
             <img
               src={cover}
               loading="lazy"
@@ -205,7 +205,7 @@ const Landing = () => {
 
           {/* Featured Lyrics */}
           <div className="relative p-4 pb-0 md:px-24">
-            <div className="flex justify-between">
+            <div className="flex justify-between border-b pb-4 border-gray-400 border-dashed">
               <p className="font-bold text-lg italic">{t("featureLyrics")}</p>
               <Link
                 to="/NT_Lyrics/lyrics"
@@ -218,7 +218,7 @@ const Landing = () => {
             <div
               className={`grid ${
                 loading || popularLyrics.length > 0 ? "" : "grid-cols-1"
-              } pt-4  pb-4 gap-0`}
+              }  pb-4 gap-0`}
             >
               {renderLyrics()}
             </div>
@@ -226,7 +226,7 @@ const Landing = () => {
 
           {/* Featured Songs */}
           <div className="relative p-4 pb-0 md:px-24">
-            <div className="flex justify-between">
+            <div className="flex justify-between border-b pb-4 border-gray-400 border-dashed">
               <p className="font-bold text-lg italic">{t("popularArtists")}</p>
               <Link
                 to="/NT_Lyrics/artists"
