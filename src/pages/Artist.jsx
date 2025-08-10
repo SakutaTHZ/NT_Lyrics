@@ -14,7 +14,10 @@ import { useSearchParams } from "react-router-dom";
 import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 
+import { useTranslation } from "react-i18next";
+
 const Artist = () => {
+  const { t } = useTranslation();
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
   const { name } = useParams();
   const [searchParams] = useSearchParams();
@@ -86,7 +89,7 @@ const Artist = () => {
   }, [name]);
 
   useEffect(() => {
-      getLyricsCountByArtist();
+    getLyricsCountByArtist();
   }, [getLyricsCountByArtist]);
 
   const fetchLyrics = useCallback(
@@ -186,9 +189,8 @@ const Artist = () => {
   const userTier = tierMap[userType]; // 0, 1, or 2
 
   const shouldHideCollection = (lyricTier = 0) => {
-    return userTier >= lyricTier; 
+    return userTier >= lyricTier;
   };
-  
 
   return (
     <>
@@ -204,7 +206,19 @@ const Artist = () => {
               />
               <div>
                 {artist ? (
-                  <p className="font-bold text-xl italic">{artist.name}</p>
+                  <p className="font-bold text-xl italic flex items-center gap-2">
+                    {artist.name}
+                    <span className="text-sm text-gray-500 font-normal">
+                      {" "}
+                      [
+                      {artist.type === "singer"
+                        ? t("singer")
+                        : artist.type === "writer"
+                        ? t("writer")
+                        : `${t("singer")} / ${t("writer")}`}{" "}
+                      ]
+                    </span>
+                  </p>
                 ) : (
                   <p className="text-gray-400 italic">Loading artist...</p>
                 )}
@@ -239,7 +253,7 @@ const Artist = () => {
         </div>
         {/* Featured Lyrics */}
         <div className="min-h-5/6 relative p-4 py-0 md:py-2 pt-0 md:px-24">
-          <div className="grid grid-cols-1 py-0 md:py-2 gap-4 md:gap-12">
+          <div className="grid grid-cols-1 py-0 md:py-2 gap-0 md:gap-12">
             {lyrics.length === 0 ? (
               <div className="w-full">
                 <img
@@ -255,27 +269,26 @@ const Artist = () => {
                     const isLast = index === lyrics.length - 1;
                     return (
                       <div key={index} className="m-0 p-0">
-                        {
-                          user?.role === "premium-user" ? (
-                            <>
-                              <LyricsRowPremium
-                                id={lyric._id}
-                                lyric={lyric}
-                                isLast={isLast}
-                                lastUserRef={lastUserRef}
-                                hideCollection={!hasToken}
-                              />
-                            </>
-                          ) : (
-                            <LyricsRow
+                        {user?.role === "premium-user" ? (
+                          <>
+                            <LyricsRowPremium
                               id={lyric._id}
                               lyric={lyric}
                               isLast={isLast}
                               lastUserRef={lastUserRef}
                               hideCollection={!hasToken}
-                              access={shouldHideCollection(lyric.tier)}
                             />
-                          )}
+                          </>
+                        ) : (
+                          <LyricsRow
+                            id={lyric._id}
+                            lyric={lyric}
+                            isLast={isLast}
+                            lastUserRef={lastUserRef}
+                            hideCollection={!hasToken}
+                            access={shouldHideCollection(lyric.tier)}
+                          />
+                        )}
                       </div>
                     );
                   })}
