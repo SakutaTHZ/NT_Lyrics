@@ -182,7 +182,9 @@ const AddLyric = ({ onClose, onUpdate, showNewMessage }) => {
   return (
     <ModalPortal>
       <div className="fixed inset-0 z-[110] flex justify-center items-center">
-        <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
+        <div className="absolute inset-0 bg-[#00000050]" 
+        // onClick={onClose} 
+        />
         <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-screen md:w-[1000px] max-h-screen md:h-auto overflow-y-auto">
           <h2 className="text-xl font-bold mb-4">
             Add New Lyric

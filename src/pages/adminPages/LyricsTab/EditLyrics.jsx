@@ -122,7 +122,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
 
   const deleteLyric = async () => {
     console.log("Deleting lyric:", lyric);
-    
+
     if (!lyric?._id) {
       console.error("Missing lyric ID");
       return;
@@ -241,7 +241,10 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
   return (
     <ModalPortal>
       <div className="fixed bottom-0 left-0 w-screen h-screen z-[110] flex justify-center items-center">
-        <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
+        <div
+          className="absolute inset-0 bg-[#00000050]"
+          // onClick={onClose}
+        />
         <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[1000px]">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold">Edit Lyric</h2>
@@ -354,7 +357,7 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
                     } catch (error) {
                       console.error("Image compression failed:", error);
                     }
-                    
+
                     setUploadedFile(file); // for uploading
                     setPreviewUrl(URL.createObjectURL(file)); // for previewing
                   }}

@@ -76,7 +76,9 @@ const AddArtist = ({ onClose, onUpdate, showNewMessage }) => {
     <>
       <ModalPortal>
         <div className="fixed inset-0 z-[100] flex justify-center items-center ">
-          <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
+          <div className="absolute inset-0 bg-[#00000050]" 
+          // onClick={onClose} 
+          />
           <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-screen md:w-[600px] h-auto max-h-screen md:h-auto overflow-y-auto">
             <h2 className="text-xl font-bold flex items-center justify-between">
               Add New Artist

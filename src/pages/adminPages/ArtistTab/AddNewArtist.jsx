@@ -16,7 +16,9 @@ const AddNewArtist = ({ onClose, artist, onUpdate}) => {
   return (
     <>
       <div className="fixed inset-0 z-[100] flex justify-center items-center">
-        <div className="absolute inset-0 bg-[#00000050]" onClick={onClose} />
+        <div className="absolute inset-0 bg-[#00000050]"
+        //  onClick={onClose} 
+         />
         <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[400px]">
         <h2 className="text-xl font-bold flex items-center justify-between">
             Edit Artist

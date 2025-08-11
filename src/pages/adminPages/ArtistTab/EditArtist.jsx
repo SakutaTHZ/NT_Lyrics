@@ -35,17 +35,14 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
 
   const updateArtist = async () => {
     try {
-      const res = await fetch(
-        `${apiUrl}/artists/updateArtist/${artist._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ name, bio, photoLink, type }),
-        }
-      );
+      const res = await fetch(`${apiUrl}/artists/updateArtist/${artist._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name, bio, photoLink, type }),
+      });
 
       const data = await res.json();
 
@@ -63,16 +60,13 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
 
   const deleteArtist = async () => {
     try {
-      const res = await fetch(
-        `${apiUrl}/artists/deleteArtist/${artist._id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`${apiUrl}/artists/deleteArtist/${artist._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = await res.json();
 
@@ -112,7 +106,10 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
   return (
     <ModalPortal>
       <div className="fixed inset-0 z-[100] flex items-center justify-center">
-        <div className="absolute inset-0 bg-black/30" onClick={onClose} />
+        <div
+          className="absolute inset-0 bg-black/30"
+          // onClick={onClose}
+        />
         <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[600px] max-w-[90vw]">
           <h2 className="text-xl font-bold flex justify-between items-center">
             Edit Artist
