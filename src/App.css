@@ -119,3 +119,7 @@
     opacity: 1;
   }
 }
+
+.gradientTitle{
+  background: linear-gradient(transparent,#eff6ff) ;
+}

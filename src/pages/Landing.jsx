@@ -205,7 +205,7 @@ const Landing = () => {
 
           {/* Featured Lyrics */}
           <div className="relative p-4 pb-0 md:px-24">
-            <div className="flex justify-between border-b pb-4 border-gray-200 border-dashed">
+            <div className="flex justify-between border-b py-4 border-gray-200 border-dashed gradientTitle">
               <p className="font-bold text-lg italic">{t("featureLyrics")}</p>
               <Link
                 to="/NT_Lyrics/lyrics"
@@ -226,7 +226,7 @@ const Landing = () => {
 
           {/* Featured Songs */}
           <div className="relative p-4 pb-0 md:px-24">
-            <div className="flex justify-between border-b pb-4 border-gray-200 border-dashed">
+            <div className="flex justify-between border-b py-4 border-gray-200 border-dashed  gradientTitle">
               <p className="font-bold text-lg italic">{t("popularArtists")}</p>
               <Link
                 to="/NT_Lyrics/artists"

@@ -78,15 +78,20 @@ const Profile = () => {
   const token = localStorage.getItem("token");
 
   const getCollection = useCallback(async () => {
-    try {
-      const collections = await fetchCollectionOverview(token);
-      setCollection(collections);
-    } catch (err) {
-      console.error("Error fetching user overview:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [token]);
+  try {
+    const collections = await fetchCollectionOverview(token);
+    const sortedCollections = [...collections.collections].sort((a, b) => {
+      if (a.group === "Default") return -1;
+      if (b.group === "Default") return 1;
+      return 0;
+    });
+    setCollection({ ...collections, collections: sortedCollections });
+  } catch (err) {
+    console.error("Error fetching user overview:", err);
+  } finally {
+    setLoading(false);
+  }
+}, [token]);
 
   const defaultGroup = collection?.collections?.find(
     (item) => item.group === "Default"
@@ -178,13 +183,14 @@ const Profile = () => {
 
   // Trigger lyrics fetch once collection is ready and group is determined
   useEffect(() => {
-    if (!collection?.collections || collection.collections.length === 0) return;
+  if (!collection?.collections || collection.collections.length === 0) return;
 
-    // Set default group only once when collections arrive
-    const defaultGroup = collection.collections[0].group;
-    setSelectedGroup(defaultGroup);
-    getLyricsByGroup(defaultGroup);
-  }, [collection, getLyricsByGroup]);
+  const defaultCol = collection.collections.find(c => c.group === "Default");
+  const firstGroup = defaultCol ? defaultCol.group : collection.collections[0].group;
+
+  setSelectedGroup(firstGroup);
+  getLyricsByGroup(firstGroup, 1, true);
+}, [collection, getLyricsByGroup]);
 
   const [showGroupEdit, setShowGroupEdit] = useState(false);
 
