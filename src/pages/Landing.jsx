@@ -205,7 +205,7 @@ const Landing = () => {
 
           {/* Featured Lyrics */}
           <div className="relative p-4 pb-0 md:px-24">
-            <div className="flex justify-between border-b pb-4 border-gray-400 border-dashed">
+            <div className="flex justify-between border-b pb-4 border-gray-200 border-dashed">
               <p className="font-bold text-lg italic">{t("featureLyrics")}</p>
               <Link
                 to="/NT_Lyrics/lyrics"
@@ -226,7 +226,7 @@ const Landing = () => {
 
           {/* Featured Songs */}
           <div className="relative p-4 pb-0 md:px-24">
-            <div className="flex justify-between border-b pb-4 border-gray-400 border-dashed">
+            <div className="flex justify-between border-b pb-4 border-gray-200 border-dashed">
               <p className="font-bold text-lg italic">{t("popularArtists")}</p>
               <Link
                 to="/NT_Lyrics/artists"
@@ -239,14 +239,14 @@ const Landing = () => {
             <div
               className={`grid ${
                 loading || popularLyrics.length > 0
-                  ? "md:grid-cols-5 md:place-items-center"
+                  ? ""
                   : "grid-cols-1"
-              } pt-4  pb-4 gap-0 md:gap-12`}
+              } pt-4  pb-4 gap-2`}
             >
               {popularArtists.slice(0, 5).map((artist) => (
                 <div
                   key={artist.name}
-                  className="border-b md:border border-gray-200 last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
+                  className="border-b border-gray-200 last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
                   onClick={() => navigate(`/NT_Lyrics/artist/${artist.id}`)}
                 >
                   <img

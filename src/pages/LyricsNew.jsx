@@ -8,25 +8,24 @@ import React, {
 import { useSearchParams } from "react-router-dom";
 import useDebounce from "../components/hooks/useDebounce";
 import axios from "axios";
-import { apiUrl } from "../assets/util/api";
-import { validateUser } from "../assets/util/api";
+import { apiUrl, validateUser } from "../assets/util/api";
 import LoadingBox from "../components/common/LoadingBox";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
 import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
+import { useTranslation } from "react-i18next";
 
 const Footer = React.lazy(() => import("../components/common/Footer"));
-
-import { useTranslation } from "react-i18next";
 
 const Lyrics = () => {
   const { t } = useTranslation();
 
-  // Get parameters from the URL
+  // Search params
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
   const debouncedSearchTerm = useDebounce(searchTerm);
 
+  // State
   const [lyrics, setLyrics] = useState([]);
   const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
@@ -39,6 +38,7 @@ const Lyrics = () => {
 
   const observer = useRef(null);
 
+  // Intersection Observer for infinite scroll
   const lastUserRef = useCallback(
     (node) => {
       if (loading || page >= totalPages) return;
@@ -55,11 +55,10 @@ const Lyrics = () => {
     [loading, totalPages, page]
   );
 
+  // User authentication
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      setHasToken(true);
-    }
+    if (token) setHasToken(true);
 
     const id = JSON.parse(localStorage.getItem("user") || "{}")?.id;
     if (!id) {
@@ -82,6 +81,7 @@ const Lyrics = () => {
     getUser();
   }, []);
 
+  // Fetch function
   const fetchLyrics = useCallback(
     async (pageNum, override = false) => {
       setLoading(true);
@@ -90,7 +90,7 @@ const Lyrics = () => {
         const res = await axios.get(`${apiUrl}/lyrics/searchLyrics`, {
           params: {
             page: pageNum,
-            limit: 20,
+            limit: 40,
             keyword: debouncedSearchTerm,
           },
           headers: {
@@ -99,29 +99,24 @@ const Lyrics = () => {
           },
         });
 
-        const data = res.data.lyrics;
-
+        const data = res.data.lyrics || [];
         if (!Array.isArray(data)) {
           console.error("Expected array, got:", data);
           return [];
         }
 
-        const newData = data;
-
         setLyrics((prev) => {
           const merged =
-            override || pageNum === 1 ? newData : [...prev, ...newData];
-          const unique = Array.from(
+            override || pageNum === 1 ? data : [...prev, ...data];
+          return Array.from(
             new Map(merged.map((item) => [item._id, item])).values()
           );
-          return unique;
         });
 
         setTotalPages(res.data.totalPages);
         setInitialLoadDone(true);
       } catch (err) {
         console.error("Failed to fetch lyrics:", err);
-        return [];
       } finally {
         setLoading(false);
       }
@@ -129,75 +124,68 @@ const Lyrics = () => {
     [debouncedSearchTerm]
   );
 
+  // Initial fetch
   useEffect(() => {
     setLyrics([]);
     setPage(1);
-    fetchLyrics(1, true);
+    fetchLyrics(1, true).then(() => {
+      // Prefetch page 2 in background if more pages exist
+      if (totalPages > 1) {
+        fetchLyrics(2);
+      }
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm, fetchLyrics]);
 
+  // Fetch when page changes (after prefetch, will be instant if cached)
   useEffect(() => {
     if (page > 1) fetchLyrics(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  const tierMap = {
-    guest: 0,
-    free: 1,
-    premium: 2,
-  };
-
-  const getUserType = () => {
-    if (!user) return "guest";
-    if (user.role === "premium-user") return "premium";
-    return "free";
-  };
-
-  const userType = getUserType(); // "guest", "free", or "premium"
-  const userTier = tierMap[userType]; // 0, 1, or 2
-
-  const shouldHideCollection = (lyricTier = 0) => {
-    return userTier >= lyricTier; 
-  };
+  // Access control logic
+  const tierMap = { guest: 0, free: 1, premium: 2 };
+  const userType = !user
+    ? "guest"
+    : user.role === "premium-user"
+    ? "premium"
+    : "free";
+  const userTier = tierMap[userType];
+  const shouldHideCollection = (lyricTier = 0) => userTier >= lyricTier;
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="w-screen h-screen">
         <div className="relative flex flex-col w-screen min-h-screen pt-4 md:pt-16">
           <div className="flex justify-between px-4 md:px-24">
-            <p className="font-bold text-xl italic text-blue-500 pb-2">{t("songLyrics")}</p>
+            <p className="font-bold text-xl italic text-blue-500 pb-2">
+              {t("songLyrics")}
+            </p>
           </div>
 
-          {/* Search input for lyrics */}
+          {/* Search */}
           <div className="py-2 px-4 md:px-24 sticky md:top-12 top-0 bg-white z-10">
-            <div className="flex justify-between gap-2">
-              <input
-                type="text"
-                placeholder={t("searchSongs")}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
+            <input
+              type="text"
+              placeholder={t("searchSongs")}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
           </div>
 
-          {/* Lyrics list */}
+          {/* Lyrics List */}
           {userLoaded && (
             <div
               className={`grid ${
-                loading || lyrics.length > 0
-                  ? ""
-                  : "grid-cols-1"
+                loading || lyrics.length > 0 ? "" : "grid-cols-1"
               } pb-16 gap-0 px-4 md:px-24`}
             >
               {(() => {
                 if (loading && !initialLoadDone) {
-                  return (
-                    <>
-                      {Array.from({ length: 12 }).map((_, index) => (
-                        <LoadingBox key={index} />
-                      ))}
-                    </>
-                  );
+                  return Array.from({ length: 12 }).map((_, i) => (
+                    <LoadingBox key={i} />
+                  ));
                 }
 
                 if (lyrics.length === 0) {
@@ -212,43 +200,35 @@ const Lyrics = () => {
                   );
                 }
 
-                return (
-                  <>
-                    {userLoaded &&
-                      lyrics.map((lyric, index) => {
-                        const isLast = index === lyrics.length - 5;
-                        return (
-                          <div
-                            key={lyric._id}
-                            className="border-b border-gray-200 last:border-0 border-dashed"
-                          >
-                            { (
-                              user?.role === "premium-user" ? (
-                                <>
-                                  <LyricsRowPremium
-                                    id={lyric._id}
-                                    lyric={lyric}
-                                    isLast={isLast}
-                                    lastUserRef={lastUserRef}
-                                    hideCollection={!hasToken}
-                                  />
-                                </>
-                              ) : (
-                                <LyricsRow
-                                  id={lyric._id}
-                                  lyric={lyric}
-                                  isLast={isLast}
-                                  lastUserRef={lastUserRef}
-                                  hideCollection={!hasToken}
-                                  access={shouldHideCollection(lyric.tier)}
-                                />
-                              )
-                            ) }
-                          </div>
-                        );
-                      })}
-                  </>
-                );
+                return lyrics.map((lyric, index) => {
+                  // Trigger earlier — 10 from the end
+                  const isLast = index === lyrics.length - 25;
+                  return (
+                    <div
+                      key={lyric._id}
+                      className="border-b border-gray-200 last:border-0 border-dashed"
+                    >
+                      {user?.role === "premium-user" ? (
+                        <LyricsRowPremium
+                          id={lyric._id}
+                          lyric={lyric}
+                          isLast={isLast}
+                          lastUserRef={lastUserRef}
+                          hideCollection={!hasToken}
+                        />
+                      ) : (
+                        <LyricsRow
+                          id={lyric._id}
+                          lyric={lyric}
+                          isLast={isLast}
+                          lastUserRef={lastUserRef}
+                          hideCollection={!hasToken}
+                          access={shouldHideCollection(lyric.tier)}
+                        />
+                      )}
+                    </div>
+                  );
+                });
               })()}
             </div>
           )}
