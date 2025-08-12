@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef} from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Footer from "../components/common/Footer";
 import { IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
@@ -14,13 +14,17 @@ import LyricsRowPremium from "../components/special/LyricRowPremium";
 const Profile = () => {
   const [page, setPage] = useState(1);
   const observer = useRef(null);
-  const [loading, setLoading] = useState(false);
+
+  // Separate loading states
+  const [loadingProfile, setLoadingProfile] = useState(false);
+  const [loadingLyrics, setLoadingLyrics] = useState(false);
+
   const [totalPages, setTotalPages] = useState(0);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
   const lastUserRef = useCallback(
     (node) => {
-      if (loading || page >= totalPages) return;
+      if (loadingLyrics || page >= totalPages) return;
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
@@ -31,11 +35,11 @@ const Profile = () => {
 
       if (node) observer.current.observe(node);
     },
-    [loading, totalPages, page]
+    [loadingLyrics, totalPages, page]
   );
 
   const [user, setUser] = useState(null);
-  const [userRole,setUserRole] = useState("free-user");
+  const [userRole, setUserRole] = useState("free-user");
   const [userLoaded, setUserLoaded] = useState(false);
 
   useEffect(() => {
@@ -48,6 +52,7 @@ const Profile = () => {
     }
 
     const getUser = async () => {
+      setLoadingProfile(true);
       try {
         const userData = await validateUser(id, token);
         if (!userData) throw new Error("No user returned");
@@ -56,6 +61,7 @@ const Profile = () => {
         console.error("Failed to fetch user:", err);
       } finally {
         setUserLoaded(true);
+        setLoadingProfile(false);
       }
     };
 
@@ -69,7 +75,7 @@ const Profile = () => {
     if (!user) return;
     setUsername(user.name);
     setEmail(user.email);
-    setUserRole(user.role)
+    setUserRole(user.role);
   }, [user]);
 
   const [showEdit, setShowEdit] = useState(false);
@@ -78,20 +84,21 @@ const Profile = () => {
   const token = localStorage.getItem("token");
 
   const getCollection = useCallback(async () => {
-  try {
-    const collections = await fetchCollectionOverview(token);
-    const sortedCollections = [...collections.collections].sort((a, b) => {
-      if (a.group === "Default") return -1;
-      if (b.group === "Default") return 1;
-      return 0;
-    });
-    setCollection({ ...collections, collections: sortedCollections });
-  } catch (err) {
-    console.error("Error fetching user overview:", err);
-  } finally {
-    setLoading(false);
-  }
-}, [token]);
+    setLoadingProfile(true);
+    try {
+      const collections = await fetchCollectionOverview(token);
+      const sortedCollections = [...collections.collections].sort((a, b) => {
+        if (a.group === "Default") return -1;
+        if (b.group === "Default") return 1;
+        return 0;
+      });
+      setCollection({ ...collections, collections: sortedCollections });
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    } finally {
+      setLoadingProfile(false);
+    }
+  }, [token]);
 
   const defaultGroup = collection?.collections?.find(
     (item) => item.group === "Default"
@@ -100,12 +107,6 @@ const Profile = () => {
 
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedGroupLyrics, setSelectedGroupLyrics] = useState([]);
-
-  const handleGroupChange = (group) => {
-    if (!group) return;
-    setSelectedGroup(group);
-    getLyricsByGroup(group, 1, true);
-  };
 
   const tierMap = {
     guest: 0,
@@ -123,15 +124,15 @@ const Profile = () => {
   const userTier = tierMap[userType]; // 0, 1, or 2
 
   const shouldHideCollection = (lyricTier = 0) => {
-    return userTier >= lyricTier; // hide if user tier is lower
+    return userTier < lyricTier; // hide if user tier is lower than lyric tier
   };
 
   const getLyricsByGroup = useCallback(
     async (group, pageNum, override = false) => {
-      setLoading(true);
+      setLoadingLyrics(true);
 
       try {
-        const token = localStorage.getItem("token"); // or however you're storing it
+        const token = localStorage.getItem("token");
 
         const res = await axios.get(
           `${apiUrl}/collections/getLyricsByGroup?group=${group}`,
@@ -142,7 +143,7 @@ const Profile = () => {
             },
             headers: {
               "Content-Type": "application/json",
-              ...(token && { Authorization: `Bearer ${token}` }), // 🔐 Include the token
+              ...(token && { Authorization: `Bearer ${token}` }),
             },
           }
         );
@@ -154,11 +155,9 @@ const Profile = () => {
           return [];
         }
 
-        const newData = data;
-
         setSelectedGroupLyrics((prev) => {
           const merged =
-            override || pageNum === 1 ? newData : [...prev, ...newData];
+            override || pageNum === 1 ? data : [...prev, ...data];
           const unique = Array.from(
             new Map(merged.map((item) => [item._id, item])).values()
           );
@@ -166,12 +165,13 @@ const Profile = () => {
         });
 
         setTotalPages(res.data.totalPages);
+        if (override) setPage(1);
         setInitialLoadDone(true);
       } catch (error) {
         console.error("Failed to fetch lyrics:", error);
         return [];
       } finally {
-        setLoading(false);
+        setLoadingLyrics(false);
       }
     },
     []
@@ -183,14 +183,20 @@ const Profile = () => {
 
   // Trigger lyrics fetch once collection is ready and group is determined
   useEffect(() => {
-  if (!collection?.collections || collection.collections.length === 0) return;
+    if (!collection?.collections || collection.collections.length === 0) return;
 
-  const defaultCol = collection.collections.find(c => c.group === "Default");
-  const firstGroup = defaultCol ? defaultCol.group : collection.collections[0].group;
+    const defaultCol = collection.collections.find((c) => c.group === "Default");
+    const firstGroup = defaultCol ? defaultCol.group : collection.collections[0].group;
 
-  setSelectedGroup(firstGroup);
-  getLyricsByGroup(firstGroup, 1, true);
-}, [collection, getLyricsByGroup]);
+    setSelectedGroup(firstGroup);
+    getLyricsByGroup(firstGroup, 1, true);
+  }, [collection, getLyricsByGroup]);
+
+  const handleGroupChange = (group) => {
+    if (!group || group === selectedGroup) return;
+    setSelectedGroup(group);
+    getLyricsByGroup(group, 1, true);
+  };
 
   const [showGroupEdit, setShowGroupEdit] = useState(false);
 
@@ -201,15 +207,16 @@ const Profile = () => {
     }
   }, [selectedGroup, getLyricsByGroup, getCollection]);
 
-  if (loading) {
+  if (loadingProfile) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
-        <p className="text-xl font-semibold"></p>
+        <p className="text-xl font-semibold">Loading profile...</p>
       </div>
     );
   }
 
   if (!userLoaded) return null;
+
   return (
     <div className="w-screen h-screen overflow-hidden overflow-y-auto">
       <div className="relative flex flex-col gap-2 min-h-screen md:pt-12">
@@ -245,18 +252,18 @@ const Profile = () => {
                 <p>
                   <span
                     className={`${
-                      userRole != "premium-user" &&
+                      userRole !== "premium-user" &&
                       defaultGroupCount === 20 &&
                       "text-red-500"
                     } font-semibold mr-1`}
                   >
                     {defaultGroupCount}
                   </span>
-                  {userRole != "premium-user" && (
-                    <span>
+                  {userRole !== "premium-user" && (
+                    <>
                       <span className="font-normal mr-1">/</span>
                       <span className="font-normal">20</span>
-                    </span>
+                    </>
                   )}
                 </p>
               </div>
@@ -271,7 +278,7 @@ const Profile = () => {
             </div>
 
             <div className="relative">
-              {userRole != "premium-user" && defaultGroupCount === 20 && (
+              {userRole !== "premium-user" && defaultGroupCount === 20 && (
                 <button className="bg-amber-200 px-5 py-1 rounded-full w-full">
                   More features in Premium{" "}
                   <span className="text-blue-700 animate-pulse">
@@ -289,10 +296,11 @@ const Profile = () => {
             </button>
           </div>
         </div>
+
         {userRole === "premium-user" ? (
           collection?.collections?.length > 0 && (
             <div className="flex flex-col py-2 px-4 md:px-24">
-              <div className="flex flex-col items-center justify-between md:gap-4  sticky top-0  z-20">
+              <div className="flex flex-col items-center justify-between md:gap-4 sticky top-0 z-20">
                 {/* Groups */}
                 <div className="w-full flex items-center justify-between gap-2 bg-white">
                   <div className="w-full bg-white sticky top-0 overflow-auto flex gap-2 py-3">
@@ -326,81 +334,16 @@ const Profile = () => {
 
               <div
                 className={`grid ${
-                  loading || selectedGroupLyrics.length > 0
+                  loadingLyrics || selectedGroupLyrics.length > 0
                     ? "md:gap-6"
                     : "grid-cols-1 md:gap-12"
                 } p-2 py-4 gap-0 border border-gray-200 rounded-b-md`}
               >
-                {(() => {
-                  if (loading && !initialLoadDone) {
-                    return (
-                      <>
-                        {Array.from({ length: 12 }).map((_, index) => (
-                          <LoadingBox key={index} />
-                        ))}
-                      </>
-                    );
-                  }
-
-                  if (selectedGroupLyrics.length === 0) {
-                    return (
-                      <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
-                        <img
-                          src={EmptyData}
-                          alt="No data Found"
-                          className="w-full md:w-96 opacity-50"
-                        />
-                      </div>
-                    );
-                  }
-
-                  return (
-                    <>
-                      {selectedGroupLyrics.map((lyric, index) => {
-                        const isLast = index === selectedGroupLyrics.length - 1;
-                        return (
-                          <div
-                            key={lyric._id}
-                            className="border-b border-gray-200 last:border-0 border-dashed"
-                          >
-                            {
-                              <LyricsRowPremium
-                                id={lyric._id}
-                                lyric={lyric}
-                                isLast={isLast}
-                                lastUserRef={lastUserRef}
-                              />
-                            }
-                          </div>
-                        );
-                      })}
-                    </>
-                  );
-                })()}
-              </div>
-            </div>
-          )
-        ) : (
-          <div
-            className={`grid ${
-              loading || selectedGroupLyrics.length > 0
-                ? "md:gap-6"
-                : "grid-cols-1 md:gap-12"
-            } p-2 py-4 gap-0 px-4 md:px-24`}
-          >
-            {(() => {
-              if (loading && !initialLoadDone) {
-                return (
-                  <>
-                    {Array.from({ length: 12 }).map((_, index) => (
-                      <LoadingBox key={index} />
-                    ))}
-                  </>
-                );
-              }
-
-              if (selectedGroupLyrics.length === 0) {
-                return (
+                {loadingLyrics && !initialLoadDone ? (
+                  Array.from({ length: 12 }).map((_, index) => (
+                    <LoadingBox key={index} />
+                  ))
+                ) : selectedGroupLyrics.length === 0 ? (
                   <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
                     <img
                       src={EmptyData}
@@ -408,45 +351,73 @@ const Profile = () => {
                       className="w-full md:w-96 opacity-50"
                     />
                   </div>
-                );
-              }
-
-              return (
-                <>
-                  {selectedGroupLyrics.map((lyric, index) => {
+                ) : (
+                  selectedGroupLyrics.map((lyric, index) => {
                     const isLast = index === selectedGroupLyrics.length - 1;
                     return (
                       <div
                         key={lyric._id}
                         className="border-b border-gray-200 last:border-0 border-dashed"
                       >
-                        {
-                          <LyricsRow
-                            id={lyric._id}
-                            lyric={lyric}
-                            isLast={isLast}
-                            lastUserRef={lastUserRef}
-                            onCollectionStatusChange={
-                              handleCollectionStatusChange
-                            }
-                            access={shouldHideCollection(lyric.tier)}
-                          />
-                        }
+                        <LyricsRowPremium
+                          id={lyric._id}
+                          lyric={lyric}
+                          isLast={isLast}
+                          lastUserRef={lastUserRef}
+                        />
                       </div>
                     );
-                  })}
-                </>
-              );
-            })()}
+                  })
+                )}
+              </div>
+            </div>
+          )
+        ) : (
+          <div
+            className={`grid ${
+              loadingLyrics || selectedGroupLyrics.length > 0
+                ? "md:gap-6"
+                : "grid-cols-1 md:gap-12"
+            } p-2 py-4 gap-0 px-4 md:px-24`}
+          >
+            {loadingLyrics && !initialLoadDone ? (
+              Array.from({ length: 12 }).map((_, index) => (
+                <LoadingBox key={index} />
+              ))
+            ) : selectedGroupLyrics.length === 0 ? (
+              <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
+                <img
+                  src={EmptyData}
+                  alt="No data Found"
+                  className="w-full md:w-96 opacity-50"
+                />
+              </div>
+            ) : (
+              selectedGroupLyrics.map((lyric, index) => {
+                const isLast = index === selectedGroupLyrics.length - 1;
+                return (
+                  <div
+                    key={lyric._id}
+                    className="border-b border-gray-200 last:border-0 border-dashed"
+                  >
+                    <LyricsRow
+                      id={lyric._id}
+                      lyric={lyric}
+                      isLast={isLast}
+                      lastUserRef={lastUserRef}
+                      onCollectionStatusChange={handleCollectionStatusChange}
+                      access={shouldHideCollection(lyric.tier)}
+                    />
+                  </div>
+                );
+              })
+            )}
           </div>
         )}
       </div>
 
       {showGroupEdit && (
-        <EditGroup
-          groupName={selectedGroup}
-          onClose={() => setShowGroupEdit(false)}
-        />
+        <EditGroup groupName={selectedGroup} onClose={() => setShowGroupEdit(false)} />
       )}
 
       {showEdit && (
