@@ -65,5 +65,8 @@
 
   "enterNewCollectionName": "Enter New Collection Name",
   "createNewCollection": "Create New Collection",
-  "collections" : "Collections"
+  "collections" : "Collections",
+  "maxCollectionsReached": "You have reached the maximum number of collections (20).",
+  "reachedMaxLength": "You’ve reached the 20-character limit.",
+  "collectionAlreadyExists": "Collection with this name already exists."
 }

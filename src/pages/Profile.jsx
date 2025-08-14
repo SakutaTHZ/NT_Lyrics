@@ -156,8 +156,7 @@ const Profile = () => {
         }
 
         setSelectedGroupLyrics((prev) => {
-          const merged =
-            override || pageNum === 1 ? data : [...prev, ...data];
+          const merged = override || pageNum === 1 ? data : [...prev, ...data];
           const unique = Array.from(
             new Map(merged.map((item) => [item._id, item])).values()
           );
@@ -185,8 +184,12 @@ const Profile = () => {
   useEffect(() => {
     if (!collection?.collections || collection.collections.length === 0) return;
 
-    const defaultCol = collection.collections.find((c) => c.group === "Default");
-    const firstGroup = defaultCol ? defaultCol.group : collection.collections[0].group;
+    const defaultCol = collection.collections.find(
+      (c) => c.group === "Default"
+    );
+    const firstGroup = defaultCol
+      ? defaultCol.group
+      : collection.collections[0].group;
 
     setSelectedGroup(firstGroup);
     getLyricsByGroup(firstGroup, 1, true);
@@ -246,10 +249,10 @@ const Profile = () => {
               <p className="text-white">{email}</p>
             </div>
 
-            <div className="relative w-full flex items-center justify-center md:gap-4 border p-2 rounded-full border-gray-300 bg-white px-4">
-              <div className="flex items-center gap-2 px-4">
+            <div className="relative w-full flex items-center justify-center md:gap-4 border p-2 rounded-full border-gray-300 bg-white">
+              <div className="flex items-center gap-2">
                 <p className=" text-lg">Collected -</p>
-                <p>
+                <p className="pr-4">
                   <span
                     className={`${
                       userRole !== "premium-user" &&
@@ -270,7 +273,7 @@ const Profile = () => {
               {userRole === "premium-user" && (
                 <div className="flex items-center gap-2 px-4 border-l border-gray-300">
                   <p className=" text-lg">Groups -</p>
-                  <span className="font-semibold">
+                  <span className={`font-semibold ${collection?.collections?.length===20 ? "text-red-500" : ""}`}>
                     {collection?.collections?.length ?? 0}
                   </span>
                 </div>
@@ -308,7 +311,7 @@ const Profile = () => {
                       <span
                         key={idx}
                         className={`px-2 py-1 rounded-md border border-gray-300 font-semibold cursor-pointer text-nowrap ${
-                          selectedGroup === col.group ? "bg-gray-200" : ""
+                          selectedGroup === col.group ? "bg-blue-500 text-white" : ""
                         }`}
                         onClick={() => handleGroupChange(col.group)}
                       >
@@ -417,7 +420,10 @@ const Profile = () => {
       </div>
 
       {showGroupEdit && (
-        <EditGroup groupName={selectedGroup} onClose={() => setShowGroupEdit(false)} />
+        <EditGroup
+          groupName={selectedGroup}
+          onClose={() => setShowGroupEdit(false)}
+        />
       )}
 
       {showEdit && (

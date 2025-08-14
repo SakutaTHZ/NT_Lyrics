@@ -11,8 +11,10 @@ import { Checkbox } from "primereact/checkbox";
 import { CgAdd } from "react-icons/cg";
 
 import { useTranslation } from "react-i18next";
+import { useVibration } from "../hooks/useVibration";
 
 const AddToCollectionBox = ({ id, addToCollection, close }) => {
+  const { vibratePattern } = useVibration();
   const { t } = useTranslation();
 
   const token = localStorage.getItem("token");
@@ -76,12 +78,24 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
   };
 
   const handleAddNewCollection = () => {
+    console.log("Adding new collection:", newCollectionName);
     if (!newCollectionName.trim()) return;
+
+    // return if collections length is 20
+    if (collection.length >= 20) {
+      vibratePattern("long");
+      handleMessageTimer(t("maxCollectionsReached"), "error");
+      return;
+    }
 
     const newGroup = newCollectionName.trim();
 
     // Prevent duplicates
-    if (collection.some((col) => col.group === newGroup)) return;
+    if (collection.some((col) => col.group === newGroup)){
+      vibratePattern("short");
+      handleMessageTimer(t("collectionAlreadyExists"), "error");
+      return;
+    } 
 
     const updated = [...collection, { group: newGroup }];
     setCollection(updated);
@@ -136,10 +150,10 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
   };
 
   const sortedCollections = [...collection].sort((a, b) => {
-  if (a.group.toLowerCase() === "default") return -1;
-  if (b.group.toLowerCase() === "default") return 1;
-  return a.group.localeCompare(b.group); // optional: alphabetical sort
-});
+    if (a.group.toLowerCase() === "default") return -1;
+    if (b.group.toLowerCase() === "default") return 1;
+    return a.group.localeCompare(b.group); // optional: alphabetical sort
+  });
 
   return (
     <Dialog
@@ -173,10 +187,22 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
           <div className="flex items-center justify-between gap-2 w-full">
             <input
               type="text"
+              maxLength={20}
               placeholder="Enter New Collection"
               className="border border-gray-200 p-2 rounded w-full bg-white"
               value={newCollectionName}
-              onChange={(e) => setNewCollectionName(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                setNewCollectionName(value);
+
+                if (value.length === 20) {
+                  handleMessageTimer(
+                    t("reachedMaxLength"),
+                    "warning"
+                  );
+                  vibratePattern("short");
+                }
+              }}
             />
             <button
               onClick={handleAddNewCollection}
@@ -196,7 +222,7 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
           ) : (
             sortedCollections.map((col, i) => (
               <div key={i} className="flex items-center justify-between">
-                {col.group}
+                {i + 1}. {col.group}
                 <Checkbox
                   checked={selectedCollections.includes(col.group)}
                   onChange={() => handleCheckboxChange(col.group)}

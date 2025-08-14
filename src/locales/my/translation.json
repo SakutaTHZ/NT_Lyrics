@@ -65,5 +65,8 @@
 
   "enterNewCollectionName": "စုစည်းမှုအမည်အသစ်ကို ထည့်သွင်းပါ။",
   "createNewCollection": "စုစည်းမှုအသစ်ကို ဖန်တီးပါ။",
-  "collections" : "စုစည်းမှုများ"
+  "collections" : "စုစည်းမှုများ",
+  "maxCollectionsReached": "သင့်စုစည်းမှုများ၏ အများဆုံးအရေအတွက် (၂၀) ကို ရောက်ရှိပြီးပါပြီ။",
+  "reachedMaxLength": "သင်သည် ၂၀ လုံးအထိ ရောက်ရှိပြီးပါပြီ။",
+  "collectionAlreadyExists": "ဒီအမည်ရှိသောစုစည်းမှု တစ်ခု ရှိပြီးသားဖြစ်သည်။"
 }
