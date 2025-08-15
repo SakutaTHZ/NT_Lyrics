@@ -18,6 +18,7 @@ const Not_Found = React.lazy(() => import("../../../src/pages/Not_Found"));
 const SignUp = React.lazy(() => import("../../../src/pages/SignUp"));
 const LyricsDetails = React.lazy(() => import("../../pages/LyricsDetails"));
 const Artist = React.lazy(() => import("../../pages/Artist"));
+const Premium = React.lazy(() => import("../../pages/Premium"));
 const AdminPanel = React.lazy(() =>
   import("../../pages/adminPages/AdminPanel")
 );
@@ -229,6 +230,14 @@ const AnimatedRoutes = () => {
               element={
                 <ErrorBoundary fallback={<Not_Found  />}>
                   <About />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/NT_Lyrics/premium"
+              element={
+                <ErrorBoundary fallback={<Not_Found  />}>
+                  <Premium />
                 </ErrorBoundary>
               }
             />
