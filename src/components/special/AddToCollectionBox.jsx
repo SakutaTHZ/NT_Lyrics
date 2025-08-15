@@ -91,11 +91,11 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
     const newGroup = newCollectionName.trim();
 
     // Prevent duplicates
-    if (collection.some((col) => col.group === newGroup)){
+    if (collection.some((col) => col.group === newGroup)) {
       vibratePattern("short");
       handleMessageTimer(t("collectionAlreadyExists"), "error");
       return;
-    } 
+    }
 
     const updated = [...collection, { group: newGroup }];
     setCollection(updated);
@@ -155,6 +155,11 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
     return a.group.localeCompare(b.group); // optional: alphabetical sort
   });
 
+  const segmenter = new Intl.Segmenter("my", { granularity: "grapheme" });
+
+  const toGraphemes = (str) =>
+    [...segmenter.segment(str)].map((seg) => seg.segment);
+
   return (
     <Dialog
       header={t("addToCollection")}
@@ -187,21 +192,21 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
           <div className="flex items-center justify-between gap-2 w-full">
             <input
               type="text"
-              maxLength={20}
               placeholder="Enter New Collection"
               className="border border-gray-200 p-2 rounded w-full bg-white"
               value={newCollectionName}
               onChange={(e) => {
-                const value = e.target.value;
-                setNewCollectionName(value);
+                const graphemes = toGraphemes(e.target.value);
 
-                if (value.length === 20) {
+                if (graphemes.length > 20) {
                   handleMessageTimer(
-                    t("reachedMaxLength"),
+                    "You’ve reached the 20-character limit.",
                     "warning"
                   );
-                  vibratePattern("short");
                 }
+
+                // Always set the truncated string
+                setNewCollectionName(graphemes.slice(0, 20).join(""));
               }}
             />
             <button

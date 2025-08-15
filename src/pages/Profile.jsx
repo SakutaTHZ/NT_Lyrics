@@ -256,7 +256,7 @@ const Profile = () => {
                   <span
                     className={`${
                       userRole !== "premium-user" &&
-                      defaultGroupCount === 20 &&
+                      defaultGroupCount >= 20 &&
                       "text-red-500"
                     } font-semibold mr-1`}
                   >
@@ -273,7 +273,7 @@ const Profile = () => {
               {userRole === "premium-user" && (
                 <div className="flex items-center gap-2 px-4 border-l border-gray-300">
                   <p className=" text-lg">Groups -</p>
-                  <span className={`font-semibold ${collection?.collections?.length===20 ? "text-red-500" : ""}`}>
+                  <span className={`font-semibold ${collection?.collections?.length>=20 ? "text-red-500" : ""}`}>
                     {collection?.collections?.length ?? 0}
                   </span>
                 </div>
@@ -281,7 +281,7 @@ const Profile = () => {
             </div>
 
             <div className="relative">
-              {userRole !== "premium-user" && defaultGroupCount === 20 && (
+              {userRole !== "premium-user" && defaultGroupCount >= 20 && (
                 <button className="bg-amber-200 px-5 py-1 rounded-full w-full">
                   More features in Premium{" "}
                   <span className="text-blue-700 animate-pulse">
