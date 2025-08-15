@@ -1,40 +1,33 @@
 import { Suspense } from "react";
 import KpayQR from "../assets/images/Kpaythz.jpg";
+import cover from "../assets/images/cover_bg.png";
+
+import { useTranslation } from "react-i18next";
 
 const About = () => {
+  const { t } = useTranslation();
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
         
-      <div className="w-screen min-h-screen overflow-hidden overflow-y-auto bg-white text-gray-800">
+      <div className="w-screen min-h-screen overflow-hidden overflow-y-auto text-gray-800">
         <div className="flex w-full min-h-screen pt-4 md:pt-16 pb-16 px-4 md:px-24 gap-6">
           {/* Left: Main content */}
           <div className="flex flex-col w-full gap-6">
             {/* 🎸 About */}
             <section>
-              <h2 className="font-bold text-2xl italic mb-2 flex gap-2 items-center pb-2">
-                About NT Lyric n Chord
+              <img
+                src={cover}
+                loading="lazy"
+                className="fixed inset-0 w-screen -z-10"
+                alt="Cover Background"
+              />
+
+              <h2 className="font-bold text-2xl text-white italic mb-2 flex gap-2 items-center py-4">
+                {t("aboutNtLyrics")}
               </h2>
-              <p className="leading-relaxed">
-                <strong>NT Lyric n Chord</strong> began as a humble Facebook
-                page — created out of necessity to help beginner musicians
-                navigate the often messy world of Burmese music chords.
-                <br />
-                <br />
-                Back in the early days, finding accurate chords and lyrics for
-                local songs was more about guesswork than guidance. That
-                frustration gave birth to this project.
-                <br />
-                <br />
-                What started as a few shared posts quickly gained traction.
-                Musicians, singers, and hobbyists began using and contributing,
-                turning the page into a quiet but growing hub.
-                <br />
-                <br />
-                Today, NT Lyric n Chord is a dedicated space — built not just to
-                host lyrics and chords, but to make playing and learning music
-                feel accessible for everyone. We’re not a corporation, and we’re
-                not some faceless aggregator. This project is run by people who
-                play music too.
+              <p className="leading-relaxed bg-white p-4 rounded-md text-md">
+                <strong>NT Lyric n Chord</strong> <p>{t("ntlyricsDescription").split("\n").map((line, i) => <span key={i}>{line}<br/></span>)}</p>
               </p>
             </section>
 
