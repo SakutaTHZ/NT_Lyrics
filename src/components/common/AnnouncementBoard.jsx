@@ -23,7 +23,7 @@ const AnnouncementBoard = () => {
               {t("Announcement")} {!expand && ":"}
             </b>
             {expand &&
-            <hr className="mb-1 border-dashed border-gray-400"/>}
+            <span className="mb-1 h-1 border-b border-dashed border-gray-400"/>}
             <span className="w-full overflow-hidden text-ellipsis leading-relaxed">
               သီချင်းစာသားအသစ်များ မကြာမီ ရလာမည်!
               သင့်အကြိုက်ဆုံးအနုပညာရှင်များထံမှ သီချင်းစာသားအသစ်များကို

@@ -10,6 +10,7 @@ import axios from "axios";
 import { apiUrl } from "../assets/util/api";
 import EditGroup from "../components/common/EditGroup";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const [page, setPage] = useState(1);
@@ -284,9 +285,9 @@ const Profile = () => {
               {userRole !== "premium-user" && defaultGroupCount >= 20 && (
                 <button className="bg-amber-200 px-5 py-1 rounded-full w-full">
                   More features in Premium{" "}
-                  <span className="text-blue-700 animate-pulse">
+                  <Link to="/NT_Lyrics/premium" className="text-blue-700 animate-pulse">
                     Learn more ...
-                  </span>
+                  </Link>
                 </button>
               )}
             </div>

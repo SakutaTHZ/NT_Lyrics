@@ -27,7 +27,7 @@ const About = () => {
                 {t("aboutNtLyrics")}
               </h2>
               <p className="leading-relaxed bg-white p-4 rounded-md text-md">
-                <strong>NT Lyric n Chord</strong> <p>{t("ntlyricsDescription").split("\n").map((line, i) => <span key={i}>{line}<br/></span>)}</p>
+                <strong>NT Lyric n Chord</strong> <span>{t("ntlyricsDescription").split("\n").map((line, i) => <span key={i}>{line}<br/></span>)}</span>
               </p>
             </section>
 

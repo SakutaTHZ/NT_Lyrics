@@ -9,8 +9,12 @@ import { useVibration } from "./../hooks/useVibration";
 import { RadioButton } from "primereact/radiobutton";
 
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
+
+  const localStorageUser = JSON.parse(localStorage.getItem("user") || "{}");
+
   const { t, i18n } = useTranslation();
   const { vibratePattern } = useVibration();
 
@@ -114,7 +118,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
           name: result.user.name,
           email: result.user.email,
           role: result.user.role,
-          isOAuth: user.isOAuth,
+          isOAuth: localStorageUser.isOAuth,
         })
       );
       localStorage.setItem("language", language);
@@ -188,9 +192,9 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
                   <span className="text-blue-500 font-semibold pl-2">Free</span>{" "}
                 </p>
                 <p className="text-gray-500">[{t("tryPremium")}]</p>
-                <button className="bg-blue-100 px-2 py-2 rounded-md">
+                <Link to={"/NT_Lyrics/premium"} className="bg-blue-100 px-2 py-2 rounded-md text-center">
                   {t("learnMore")}...
-                </button>
+                </Link>
               </div>
             )}
 
@@ -234,12 +238,12 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
                     type="text"
                     id="email"
                     className={
-                      `${user?.isOAuth && "bg-gray-100"} ` + inputClass
+                      `${localStorageUser.isOAuth && "bg-gray-100"} ` + inputClass
                     }
                     placeholder={t("enterEmail")}
                     value={email}
                     onChange={(e) => checkEmail(e.target.value)}
-                    disabled={user?.isOAuth}
+                    disabled={localStorageUser.isOAuth}
                   />
                   {!isEmailCorrect && (
                     <p className={`text-sm text-red-400 mt-1`}>
@@ -248,7 +252,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
                   )}
                 </div>
                 {/* Password */}
-                <div className={`w-full ${user?.isOAuth && "hidden"} `}>
+                <div className={`w-full ${localStorageUser.isOAuth && "hidden"} `}>
                   <label
                     htmlFor="Change Password"
                     className={`${labelClass} flex justify-between items-center`}

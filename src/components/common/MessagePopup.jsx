@@ -12,7 +12,7 @@ const MessagePopup = ({ custom_class = "", message_type = "", message_text = "Th
   return createPortal(
     <>
       <div
-        className={`animate-right-normal fixed top-16 right-0 shadow-sm flex items-center gap-4 md:gap-2 p-2 px-4 rounded-l-lg ${
+        className={`animate-right-normal fixed top-16 right-0 shadow-sm flex items-start gap-4 md:gap-2 p-2 px-2 rounded-l-lg ${
           message_type === "error"
             ? "bg-red-50 "
             : message_type === "alert"

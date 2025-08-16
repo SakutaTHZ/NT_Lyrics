@@ -143,11 +143,12 @@ const Landing = () => {
     return popularLyrics
       .sort((a, b) => b.view_count - a.view_count)
       .slice(0, 5)
-      .map((lyric) => (
+      .map((lyric, i) => (
         <div
           key={lyric._id}
-          className="border-b border-gray-200 last:border-0 border-dashed"
+          className="border-b border-gray-200 last:border-0 border-dashed flex"
         >
+          <span className="py-5 px-2 w-2 mr-2 font-semibold">{i + 1}.</span>
           <LyricsRow
             id={lyric._id}
             lyric={lyric}
@@ -171,10 +172,19 @@ const Landing = () => {
               alt="Cover Background"
             />
 
-            <div className="animate-down-start z-10 w-full md:w-96 p-4 bg-white rounded-md shadow-md flex flex-col gap-4 md:translate-y-12">
+            <div className="animate-down-start relative z-10 w-full md:w-96 p-4 bg-white rounded-md shadow-md flex flex-col gap-4 md:translate-y-12">
               <div className="flex items-center gap-4 md:hidden">
                 <p className="font-bold text-sm italic text-blue-500 text-nowrap">
                   NT Lyric & Chord
+                  <span
+                    className={`text-xs font-normal px-3 py-0.5 ml-2 rounded-full ${
+                      user.role === "premium-user"
+                        ? "bg-amber-200 text-gray-800"
+                        : "hidden"
+                    }`}
+                  >
+                    premium
+                  </span>
                 </p>
                 <span className="w-full h-[1px] bg-blue-100 "></span>
               </div>
@@ -201,7 +211,7 @@ const Landing = () => {
           </div>
 
           {/* Announcement Board */}
-          <AnnouncementBoard/>
+          <AnnouncementBoard />
 
           {/* Featured Lyrics */}
           <div className="relative p-4 pb-0 md:px-24">
@@ -238,17 +248,16 @@ const Landing = () => {
 
             <div
               className={`grid ${
-                loading || popularLyrics.length > 0
-                  ? ""
-                  : "grid-cols-1"
-              } pt-4  pb-4 gap-2`}
+                loading || popularLyrics.length > 0 ? "" : "grid-cols-1"
+              }`}
             >
-              {popularArtists.slice(0, 5).map((artist) => (
+              {popularArtists.slice(0, 5).map((artist, i) => (
                 <div
                   key={artist.name}
                   className="border-b border-gray-200 last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
                   onClick={() => navigate(`/NT_Lyrics/artist/${artist.id}`)}
                 >
+                  <span className="py-5 w-2 font-semibold">{i + 1}.</span>
                   <img
                     src={artist.photoLink}
                     className="w-12 h-12 object-contain rounded-full"

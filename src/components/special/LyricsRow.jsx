@@ -96,7 +96,7 @@ const LyricsRow = ({
           access
             ? goToLyricsDetails
             : () => {
-                setMessageText("You don't have access to this lyrics.");
+                setMessageText(t("youHaveToBePremiumUserToAccessThisFeature"));
                 setMessageType("error");
                 setShowMessage(true);
                 setTimeout(() => setShowMessage(false), 4000);
