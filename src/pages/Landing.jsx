@@ -178,7 +178,7 @@ const Landing = () => {
                   NT Lyric & Chord
                   <span
                     className={`animate-down-start text-xs font-normal px-3 py-0.5 ml-2 rounded-full ${
-                      user.role === "premium-user"
+                      user?.role === "premium-user"
                         ? "bg-amber-200 text-gray-800"
                         : "hidden"
                     }`}
