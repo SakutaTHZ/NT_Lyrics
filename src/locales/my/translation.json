@@ -77,5 +77,17 @@
   "youHaveToBePremiumUserToAccessThisFeature": "ဒီ feature ကို အသုံးပြုရန် Premium အသုံးပြုသူ ဖြစ်ရမည်။",
 
   "premiumFeatures": "Premium feature များ",
-  "upgraedToGetTheseExclusiveFeaturesAndBenifits" : "အထူး feature များနှင့် အကျိုးခံစားခွင့်များရရှိရန် Premium သို့ Upgrade လုပ်ပါ။"
+  "upgraedToGetTheseExclusiveFeaturesAndBenifits" : "အထူး feature များနှင့် အကျိုးခံစားခွင့်များရရှိရန် Premium သို့ Upgrade လုပ်ပါ။",
+
+  "upgradeNow": "ယခု Upgrade လုပ်ပါ",
+  "unlockAllLyrics": "အားလုံးသော သီချင်းစာသားများကို ဖွင့်ပါ",
+  "allTheLyricsAreUnlockedForPremiumUsers": "Premium အသုံးပြုသူများအတွက် သီချင်းစာသားအားလုံးကို ဖွင့်ထားပါသည်။ သီချင်းစာသားများ ထည့်ရန် စောင့်ဆိုင်းရန် မလိုတော့ပါ။",
+  "thisAlsoUnlocksCollections": "ဒီ feature က သင့်ကို စုစည်းမှုများ ဖန်တီးခြင်းနှင့် စီမံခန့်ခွဲခြင်းကို ခွင့်ပြုပါသည်။",
+  "collectionsexplained": {
+    "title": "စုစည်းမှုများ",
+    "description": "စုစည်းမှုများသည် သင့်အကြိုက်ဆုံး သီချင်းစာသားများကို သင်ကြိုက်နှစ်သက်သော အမျိုးအစားအလိုက် စုဆောင်းထားနိုင်သည့် အယ်လ်ဘမ်များနဲ့ ဆင်တူသည်။",
+    "limitInfo": "သင်သည် စုစည်းမှု ၂၀ အထိ ဖန်တီးနိုင်ပြီး တစ်စုလျှင် သီချင်းစာသား ၂၀ အထိ ထည့်သွင်းနိုင်သည်။",
+    "defaultInfo": "Default စုစည်းမှုသည် ကန့်သတ်မရှိပါ၊ သင်အမြဲတမ်း နောက်ထပ်စာသားများကို သိမ်းဆည်းနိုင်သည်။",
+    "benefit": "စာအုပ်စုများသည် သင့်အကြိုက်ဆုံး သီချင်းစာသားများကို သင်ပိုင်ဆိုင်သည့် ပုံစံအတိုင်း အဆင်ပြေစွာ စုဆောင်းထားနိုင်စေသည်။"
+  }
 }

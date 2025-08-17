@@ -122,7 +122,6 @@ const Profile = () => {
   };
 
   const userType = getUserType(); // "guest", "free", or "premium"
-  console.log("User Type:", userType);
   const userTier = tierMap[userType]; // 0, 1, or 2
 
   const shouldHideCollection = (lyricTier = 0) => userTier >= lyricTier;
