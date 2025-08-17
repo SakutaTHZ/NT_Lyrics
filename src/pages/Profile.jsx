@@ -122,11 +122,10 @@ const Profile = () => {
   };
 
   const userType = getUserType(); // "guest", "free", or "premium"
+  console.log("User Type:", userType);
   const userTier = tierMap[userType]; // 0, 1, or 2
 
-  const shouldHideCollection = (lyricTier = 0) => {
-    return userTier < lyricTier; // hide if user tier is lower than lyric tier
-  };
+  const shouldHideCollection = (lyricTier = 0) => userTier >= lyricTier;
 
   const getLyricsByGroup = useCallback(
     async (group, pageNum, override = false) => {
