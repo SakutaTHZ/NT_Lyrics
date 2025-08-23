@@ -19,19 +19,19 @@ const AnnouncementBoard = () => {
               expand ? "flex flex-col gap-2" : "text-nowrap flex"
             } w-full transition-all  duration-300 `}
           >
-            <b className={`${expand ? "font-bold text-lg italic pb-2" : "pr-2"}`}>
+            <b
+              className={`${expand ? "font-bold text-lg italic pb-2" : "pr-2"}`}
+            >
               {t("Announcement")} {!expand && ":"}
             </b>
-            {expand &&
-            <span className="mb-1 h-1 border-b border-dashed border-gray-400"/>}
+            {expand && (
+              <span className="mb-1 h-1 border-b border-dashed border-gray-400" />
+            )}
             <span className="w-full overflow-hidden text-ellipsis leading-relaxed">
-              သီချင်းစာသားအသစ်များ မကြာမီ ရလာမည်!
-              သင့်အကြိုက်ဆုံးအနုပညာရှင်များထံမှ သီချင်းစာသားအသစ်များကို
-              စိတ်လှုပ်ရှားစွာ စောင့်မျှော်ထားပါ။
-              ကျွန်ုပ်တို့၏သီချင်းစာသားဝက်ဘ်ဆိုဒ်ကို Premium ဝယ်ယူခြင်းဖြင့်
-              ပံ့ပိုးပါ — ကြော်ငြာမပါသောအတွေ့အကြုံနှင့်
-              သီးသန့်အကြောင်းအရာများကို အမြန်ရယူနိုင်သည်။ တေးသံနှင့်အတူရှိနေတဲ့
-              သင့်အား ကျေးဇူးအထူးတင်ပါသည်။
+              NT Lyric & Chord မှ ကြိုဆိုပါသည်။ လက်ရှိတွင်
+              သီချင်းများ ထည့်သွင်း​နေဆဲဖြစ်ပါသည်။ 
+              App ၏ တခြား​သောလုပ်​ဆောင်ချက်များကို လည်း
+              စမ်းသပ်ပြုပြင်လျှက်ရှိပြီး မကြာခင် အားလုံးအသုံးပြုန်ိုင်ပါမည်။
             </span>
           </p>
           <p

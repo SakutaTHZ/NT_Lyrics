@@ -89,5 +89,16 @@
     "limitInfo": "You can create up to 20 collections, each holding up to 20 lyrics.",
     "defaultInfo": "Your Default Collection is unlimited, so you can always save more lyrics there.",
     "benefit": "Collections make it easy to keep your favorite lyrics organized in a way that feels personal to you."
+  },
+  "SeeFeatures": "See Features",
+  "noAds": "No Ads",
+  "Themes": "Themes",
+  "OfflineCollections": "Offline Collections",
+  "lyricsRequests": "Lyrics Requests",
+  "themesexplained": {
+    "title": "Themes",
+    "description": "Themes let you personalize the look and feel of the app to match your style.",
+    "lightDark": "You can switch between Light and Dark modes anytime.",
+    "custom": "More custom color themes are coming soon, so you can make the app truly yours."
   }
 }

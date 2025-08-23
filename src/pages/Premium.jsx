@@ -1,11 +1,18 @@
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BiArrowBack, BiX } from "react-icons/bi";
 import { CgCheck } from "react-icons/cg";
+import UpgradeToPremium from "../components/common/UpgradeToPremium";
 
 const Premium = () => {
   const { t } = useTranslation();
-  const columnClass = "p-2";
+  const columnClass = "p-2 text-pretty";
+
+  const openUpgradeModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -26,7 +33,10 @@ const Premium = () => {
               </svg>
               <h2 className="font-bold text-2xl italic text-white absolute top-4 left-4">
                 <p className="flex items-center gap-2">
-                  <span>
+                  <span
+                    onClick={() => window.history.back()}
+                    className="cursor-pointer"
+                  >
                     <BiArrowBack />
                   </span>
                   {t("premiumFeatures")}
@@ -51,6 +61,16 @@ const Premium = () => {
                 </thead>
 
                 <tbody>
+                  <tr className="border border-gray-200">
+                    <td className={`${columnClass}`}>{t("noAds")}</td>
+                    <td className={`${columnClass} bg-gray-50 w-24`}>
+                      <CgCheck size={20} className="text-green-500" />
+                    </td>
+                    <td className={`${columnClass} bg-blue-50 w-24`}>
+                      <CgCheck size={20} className="text-green-500" />
+                    </td>
+                  </tr>
+
                   <tr className="border border-gray-200 bg-gray-50">
                     <td className={`${columnClass}`}>
                       <a href="#unlockAllLyrics">{t("unlockAllLyrics")}</a>
@@ -76,37 +96,9 @@ const Premium = () => {
                   </tr>
 
                   <tr className="border border-gray-200 bg-gray-50">
-                    <td className={`${columnClass}`}>Offline Collections</td>
-                    <td className={`${columnClass} bg-gray-50 w-24`}>
-                      <BiX size={20} className="text-red-500" />
+                    <td className={`${columnClass}`}>
+                      <a href="#themes">{t("theme")}</a>
                     </td>
-                    <td className={`${columnClass} bg-blue-50 w-24`}>
-                      <CgCheck size={20} className="text-green-500" />
-                    </td>
-                  </tr>
-
-                  <tr className="border border-gray-200">
-                    <td className={`${columnClass}`}>No Ads</td>
-                    <td className={`${columnClass} bg-gray-50 w-24`}>
-                      <BiX size={20} className="text-red-500" />
-                    </td>
-                    <td className={`${columnClass} bg-blue-50 w-24`}>
-                      <CgCheck size={20} className="text-green-500" />
-                    </td>
-                  </tr>
-
-                  <tr className="border border-gray-200 bg-gray-50">
-                    <td className={`${columnClass}`}>Themes</td>
-                    <td className={`${columnClass} bg-gray-50 w-24`}>
-                      <BiX size={20} className="text-red-500" />
-                    </td>
-                    <td className={`${columnClass} bg-blue-50 w-24`}>
-                      <CgCheck size={20} className="text-green-500" />
-                    </td>
-                  </tr>
-
-                  <tr className="border border-gray-200">
-                    <td className={`${columnClass}`}>Lyrics Requests</td>
                     <td className={`${columnClass} bg-gray-50 w-24`}>
                       <BiX size={20} className="text-red-500" />
                     </td>
@@ -121,7 +113,10 @@ const Premium = () => {
                       colSpan={2}
                       className={`${columnClass} bg-blue-50 w-24`}
                     >
-                      <button className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                      <button
+                        className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                        onClick={openUpgradeModal}
+                      >
                         {t("upgradeNow")}
                       </button>
                     </td>
@@ -161,17 +156,47 @@ const Premium = () => {
               </div>
 
               <div className="bg-white p-2 rounded-lg mt-2">
-  <p>{t("collectionsexplained.description")}</p>
-  <ul className="list-disc list-inside mt-2 space-y-1">
-    <li>{t("collectionsexplained.limitInfo")}</li>
-    <li>{t("collectionsexplained.defaultInfo")}</li>
-  </ul>
-  <p className="mt-2">{t("collectionsexplained.benefit")}</p>
-</div>
+                <p>{t("collectionsexplained.description")}</p>
+                <ul className="list-disc list-inside mt-2 space-y-1">
+                  <li>{t("collectionsexplained.limitInfo")}</li>
+                  <li>{t("collectionsexplained.defaultInfo")}</li>
+                </ul>
+                <p className="mt-2">{t("collectionsexplained.benefit")}</p>
+              </div>
             </div>
+
+            {/* Theme */}
+            <div
+              id="themes"
+              className="unlockAllLyrics w-full flex flex-col bg-blue-100 p-2 rounded-lg mt-4"
+            >
+              <div className="flex items-center gap-2">
+                <CgCheck size={24} className="text-green-500" />
+                <span className="text-md font-semibold">{t("theme")}</span>
+              </div>
+
+              <div className="bg-white p-2 rounded-lg mt-2">
+                <p>{t("themesexplained.description")}</p>
+                <ul className="list-disc list-inside mt-2 space-y-1">
+                  <li>{t("themesexplained.lightDark")}</li>
+                  <li>{t("themesexplained.custom")}</li>
+                </ul>
+              </div>
+            </div>
+
+            <button
+              className="loading-animation w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 my-2 mb-8"
+              onClick={openUpgradeModal}
+            >
+              {t("upgradeNow")}
+            </button>
           </div>
         </div>
       </div>
+
+      {isModalOpen && (
+        <UpgradeToPremium onClose={() => setIsModalOpen(false)} />
+      )}
     </Suspense>
   );
 };

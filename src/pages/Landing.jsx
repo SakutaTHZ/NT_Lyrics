@@ -168,7 +168,7 @@ const Landing = () => {
             <img
               src={cover}
               loading="lazy"
-              className="absolute inset-0 sm:h-full md:w-full object-fill"
+              className="absolute inset-0 sm:h-full md:w-full object-cover object-top"
               alt="Cover Background"
             />
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import PropTypes from "prop-types";
 import PasswordInput from "./Password_Input";
-import { BiCheck } from "react-icons/bi";
+import { BiCheck, BiInfoCircle } from "react-icons/bi";
 import { useAuth } from "../../components/hooks/authContext";
 import { apiUrl } from "../../assets/util/api"; // Adjust the import path as necessary
 import { useVibration } from "./../hooks/useVibration";
@@ -168,6 +168,9 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
                   <span className="text-sm bg-yellow-100 text-yellow-800 py-1 px-2 rounded-md border border-yellow-300 font-semibold">
                     Premium
                   </span>
+                  <Link to={"/NT_Lyrics/premium"} title="See Features" className="ml-auto text-blue-500 font-semibold underline">
+                    <BiInfoCircle size={24}/>
+                  </Link>
                 </div>
 
                 <div className="flex items-center gap-2 bg-gray-100 p-2 rounded-md">
