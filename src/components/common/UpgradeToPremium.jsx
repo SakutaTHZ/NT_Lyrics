@@ -2,11 +2,17 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import ModalPortal from "../../components/special/ModalPortal";
 import useModalEscClose from "../../components/hooks/useModalEscClose";
-import { BiX } from "react-icons/bi";
+import { BiCopy, BiPhone, BiX } from "react-icons/bi";
 import { AnimatePresence, motion } from "framer-motion";
 import InputField from "./InputField";
 import DropdownField from "./DropdownField";
 import imageCompression from "browser-image-compression";
+import { CgProfile } from "react-icons/cg";
+
+// Payment Icons
+import kpay from "../../assets/images/Payments/KpayLogo.png";
+import ayapay from "../../assets/images/Payments/AyaPay.jpg";
+import wavemoney from "../../assets/images/Payments/WavePay.jpg";
 
 const UpgradeToPremium = ({ onClose }) => {
   useModalEscClose(onClose);
@@ -30,14 +36,97 @@ const UpgradeToPremium = ({ onClose }) => {
     { name: "WaveMoney", value: "WaveMoney" },
   ];
 
+  const paymentinfo = ({ selectedpayment }) => {
+    if (selectedpayment === "KPay") {
+      return (
+        <div className="p-4 bg-gray-100 rounded-md flex gap-4 items-start">
+          <img src={kpay} alt="Payment" className="h-12 aspect-square object-center rounded-md" />
+          <div className="">
+            <div className="w-auto flex items-center gap-2">
+              <BiPhone size={20} className="text-gray-500" />
+              <span>09-123456789</span>
+              {/* Copy button to copy the phone number */}
+              <button
+                className="ml-2 -translate-y-1 text-blue-600 hover:underline"
+                onClick={() => {
+                  navigator.clipboard.writeText("09123456789");
+                  alert("Phone number copied to clipboard!");
+                }}
+              >
+                <BiCopy />
+              </button>
+            </div>
+            <div className="w-auto flex items-center gap-2">
+              <CgProfile size={20} className="text-gray-500" />
+              <span>NT Lyrics</span>
+            </div>
+          </div>
+        </div>
+      );
+    }else if (selectedpayment === "AYAPay") {
+      return (
+        <div className="p-4 bg-gray-100 rounded-md flex gap-4 items-start">
+          <img src={ayapay} alt="Payment" className="h-12 aspect-square object-center rounded-md" />
+          <div className="">
+            <div className="w-auto flex items-center gap-2">
+              <BiPhone size={20} className="text-gray-500" />
+              <span>09-123456789</span>
+              {/* Copy button to copy the phone number */}
+              <button
+                className="ml-2 -translate-y-1 text-blue-600 hover:underline"
+                onClick={() => {
+                  navigator.clipboard.writeText("09123456789");
+                  alert("Phone number copied to clipboard!");
+                }}
+              >
+                <BiCopy />
+              </button>
+            </div>
+            <div className="w-auto flex items-center gap-2">
+              <CgProfile size={20} className="text-gray-500" />
+              <span>NT Lyrics</span>
+            </div>
+          </div>
+        </div>
+      );
+    }else if (selectedpayment === "WaveMoney") {
+      return (
+        <div className="p-4 bg-gray-100 rounded-md flex gap-4 items-start">
+          <img src={wavemoney} alt="Payment" className="h-12 aspect-square object-center rounded-md" />
+          <div className="">
+            <div className="w-auto flex items-center gap-2">
+              <BiPhone size={20} className="text-gray-500" />
+              <span>09-123456789</span>
+              {/* Copy button to copy the phone number */}
+              <button
+                className="ml-2 -translate-y-1 text-blue-600 hover:underline"
+                onClick={() => {
+                  navigator.clipboard.writeText("09123456789");
+                  alert("Phone number copied to clipboard!");
+                }}
+              >
+                <BiCopy />
+              </button>
+            </div>
+            <div className="w-auto flex items-center gap-2">
+              <CgProfile size={20} className="text-gray-500" />
+              <span>NT Lyrics</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  };
+
   const [selectedDuration, setSelectedDuration] = React.useState("6");
   const durationOptions = [
     { name: "6 Months", value: "6" },
     { name: "12 Months", value: "12" },
   ];
-  
-const [uploadedFile, setUploadedFile] = React.useState(null);
 
+  const [uploadedFile, setUploadedFile] = React.useState(null);
+
+  console.log("Uploaded File:", uploadedFile);
   return (
     <>
       <ModalPortal>
@@ -144,10 +233,17 @@ const [uploadedFile, setUploadedFile] = React.useState(null);
                     }}
                     className="w-full p-2 border border-gray-300 rounded-md"
                   />
-                </div>
-                <button
-                  className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4"
-                  onClick={() => {
+                  {/* Notice */}
+                  <p className="mt-1 text-sm text-gray-500">
+                    * Please ensure you upload a clear and valid screenshot of your payment receipt.
+                  </p>
+                  </div>
+
+                  {paymentinfo({ selectedpayment })}
+
+                  <button
+                    className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4"
+                    onClick={() => {
                     console.log("Upgrade Clicked");
                   }}
                 >
