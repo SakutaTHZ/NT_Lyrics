@@ -100,5 +100,17 @@
     "description": "Themes let you personalize the look and feel of the app to match your style.",
     "lightDark": "You can switch between Light and Dark modes anytime.",
     "custom": "More custom color themes are coming soon, so you can make the app truly yours."
+  },
+  "upgradePremium": {
+    "title": "Upgrade to Premium",
+    "phoneNumber": "Phone Number",
+    "phoneNumberPlaceholder": "Enter Your Payment Phone Number",
+    "duration": "Select Premium Duration",
+    "paymentMethod": "Payment Method",
+    "uploadFile": "Upload Lyric File",
+    "uploadFileRequired": "*",
+    "uploadNotice": "* Please ensure you upload a clear and valid screenshot of your payment receipt.",
+    "upgradeButton": "Upgrade Now",
+    "copyAlert": "Phone number copied to clipboard!"
   }
 }

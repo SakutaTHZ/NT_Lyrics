@@ -13,8 +13,10 @@ import { CgProfile } from "react-icons/cg";
 import kpay from "../../assets/images/Payments/KpayLogo.png";
 import ayapay from "../../assets/images/Payments/AyaPay.jpg";
 import wavemoney from "../../assets/images/Payments/WavePay.jpg";
+import { useTranslation } from "react-i18next";
 
 const UpgradeToPremium = ({ onClose }) => {
+  const { t } = useTranslation();
   useModalEscClose(onClose);
 
   useEffect(() => {
@@ -40,7 +42,11 @@ const UpgradeToPremium = ({ onClose }) => {
     if (selectedpayment === "KPay") {
       return (
         <div className="p-4 bg-gray-100 rounded-md flex gap-4 items-start">
-          <img src={kpay} alt="Payment" className="h-12 aspect-square object-center rounded-md" />
+          <img
+            src={kpay}
+            alt="Payment"
+            className="h-12 aspect-square object-center rounded-md"
+          />
           <div className="">
             <div className="w-auto flex items-center gap-2">
               <BiPhone size={20} className="text-gray-500" />
@@ -63,10 +69,14 @@ const UpgradeToPremium = ({ onClose }) => {
           </div>
         </div>
       );
-    }else if (selectedpayment === "AYAPay") {
+    } else if (selectedpayment === "AYAPay") {
       return (
         <div className="p-4 bg-gray-100 rounded-md flex gap-4 items-start">
-          <img src={ayapay} alt="Payment" className="h-12 aspect-square object-center rounded-md" />
+          <img
+            src={ayapay}
+            alt="Payment"
+            className="h-12 aspect-square object-center rounded-md"
+          />
           <div className="">
             <div className="w-auto flex items-center gap-2">
               <BiPhone size={20} className="text-gray-500" />
@@ -89,10 +99,14 @@ const UpgradeToPremium = ({ onClose }) => {
           </div>
         </div>
       );
-    }else if (selectedpayment === "WaveMoney") {
+    } else if (selectedpayment === "WaveMoney") {
       return (
         <div className="p-4 bg-gray-100 rounded-md flex gap-4 items-start">
-          <img src={wavemoney} alt="Payment" className="h-12 aspect-square object-center rounded-md" />
+          <img
+            src={wavemoney}
+            alt="Payment"
+            className="h-12 aspect-square object-center rounded-md"
+          />
           <div className="">
             <div className="w-auto flex items-center gap-2">
               <BiPhone size={20} className="text-gray-500" />
@@ -160,7 +174,9 @@ const UpgradeToPremium = ({ onClose }) => {
               className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-full max-w-md"
             >
               <div className="header flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Upgrade to Premium</h2>
+                <h2 className="text-xl font-semibold">
+                  {t("upgradePremium.title")}
+                </h2>
                 <button
                   className="text-gray-500 hover:text-gray-700"
                   onClick={onClose}
@@ -172,15 +188,15 @@ const UpgradeToPremium = ({ onClose }) => {
               <div className="flex flex-col gap-2">
                 <hr className="border-gray-300 border-dashed" />
                 <InputField
-                  label="Phone Number"
+                  label={t("upgradePremium.phoneNumber")}
                   value={phoneNumber}
                   onChange={setPhoneNumber}
-                  placeholder="Enter Your Payment Phone Number"
+                  placeholder={t("upgradePremium.phoneNumberPlaceholder")}
                   required={true}
                 />
 
                 <DropdownField
-                  label="Select Premium Duration"
+                  label={t("upgradePremium.duration")}
                   value={selectedDuration}
                   options={durationOptions}
                   onChange={setSelectedDuration}
@@ -188,7 +204,7 @@ const UpgradeToPremium = ({ onClose }) => {
                 />
 
                 <DropdownField
-                  label="Payment Method"
+                  label={t("upgradePremium.paymentMethod")}
                   value={selectedpayment}
                   options={paymentOptions}
                   onChange={setSelectedPayment}
@@ -197,8 +213,10 @@ const UpgradeToPremium = ({ onClose }) => {
 
                 <div className="w-full">
                   <label className="block mb-2 text-sm font-medium text-gray-700">
-                    Upload Lyric File
-                    <span className="pl-1 text-red-500">*</span>
+                    {t("upgradePremium.uploadFile")}
+                    <span className="pl-1 text-red-500">
+                      {t("upgradePremium.uploadFileRequired")}
+                    </span>
                   </label>
                   <input
                     type="file"
@@ -235,19 +253,19 @@ const UpgradeToPremium = ({ onClose }) => {
                   />
                   {/* Notice */}
                   <p className="mt-1 text-sm text-gray-500">
-                    * Please ensure you upload a clear and valid screenshot of your payment receipt.
+                    {t("upgradePremium.uploadNotice")}
                   </p>
-                  </div>
+                </div>
 
-                  {paymentinfo({ selectedpayment })}
+                {paymentinfo({ selectedpayment })}
 
-                  <button
-                    className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4"
-                    onClick={() => {
-                    console.log("Upgrade Clicked");
+                <button
+                  className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4"
+                  onClick={() => {
+                    alert(t("upgradePremium.copyAlert"));
                   }}
                 >
-                  Upgrade Now
+                  {t("upgradePremium.upgradeButton")}
                 </button>
               </div>
             </motion.div>
