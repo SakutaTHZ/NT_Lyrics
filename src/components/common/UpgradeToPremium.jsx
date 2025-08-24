@@ -41,7 +41,7 @@ const UpgradeToPremium = ({ onClose }) => {
   const paymentinfo = ({ selectedpayment }) => {
     if (selectedpayment === "KPay") {
       return (
-        <div className="p-4 bg-gray-100 rounded-md flex gap-4 items-start">
+        <div className="checkbox-fade p-4 bg-gray-100 rounded-md flex gap-4 items-start">
           <img
             src={kpay}
             alt="Payment"
@@ -71,7 +71,7 @@ const UpgradeToPremium = ({ onClose }) => {
       );
     } else if (selectedpayment === "AYAPay") {
       return (
-        <div className="p-4 bg-gray-100 rounded-md flex gap-4 items-start">
+        <div className="checkbox-fade p-4 bg-gray-100 rounded-md flex gap-4 items-start">
           <img
             src={ayapay}
             alt="Payment"
@@ -101,7 +101,7 @@ const UpgradeToPremium = ({ onClose }) => {
       );
     } else if (selectedpayment === "WaveMoney") {
       return (
-        <div className="p-4 bg-gray-100 rounded-md flex gap-4 items-start">
+        <div className="checkbox-fade p-4 bg-gray-100 rounded-md flex gap-4 items-start">
           <img
             src={wavemoney}
             alt="Payment"
