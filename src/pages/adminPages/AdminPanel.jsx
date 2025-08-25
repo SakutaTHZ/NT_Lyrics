@@ -5,6 +5,7 @@ import { CgArrowTopRight } from "react-icons/cg";
 import UsersTab from "./UsersTab/UsersTab";
 import ArtistsTab from "./ArtistTab/ArtistsTab";
 import LyricsTab from "./LyricsTab/LyricsTab";
+import PaymentTab from "./PaymentTab/PaymentsTab";
 import {
   fetchTop10Artists,
   fetchArtistOverview,
@@ -281,6 +282,22 @@ const AdminPanel = () => {
                 </div>
                 {/* Column 3 */}
                 <div className="flex flex-col gap-4">
+                  <div className="rotatingBorder p-2 border border-gray-200 rounded-md shadow-sm w-full h-fit">
+                    <p className="p-2 px-4 bg-blue-50 text-gray-700 font-semibold mb-2">
+                      Premium Requests
+                    </p>
+                    <p className="p-4 text-2xl font-bold flex items-center justify-between gap-2">
+                      <span>20</span>{" "}
+
+                      <button
+                        className="rotatingBorder bg-blue-100 hover:bg-blue-200 transition-colors h-full aspect-square p-2 rounded-md cursor-pointer"
+                        onClick={() => setActiveIndex(4)}
+                      >
+                        <CgArrowTopRight size={20} />
+                      </button>
+                    </p>
+                  </div>
+
                   <div className="p-2 border border-gray-200 rounded-md shadow-sm w-full h-fit">
                     <p className="p-2 px-4 bg-gray-50 text-gray-700 font-semibold mb-2">
                       Accumulated Balance
@@ -318,6 +335,10 @@ const AdminPanel = () => {
             {/* Users Panel */}
             <TabPanel header="Users">
               <UsersTab />
+            </TabPanel>
+            {/* Payments Panel */}
+            <TabPanel header="Payments">
+              <PaymentTab />
             </TabPanel>
           </TabView>
         </div>

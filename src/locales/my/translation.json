@@ -101,12 +101,19 @@
     "custom": "မကြာမီတွင် နောက်ထပ် အရောင်အပြင်အဆင်များကို ထပ်မံထည့်သွင်းမည်ဖြစ်သဖြင့် သင့် app ကို တကယ့်ကို ကိုယ်ပိုင်လုပ်နိုင်ပါမည်။"
   },
   "upgradePremium": {
+    "validation": {
+      "phoneRequired": "ဖုန်းနံပါတ်ကို ထည့်ပေးပါ။",
+      "phoneInvalid": "မှန်ကန်သော ဖုန်းနံပါတ်ကို ထည့်ပေးပါ။",
+      "paymentRequired": "ငွေပေးချေမှု နည်းလမ်းကို ရွေးပါ။",
+      "durationRequired": "Premium Plan ကို ရွေးပါ။",
+      "fileRequired": "မှန်ကန်သော ငွေပေးချေမှု အထောက်အထားကို တင်ပေးပါ။"
+    },
     "title": "Premium အဆင့်မြှင့်ရန်",
     "phoneNumber": "ဖုန်းနံပါတ်",
     "phoneNumberPlaceholder": "ငွေပေးချေမှုတွင် သုံးသည့် ဖုန်းနံပါတ်ကို ထည့်ပါ",
-    "duration": "Premium ကြာချိန်ကို ရွေးပါ",
+    "duration": "Premium Plan ကို ရွေးပါ",
     "paymentMethod": "ငွေပေးချေမှု နည်းလမ်း",
-    "uploadFile": "သီချင်းဖိုင် တင်ရန်",
+    "uploadAValidPaymentProof": "သင်၏ ငွေပေးချေမှု အထောက်အထားကို တင်ပါ",
     "uploadFileRequired": "*",
     "uploadNotice": "* ငွေပေးချေမှု အထောက်အထား စာရွက်/စကရင်ရှော့ တိကျသေချာစွာ ရှင်းလင်းစွာ တင်ပေးပါ။",
     "upgradeButton": "အခုတင် အဆင့်မြှင့်မည်",

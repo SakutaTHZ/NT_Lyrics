@@ -102,12 +102,19 @@
     "custom": "More custom color themes are coming soon, so you can make the app truly yours."
   },
   "upgradePremium": {
+    "validation": {
+      "phoneRequired": "Please enter your phone number.",
+      "phoneInvalid": "Please enter a valid phone number.",
+      "paymentRequired": "Please select a payment method.",
+      "durationRequired": "Please select a premium duration.",
+      "fileRequired": "Please upload a valid payment proof."
+    },
     "title": "Upgrade to Premium",
     "phoneNumber": "Phone Number",
     "phoneNumberPlaceholder": "Enter Your Payment Phone Number",
     "duration": "Select Premium Duration",
     "paymentMethod": "Payment Method",
-    "uploadFile": "Upload Lyric File",
+    "uploadAValidPaymentProof": "Upload a Valid Payment Proof",
     "uploadFileRequired": "*",
     "uploadNotice": "* Please ensure you upload a clear and valid screenshot of your payment receipt.",
     "upgradeButton": "Upgrade Now",

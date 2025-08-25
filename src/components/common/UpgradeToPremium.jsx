@@ -141,6 +141,36 @@ const UpgradeToPremium = ({ onClose }) => {
   const [uploadedFile, setUploadedFile] = React.useState(null);
 
   console.log("Uploaded File:", uploadedFile);
+
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const [successMessage, setSuccessMessage] = React.useState(""); 
+
+  const validateForm = () => {
+    if (!phoneNumber) {
+      setErrorMessage(t("upgradePremium.validation.phoneRequired"));
+      return false;
+    }
+    const phoneRegex = /^(09|\+?959)\d{7,9}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      setErrorMessage(t("upgradePremium.validation.phoneInvalid"));
+      return false;
+    }
+    if (!selectedpayment) {
+      setErrorMessage(t("upgradePremium.validation.paymentRequired"));
+      return false;
+    }
+    if (!selectedDuration) {
+      setErrorMessage(t("upgradePremium.validation.durationRequired"));
+      return false;
+    }
+    if (!uploadedFile) {
+      setErrorMessage(t("upgradePremium.validation.fileRequired"));
+      return false;
+    }
+    setErrorMessage("");
+    return true;
+  };
+
   return (
     <>
       <ModalPortal>
@@ -187,6 +217,18 @@ const UpgradeToPremium = ({ onClose }) => {
               {/* Body content */}
               <div className="flex flex-col gap-2">
                 <hr className="border-gray-300 border-dashed" />
+
+                {errorMessage && (
+                  <div className="p-2 bg-red-100 text-red-700 border border-red-300 rounded text-sm">
+                    {errorMessage}
+                  </div>
+                )}
+                {successMessage && (
+                  <div className="p-2 bg-green-100 text-green-700 border border-green-300 rounded text-sm">
+                    {successMessage}
+                  </div>
+                )}
+
                 <InputField
                   label={t("upgradePremium.phoneNumber")}
                   value={phoneNumber}
@@ -213,7 +255,7 @@ const UpgradeToPremium = ({ onClose }) => {
 
                 <div className="w-full">
                   <label className="block mb-2 text-sm font-medium text-gray-700">
-                    {t("upgradePremium.uploadFile")}
+                    {t("upgradePremium.uploadAValidPaymentProof")}
                     <span className="pl-1 text-red-500">
                       {t("upgradePremium.uploadFileRequired")}
                     </span>
@@ -262,7 +304,23 @@ const UpgradeToPremium = ({ onClose }) => {
                 <button
                   className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4"
                   onClick={() => {
-                    alert(t("upgradePremium.copyAlert"));
+                    if (validateForm()) {
+                      // Form is valid, proceed with submission logic
+                      setSuccessMessage(
+                        "Your upgrade request has been submitted!"
+                      );
+                      setErrorMessage("");
+                      // Clear form fields
+                      setPhoneNumber("");
+                      setSelectedPayment("KPay");
+                      setSelectedDuration("6");
+                      setUploadedFile(null);
+
+                      // Optionally close the modal 3 seconds after submission
+                      setTimeout(() => {
+                        onClose();
+                      }, 3000);
+                    }
                   }}
                 >
                   {t("upgradePremium.upgradeButton")}
