@@ -251,6 +251,8 @@ img {
   bottom: -4px;
   background: linear-gradient(45deg, #ff000050, #00ff0050, #0000ff50, #ff00ff50, #00ffff50, #ffff0050, #ff000050);
   background-size: 400% 400%;
+  /* Blur the background */
+  filter: blur(8px);
   border-radius: 10px;
   z-index: -1;
   animation: rotateBorder 10s linear infinite;
