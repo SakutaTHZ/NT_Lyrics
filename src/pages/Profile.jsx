@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import Footer from "../components/common/Footer";
-import { IoSettingsOutline } from "react-icons/io5";
+import { IoInformationCircleOutline, IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
 import { fetchCollectionOverview, validateUser } from "../assets/util/api";
 import LoadingBox from "../components/common/LoadingBox";
@@ -11,6 +11,7 @@ import { apiUrl } from "../assets/util/api";
 import EditGroup from "../components/common/EditGroup";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 import { Link } from "react-router-dom";
+import { Dialog } from "primereact/dialog";
 
 const Profile = () => {
   const [page, setPage] = useState(1);
@@ -71,6 +72,8 @@ const Profile = () => {
 
   const [username, setUsername] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
+
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -272,18 +275,55 @@ const Profile = () => {
               {userRole === "premium-user" && (
                 <div className="flex items-center gap-2 px-4 border-l border-gray-300">
                   <p className=" text-lg">Groups -</p>
-                  <span className={`font-semibold ${collection?.collections?.length>=20 ? "text-red-500" : ""}`}>
+                  <span
+                    className={`font-semibold ${
+                      collection?.collections?.length >= 20
+                        ? "text-red-500"
+                        : ""
+                    }`}
+                  >
                     {collection?.collections?.length ?? 0}
                   </span>
                 </div>
               )}
             </div>
 
+            {/* Premium request Status */}
+            <div
+              className="relative w-full bg-blue-50 p-2 rounded-full text-center text-blue-700 font-semibold flex items-center justify-center gap-2 border border-blue-200"
+              onClick={() => setVisible(true)}
+            >
+              Premium request Pending
+              <IoInformationCircleOutline size={18} fontWeight={900} />
+            </div>
+            <Dialog
+              header="Payment Status"
+              visible={visible}
+              className="w-[90vw] md:w-[50vw]"
+              onHide={() => {
+                if (!visible) return;
+                setVisible(false);
+              }}
+            >
+              <p className="m-0">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+            </Dialog>
+
             <div className="relative">
               {userRole !== "premium-user" && defaultGroupCount >= 20 && (
                 <button className="bg-amber-200 px-5 py-1 rounded-full w-full">
                   More features in Premium{" "}
-                  <Link to="/NT_Lyrics/premium" className="text-blue-700 animate-pulse">
+                  <Link
+                    to="/NT_Lyrics/premium"
+                    className="text-blue-700 animate-pulse"
+                  >
                     Learn more ...
                   </Link>
                 </button>
@@ -310,7 +350,9 @@ const Profile = () => {
                       <span
                         key={idx}
                         className={`px-2 py-1 rounded-md border border-gray-300 font-semibold cursor-pointer text-nowrap ${
-                          selectedGroup === col.group ? "bg-blue-500 text-white" : ""
+                          selectedGroup === col.group
+                            ? "bg-blue-500 text-white"
+                            : ""
                         }`}
                         onClick={() => handleGroupChange(col.group)}
                       >

@@ -118,6 +118,7 @@
     "uploadFileRequired": "*",
     "uploadNotice": "* Please ensure you upload a clear and valid screenshot of your payment receipt.",
     "upgradeButton": "Upgrade Now",
-    "copyAlert": "Phone number copied to clipboard!"
+    "copyAlert": "Phone number copied to clipboard!",
+    "total": "Total"
   }
 }

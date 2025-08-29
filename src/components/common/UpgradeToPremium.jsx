@@ -41,7 +41,7 @@ const UpgradeToPremium = ({ onClose }) => {
   const paymentinfo = ({ selectedpayment }) => {
     if (selectedpayment === "KPay") {
       return (
-        <div className="checkbox-fade p-4 bg-gray-100 rounded-md flex gap-4 items-start">
+        <div className="animate-down-start p-4 bg-gray-100 rounded-md flex gap-4 items-start">
           <img
             src={kpay}
             alt="Payment"
@@ -71,7 +71,7 @@ const UpgradeToPremium = ({ onClose }) => {
       );
     } else if (selectedpayment === "AYAPay") {
       return (
-        <div className="checkbox-fade p-4 bg-gray-100 rounded-md flex gap-4 items-start">
+        <div className="animate-down-start p-4 bg-gray-100 rounded-md flex gap-4 items-start">
           <img
             src={ayapay}
             alt="Payment"
@@ -101,7 +101,7 @@ const UpgradeToPremium = ({ onClose }) => {
       );
     } else if (selectedpayment === "WaveMoney") {
       return (
-        <div className="checkbox-fade p-4 bg-gray-100 rounded-md flex gap-4 items-start">
+        <div className="animate-down-start p-4 bg-gray-100 rounded-md flex gap-4 items-start">
           <img
             src={wavemoney}
             alt="Payment"
@@ -134,8 +134,8 @@ const UpgradeToPremium = ({ onClose }) => {
 
   const [selectedDuration, setSelectedDuration] = React.useState("6");
   const durationOptions = [
-    { name: "6 Months", value: "6" },
-    { name: "12 Months", value: "12" },
+    { name: "6 Months", value: "6", price: "10000" },
+    { name: "12 Months", value: "12", price: "18000" },
   ];
 
   const [uploadedFile, setUploadedFile] = React.useState(null);
@@ -143,7 +143,7 @@ const UpgradeToPremium = ({ onClose }) => {
   console.log("Uploaded File:", uploadedFile);
 
   const [errorMessage, setErrorMessage] = React.useState("");
-  const [successMessage, setSuccessMessage] = React.useState(""); 
+  const [successMessage, setSuccessMessage] = React.useState("");
 
   const validateForm = () => {
     if (!phoneNumber) {
@@ -229,6 +229,14 @@ const UpgradeToPremium = ({ onClose }) => {
                   </div>
                 )}
 
+                <DropdownField
+                  label={t("upgradePremium.paymentMethod")}
+                  value={selectedpayment}
+                  options={paymentOptions}
+                  onChange={setSelectedPayment}
+                  required={true}
+                />
+
                 <InputField
                   label={t("upgradePremium.phoneNumber")}
                   value={phoneNumber}
@@ -245,61 +253,71 @@ const UpgradeToPremium = ({ onClose }) => {
                   required={true}
                 />
 
-                <DropdownField
-                  label={t("upgradePremium.paymentMethod")}
-                  value={selectedpayment}
-                  options={paymentOptions}
-                  onChange={setSelectedPayment}
-                  required={true}
-                />
+                {/* File Upload */}
+                {phoneNumber && selectedpayment && selectedDuration && (
+                  <div className="w-full animate-left">
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
+                      {t("upgradePremium.uploadAValidPaymentProof")}
+                      <span className="pl-1 text-red-500">
+                        {t("upgradePremium.uploadFileRequired")}
+                      </span>
+                    </label>
+                    <input
+                      type="file"
+                      // onChange={(e) => setUploadedFile(e.target.files[0])}
+                      onChange={async (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
 
-                <div className="w-full">
-                  <label className="block mb-2 text-sm font-medium text-gray-700">
-                    {t("upgradePremium.uploadAValidPaymentProof")}
-                    <span className="pl-1 text-red-500">
-                      {t("upgradePremium.uploadFileRequired")}
-                    </span>
-                  </label>
-                  <input
-                    type="file"
-                    // onChange={(e) => setUploadedFile(e.target.files[0])}
-                    onChange={async (e) => {
-                      const file = e.target.files[0];
-                      if (!file) return;
+                        const fileSizeMB = file.size / 1024 / 1024;
 
-                      const fileSizeMB = file.size / 1024 / 1024;
+                        // If already less than or equal to 3MB, skip compression
+                        if (fileSizeMB <= 3) {
+                          setUploadedFile(file);
+                          return;
+                        }
 
-                      // If already less than or equal to 3MB, skip compression
-                      if (fileSizeMB <= 3) {
-                        setUploadedFile(file);
-                        return;
-                      }
+                        const options = {
+                          maxSizeMB: 3,
+                          maxWidthOrHeight: 1920, // Optional: Resize large images
+                          useWebWorker: true,
+                        };
 
-                      const options = {
-                        maxSizeMB: 3,
-                        maxWidthOrHeight: 1920, // Optional: Resize large images
-                        useWebWorker: true,
-                      };
-
-                      try {
-                        const compressedFile = await imageCompression(
-                          file,
-                          options
-                        );
-                        setUploadedFile(compressedFile);
-                      } catch (error) {
-                        console.error("Image compression failed:", error);
-                      }
-                    }}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                  {/* Notice */}
-                  <p className="mt-1 text-sm text-gray-500">
-                    {t("upgradePremium.uploadNotice")}
-                  </p>
-                </div>
+                        try {
+                          const compressedFile = await imageCompression(
+                            file,
+                            options
+                          );
+                          setUploadedFile(compressedFile);
+                        } catch (error) {
+                          console.error("Image compression failed:", error);
+                        }
+                      }}
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                    />
+                    {/* Notice */}
+                    <p className="mt-1 text-sm bg-red-100 p-2 rounded text-red-800">
+                      {t("upgradePremium.uploadNotice")}
+                    </p>
+                  </div>
+                )}
 
                 {paymentinfo({ selectedpayment })}
+
+                <hr className="border-gray-300 border-dashed" />
+                {/* Total */}
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold">
+                    {t("upgradePremium.total")}:
+                  </span>
+                  <span className="text-lg font-bold text-blue-600">
+                    {selectedDuration === "6"
+                      ? "10,000 MMK"
+                      : selectedDuration === "12"
+                      ? "18,000 MMK"
+                      : "0 MMK"}
+                  </span>
+                </div>
 
                 <button
                   className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4"
