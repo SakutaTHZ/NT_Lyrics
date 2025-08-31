@@ -147,7 +147,7 @@ img {
     opacity: 1;
   }
 }
-.animation-delay-200{
+.animation-delay-200 {
   animation-delay: 500ms;
 }
 .animate-appear {
@@ -163,20 +163,24 @@ img {
 }
 
 .gradient-overlay {
-  background: linear-gradient(transparent,rgba(255, 255, 255, 0.25), rgb(255, 255, 255));
+  background: linear-gradient(
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    rgb(255, 255, 255)
+  );
 }
 
 .meshBg {
-  background: #38BDF8;
-  background: radial-gradient(circle,#60a5fa 19%, #60a5fa 31%, #3b82f6 85%);
+  background: #38bdf8;
+  background: radial-gradient(circle, #60a5fa 19%, #60a5fa 31%, #3b82f6 85%);
 }
 
-.loading-animation{
+.loading-animation {
   position: relative;
   overflow: hidden;
 }
-.loading-animation::before{
-  content: '';
+.loading-animation::before {
+  content: "";
   position: absolute;
   width: 15%;
   height: 100%;
@@ -189,20 +193,21 @@ img {
 
 @keyframes loadingData {
   from {
-    left:-10%;
+    left: -10%;
   }
   to {
     left: 110%;
   }
 }
 
-.loading-box{
-  animation: LoadingBox 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) alternate infinite;
+.loading-box {
+  animation: LoadingBox 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) alternate
+    infinite;
 }
 
 @keyframes LoadingBox {
   from {
-    opacity: .5;
+    opacity: 0.5;
   }
   to {
     opacity: 1;
@@ -234,7 +239,7 @@ img {
   background: white;
   border-radius: 8px;
 }
-.rotatingBorder::after{
+.rotatingBorder::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -249,7 +254,16 @@ img {
   left: -4px;
   right: -4px;
   bottom: -4px;
-  background: linear-gradient(45deg, #ff000050, #00ff0050, #0000ff50, #ff00ff50, #00ffff50, #ffff0050, #ff000050);
+  background: linear-gradient(
+    45deg,
+    #ff000050,
+    #00ff0050,
+    #0000ff50,
+    #ff00ff50,
+    #00ffff50,
+    #ffff0050,
+    #ff000050
+  );
   background-size: 400% 400%;
   /* Blur the background */
   filter: blur(8px);
@@ -264,5 +278,11 @@ img {
   }
   100% {
     background-position: 400% 50%;
+  }
+}
+
+.paymentStatusDialog {
+  .p-dialog-content {
+    padding: 1rem 1.5rem 2rem 1.5rem;
   }
 }

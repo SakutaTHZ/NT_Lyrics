@@ -439,3 +439,18 @@ export const lookForGroups = async (lyricId, token) => {
 
   return matchedGroups;
 };
+
+export const checkIfPaymentRequested = async (token) => {
+  try {
+    const res = await axios.get(`${apiUrl}/paymentRequests/checkPaymentExists`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Error checking payment request status:", err);
+    throw err;
+  }
+}

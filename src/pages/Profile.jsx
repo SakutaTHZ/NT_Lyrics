@@ -2,7 +2,11 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import Footer from "../components/common/Footer";
 import { IoInformationCircleOutline, IoSettingsOutline } from "react-icons/io5";
 import ProfileEdit from "../components/common/ProfileEdit";
-import { fetchCollectionOverview, validateUser } from "../assets/util/api";
+import {
+  checkIfPaymentRequested,
+  fetchCollectionOverview,
+  validateUser,
+} from "../assets/util/api";
 import LoadingBox from "../components/common/LoadingBox";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
 import LyricsRow from "../components/special/LyricsRow";
@@ -68,6 +72,27 @@ const Profile = () => {
     };
 
     getUser();
+  }, []);
+
+  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+  const [payment, setPayment] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    const checkPayment = async () => {
+      try {
+        const paymentData = await checkIfPaymentRequested(token);
+        if (!paymentData) throw new Error("No payment returned");
+        const exists = paymentData.isExist;
+        setIsPaymentProcessing(exists);
+        setPayment(paymentData.payment || null);
+      } catch (err) {
+        console.error("Failed to fetch payment:", err);
+      }
+    };
+
+    checkPayment();
   }, []);
 
   const [username, setUsername] = useState(user?.name);
@@ -225,7 +250,7 @@ const Profile = () => {
   return (
     <div className="w-screen h-screen overflow-hidden overflow-y-auto">
       <div className="relative flex flex-col gap-2 min-h-screen md:pt-12">
-        <div className="w-full flex flex-col items-center justify-center customBackground rounded-b-4xl py-8">
+        <div className="w-full flex flex-col items-center justify-center customBackground rounded-b-4xl py-8 pb-4">
           <div className="flex items-center flex-col gap-4 w-full px-8 md:px-24">
             <div className="relative profileImageBox flex items-center justify-center">
               <img
@@ -289,31 +314,68 @@ const Profile = () => {
             </div>
 
             {/* Premium request Status */}
-            <div
-              className="relative w-full bg-blue-50 p-2 rounded-full text-center text-blue-700 font-semibold flex items-center justify-center gap-2 border border-blue-200"
-              onClick={() => setVisible(true)}
-            >
-              Premium request Pending
-              <IoInformationCircleOutline size={18} fontWeight={900} />
-            </div>
+            {isPaymentProcessing && (
+              <div
+                className="relative w-full bg-blue-50 p-2 rounded-full text-center text-blue-700 font-semibold flex items-center justify-center gap-2 border border-blue-200"
+                onClick={() => setVisible(true)}
+              >
+                Premium request Pending
+                <IoInformationCircleOutline size={18} fontWeight={900} />
+              </div>
+            )}
             <Dialog
               header="Payment Status"
               visible={visible}
-              className="w-[90vw] md:w-[50vw]"
+              className="w-[90vw] md:w-[40vw] rounded-xl shadow-lg paymentStatusDialog"
               onHide={() => {
                 if (!visible) return;
                 setVisible(false);
               }}
             >
-              <p className="m-0">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
+              <div className="p-2">
+                {payment ? (
+                  <div className="flex flex-col gap-4">
+                    <div className="grid grid-cols-2 gap-y-3 gap-x-4">
+                      <span className="font-medium text-gray-600">
+                        Requested At:
+                      </span>
+                      <span className="text-gray-900"> 
+                        {new Date(payment.requestedAt).toISOString().slice(0, 10)}
+                      </span>
+
+                      <span className="font-medium text-gray-600">Phone:</span>
+                      <span className="text-gray-900">{payment.phone}</span>
+
+                      <span className="font-medium text-gray-600">
+                        Payment Type:
+                      </span>
+                      <span className="capitalize text-gray-900">
+                        {payment.paymentType}
+                      </span>
+
+                      <span className="font-medium text-gray-600">
+                        Payment Plan:
+                      </span>
+                      <span className="text-gray-900">
+                        {payment.durationInMonths} months
+                      </span>
+
+                      <span className="font-medium text-gray-600">Total:</span>
+                      <span className="text-gray-900 font-semibold">
+                        {payment.durationInMonths === 6
+                          ? "10,000 Ks"
+                          : payment.durationInMonths === 12
+                          ? "18,000 Ks"
+                          : "???"}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-500 py-6">
+                    No payment information available.
+                  </div>
+                )}
+              </div>
             </Dialog>
 
             <div className="relative">

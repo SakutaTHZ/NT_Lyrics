@@ -1,12 +1,32 @@
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BiArrowBack, BiX } from "react-icons/bi";
 import { CgCheck } from "react-icons/cg";
 import UpgradeToPremium from "../components/common/UpgradeToPremium";
+import { checkIfPaymentRequested } from "../assets/util/api";
 
 const Premium = () => {
   const { t } = useTranslation();
   const columnClass = "p-2 text-pretty";
+
+  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    const checkPayment = async () => {
+      try {
+        const paymentData = await checkIfPaymentRequested(token);
+        if (!paymentData) throw new Error("No payment returned");
+        const exists = paymentData.isExist;
+        setIsPaymentProcessing(exists);
+      } catch (err) {
+        console.error("Failed to fetch payment:", err);
+      }
+    };
+
+    checkPayment();
+  }, []);
 
   const openUpgradeModal = () => {
     setIsModalOpen(true);
@@ -107,20 +127,37 @@ const Premium = () => {
                     </td>
                   </tr>
 
-                  <tr className="border border-gray-200">
-                    <td className={`${columnClass}`}></td>
-                    <td
-                      colSpan={2}
-                      className={`${columnClass} bg-blue-50 w-24`}
-                    >
-                      <button
-                        className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                        onClick={openUpgradeModal}
+                  {isPaymentProcessing ? (
+                    <tr className="border border-gray-200">
+                      <td
+                        colSpan={3}
+                        className={`${columnClass} bg-blue-50 w-24`}
                       >
-                        {t("upgradeNow")}
-                      </button>
-                    </td>
-                  </tr>
+                        <div className="w-full bg-yellow-100 text-yellow-900 p-4 rounded-lg border border-yellow-500">
+                          <p>
+                            {t(
+                              "upgradePremium.yourPaymentIsBeingProcessedPleaseWait"
+                            )}
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr className="border border-gray-200">
+                      <td className={`${columnClass}`}></td>
+                      <td
+                        colSpan={2}
+                        className={`${columnClass} bg-blue-50 w-24`}
+                      >
+                        <button
+                          className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                          onClick={openUpgradeModal}
+                        >
+                          {t("upgradeNow")}
+                        </button>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -183,13 +220,15 @@ const Premium = () => {
                 </ul>
               </div>
             </div>
-
-            <button
-              className="loading-animation w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 my-2 mb-8"
-              onClick={openUpgradeModal}
-            >
-              {t("upgradeNow")}
-            </button>
+            {console.log("Render: isPaymentProcessing =", isPaymentProcessing)}
+            {!isPaymentProcessing && (
+              <button
+                className="loading-animation w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 my-2 mb-8"
+                onClick={openUpgradeModal}
+              >
+                {t("upgradeNow")}
+              </button>
+            )}
           </div>
         </div>
       </div>
