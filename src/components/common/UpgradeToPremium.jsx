@@ -14,10 +14,13 @@ import kpay from "../../assets/images/Payments/KpayLogo.png";
 import ayapay from "../../assets/images/Payments/AyaPay.jpg";
 import wavemoney from "../../assets/images/Payments/WavePay.jpg";
 import { useTranslation } from "react-i18next";
+import { apiUrl } from "../../assets/util/api";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const UpgradeToPremium = ({ onClose }) => {
   const { t } = useTranslation();
   useModalEscClose(onClose);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -140,8 +143,6 @@ const UpgradeToPremium = ({ onClose }) => {
 
   const [uploadedFile, setUploadedFile] = React.useState(null);
 
-  console.log("Uploaded File:", uploadedFile);
-
   const [errorMessage, setErrorMessage] = React.useState("");
   const [successMessage, setSuccessMessage] = React.useState("");
 
@@ -169,6 +170,73 @@ const UpgradeToPremium = ({ onClose }) => {
     }
     setErrorMessage("");
     return true;
+  };
+
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    // Prepare FormData
+    const formData = new FormData();
+    formData.append("paymentType", selectedpayment);
+    formData.append("durationInMonths", selectedDuration);
+    formData.append("paymentImage", uploadedFile);
+    formData.append("phone", phoneNumber);
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`${apiUrl}/paymentRequests/create`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+
+      // Check content type
+      const contentType = response.headers.get("content-type");
+      let data;
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        console.warn("Unexpected non-JSON response:", text);
+        throw new Error(`Unexpected response: ${text}`);
+      }
+
+      console.log("Parsed response JSON:", data);
+
+      if (!response.ok) {
+        let errorMsg = "Failed to submit request.";
+        if (data?.message) {
+          errorMsg = data.message;
+        } else if (Array.isArray(data?.errors) && data.errors.length > 0) {
+          errorMsg = data.errors[0].message; // <-- first error message
+        }
+        setErrorMessage(errorMsg);
+        return;
+      }
+
+      setSuccessMessage(t("upgradePremium.yourRequestIsBeingProcessed"));
+    } catch (err) {
+      console.error("❌ Failed to submit data:", err);
+      setErrorMessage(err.message || "Something went wrong.");
+    } finally {
+      setIsLoading(false);
+
+      // reset fields
+      setPhoneNumber("");
+      setSelectedPayment("KPay");
+      setSelectedDuration("6");
+      setUploadedFile(null);
+
+      // optional modal close
+      // setTimeout(() => onClose(), 3000);
+    }
   };
 
   return (
@@ -321,27 +389,19 @@ const UpgradeToPremium = ({ onClose }) => {
 
                 <button
                   className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4"
-                  onClick={() => {
-                    if (validateForm()) {
-                      // Form is valid, proceed with submission logic
-                      setSuccessMessage(
-                        "Your upgrade request has been submitted!"
-                      );
-                      setErrorMessage("");
-                      // Clear form fields
-                      setPhoneNumber("");
-                      setSelectedPayment("KPay");
-                      setSelectedDuration("6");
-                      setUploadedFile(null);
-
-                      // Optionally close the modal 3 seconds after submission
-                      setTimeout(() => {
-                        onClose();
-                      }, 3000);
-                    }
-                  }}
+                  onClick={handleSubmit}
                 >
-                  {t("upgradePremium.upgradeButton")}
+                  {isLoading ? (
+                    <div className="flex justify-center items-center gap-2">
+                      <AiOutlineLoading3Quarters
+                        className="animate-spin text-2xl text-green-700"
+                        size={16}
+                      />
+                      {t("upgradePremium.upgradeButton")}
+                    </div>
+                  ) : (
+                    t("upgradePremium.upgradeButton")
+                  )}
                 </button>
               </div>
             </motion.div>
