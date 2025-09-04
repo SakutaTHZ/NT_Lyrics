@@ -2,7 +2,7 @@
 import { MdEdit } from "react-icons/md";
 import PropTypes from "prop-types";
 
-const RoleTab = ({ role }) => {
+export const RoleTab = ({ role }) => {
   switch (role) {
     case "admin":
       return (

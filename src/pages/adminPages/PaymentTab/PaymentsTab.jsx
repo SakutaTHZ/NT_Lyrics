@@ -197,7 +197,11 @@ const PaymentsTab = () => {
           <thead className="thead-shadow text-xs text-gray-600 uppercase sticky top-0 bg-gray-100 z-10">
             <tr>
               <th className="px-4 py-3">#</th>
-              <th className="px-4 py-3">User ID</th>
+              <th className="px-4 py-3">UserID</th>
+              <th className="px-4 py-3">Name</th>
+              <th className="px-4 py-3">Email</th>
+              <th className="px-4 py-3">Phone</th>
+              <th className="px-4 py-3">Tier</th>
               <th className="px-4 py-3">Duration</th>
               <th className="px-4 py-3">Payment Type</th>
               <th className="px-4 py-3">Image</th>
