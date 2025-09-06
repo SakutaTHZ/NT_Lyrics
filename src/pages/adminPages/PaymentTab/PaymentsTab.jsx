@@ -6,6 +6,7 @@ import axios from "axios";
 import { apiUrl } from "../../../assets/util/api";
 import { BiSearch } from "react-icons/bi";
 import PaymentRow from "./PaymentRow";
+import EditPayment from "./EditPayMent";
 
 const PaymentsTab = () => {
   const [showMessage, setShowMessage] = useState(false);
@@ -43,7 +44,7 @@ const PaymentsTab = () => {
 
   const [selectedRequest, setSelectedRequest] = useState(null);
   const handleEdit = (request) => setSelectedRequest(request);
-  // const closeModal = () => setSelectedRequest(null);
+  const closeModal = () => setSelectedRequest(null);
 
   const fetchRequests = async (pageNum = 1, override = false) => {
     setLoading(true);
@@ -197,6 +198,7 @@ const PaymentsTab = () => {
           <thead className="thead-shadow text-xs text-gray-600 uppercase sticky top-0 bg-gray-100 z-10">
             <tr>
               <th className="px-4 py-3">#</th>
+              <th className="px-4 py-3">PaymentID</th> 
               <th className="px-4 py-3">UserID</th>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Email</th>
@@ -253,7 +255,18 @@ const PaymentsTab = () => {
       </div>
 
       {/* Edit Modal */}
-      {selectedRequest && <p>Modal Here</p>}
+      {selectedRequest && (
+              <EditPayment
+                onClose={closeModal}
+                request={selectedRequest}
+                onUpdate={() => {
+                  setRequests([]);
+                  setPage(1);
+                  fetchRequests(1, true);
+                }}
+                showNewMessage={showNewMessage}
+              />
+            )}
     </div>
   );
 };

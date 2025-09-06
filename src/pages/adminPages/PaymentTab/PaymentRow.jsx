@@ -86,7 +86,12 @@ const PaymentRow = ({ request, idx, isLast, lastPaymentRef, onEdit }) => {
   return (
     <tr key={idx} ref={ref} className="hover:bg-gray-50 transition">
       <td className="px-4 py-3">{idx + 1}</td>
-      <td className="px-4 py-3">{request.userId}</td>
+      <td className="px-4 py-3" title={request._id}>
+        <p className="w-16 truncate">{request._id}</p>
+      </td>
+      <td className="px-4 py-3" title={request.userId}>
+        <p className="w-16 truncate">{request.userId}</p>
+      </td>
       <td className="px-4 py-3">{user.name}</td>
       <td className="px-4 py-3">{user.email}</td>
       <td className="px-4 py-3">{request.phone}</td>
@@ -105,9 +110,16 @@ const PaymentRow = ({ request, idx, isLast, lastPaymentRef, onEdit }) => {
         />
       </td>
       <td className="px-4 py-3">
-        {request.createdAt
-          ? new Date(request.createdAt).toISOString().slice(0, 10)
+        {request.requestedAt
+          ? new Date(request.requestedAt).toISOString().slice(0, 10)
           : "-"}
+          <br/>
+        <span className="text-xs">
+          {new Date(request.requestedAt).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
       </td>
       <td className="px-4 py-3">
         <button

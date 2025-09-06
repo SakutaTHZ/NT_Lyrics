@@ -16,8 +16,10 @@ import EditGroup from "../components/common/EditGroup";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 import { Link } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
+  const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const observer = useRef(null);
 
@@ -332,7 +334,7 @@ const Profile = () => {
                 setVisible(false);
               }}
             >
-              <div className="p-2">
+              <div className="">
                 {payment ? (
                   <div className="flex flex-col gap-4">
                     <div className="grid grid-cols-2 gap-y-3 gap-x-4">
@@ -369,6 +371,13 @@ const Profile = () => {
                           : "???"}
                       </span>
                     </div>
+                    <div className="w-full bg-yellow-100 text-yellow-900 p-4 rounded-lg border border-yellow-500">
+                          <p>
+                            {t(
+                              "upgradePremium.yourPaymentIsBeingProcessedPleaseWait"
+                            )}
+                          </p>
+                        </div>
                   </div>
                 ) : (
                   <div className="text-center text-gray-500 py-6">
