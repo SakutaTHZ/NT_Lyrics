@@ -12,6 +12,7 @@ import {
   fetchUserOverview,
   fetchLyricOverview,
   fetchPopularLyrics,
+  fetchPaymentOverview,
 } from "../../assets/util/api";
 
 const Nav = React.lazy(() => import("../../components/adminComponents/Nav"));
@@ -39,7 +40,7 @@ const LyricsList = () => {
           className="relative flex items-center justify-between w-full border-b last:border-0  border-dashed border-gray-200 px-3"
         >
           <div className="flex items-center gap-1">
-          <p className="mr-4 font-semibold">{index + 1}.</p>
+            <p className="mr-4 font-semibold">{index + 1}.</p>
             <img src={lyric.lyricsPhoto} className="w-12 h-12 object-contain" />
             <div className="flex justify-between items-center w-full p-2 pl-4">
               <div className="flex flex-col gap-2">
@@ -58,7 +59,9 @@ const LyricsList = () => {
             </div>
           </div>
 
-          <p className="text-gray-500 text-base font-semibold bg-gray-100 p-1 px-2 rounded-full">{lyric.viewCount}</p>
+          <p className="text-gray-500 text-base font-semibold bg-gray-100 p-1 px-2 rounded-full">
+            {lyric.viewCount}
+          </p>
         </div>
       ))}
     </div>
@@ -154,6 +157,22 @@ const AdminPanel = () => {
     }
   };
 
+  const [paymentCount, setPaymentCount] = useState({
+    totalCount: 0,
+    requestCount: 0,
+    approveCount: 0,
+    rejectCount: 0,
+  });
+
+  const getPaymentOverview = async () => {
+    try {
+      const counts = await fetchPaymentOverview(localStorage.getItem("token"));
+      setPaymentCount(counts);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    }
+  };
+
   const [lyricsCount, setLyricsCount] = useState({
     totalCount: 0,
     countDiff: 0,
@@ -174,6 +193,7 @@ const AdminPanel = () => {
     getArtistOverview();
     getLyricOverview();
     getUserOverview();
+    getPaymentOverview();
   }, []);
 
   return (
@@ -282,15 +302,35 @@ const AdminPanel = () => {
                 </div>
                 {/* Column 3 */}
                 <div className="flex flex-col gap-4">
-                  <div className="rotatingBorder p-2 border border-gray-200 rounded-md shadow-sm w-full h-fit">
+                  <div
+                    className={`${
+                      paymentCount.requestCount > 0 ? "rotatingBorder" : ""
+                    } p-2 border border-gray-200 rounded-md shadow-sm w-full h-fit`}
+                  >
                     <p className="p-2 px-4 bg-blue-50 text-gray-700 font-semibold mb-2">
                       Premium Requests
                     </p>
                     <p className="p-4 text-2xl font-bold flex items-center justify-between gap-2">
-                      <span>20</span>{" "}
+                    <div className="flex gap-6 items-center">
+                      <div className="relative border border-blue-200 w-12 h-12 rounded-full flex items-center justify-center">
+                        <span>{paymentCount.requestCount}</span>
+                      </div>{" "}
+                      <div className="flex flex-col">
+                        <div className="font-normal text-sm text-gray-500">
+                          <p className="text-sm text-green-500">
+                            <span className="min-w-[20px] font-semibold">{paymentCount.approveCount}</span> Approved
+                          </p>
+                          <p className="text-sm text-red-500">
+                            <span className="min-w-[20px] font-semibold">{paymentCount.rejectCount}</span> Rejected
+                          </p>
+                        </div>
+                      </div>
+                    </div>
 
                       <button
-                        className="rotatingBorder bg-blue-100 hover:bg-blue-200 transition-colors h-full aspect-square p-2 rounded-md cursor-pointer"
+                        className={`${
+                          paymentCount.requestCount > 0 ? "rotatingBorder" : ""
+                        } bg-blue-100 hover:bg-blue-200 transition-colors h-full aspect-square p-2 rounded-md cursor-pointer`}
                         onClick={() => setActiveIndex(4)}
                       >
                         <CgArrowTopRight size={20} />
@@ -330,7 +370,7 @@ const AdminPanel = () => {
             </TabPanel>
             {/* Lyrics Panel */}
             <TabPanel header="Lyrics">
-              <LyricsTab/>
+              <LyricsTab />
             </TabPanel>
             {/* Users Panel */}
             <TabPanel header="Users">

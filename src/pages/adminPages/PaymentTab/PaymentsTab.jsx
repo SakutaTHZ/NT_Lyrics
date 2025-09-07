@@ -3,7 +3,7 @@ import MessagePopup from "../../../components/common/MessagePopup";
 import { Chart } from "primereact/chart";
 import useDebounce from "../../../components/hooks/useDebounce";
 import axios from "axios";
-import { apiUrl } from "../../../assets/util/api";
+import { apiUrl, fetchPaymentOverview } from "../../../assets/util/api";
 import { BiSearch } from "react-icons/bi";
 import PaymentRow from "./PaymentRow";
 import EditPayment from "./EditPayMent";
@@ -12,13 +12,6 @@ const PaymentsTab = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
   const [messageType, setMessageType] = useState("success");
-
-  const [requestCount] = useState({
-    totalCount: 30,
-    countDiff: 5,
-    totalPending: 10,
-    totalApproved: 20,
-  });
 
   const [requests, setRequests] = useState([]);
 
@@ -32,6 +25,22 @@ const PaymentsTab = () => {
 
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
   const observer = useRef(null);
+
+  const [paymentCount, setPaymentCount] = useState({
+    totalCount: 0,
+    requestCount: 0,
+    approveCount: 0,
+    rejectCount: 0,
+  });
+
+  const getPaymentOverview = async () => {
+    try {
+      const counts = await fetchPaymentOverview(localStorage.getItem("token"));
+      setPaymentCount(counts);
+    } catch (err) {
+      console.error("Error fetching user overview:", err);
+    }
+  };
 
   const showNewMessage = (type, message) => {
     setMessageText(message);
@@ -94,6 +103,7 @@ const PaymentsTab = () => {
 
   // Reset on filter or search
   useEffect(() => {
+    getPaymentOverview();
     setRequests([]);
     setPage(1);
     setTotalPages(null);
@@ -102,17 +112,18 @@ const PaymentsTab = () => {
 
   // Fetch data
   useEffect(() => {
+    getPaymentOverview();
     fetchRequests(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, debouncedSearchTerm]);
 
   const chartData = {
-    labels: ["Pending", "Approved"],
+    labels: ["Rejected", "Approved"],
     datasets: [
       {
-        data: [10, 20],
-        backgroundColor: ["#42A5F5", "#66BB6A"],
-        hoverBackgroundColor: ["#64B5F6", "#81C784"],
+        data: [paymentCount.rejectCount, paymentCount.approveCount],
+        backgroundColor: ["#ef4444", "#66BB6A"],
+        hoverBackgroundColor: ["#dc2626", "#81C784"],
       },
     ],
   };
@@ -141,30 +152,26 @@ const PaymentsTab = () => {
           </p>
           <div className="p-5 h-fit flex flex-col md:flex-row gap-2 items-center justify-between">
             <div className="flex flex-wrap h-full w-full">
-              <div>
-                <p className="font-extrabold text-3xl text-gray-800">
-                  {requestCount.totalCount}
-                </p>
-                <p className="mt-2 text-sm text-green-600 flex items-center">
-                  <span className="font-medium">+{requestCount.countDiff}</span>
-                  <span className="ml-1 text-gray-500">
-                    requests vs last month
-                  </span>
-                </p>
-              </div>
-              <div className="md:ml-4 flex flex-wrap gap-2 p-2 rounded-md md:border-l-2 border-gray-200">
+              <div className="md:ml-4 flex flex-wrap gap-2 p-2 ">
                 <div className="flex items-center md:px-4 gap-3">
                   <p className="min-w-16 text-center text-blue-500 text-2xl font-bold bg-blue-50 p-3 rounded-md">
-                    {requestCount.totalPending}
+                    {paymentCount.requestCount}
                   </p>
-                  <div className="flex items-center">Pending</div>
+                  <div className="flex items-center">Requests</div>
                 </div>
 
                 <div className="flex items-center md:px-4 gap-3">
                   <p className="min-w-16 text-center text-green-500 text-2xl font-bold bg-green-50 p-3 rounded-md">
-                    {requestCount.totalApproved}
+                    {paymentCount.approveCount}
                   </p>
                   <div className="flex items-center">Approved</div>
+                </div>
+
+                <div className="flex items-center md:px-4 gap-3">
+                  <p className="min-w-16 text-center text-red-500 text-2xl font-bold bg-red-50 p-3 rounded-md">
+                    {paymentCount.rejectCount}
+                  </p>
+                  <div className="flex items-center">Rejected</div>
                 </div>
               </div>
             </div>
@@ -198,7 +205,7 @@ const PaymentsTab = () => {
           <thead className="thead-shadow text-xs text-gray-600 uppercase sticky top-0 bg-gray-100 z-10">
             <tr>
               <th className="px-4 py-3">#</th>
-              <th className="px-4 py-3">PaymentID</th> 
+              <th className="px-4 py-3">PaymentID</th>
               <th className="px-4 py-3">UserID</th>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Email</th>
@@ -256,17 +263,18 @@ const PaymentsTab = () => {
 
       {/* Edit Modal */}
       {selectedRequest && (
-              <EditPayment
-                onClose={closeModal}
-                request={selectedRequest}
-                onUpdate={() => {
-                  setRequests([]);
-                  setPage(1);
-                  fetchRequests(1, true);
-                }}
-                showNewMessage={showNewMessage}
-              />
-            )}
+        <EditPayment
+          onClose={closeModal}
+          request={selectedRequest}
+          onUpdate={() => {
+            setRequests([]);
+            setPage(1);
+            fetchRequests(1, true); // force reload page 1
+            getPaymentOverview(); // also refresh stats
+          }}
+          showNewMessage={showNewMessage}
+        />
+      )}
     </div>
   );
 };

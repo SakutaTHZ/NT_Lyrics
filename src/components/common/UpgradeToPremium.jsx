@@ -394,7 +394,7 @@ const UpgradeToPremium = ({ onClose }) => {
                   {isLoading ? (
                     <div className="flex justify-center items-center gap-2">
                       <AiOutlineLoading3Quarters
-                        className="animate-spin text-2xl text-green-700"
+                        className="animate-spin text-2xl text-white"
                         size={16}
                       />
                       {t("upgradePremium.upgradeButton")}

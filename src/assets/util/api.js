@@ -294,6 +294,23 @@ export const fetchCollectionOverview = async (authToken) => {
   }
 };
 
+export const fetchPaymentOverview = async (authToken) => {
+  try {
+    const res = await axios.get(
+      `${apiUrl}/paymentRequests/paymentOverview`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching user overview:", err);
+  }
+};
+
 export const fetchLyricsByGroup = async (group, authToken) => {
   try {
     const res = await axios.get(

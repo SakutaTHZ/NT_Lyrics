@@ -21,6 +21,7 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
   }, []);
 
   const [user, setUser] = useState(null);
+  const [duration, setDuration] = useState(request.durationInMonths || 6);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -39,6 +40,48 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
     getUser();
   }, [request.userId]);
 
+  const ApprovePayment = async (requestId, token) => {
+    const response = await fetch(
+      `${apiUrl}/paymentRequests/approvePayment/${requestId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+
+        body: JSON.stringify({ durationInMonths: duration }),
+      }
+    );
+    if (!response.ok) {
+      const errorData = await response.json();
+      showNewMessage("error", errorData.message);
+      throw new Error(errorData.message || "Failed to approve payment");
+    }
+    showNewMessage("success", "User updated successfully!");
+    return response.json();
+  };
+
+  const RejectPayment = async (requestId, token) => {
+    const response = await fetch(
+      `${apiUrl}/paymentRequests/rejectPayment/${requestId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      const errorData = await response.json();
+      showNewMessage("error", errorData.message);
+      throw new Error(errorData.message || "Failed to reject payment");
+    }
+    showNewMessage("success", "User updated successfully!");
+    return response.json();
+  };
+
   return (
     <>
       <ModalPortal>
@@ -47,7 +90,7 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
             className="absolute inset-0 bg-[#00000050]"
             // onClick={onClose}
           />
-          <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-[1000px]">
+          <div className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-full md:w-[1000px] h-screen md:h-auto overflow-y-auto max-h-[100vh]">
             <h2 className="text-xl font-bold flex items-center justify-between">
               Payment
               <p className="flex items-center px-2 py-1 border border-gray-300 rounded-full">
@@ -86,18 +129,22 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
                       <>
                         <span className="font-medium text-gray-600">
                           Premium Start
-                          </span>
-                          <span className="text-gray-900">
-                            {user?.premiumStartDate
-                              ? new Date(user.premiumStartDate).toISOString().slice(0, 10)
-                              : "-"}
-                          </span>                                   
+                        </span>
+                        <span className="text-gray-900">
+                          {user?.premiumStartDate
+                            ? new Date(user.premiumStartDate)
+                                .toISOString()
+                                .slice(0, 10)
+                            : "-"}
+                        </span>
                         <span className="font-medium text-gray-600">
                           Premium End
                         </span>
                         <span className="text-gray-900">
                           {user?.premiumEndDate
-                            ? new Date(user.premiumEndDate).toISOString().slice(0, 10)
+                            ? new Date(user.premiumEndDate)
+                                .toISOString()
+                                .slice(0, 10)
                             : "-"}
                         </span>
                       </>
@@ -135,8 +182,14 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
                     <span className="font-medium text-gray-600">
                       Payment Plan
                     </span>
-                    <span className="text-gray-900">
-                      {request.durationInMonths} months
+                    <span className="text-gray-900 w-full flex items-center gap-2">
+                      <input
+                        type="number"
+                        value={duration}
+                        onChange={(e) => setDuration(e.target.value)}
+                        className="border border-gray-300 rounded-md p-1 w-16"
+                      />{" "}
+                      months
                     </span>
 
                     <span className="font-medium text-gray-600">Total</span>
@@ -156,6 +209,7 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
               <div className="flex justify-end gap-2 mt-4">
                 <button
                   onClick={async () => {
+                    await RejectPayment(request._id, localStorage.getItem("token"));
                     onUpdate();
                     onClose();
                   }}
@@ -165,6 +219,7 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
                 </button>
                 <button
                   onClick={async () => {
+                    await ApprovePayment(request._id, localStorage.getItem("token"));
                     onUpdate();
                     onClose();
                   }}
