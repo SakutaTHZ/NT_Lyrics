@@ -121,6 +121,7 @@
     "copyAlert": "Phone number copied to clipboard!",
     "total": "Total",
     "yourRequestIsBeingProcessed": "Your request is being processed. Please wait for confirmation.",
-    "yourPaymentIsBeingProcessedPleaseWait": "Your payment is being processed. Please wait for confirmation."
+    "yourPaymentIsBeingProcessedPleaseWait": "Your payment is being processed. Please wait for confirmation.",
+    "makingSureYourPaymentIsCorrect":"Making sure your payment is Correct"
   }
 }

@@ -234,7 +234,12 @@ const Premium = () => {
       </div>
 
       {isModalOpen && (
-        <UpgradeToPremium onClose={() => setIsModalOpen(false)} />
+        <UpgradeToPremium
+          onClose={() => setIsModalOpen(false)}
+          onSuccess={() => {
+            setIsPaymentProcessing(true)
+          }}
+        />
       )}
     </Suspense>
   );

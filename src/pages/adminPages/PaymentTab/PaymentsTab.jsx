@@ -121,7 +121,7 @@ const PaymentsTab = () => {
     labels: ["Rejected", "Approved"],
     datasets: [
       {
-        data: [paymentCount.rejectCount, paymentCount.approveCount],
+        data: [paymentCount?.rejectCount, paymentCount?.approveCount],
         backgroundColor: ["#ef4444", "#66BB6A"],
         hoverBackgroundColor: ["#dc2626", "#81C784"],
       },
@@ -155,21 +155,21 @@ const PaymentsTab = () => {
               <div className="md:ml-4 flex flex-wrap gap-2 p-2 ">
                 <div className="flex items-center md:px-4 gap-3">
                   <p className="min-w-16 text-center text-blue-500 text-2xl font-bold bg-blue-50 p-3 rounded-md">
-                    {paymentCount.requestCount}
+                    {paymentCount?.requestCount}
                   </p>
                   <div className="flex items-center">Requests</div>
                 </div>
 
                 <div className="flex items-center md:px-4 gap-3">
                   <p className="min-w-16 text-center text-green-500 text-2xl font-bold bg-green-50 p-3 rounded-md">
-                    {paymentCount.approveCount}
+                    {paymentCount?.approveCount}
                   </p>
                   <div className="flex items-center">Approved</div>
                 </div>
 
                 <div className="flex items-center md:px-4 gap-3">
                   <p className="min-w-16 text-center text-red-500 text-2xl font-bold bg-red-50 p-3 rounded-md">
-                    {paymentCount.rejectCount}
+                    {paymentCount?.rejectCount}
                   </p>
                   <div className="flex items-center">Rejected</div>
                 </div>

@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import { apiUrl } from "../../assets/util/api";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-const UpgradeToPremium = ({ onClose }) => {
+const UpgradeToPremium = ({ onClose, onSuccess}) => {
   const { t } = useTranslation();
   useModalEscClose(onClose);
   const token = localStorage.getItem("token");
@@ -176,10 +176,9 @@ const UpgradeToPremium = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting form...");
 
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     // Prepare FormData
     const formData = new FormData();
@@ -191,51 +190,51 @@ const UpgradeToPremium = ({ onClose }) => {
     setIsLoading(true);
 
     try {
+      // ✅ Fire request
       const response = await fetch(`${apiUrl}/paymentRequests/create`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
 
-      // Check content type
-      const contentType = response.headers.get("content-type");
+      // ✅ Try parse JSON directly, no content-type juggling
       let data;
-      if (contentType && contentType.includes("application/json")) {
+      try {
         data = await response.json();
-      } else {
-        const text = await response.text();
-        console.warn("Unexpected non-JSON response:", text);
-        throw new Error(`Unexpected response: ${text}`);
+      } catch {
+        throw new Error("Invalid JSON response from server.");
       }
 
-      console.log("Parsed response JSON:", data);
+      console.log("Server response:", data);
 
       if (!response.ok) {
-        let errorMsg = "Failed to submit request.";
-        if (data?.message) {
-          errorMsg = data.message;
-        } else if (Array.isArray(data?.errors) && data.errors.length > 0) {
-          errorMsg = data.errors[0].message; // <-- first error message
-        }
+        let errorMsg =
+          data?.message ||
+          (Array.isArray(data?.errors) && data.errors[0]?.message) ||
+          "Failed to submit request.";
         setErrorMessage(errorMsg);
         return;
       }
 
+      // ✅ Show success immediately
       setSuccessMessage(t("upgradePremium.yourRequestIsBeingProcessed"));
+
+      // ✅ Auto-close sooner
+      setTimeout(() => onClose(), 1500);
     } catch (err) {
       console.error("❌ Failed to submit data:", err);
       setErrorMessage(err.message || "Something went wrong.");
     } finally {
       setIsLoading(false);
 
-      // reset fields
+      // ✅ Reset fields after modal closes
       setPhoneNumber("");
       setSelectedPayment("KPay");
       setSelectedDuration("6");
       setUploadedFile(null);
 
-      // optional modal close
-      // setTimeout(() => onClose(), 3000);
+      if (onSuccess) onSuccess();
+      setTimeout(() => onClose(), 1500); 
     }
   };
 
@@ -259,7 +258,7 @@ const UpgradeToPremium = ({ onClose }) => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="absolute inset-0 bg-[#00000050]"
-              onClick={onClose}
+              onClick={!isLoading ? onClose : undefined}
             />
 
             {/* Modal Box */}
@@ -276,8 +275,9 @@ const UpgradeToPremium = ({ onClose }) => {
                   {t("upgradePremium.title")}
                 </h2>
                 <button
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={onClose}
+                  disabled={isLoading}
                 >
                   <BiX size={24} />
                 </button>
@@ -303,6 +303,7 @@ const UpgradeToPremium = ({ onClose }) => {
                   options={paymentOptions}
                   onChange={setSelectedPayment}
                   required={true}
+                  disabled={isLoading}
                 />
 
                 <InputField
@@ -311,6 +312,7 @@ const UpgradeToPremium = ({ onClose }) => {
                   onChange={setPhoneNumber}
                   placeholder={t("upgradePremium.phoneNumberPlaceholder")}
                   required={true}
+                  disabled={isLoading}
                 />
 
                 <DropdownField
@@ -319,6 +321,7 @@ const UpgradeToPremium = ({ onClose }) => {
                   options={durationOptions}
                   onChange={setSelectedDuration}
                   required={true}
+                  disabled={isLoading}
                 />
 
                 {/* File Upload */}
@@ -332,6 +335,7 @@ const UpgradeToPremium = ({ onClose }) => {
                     </label>
                     <input
                       type="file"
+                      disabled={isLoading}
                       // onChange={(e) => setUploadedFile(e.target.files[0])}
                       onChange={async (e) => {
                         const file = e.target.files[0];
@@ -340,7 +344,7 @@ const UpgradeToPremium = ({ onClose }) => {
                         const fileSizeMB = file.size / 1024 / 1024;
 
                         // If already less than or equal to 3MB, skip compression
-                        if (fileSizeMB <= 3) {
+                        if (fileSizeMB <= 2) {
                           setUploadedFile(file);
                           return;
                         }
@@ -361,7 +365,7 @@ const UpgradeToPremium = ({ onClose }) => {
                           console.error("Image compression failed:", error);
                         }
                       }}
-                      className="w-full p-2 border border-gray-300 rounded-md"
+                      className="w-full p-2 border border-gray-300 rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed"
                     />
                     {/* Notice */}
                     <p className="mt-1 text-sm bg-red-100 p-2 rounded text-red-800">
@@ -388,8 +392,9 @@ const UpgradeToPremium = ({ onClose }) => {
                 </div>
 
                 <button
-                  className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4"
+                  className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleSubmit}
+                  disabled={isLoading}
                 >
                   {isLoading ? (
                     <div className="flex justify-center items-center gap-2">
@@ -397,7 +402,7 @@ const UpgradeToPremium = ({ onClose }) => {
                         className="animate-spin text-2xl text-white"
                         size={16}
                       />
-                      {t("upgradePremium.upgradeButton")}
+                      {t("upgradePremium.makingSureYourPaymentIsCorrect")}
                     </div>
                   ) : (
                     t("upgradePremium.upgradeButton")
@@ -417,6 +422,7 @@ UpgradeToPremium.propTypes = {
   user: PropTypes.object.isRequired,
   onUpdate: PropTypes.func.isRequired,
   showNewMessage: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func.isRequired,
 };
 
 export default UpgradeToPremium;
