@@ -6,7 +6,7 @@ import axios from "axios";
 import { apiUrl, fetchPaymentOverview } from "../../../assets/util/api";
 import { BiSearch } from "react-icons/bi";
 import PaymentRow from "./PaymentRow";
-import EditPayment from "./EditPayMent";
+import EditPayment from "./EditPayment";
 
 const PaymentsTab = () => {
   const [showMessage, setShowMessage] = useState(false);
