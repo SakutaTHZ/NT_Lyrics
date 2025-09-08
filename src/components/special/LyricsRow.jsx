@@ -79,14 +79,22 @@ const LyricsRow = ({
       setMessageText(err.message + "\nTry Premium for more features.");
     } finally {
       setShowMessage(true);
-      setTimeout(() => setShowMessage(false), 4000);
+      setTimeout(() => setShowMessage(false), 10000);
     }
   };
 
   return (
     <>
       {showMessage && (
-        <MessagePopup message_type={messageType} message_text={messageText} />
+        <MessagePopup message_type={messageType} isVisible={showMessage} closePopup={() => setShowMessage(false)}>
+          <div className="message_text text-pretty text-left">
+              {messageText.split("\n").map((line, index) => (
+                <span key={index}>
+                  {line}
+                </span>
+              ))}
+          </div>
+        </MessagePopup>
       )}
       <motion.div
         className={`relative flex items-center w-full border-b last:border-0 border-dashed border-gray-200 py-2 hover:bg-gray-50 cursor-pointer ${
@@ -99,7 +107,7 @@ const LyricsRow = ({
                 setMessageText(t("youHaveToBePremiumUserToAccessThisFeature"));
                 setMessageType("error");
                 setShowMessage(true);
-                setTimeout(() => setShowMessage(false), 4000);
+                setTimeout(() => setShowMessage(false), 10000);
               }
         }
         ref={(node) => {
@@ -140,12 +148,10 @@ const LyricsRow = ({
           className="hidden"
         />
         <div className="flex justify-between items-center w-full p-2">
-          <div
-            className={`flex flex-col gap-2 ${
-              imageError && "glitching"
-            }`}
-          >
-            <p className="font-semibold text-lg">{lyric?.title ?? "Sample Title"}</p>
+          <div className={`flex flex-col gap-2 ${imageError && "glitching"}`}>
+            <p className="font-semibold text-lg">
+              {lyric?.title ?? "Sample Title"}
+            </p>
             <p className="text-md text-gray-500 flex items-center gap-1 max-w-64 overflow-hidden text-ellipsis whitespace-nowrap">
               <span className="overflow-hidden text-ellipsis whitespace-nowrap">
                 {lyric.singers.map(

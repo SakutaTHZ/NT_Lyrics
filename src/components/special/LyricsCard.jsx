@@ -76,7 +76,16 @@ const LyricsCard = ({
   return (
     <>
       {showMessage && (
-        <MessagePopup message_type={messageType} message_text={messageText} />
+        
+                <MessagePopup message_type={messageType} isVisible={showMessage} closePopup={() => setShowMessage(false)}>
+                  <div className="message_text text-pretty text-left">
+                      {messageText.split("\n").map((line, index) => (
+                        <span key={index}>
+                          {line}
+                        </span>
+                      ))}
+                  </div>
+                </MessagePopup>
       )}
       <motion.div
         className="relative cursor-pointer flex items-center w-full border-b last:border-0  border-dashed border-gray-50 hover:border-blue-300 hover:border-2 transition-all rounded-md"

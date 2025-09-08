@@ -155,7 +155,17 @@ const UsersTab = () => {
   return (
     <div>
       {showMessage && (
-        <MessagePopup message_type={messageType} message_text={messageText} />
+        <MessagePopup
+          message_type={messageType}
+          isVisible={showMessage}
+          closePopup={() => setShowMessage(false)}
+        >
+          <div className="message_text text-pretty text-left">
+            {messageText.split("\n").map((line, index) => (
+              <span key={index}>{line}</span>
+            ))}
+          </div>
+        </MessagePopup>
       )}
 
       {/* Stats */}

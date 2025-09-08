@@ -154,9 +154,13 @@ const LyricsTab = () => {
     labels: ["Guest", "Free", "Premium"],
     datasets: [
       {
-        data: [lyricsCount.countForGuestTier, lyricsCount.countForFreeTier, lyricsCount.countForPremiumTier],
-        backgroundColor: ["#9ca3af", "#60a5fa","#facc15"],
-        hoverBackgroundColor: ["#6b7280", "#3b82f6","#eab308"],
+        data: [
+          lyricsCount.countForGuestTier,
+          lyricsCount.countForFreeTier,
+          lyricsCount.countForPremiumTier,
+        ],
+        backgroundColor: ["#9ca3af", "#60a5fa", "#facc15"],
+        hoverBackgroundColor: ["#6b7280", "#3b82f6", "#eab308"],
       },
     ],
   };
@@ -209,7 +213,17 @@ const LyricsTab = () => {
   return (
     <>
       {showMessage && (
-        <MessagePopup message_type={messageType} message_text={messageText} />
+        <MessagePopup
+          message_type={messageType}
+          isVisible={showMessage}
+          closePopup={() => setShowMessage(false)}
+        >
+          <div className="message_text text-pretty text-left">
+            {messageText.split("\n").map((line, index) => (
+              <span key={index}>{line}</span>
+            ))}
+          </div>
+        </MessagePopup>
       )}
 
       {/* Stats */}

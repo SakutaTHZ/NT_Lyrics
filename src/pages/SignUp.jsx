@@ -99,14 +99,24 @@ const SignUp = () => {
       loginAction({ email, password });
     } catch (error) {
       console.error(error.message.errors);
-        setErrorMessage("Signup failed. Try again.");
+      setErrorMessage("Signup failed. Try again.");
     }
   };
 
   return (
     <>
       {showMessage && (
-        <MessagePopup message_type={messageType} message_text={messageText} />
+        <MessagePopup
+          message_type={messageType}
+          isVisible={showMessage}
+          closePopup={() => setShowMessage(false)}
+        >
+          <div className="message_text text-pretty text-left">
+            {messageText.split("\n").map((line, index) => (
+              <span key={index}>{line}</span>
+            ))}
+          </div>
+        </MessagePopup>
       )}
       <div
         className="flex w-screen h-screen justify-center items-center overflow-hidden"

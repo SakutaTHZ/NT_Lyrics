@@ -186,7 +186,17 @@ const ArtistsTab = () => {
   return (
     <>
       {showMessage && (
-        <MessagePopup message_type={messageType} message_text={messageText} />
+        <MessagePopup
+          message_type={messageType}
+          isVisible={showMessage}
+          closePopup={() => setShowMessage(false)}
+        >
+          <div className="message_text text-pretty text-left">
+            {messageText.split("\n").map((line, index) => (
+              <span key={index}>{line}</span>
+            ))}
+          </div>
+        </MessagePopup>
       )}
 
       {/* Stats */}
@@ -203,7 +213,11 @@ const ArtistsTab = () => {
               />
             </button>
           </p>
-          <div className={`${showStats ? "p-5 h-fit" : "p-0 h-0"} transition-all overflow-hidden flex flex-col md:flex-row gap-2 items-center justify-between`}>
+          <div
+            className={`${
+              showStats ? "p-5 h-fit" : "p-0 h-0"
+            } transition-all overflow-hidden flex flex-col md:flex-row gap-2 items-center justify-between`}
+          >
             <div className="flex flex-wrap h-full w-full">
               <div>
                 <p className="font-extrabold text-3xl text-gray-800">

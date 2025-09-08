@@ -68,14 +68,11 @@ const ResetPassword = () => {
     }
 
     try {
-      const res = await fetch(
-        `${apiUrl}/users/resetPassword/${token}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ newPassword: password }),
-        }
-      );
+      const res = await fetch(`${apiUrl}/users/resetPassword/${token}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newPassword: password }),
+      });
 
       const data = await res.json();
 
@@ -101,7 +98,17 @@ const ResetPassword = () => {
   return (
     <>
       {showMessage && (
-        <MessagePopup message_type={messageType} message_text={messageText} />
+        <MessagePopup
+          message_type={messageType}
+          isVisible={showMessage}
+          closePopup={() => setShowMessage(false)}
+        >
+          <div className="message_text text-pretty text-left">
+            {messageText.split("\n").map((line, index) => (
+              <span key={index}>{line}</span>
+            ))}
+          </div>
+        </MessagePopup>
       )}
 
       <div
@@ -177,23 +184,21 @@ const ResetPassword = () => {
           </form>
 
           {disableBoxes && (
-            <Link
-                to="/NT_Lyrics/login"
-              >
-            <button
-              type="button"
-              className={`w-full py-2 rounded bg-green-400 transition-all duration-300 transform
+            <Link to="/NT_Lyrics/login">
+              <button
+                type="button"
+                className={`w-full py-2 rounded bg-green-400 transition-all duration-300 transform
                 ${
                   disableBoxes
                     ? "-translate-y-6 opacity-100"
                     : "translate-y-0 opacity-0 pointer-events-none"
                 } transition-all duration-300 ease-in-out
               `}
-              disabled={!checkPasswords}
-            >
-              Go to Login
-            </button>
-              </Link>
+                disabled={!checkPasswords}
+              >
+                Go to Login
+              </button>
+            </Link>
           )}
         </div>
       </div>

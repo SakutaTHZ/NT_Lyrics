@@ -153,7 +153,17 @@ const LyricsDetails = () => {
     userLoaded && (
       <div className="w-screen min-h-screen h-screen overflow-hidden overflow-y-auto">
         {showMessage && (
-          <MessagePopup message_type={"success"} message_text={messageText} />
+          <MessagePopup
+            message_type={"success"}
+            isVisible={showMessage}
+            closePopup={() => setShowMessage(false)}
+          >
+            <div className="message_text text-pretty text-left">
+              {messageText.split("\n").map((line, index) => (
+                <span key={index}>{line}</span>
+              ))}
+            </div>
+          </MessagePopup>
         )}
 
         {showGallery && (

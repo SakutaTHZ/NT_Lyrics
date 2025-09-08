@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import {useState } from "react";
+import { useState } from "react";
 import MessagePopup from "../common/MessagePopup";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -48,7 +48,7 @@ const LyricRowPremium = ({
     const token = localStorage.getItem("token");
     const message = shouldAdd
       ? t("lyricHasBeenAddedToCollection")
-      : t("lyricHasBeenRemovedFromCollection")
+      : t("lyricHasBeenRemovedFromCollection");
 
     try {
       let res = null;
@@ -80,7 +80,17 @@ const LyricRowPremium = ({
   return (
     <>
       {showMessage && (
-        <MessagePopup message_type={messageType} message_text={messageText} />
+        <MessagePopup
+          message_type={messageType}
+          isVisible={showMessage}
+          closePopup={() => setShowMessage(false)}
+        >
+          <div className="message_text text-pretty text-left">
+            {messageText.split("\n").map((line, index) => (
+              <span key={index}>{line}</span>
+            ))}
+          </div>
+        </MessagePopup>
       )}
       <motion.div
         className="relative flex items-center w-full border-b last:border-0 border-dashed border-gray-200 py-2"
@@ -107,10 +117,7 @@ const LyricRowPremium = ({
           <div className="relative flex flex-col gap-2">
             <p className="font-semibold">
               {isInCollection && (
-                <BsHeartFill
-                  size={16}
-                  className="text-red-500 inline mr-2"
-                />
+                <BsHeartFill size={16} className="text-red-500 inline mr-2" />
               )}
               {lyric?.title ?? "Sample Title"}{" "}
             </p>

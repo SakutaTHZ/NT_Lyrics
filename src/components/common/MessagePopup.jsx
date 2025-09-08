@@ -6,32 +6,60 @@ import { createPortal } from "react-dom";
 
 const portalRoot = document.getElementById("modal-root");
 
-const MessagePopup = ({ custom_class = "", message_type = "", message_text = "There should be a message!" }) => {
+const MessagePopup = ({
+  custom_class = "",
+  message_type = "",
+  children,
+  closePopup = () => {},
+}) => {
   if (!portalRoot) return null;
 
   return createPortal(
     <>
-      <div
-        className={`animate-right-normal fixed top-16 right-0 shadow-sm flex items-start gap-4 md:gap-2 p-2 px-2 rounded-l-lg ${
-          message_type === "error"
-            ? "bg-red-50 "
-            : message_type === "alert"
-            ? "bg-yellow-50 "
-            : message_type === "success"
-            ? "bg-green-50 "
-            : "bg-blue-50 "
-        } z-50 w-fit max-w-3/4 ${custom_class}`}
-      >
-        {message_type === "error" ? (
-          <BiErrorCircle className="flex-shrink-0 text-red-500" size={20} />
-        ) : message_type === "alert" ? (
-          <FiAlertCircle className="flex-shrink-0 text-yellow-500" size={20} />
-        ) : message_type === "success" ? (
-          <BiCheckCircle className="flex-shrink-0 text-green-500" size={20} />
-        ) : (
-          <BsQuestionCircle className="flex-shrink-0 text-blue-400" size={20} />
-        )}
-        <p className="text-pretty">{message_text}</p>
+      <div className="animate-down fixed top-4 z-[1000] water-drop w-full h-12 rounded-full py-4 flex items-center justify-center" onClick={closePopup}>
+        <div className={`waterDrop w-8 h-8  rounded-full shadow-lg mx-auto ${
+            message_type === "error"
+              ? "bg-gradient-to-br from-white to-red-50"
+              : message_type === "alert"
+              ? "bg-gradient-to-br from-white to-yellow-50"
+              : message_type === "success"
+              ? "bg-gradient-to-br from-white to-green-50"
+              : "bg-gradient-to-br from-white to-blue-50"
+          }`}></div>
+
+        <div
+          className={`expandBox absolute w-[90vw] md:w-[400px] top-0 flex justify-center items-center rounded-2xl border border-gray-100 p-2 px-4 shadow-lg gap-4 md:gap-2 ${custom_class} ${
+            message_type === "error"
+              ? "bg-gradient-to-br from-white to-red-50"
+              : message_type === "alert"
+              ? "bg-gradient-to-br from-white to-yellow-50"
+              : message_type === "success"
+              ? "bg-gradient-to-br from-white to-green-50"
+              : "bg-gradient-to-br from-white to-blue-50"
+          }`}
+        >
+          <div className="icon h-full flex items-center justify-center">
+            {message_type === "error" ? (
+              <BiErrorCircle className="flex-shrink-0 text-red-500" size={32} />
+            ) : message_type === "alert" ? (
+              <FiAlertCircle
+                className="flex-shrink-0 text-yellow-500"
+                size={32}
+              />
+            ) : message_type === "success" ? (
+              <BiCheckCircle
+                className="flex-shrink-0 text-green-500"
+                size={32}
+              />
+            ) : (
+              <BsQuestionCircle
+                className="flex-shrink-0 text-blue-400"
+                size={32}
+              />
+            )}
+          </div>
+          <div className="message_text flex-1">{children}</div>
+        </div>
       </div>
     </>,
     portalRoot
@@ -41,7 +69,8 @@ const MessagePopup = ({ custom_class = "", message_type = "", message_text = "Th
 MessagePopup.propTypes = {
   custom_class: PropTypes.string,
   message_type: PropTypes.string,
-  message_text: PropTypes.string,
+  children: PropTypes.node,
+  closePopup: PropTypes.func,
 };
 
 export default MessagePopup;
