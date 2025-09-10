@@ -31,7 +31,7 @@ const RequireAdmin = React.lazy(() =>
 
 // Animations to randomly pick from
 const animations = [
-  /*{
+  {
     initial: {
       opacity: 0,
       scale: 0.95,
@@ -113,7 +113,7 @@ const animations = [
     exit: { opacity: 0, y: 100, transition: { duration: 0.3, ease: "easeIn" } },
   }, // Slide from Bottom
 
-  {
+  /*{
     initial: {
       opacity: 0,
       scale: 0.8,

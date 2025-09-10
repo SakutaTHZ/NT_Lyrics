@@ -17,25 +17,25 @@ const MessagePopup = ({
   return createPortal(
     <>
       <div className="animate-down fixed top-4 z-[1000] water-drop w-full h-12 rounded-full py-4 flex items-center justify-center" onClick={closePopup}>
-        <div className={`waterDrop w-8 h-8  rounded-full shadow-lg mx-auto ${
+        <div className={`waterDrop w-8 h-8  rounded-full shadow-lg mx-auto border ${
             message_type === "error"
-              ? "bg-gradient-to-br from-white to-red-50"
+              ? "bg-red-200 border-red-200"
               : message_type === "alert"
-              ? "bg-gradient-to-br from-white to-yellow-50"
+              ? "bg-yellow-200 border-yellow-200"
               : message_type === "success"
-              ? "bg-gradient-to-br from-white to-green-50"
-              : "bg-gradient-to-br from-white to-blue-50"
+              ? "bg-green-200 border-green-200"
+              : "bg-blue-200 border-blue-200"
           }`}></div>
 
         <div
-          className={`expandBox absolute w-[90vw] md:w-[400px] top-0 flex justify-center items-center rounded-2xl border border-gray-100 p-2 px-4 shadow-lg gap-4 md:gap-2 ${custom_class} ${
+          className={`expandBox absolute w-[90vw] md:w-[400px] top-0 flex justify-center items-center rounded-2xl border p-2 px-4 shadow-lg gap-4 md:gap-2 ${custom_class} ${
             message_type === "error"
-              ? "bg-gradient-to-br from-white to-red-50"
+              ? "bg-gradient-to-br from-white to-red-50 border-red-200"
               : message_type === "alert"
-              ? "bg-gradient-to-br from-white to-yellow-50"
+              ? "bg-gradient-to-br from-white to-yellow-50 border-yellow-200"
               : message_type === "success"
-              ? "bg-gradient-to-br from-white to-green-50"
-              : "bg-gradient-to-br from-white to-blue-50"
+              ? "bg-gradient-to-br from-white to-green-50 border-green-200"
+              : "bg-gradient-to-br from-white to-blue-50 border-blue-200"
           }`}
         >
           <div className="icon h-full flex items-center justify-center">
