@@ -28,7 +28,7 @@ const MessagePopup = ({
           }`}></div>
 
         <div
-          className={`expandBox absolute w-[90vw] md:w-[400px] top-0 flex justify-center items-center rounded-2xl border p-2 px-4 shadow-lg gap-4 md:gap-2 ${custom_class} ${
+          className={`expandBox absolute w-[90vw] md:w-[400px] top-0 flex justify-center items-start rounded-2xl border p-2 px-4 shadow-lg gap-4 md:gap-2 ${custom_class} ${
             message_type === "error"
               ? "bg-gradient-to-br from-white to-red-50 border-red-200"
               : message_type === "alert"

@@ -76,7 +76,11 @@ const LyricsRow = ({
     } catch (err) {
       console.error(err.message);
       setMessageType("error");
-      setMessageText(err.message + "\nTry Premium for more features.");
+      if (err.message === "You can add only 20 collections") {
+        setMessageText(t("youCanOnlyAddUpTo20SongsToEachCollection"));
+      }else {
+        setMessageText(t("somethingWentWrongPleaseTryAgainLater"));
+      }
     } finally {
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 10000);
@@ -86,13 +90,25 @@ const LyricsRow = ({
   return (
     <>
       {showMessage && (
-        <MessagePopup message_type={messageType} isVisible={showMessage} closePopup={() => setShowMessage(false)}>
-          <div className="message_text text-pretty text-left">
+        <MessagePopup
+          message_type={messageType}
+          isVisible={showMessage}
+          closePopup={() => setShowMessage(false)}
+        >
+          <div className="message_text text-pretty text-left flex flex-col gap-3">
+            <p>
               {messageText.split("\n").map((line, index) => (
-                <span key={index}>
-                  {line}
-                </span>
+                <span key={index}>{line}</span>
               ))}
+            </p>
+            {(access < 1 || messageType === "error") && (
+              <button
+                className="rotatingBorder w-full bg-white shadow-sm text-sm line-clamp-3 hover:bg-gray-50 p-2 rounded-md text-left font-medium"
+                onClick={() => navigate("/NT_Lyrics/premium")}
+              >
+                {t("upgraedToGetTheseExclusiveFeaturesAndBenifits")}
+              </button>
+            )}
           </div>
         </MessagePopup>
       )}
