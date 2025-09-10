@@ -213,7 +213,22 @@ const Landing = () => {
           {/* Announcement Board */}
           <AnnouncementBoard />
 
-          {/* Featured Lyrics */}
+          {/* Support Us */}
+          {user?.role != "premium-user" && (
+            <div className="relative p-4 py-0 md:px-24">
+              <div className="relative flex justify-between border py-4 border-gray-200 rounded-md px-4 h-32 bg-linear-to-br from-blue-400 to-blue-200">
+                <p className="text-xl font-bold w-1/2 text-white">Support us by buying the Premium version</p>
+                <button
+                  className="absolute top-4 right-4 border border-white px-4 py-2 rounded-md text-sm font-semibold bg-white text-blue-500 hover:bg-blue-700 self-center"
+                  onClick={() => navigate("/NT_Lyrics/premium")}
+                >
+                  {t("upgradeNow")}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Featured Lyrics */} 
           <div className="relative p-4 pb-0 md:px-24">
             <div className="flex justify-between border-b py-4 border-gray-200 border-dashed gradientTitle">
               <p className="font-bold text-lg italic">{t("featureLyrics")}</p>
