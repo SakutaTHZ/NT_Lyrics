@@ -210,25 +210,40 @@ const Landing = () => {
             </div>
           </div>
 
-          {/* Announcement Board */}
-          <AnnouncementBoard />
+          <div className="flex flex-col items-center  p-4 py-0 md:px-24 mt-4 gap-4">
+            {/* Announcement Board */}
+            <AnnouncementBoard />
 
-          {/* Support Us */}
-          {user?.role != "premium-user" && (
-            <div className="relative p-4 py-0 md:px-24">
-              <div className="relative flex justify-between border py-4 border-gray-200 rounded-md px-4 h-32 bg-linear-to-br from-blue-400 to-blue-200">
-                <p className="text-xl font-bold w-1/2 text-white">Support us by buying the Premium version</p>
-                <button
-                  className="absolute top-4 right-4 border border-white px-4 py-2 rounded-md text-sm font-semibold bg-white text-blue-500 hover:bg-blue-700 self-center"
-                  onClick={() => navigate("/NT_Lyrics/premium")}
-                >
-                  {t("upgradeNow")}
-                </button>
+            {/* Support Us */}
+            {user?.role === "free-user" && (
+              <div className="relative w-full">
+                <div className="relative flex justify-between border py-4 border-gray-200 rounded-md px-4 bg-linear-to-br from-blue-400 to-blue-200 mx-auto overflow-hidden">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 1440 320"
+                    className="absolute bottom-0 left-0"
+                  >
+                    <path
+                      fill="#ffffff50"
+                      d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,245,1152,250.7C1248,256,1344,288,1392,304L1440,320L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                    ></path>
+                  </svg>
+
+                  <p className="z-2 text-xl font-bold w-1/2 text-white">
+                    Support us by buying the Premium version
+                  </p>
+                  <button
+                    className="border border-white px-4 py-2 rounded-md text-sm font-semibold bg-white text-blue-500 hover:bg-blue-200 self-center"
+                    onClick={() => navigate("/NT_Lyrics/premium")}
+                  >
+                    {t("upgradeNow")}
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
-          {/* Featured Lyrics */} 
+          {/* Featured Lyrics */}
           <div className="relative p-4 pb-0 md:px-24">
             <div className="flex justify-between border-b py-4 border-gray-200 border-dashed gradientTitle">
               <p className="font-bold text-lg italic">{t("featureLyrics")}</p>

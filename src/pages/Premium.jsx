@@ -14,6 +14,12 @@ const Premium = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
+    // If no token, redirect to home
+    if (!token) {
+      window.location.href = "/";
+      return;
+    }
+
     const checkPayment = async () => {
       try {
         const paymentData = await checkIfPaymentRequested(token);

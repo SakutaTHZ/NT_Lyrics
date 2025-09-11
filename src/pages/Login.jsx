@@ -121,7 +121,7 @@ const Login = () => {
       </Link>
 
       {/* Login Box */}
-      <div className="animate-appear loginContainer flex flex-col gap-5 w-full md:w-1/2 px-5 md:px-40 text-base">
+      <div className="animate-appear loginContainer flex flex-col gap-5 w-full md:w-2/3 px-5 md:px-40 text-base">
         <h1 className="text-blue-500 font-bold text-3xl italic">
           NT Lyrics & Chords
         </h1>
@@ -223,10 +223,10 @@ const Login = () => {
       </div>
 
       {/* Image Holder */}
-      <div className="imageContainer items-center justify-end h-full hidden md:flex md:w-1/2 bg-gray-100">
+      <div className="imageContainer items-center justify-end h-full overflow-hidden hidden md:flex md:w-1/3 bg-gray-100">
         <img
           src={Preview}
-          className="h-3/5 rounded-lg animate-right translate-x-44 shadow-2xl"
+          className="h-3/5 rounded-lg animate-right translate-x-120 shadow-2xl"
           alt="Preview"
         />
       </div>

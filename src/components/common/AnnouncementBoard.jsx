@@ -7,7 +7,7 @@ const AnnouncementBoard = () => {
   const [expand, setExpand] = useState(false);
   return (
     <>
-      <div className="relative p-4 md:px-24">
+      <div className="w-full relative p-0 md:px-0">
         <div
           className={`flex transition-all duration-300 relative bg-blue-50 rounded-md p-2 text-blue-950 text-md md:text-base border border-dashed border-blue-200 ${
             expand ? "p-4" : "pr-8"
