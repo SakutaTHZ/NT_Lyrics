@@ -124,5 +124,6 @@
     "yourPaymentIsBeingProcessedPleaseWait": "Your payment is being processed. Please wait for confirmation.",
     "makingSureYourPaymentIsCorrect":"Making sure your payment is Correct"
   },
-  "youCanOnlyAddUpTo20SongsToEachCollection": "You can only add up to 20 songs to each collection."
+  "youCanOnlyAddUpTo20SongsToEachCollection": "You can only add up to 20 songs to each collection.",
+  "profileUpdatedSuccessfully": "Profile updated successfully."
 }

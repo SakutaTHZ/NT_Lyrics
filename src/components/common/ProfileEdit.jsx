@@ -11,7 +11,7 @@ import { RadioButton } from "primereact/radiobutton";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
+const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate }) => {
 
   const localStorageUser = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -394,6 +394,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox }) => {
                     vibratePattern("doubleTap");
                     updateUser();
                     closeBox();
+                    onUpdate();
                   }}
                 >
                   {t("save")}
@@ -428,6 +429,7 @@ ProfileEdit.propTypes = {
   usernameChange: PropTypes.func.isRequired,
   emailChange: PropTypes.func.isRequired,
   closeBox: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 export default ProfileEdit;

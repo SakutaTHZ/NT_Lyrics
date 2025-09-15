@@ -123,5 +123,6 @@
     "yourPaymentIsBeingProcessedPleaseWait": "သင့်ငွေပေးချေမှုကို လက်ရှိ ဆောင်ရွက်နေပါသည်။ အတည်ပြုချက်အတွက် စောင့်ဆိုင်းပါ။",
     "makingSureYourPaymentIsCorrect":"သင့်ငွေပေးချေမှုမှန်ကန်ကြောင်း ကျွန်ုပ်တို့သေချာအောင်လုပ်နေပါသည်။"
   },
-  "youCanOnlyAddUpTo20SongsToEachCollection": "သင်သည် တစ်စုစည်းမှုလျှင် သီချင်း ၂၀ အထိသာ ထည့်နိုင်သည်။"
+  "youCanOnlyAddUpTo20SongsToEachCollection": "သင်သည် တစ်စုစည်းမှုလျှင် သီချင်း ၂၀ အထိသာ ထည့်နိုင်သည်။",
+  "profileUpdatedSuccessfully": "ကိုယ်ရေးအချက်အလက်များကို အောင်မြင်စွာ update ပြုလုပ်ပြီးပါပြီ။"
 }
