@@ -25,14 +25,14 @@ const NAV_LINKS = [
     icon: <GoHome size={18} />,
   },
   {
-    path: "/NT_Lyrics/lyrics",
-    label: "Lyrics",
-    icon: <MdOutlineLyrics size={18} />,
-  },
-  {
     path: "/NT_Lyrics/artists",
     label: "Artists",
     icon: <BsPeople size={18} />,
+  },
+  {
+    path: "/NT_Lyrics/lyrics",
+    label: "Lyrics",
+    icon: <MdOutlineLyrics size={18} />,
   },
   {
     path: "/NT_Lyrics/about",

@@ -1,5 +1,4 @@
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/common/Footer";
 import { BiArrowBack, BiSearch } from "react-icons/bi";
 import { AutoComplete } from "primereact/autocomplete";
@@ -34,6 +33,8 @@ const Artist = () => {
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
   const [items, setItems] = useState([]);
+
+  const navigate = useNavigate();
 
   const search = (event) => {
     const filteredTitles = lyrics
@@ -229,9 +230,9 @@ const Artist = () => {
                 </div>
               </div>
             </div>
-            <Link to="/" className="text-blue-500">
+            <button onClick={() => navigate(-1)} className="text-blue-500">
               <BiArrowBack size={20} />
-            </Link>
+            </button>
           </div>
         </div>
 
