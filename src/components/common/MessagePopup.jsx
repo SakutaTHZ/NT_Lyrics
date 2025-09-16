@@ -15,7 +15,11 @@ const MessagePopup = ({
 }) => {
   
   const { vibratePattern } = useVibration();
-  vibratePattern("doubleTap");
+  if (message_type === "error") {
+    vibratePattern("errorBuzz");
+  } else {
+    vibratePattern("doubleTap");
+  }
 
   if (!portalRoot) return null;
 
