@@ -144,7 +144,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
 
   return (
     <div className="absolute flex justify-center items-center top-0 left-0 w-screen h-screen bg-[#00000080] z-50">
-      <div className="fixed inset-0 animate-down-start w-screen h-screen md:h-fit min-h-screen py-6 md:px-18 bg-gray-100 flex flex-col">
+      <div className="fixed inset-0 animate-down-start w-screen h-screen md:h-fit min-h-screen overflow-y-scroll py-6 md:px-18 bg-gray-100 flex flex-col">
         <div className="w-full flex items-center justify-center md:mt-12 pb-2 mb-2">
           {/* <div className="profileImageBox w-24 aspect-square rounded-full overflow-hidden border-8 border-white">
             
@@ -305,6 +305,82 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
                       )}
                     </>
                   )}
+                </div>
+              </div>
+            </div>
+
+            {/* App Data */}
+            <div className="w-full flex flex-col items-center pb-2 gap-2 border-t border-dashed border-gray-300 pt-2">
+              <p className="w-full font-semibold text-md italic text-gray-500">
+                {t("app")}
+              </p>
+              <div className="bg-white w-full p-4 rounded-md flex flex-col gap-4">
+                {/* Language */}
+                <div className="flex flex-col w-full py-1">
+                  <label htmlFor="language" className={`${labelClass}`}>
+                    {t("language")}
+                  </label>
+
+                  <div className="flex flex-wrap gap-3 pt-2">
+                    <div className="flex align-items-center">
+                      <RadioButton
+                        inputId="language"
+                        name="language"
+                        value="my"
+                        onChange={(e) => setLanguage(e.value)}
+                        checked={language === "my"}
+                      />
+                      <label htmlFor="language" className="ml-2">
+                        {t("myanmar")}
+                      </label>
+                    </div>
+                    <div className="flex align-items-center">
+                      <RadioButton
+                        inputId="language"
+                        name="language"
+                        value="en"
+                        onChange={(e) => setLanguage(e.value)}
+                        checked={language === "en"}
+                      />
+                      <label htmlFor="language" className="ml-2">
+                        {t("english")}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Theme */}
+                <div className="flex flex-col w-full">
+                  <label htmlFor="theme" className={`${labelClass}`}>
+                    {t("theme")}
+                  </label>
+
+                  <div className="flex flex-wrap gap-3 pt-2">
+                    <div className="flex align-items-center">
+                      <RadioButton
+                        inputId="theme"
+                        name="theme"
+                        value="light"
+                        onChange={(e) => setTheme(e.value)}
+                        checked={theme === "light"}
+                      />
+                      <label htmlFor="theme" className="ml-2">
+                        Light
+                      </label>
+                    </div>
+                    <div className="flex align-items-center">
+                      <RadioButton
+                        inputId="theme"
+                        name="theme"
+                        value="dark"
+                        onChange={(e) => setTheme(e.value)}
+                        checked={theme === "dark"}
+                      />
+                      <label htmlFor="theme" className="ml-2">
+                        Dark
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
