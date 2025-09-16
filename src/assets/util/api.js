@@ -340,10 +340,10 @@ export const validateUser = async (id,token) => {
   } catch (err) {
     console.error("Error validating user:", err);
 
-    //localStorage.removeItem("user");
-    //localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
 
-    //window.location.href = "/login";
+    window.location.href = "/login";
     
     throw err; // optionally let the caller handle this
   }

@@ -22,6 +22,7 @@ import LoadingBox from "../components/common/LoadingBox";
 
 import { useTranslation } from "react-i18next";
 import AnnouncementBoard from "../components/common/AnnouncementBoard";
+import MessagePopup from "../components/common/MessagePopup";
 
 const Landing = () => {
   const { t } = useTranslation();
@@ -75,6 +76,10 @@ const Landing = () => {
   const [user, setUser] = useState(null);
   const [userLoaded, setUserLoaded] = useState(false);
 
+  const [showMessage, setShowMessage] = useState(false);
+  const [messageText, setMessageText] = useState("");
+  const [messageType, setMessageType] = useState("success");
+
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -89,6 +94,20 @@ const Landing = () => {
         const userData = await validateUser(id, token);
         if (!userData) throw new Error("No user returned");
         setUser(userData.user);
+        console.log("User data:", userData);
+        // Check for user status and show message if needed
+        if (userData.user.status === 1) {
+          setMessageText("You are now a premium user! Enjoy the benefits.");
+          setMessageType("success");
+          setShowMessage(true);
+          setTimeout(() => setShowMessage(false), 10000);
+        } else if (userData.user.status === 2) {
+          
+          setMessageText("Your premium subscription has been rejected. Please contact support.");
+          setMessageType("error");
+          setShowMessage(true);
+          setTimeout(() => setShowMessage(false), 10000);
+        }
       } catch (err) {
         console.error("Failed to fetch user:", err);
       } finally {
@@ -161,6 +180,22 @@ const Landing = () => {
 
   return (
     <>
+      {showMessage && (
+        <MessagePopup
+          message_type={messageType}
+          isVisible={showMessage}
+          closePopup={() => setShowMessage(false)}
+        >
+          <div className="message_text text-pretty text-left flex flex-col gap-3">
+            <p>
+              {messageText.split("\n").map((line, index) => (
+                <span key={index}>{line}</span>
+              ))}
+            </p>
+          </div>
+        </MessagePopup>
+      )}
+
       {userLoaded && (
         <div className="w-screen h-screen overflow-hidden overflow-y-auto">
           {/* Hero Section */}
@@ -233,7 +268,7 @@ const Landing = () => {
                     Support us by buying the Premium version
                   </p>
                   <button
-                    className="border border-white px-4 py-2 rounded-md text-sm font-semibold bg-white text-blue-500 hover:bg-blue-200 self-center"
+                    className="border border-white px-4 py-2 rounded-md text-sm font-semibold bg-white text-blue-500 hover:bg-blue-200 self-center z-10"
                     onClick={() => navigate("/NT_Lyrics/premium")}
                   >
                     {t("upgradeNow")}
