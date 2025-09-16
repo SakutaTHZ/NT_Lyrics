@@ -339,11 +339,11 @@ export const validateUser = async (id,token) => {
     return res.data;
   } catch (err) {
     console.error("Error validating user:", err);
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
 
-    // Redirect to login
-    window.location.href = "/login";
+    //localStorage.removeItem("user");
+    //localStorage.removeItem("token");
+
+    //window.location.href = "/login";
     
     throw err; // optionally let the caller handle this
   }
