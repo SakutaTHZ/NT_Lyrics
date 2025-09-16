@@ -124,5 +124,8 @@
     "makingSureYourPaymentIsCorrect":"သင့်ငွေပေးချေမှုမှန်ကန်ကြောင်း ကျွန်ုပ်တို့သေချာအောင်လုပ်နေပါသည်။"
   },
   "youCanOnlyAddUpTo20SongsToEachCollection": "သင်သည် တစ်စုစည်းမှုလျှင် သီချင်း ၂၀ အထိသာ ထည့်နိုင်သည်။",
-  "profileUpdatedSuccessfully": "ကိုယ်ရေးအချက်အလက်များကို အောင်မြင်စွာ update ပြုလုပ်ပြီးပါပြီ။"
+  "profileUpdatedSuccessfully": "ကိုယ်ရေးအချက်အလက်များကို အောင်မြင်စွာ update ပြုလုပ်ပြီးပါပြီ။",
+  "youAreNowAPremiumUser": "သင်သည် ယခု Premium အသုံးပြုသူ ဖြစ်ပါပြီ။",
+  "yourPremiumHasExpired": "သင့် Premium သက်တမ်းကုန်ဆုံးသွားပါပြီ။",
+  "yourPremiumRequestHasBeenRejected": "သင့် Premium တောင်းဆိုမှုကို ငြင်းပယ်လိုက်ပါပြီ။"
 }

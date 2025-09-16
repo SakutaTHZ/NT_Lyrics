@@ -471,3 +471,23 @@ export const checkIfPaymentRequested = async (token) => {
     throw err;
   }
 }
+
+// Patch Api changeToDefaultStatus
+export const changeToDefaultStatus = async (token) => {
+  const response = await fetch(
+    `${apiUrl}/users/changeToDefaultStatus`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );  
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.errors?.[0]?.message || "Failed to change user status");
+  } 
+  return data;
+}

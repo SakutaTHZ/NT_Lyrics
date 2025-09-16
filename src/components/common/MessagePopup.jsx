@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { FiAlertCircle } from "react-icons/fi";
 import { BsQuestionCircle } from "react-icons/bs";
 import { createPortal } from "react-dom";
+import { useVibration } from "../hooks/useVibration";
 
 const portalRoot = document.getElementById("modal-root");
 
@@ -12,6 +13,10 @@ const MessagePopup = ({
   children,
   closePopup = () => {},
 }) => {
+  
+  const { vibratePattern } = useVibration();
+  vibratePattern("doubleTap");
+
   if (!portalRoot) return null;
 
   return createPortal(

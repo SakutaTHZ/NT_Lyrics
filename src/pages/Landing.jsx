@@ -14,6 +14,7 @@ import LyricsRow from "../components/special/LyricsRow";
 
 // Utils
 import {
+  changeToDefaultStatus,
   fetchPopularLyrics,
   fetchTop10Artists,
   validateUser,
@@ -97,13 +98,12 @@ const Landing = () => {
         console.log("User data:", userData);
         // Check for user status and show message if needed
         if (userData.user.status === 1) {
-          setMessageText("You are now a premium user! Enjoy the benefits.");
+          setMessageText(t("youAreNowAPremiumUser"));
           setMessageType("success");
           setShowMessage(true);
           setTimeout(() => setShowMessage(false), 10000);
         } else if (userData.user.status === 2) {
-          
-          setMessageText("Your premium subscription has been rejected. Please contact support.");
+          setMessageText(t("yourPremiumRequestHasBeenRejected"));
           setMessageType("error");
           setShowMessage(true);
           setTimeout(() => setShowMessage(false), 10000);
@@ -116,6 +116,7 @@ const Landing = () => {
     };
 
     getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const tierMap = {
@@ -184,7 +185,10 @@ const Landing = () => {
         <MessagePopup
           message_type={messageType}
           isVisible={showMessage}
-          closePopup={() => setShowMessage(false)}
+          closePopup={() => {
+            setShowMessage(false);
+            changeToDefaultStatus(token);
+          }}
         >
           <div className="message_text text-pretty text-left flex flex-col gap-3">
             <p>

@@ -125,5 +125,8 @@
     "makingSureYourPaymentIsCorrect":"Making sure your payment is Correct"
   },
   "youCanOnlyAddUpTo20SongsToEachCollection": "You can only add up to 20 songs to each collection.",
-  "profileUpdatedSuccessfully": "Profile updated successfully."
+  "profileUpdatedSuccessfully": "Profile updated successfully.",
+  "youAreNowAPremiumUser": "You are now a Premium user.",
+  "yourPremiumHasExpired": "Your Premium has expired.",
+  "yourPremiumRequestHasBeenRejected": "Your Premium request has been rejected."
 }
