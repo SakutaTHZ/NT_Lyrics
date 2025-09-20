@@ -106,10 +106,6 @@ const LyricsDetails = () => {
     );
   }
 
-  const goToArtist = (id) => {
-    navigate(`/NT_Lyrics/artist/${id}`);
-  };
-
   const genreTagClass =
     "text-xs border border-dashed border-gray-300 text-gray-600 px-2 py-1 rounded-full  ";
 
@@ -328,7 +324,15 @@ const LyricsDetails = () => {
                           <div
                             key={index}
                             className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
-                            onClick={() => goToArtist(featuringData._id)}
+                            onClick={() => {
+                              //navigate(`/NT_Lyrics/artist/${artist._id}`);
+                              setSelectedArtist(featuringData._id);
+                              setShowArtistDetails(true);
+                              console.log(
+                                "Selected artist ID:",
+                                featuringData._id
+                              );
+                            }}
                           >
                             <img
                               src={featuringData.photoLink}
@@ -354,7 +358,15 @@ const LyricsDetails = () => {
                           <div
                             key={index}
                             className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
-                            onClick={() => goToArtist(writerData._id)}
+                            onClick={() => {
+                              //navigate(`/NT_Lyrics/artist/${artist._id}`);
+                              setSelectedArtist(writerData._id);
+                              setShowArtistDetails(true);
+                              console.log(
+                                "Selected artist ID:",
+                                writerData._id
+                              );
+                            }}
                           >
                             <img
                               src={writerData.photoLink}
