@@ -1,15 +1,16 @@
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Footer from "../components/common/Footer";
 import useDebounce from "../components/hooks/useDebounce";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
 import { apiUrl } from "../assets/util/api";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import Artist from "./Artist";
 
 const Artists = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   const [artists, setArtists] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -57,6 +58,9 @@ const Artists = () => {
     [debouncedSearchTerm]
   );
 
+  const [showArtistDetails, setShowArtistDetails] = useState(false);
+  const [selectedArtist, setSelectedArtist] = useState(null);
+
   const lastUserRef = useCallback(
     (node) => {
       if (loading || page >= totalPages) return;
@@ -84,7 +88,7 @@ const Artists = () => {
         fetchArtists(2); // Prefetch page 2
       }
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm, fetchArtists]);
 
   // Fetch on page change
@@ -122,7 +126,11 @@ const Artists = () => {
                 <div
                   key={artist._id || idx}
                   className="border-b md:border border-gray-200 last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
-                  onClick={() => navigate(`/NT_Lyrics/artist/${artist._id}`)}
+                  onClick={() => {
+                    //navigate(`/NT_Lyrics/artist/${artist._id}`);
+                    setSelectedArtist(artist._id);
+                    setShowArtistDetails(true);
+                  }}
                   ref={isLast ? lastUserRef : null}
                 >
                   <img
@@ -157,6 +165,14 @@ const Artists = () => {
 
         <Footer />
       </div>
+
+      {/* Artist Details Modal */}
+      {showArtistDetails && selectedArtist && (
+        <Artist
+          artistId={selectedArtist}
+          onClose={() => setShowArtistDetails(false)}
+        />
+      )}
     </Suspense>
   );
 };

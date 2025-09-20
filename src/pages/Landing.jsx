@@ -24,6 +24,7 @@ import LoadingBox from "../components/common/LoadingBox";
 import { useTranslation } from "react-i18next";
 import AnnouncementBoard from "../components/common/AnnouncementBoard";
 import MessagePopup from "../components/common/MessagePopup";
+import Artist from "./Artist";
 
 const Landing = () => {
   const { t } = useTranslation();
@@ -133,6 +134,9 @@ const Landing = () => {
 
   const userType = getUserType(); // "guest", "free", or "premium"
   const userTier = tierMap[userType]; // 0, 1, or 2
+
+  const [showArtistDetails, setShowArtistDetails] = useState(false);
+  const [selectedArtist, setSelectedArtist] = useState(null);
 
   const shouldHideCollection = (lyricTier = 0) => {
     return userTier >= lyricTier; // hide if user tier is lower
@@ -324,7 +328,12 @@ const Landing = () => {
                 <div
                   key={artist.name}
                   className="border-b border-gray-200 last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
-                  onClick={() => navigate(`/NT_Lyrics/artist/${artist.id}`)}
+                  onClick={() => {
+                    //navigate(`/NT_Lyrics/artist/${artist._id}`);
+                    setSelectedArtist(artist.id);
+                    setShowArtistDetails(true);
+                    console.log("Selected artist ID:", artist.id);
+                  }}
                 >
                   <span className="py-5 w-2 font-semibold">{i + 1}.</span>
                   <img
@@ -357,6 +366,13 @@ const Landing = () => {
 
           <Footer />
         </div>
+      )}
+      {/* Artist Details Modal */}
+      {showArtistDetails && selectedArtist && (
+        <Artist
+          artistId={selectedArtist}
+          onClose={() => setShowArtistDetails(false)}
+        />
       )}
     </>
   );

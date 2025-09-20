@@ -150,7 +150,8 @@ const LyricsDetails = () => {
   };
 
   return (
-    userLoaded && (
+    <>
+      {userLoaded && (
       <div className="w-screen min-h-screen h-screen overflow-hidden overflow-y-auto">
         {showMessage && (
           <MessagePopup
@@ -421,7 +422,8 @@ const LyricsDetails = () => {
 
         <Footer />
       </div>
-    )
+
+    )}</>
   );
 };
 

@@ -1,4 +1,3 @@
-import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/common/Footer";
 import { BiArrowBack, BiSearch } from "react-icons/bi";
 import { AutoComplete } from "primereact/autocomplete";
@@ -14,14 +13,26 @@ import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 
 import { useTranslation } from "react-i18next";
+import { motion, AnimatePresence } from "framer-motion";
 
-const Artist = () => {
+const Artist = ({ artistId, onClose }) => {
+  console.log("ArtistId prop:", artistId);
   const { t } = useTranslation();
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
-  const { name } = useParams();
+  const name = artistId;
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
   const debouncedSearchTerm = useDebounce(searchTerm);
+
+  const [isVisible, setIsVisible] = useState(true);
+
+const handleClose = () => {
+  setIsVisible(false);
+  // after animation duration, call the parent onClose
+  setTimeout(() => {
+    onClose();
+  }, 300); // match your transition duration
+};
 
   const [artist, setArtist] = useState();
   const [lyrics, setLyrics] = useState([]);
@@ -33,8 +44,6 @@ const Artist = () => {
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
   const [items, setItems] = useState([]);
-
-  const navigate = useNavigate();
 
   const search = (event) => {
     const filteredTitles = lyrics
@@ -195,129 +204,149 @@ const Artist = () => {
 
   return (
     <>
-      <div className="w-screen h-screen overflow-hidden overflow-y-auto">
-        <div className="relative p-4 py-2 md:px-24 pt-4 md:pt-16 border-b border-dashed border-gray-300">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <img
-                src={artist?.photoLink || "https://via.placeholder.com/150"}
-                loading="lazy"
-                alt="Lyrics"
-                className="w-16 h-16 rounded-full"
-              />
-              <div>
-                {artist ? (
-                  <p className="font-bold text-xl italic flex items-center gap-2">
-                    {artist.name}
-                    <span className="text-sm text-gray-500 font-normal">
-                      {" "}
-                      [
-                      {artist.type === "singer"
-                        ? t("singer")
-                        : artist.type === "writer"
-                        ? t("writer")
-                        : `${t("singer")} / ${t("writer")}`}{" "}
-                      ]
-                    </span>
-                  </p>
-                ) : (
-                  <p className="text-gray-400 italic">Loading artist...</p>
-                )}
+      <AnimatePresence>
+        {isVisible && artistId && (
+          <motion.div
+            className="w-screen h-screen absolute inset-0 z-20 bg-white overflow-hidden overflow-y-auto"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            {/* ...all your modal content here... */}
+            <div className="relative p-4 py-2 md:px-24 pt-4 md:pt-16 border-b border-dashed border-gray-300">
+              <div className="flex items-center justify-between gap-4">
+                {/* header content */}
+
                 <div className="flex items-center gap-4">
-                  <p className="text-gray-500">
-                    {lyricsCount} {lyrics.length > 1 ? "songs" : "song"}
-                  </p>
+                  <img
+                    src={artist?.photoLink || "https://via.placeholder.com/150"}
+                    loading="lazy"
+                    alt="Lyrics"
+                    className="w-16 h-16 rounded-full"
+                  />
+                  <div>
+                    {artist ? (
+                      <p className="font-bold text-xl italic flex items-center gap-2">
+                        {artist.name}
+                        <span className="text-sm text-gray-500 font-normal">
+                          {" "}
+                          [
+                          {artist.type === "singer"
+                            ? t("singer")
+                            : artist.type === "writer"
+                            ? t("writer")
+                            : `${t("singer")} / ${t("writer")}`}{" "}
+                          ]
+                        </span>
+                      </p>
+                    ) : (
+                      <p className="text-gray-400 italic">Loading artist...</p>
+                    )}
+                    <div className="flex items-center gap-4">
+                      <p className="text-gray-500">
+                        {lyricsCount} {lyrics.length > 1 ? "songs" : "song"}
+                      </p>
+                    </div>
+                  </div>
                 </div>
+                <button onClick={handleClose} className="text-blue-500">
+                  <BiArrowBack size={20} />
+                </button>
               </div>
             </div>
-            <button onClick={() => navigate(-1)} className="text-blue-500">
-              <BiArrowBack size={20} />
-            </button>
-          </div>
-        </div>
 
-        <div className="flex justify-between gap-2 py-4 px-4 md:px-24 sticky top-0 md:top-12 bg-white  z-10">
-          <AutoComplete
-            value={searchTerm}
-            suggestions={items}
-            completeMethod={search}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full"
-            placeholder="သီချင်းရှာကြမယ်"
-            pt={{
-              root: "lyrics-searchBox border-gray-300 rounded-md w-full relative",
-              input: "text-gray-900",
-              panel: "shadow-lg border border-gray-200 bg-white",
-              item: "px-4 py-2 hover:bg-gray-200 cursor-pointer",
-            }}
-          />
-        </div>
-        {/* Featured Lyrics */}
-        <div className="min-h-5/6 relative p-4 py-0 md:py-2 pt-0 md:px-24">
-          <div className="grid grid-cols-1 py-0 gap-0">
-            {lyrics.length === 0 ? (
-              <div className="w-full">
-                <img
-                  src={EmptyData}
-                  alt="No data Found"
-                  className="w-full opacity-50"
-                />
-              </div>
-            ) : (
-              <>
-                {userLoaded &&
-                  lyrics.map((lyric, index) => {
-                    const isLast = index === lyrics.length - 1;
-                    return (
-                      <div key={index} className="m-0 p-0">
-                        {user?.role === "premium-user" ? (
-                          <>
-                            <LyricsRowPremium
-                              id={lyric._id}
-                              lyric={lyric}
-                              isLast={isLast}
-                              lastUserRef={lastUserRef}
-                              hideCollection={!hasToken}
-                            />
-                          </>
-                        ) : (
-                          <LyricsRow
-                            id={lyric._id}
-                            lyric={lyric}
-                            isLast={isLast}
-                            lastUserRef={lastUserRef}
-                            hideCollection={!hasToken}
-                            access={shouldHideCollection(lyric.tier)}
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
-                {loading && (
-                  <div className="text-center py-4 text-gray-500 flex items-center justify-center gap-2">
-                    <BiSearch
-                      style={{
-                        display: "inline-block",
-                        animation: "wave 3s infinite",
-                      }}
+            <div className="flex justify-between gap-2 py-4 px-4 md:px-24 sticky top-0 md:top-12 bg-white  z-10">
+              <AutoComplete
+                value={searchTerm}
+                suggestions={items}
+                completeMethod={search}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full"
+                placeholder="သီချင်းရှာကြမယ်"
+                pt={{
+                  root: "lyrics-searchBox border-gray-300 rounded-md w-full relative",
+                  input: "text-gray-900",
+                  panel: "shadow-lg border border-gray-200 bg-white",
+                  item: "px-4 py-2 hover:bg-gray-200 cursor-pointer",
+                }}
+              />
+            </div>
+            {/* Featured Lyrics */}
+            <div className="min-h-5/6 relative p-4 py-0 md:py-2 pt-0 md:px-24">
+              <div className="grid grid-cols-1 py-0 gap-0">
+                {lyrics.length === 0 ? (
+                  <div className="w-full">
+                    <img
+                      src={EmptyData}
+                      alt="No data Found"
+                      className="w-full opacity-50"
                     />
-                    Searching more lyrics...
                   </div>
+                ) : (
+                  <>
+                    {userLoaded &&
+                      lyrics.map((lyric, index) => {
+                        const isLast = index === lyrics.length - 1;
+                        return (
+                          <div key={index} className="m-0 p-0">
+                            {user?.role === "premium-user" ? (
+                              <>
+                                <LyricsRowPremium
+                                  id={lyric._id}
+                                  lyric={lyric}
+                                  isLast={isLast}
+                                  lastUserRef={lastUserRef}
+                                  hideCollection={!hasToken}
+                                />
+                              </>
+                            ) : (
+                              <LyricsRow
+                                id={lyric._id}
+                                lyric={lyric}
+                                isLast={isLast}
+                                lastUserRef={lastUserRef}
+                                hideCollection={!hasToken}
+                                access={shouldHideCollection(lyric.tier)}
+                              />
+                            )}
+                          </div>
+                        );
+                      })}
+                    {loading && (
+                      <div className="text-center py-4 text-gray-500 flex items-center justify-center gap-2">
+                        <BiSearch
+                          style={{
+                            display: "inline-block",
+                            animation: "wave 3s infinite",
+                          }}
+                        />
+                        Searching more lyrics...
+                      </div>
+                    )}
+                    {!loading && lyrics.length === 0 && initialLoadDone && (
+                      <div className="text-center py-4 text-gray-400 italic">
+                        No lyrics found.
+                      </div>
+                    )}
+                  </>
                 )}
-                {!loading && lyrics.length === 0 && initialLoadDone && (
-                  <div className="text-center py-4 text-gray-400 italic">
-                    No lyrics found.
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        </div>
+              </div>
+            </div>
 
-        <Footer />
-      </div>
+            <Footer />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
+};
+
+import PropTypes from "prop-types";
+
+Artist.propTypes = {
+  artistId: PropTypes.string,
+  onClose: PropTypes.func,
 };
 
 export default Artist;
