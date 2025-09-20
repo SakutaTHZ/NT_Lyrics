@@ -295,11 +295,11 @@ const LyricsDetails = () => {
                             className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
                             onClick={() => {
                               //navigate(`/NT_Lyrics/artist/${artist._id}`);
-                              setSelectedArtist(artistData._id);
+                              setSelectedArtist(artistData.id);
                               setShowArtistDetails(true);
                               console.log(
                                 "Selected artist ID:",
-                                artistData._id
+                                artistData.id
                               );
                             }}
                           >
