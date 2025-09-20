@@ -47,7 +47,7 @@ const LyricsRow = ({
 
   const goToLyricsDetails = () => {
     // Pass the id dynamically in the URL
-    navigate(`/NT_Lyrics/lyrics/${id}`);
+    navigate(`/NT_Lyrics/lyricsdetail/${id}`);
   };
 
   const changeLyricsStatus = async (shouldAdd) => {
