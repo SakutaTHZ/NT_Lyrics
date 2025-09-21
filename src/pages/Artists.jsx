@@ -7,6 +7,7 @@ import { apiUrl } from "../assets/util/api";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import Artist from "./Artist";
+import ModalContainer from "../components/special/ModalContainer";
 
 const Artists = () => {
   const { t } = useTranslation();
@@ -168,10 +169,15 @@ const Artists = () => {
 
       {/* Artist Details Modal */}
       {showArtistDetails && selectedArtist && (
-        <Artist
-          artistId={selectedArtist}
+        <ModalContainer
+          isOpen={showArtistDetails}
           onClose={() => setShowArtistDetails(false)}
-        />
+        >
+          <Artist
+            artistId={selectedArtist}
+            onClose={() => setShowArtistDetails(false)}
+          />
+        </ModalContainer>
       )}
     </Suspense>
   );

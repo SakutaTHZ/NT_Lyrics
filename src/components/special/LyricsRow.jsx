@@ -15,6 +15,8 @@ import { useVibration } from "../hooks/useVibration";
 // import { TbError404 } from "react-icons/tb";
 
 import { useTranslation } from "react-i18next";
+import LyricsDetails from "../../pages/LyricsDetails";
+import ModalContainer from "./ModalContainer";
 
 const LyricsRow = ({
   id,
@@ -37,6 +39,9 @@ const LyricsRow = ({
   const [messageType, setMessageType] = useState("success");
   const [isInCollection, setIsInCollection] = useState(lyric.isFavourite);
 
+  const [showLyricDetails, setShowLyricDetails] = useState(false);
+  const [selectedLyric, setSelectedLyric] = useState(null);
+
   // IntersectionObserver hook
   const { ref: inViewRef, inView } = useInView({
     triggerOnce: true, // Trigger only once when it first comes into view
@@ -45,10 +50,9 @@ const LyricsRow = ({
 
   const navigate = useNavigate();
 
-  const goToLyricsDetails = () => {
-    // Pass the id dynamically in the URL
+  /*const goToLyricsDetails = () => {
     navigate(`/NT_Lyrics/lyricsdetail/${id}`);
-  };
+  };*/
 
   const changeLyricsStatus = async (shouldAdd) => {
     const token = localStorage.getItem("token");
@@ -78,7 +82,7 @@ const LyricsRow = ({
       setMessageType("error");
       if (err.message === "You can add only 20 collections") {
         setMessageText(t("youCanOnlyAddUpTo20SongsToEachCollection"));
-      }else {
+      } else {
         setMessageText(t("somethingWentWrongPleaseTryAgainLater"));
       }
     } finally {
@@ -92,7 +96,6 @@ const LyricsRow = ({
       {showMessage && (
         <MessagePopup
           message_type={messageType}
-          isVisible={showMessage}
           closePopup={() => setShowMessage(false)}
         >
           <div className="message_text text-pretty text-left flex flex-col gap-3">
@@ -101,7 +104,10 @@ const LyricsRow = ({
                 <span key={index}>{line}</span>
               ))}
             </p>
-            {(access < 1 || (messageType === "error" && messageText === t("youCanOnlyAddUpTo20SongsToEachCollection"))) && (
+            {(access < 1 ||
+              (messageType === "error" &&
+                messageText ===
+                  t("youCanOnlyAddUpTo20SongsToEachCollection"))) && (
               <button
                 className="rotatingBorder w-full bg-white shadow-sm text-sm line-clamp-3 hover:bg-gray-50 p-2 rounded-md text-left font-medium"
                 onClick={() => navigate("/NT_Lyrics/premium")}
@@ -118,7 +124,10 @@ const LyricsRow = ({
         } ${imageError && "opacity-50 text-gray-500"}`}
         onClick={
           access
-            ? goToLyricsDetails
+            ? () => {
+                setSelectedLyric(id);
+                setShowLyricDetails(true);
+              }
             : () => {
                 setMessageText(t("youHaveToBePremiumUserToAccessThisFeature"));
                 setMessageType("error");
@@ -135,25 +144,6 @@ const LyricsRow = ({
         animate={inView ? { scale: 1, opacity: 1, y: 0 } : false} // <- this is key
         transition={{ duration: 0.35, ease: "easeOut" }}
       >
-        {/* {!imageError ? (
-          <img
-            src={bustedImageUrl}
-            alt="Lyrics"
-            onError={() => setImageError(true)}
-            onContextMenu={(e) => e.preventDefault()}
-            draggable={false}
-            loading="lazy"
-            style={{ pointerEvents: "none", userSelect: "none" }}
-            className="w-12 h-12 object-contain"
-          />
-        ) : (
-          <div
-            style={{ pointerEvents: "none", userSelect: "none" }}
-            className="w-12 h-12 object-contain bg-gray-50 roundedd-md flex items-center justify-center"
-          >
-            <TbError404 size={24} className="text-gray-400" />
-          </div>
-        )} */}
 
         {/* Invisible image just for checking if lyrics is ready */}
         <img
@@ -214,6 +204,18 @@ const LyricsRow = ({
           {}
         </div>
       </motion.div>
+
+      {showLyricDetails && (
+        <ModalContainer
+          isOpen={showLyricDetails}
+          onClose={() => setShowLyricDetails(false)}
+        >
+          <LyricsDetails
+            lyricsId={selectedLyric}
+            onClose={() => setShowLyricDetails(false)}
+          />
+        </ModalContainer>
+      )}
     </>
   );
 };

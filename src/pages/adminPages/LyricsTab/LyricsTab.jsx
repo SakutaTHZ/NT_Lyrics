@@ -215,7 +215,6 @@ const LyricsTab = () => {
       {showMessage && (
         <MessagePopup
           message_type={messageType}
-          isVisible={showMessage}
           closePopup={() => setShowMessage(false)}
         >
           <div className="message_text text-pretty text-left">

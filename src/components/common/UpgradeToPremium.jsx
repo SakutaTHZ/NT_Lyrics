@@ -225,7 +225,7 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
       console.error("❌ Failed to submit data:", err);
       setErrorMessage(err.message || "Something went wrong.");
     } finally {
-      setIsLoading(false);
+      setIsLoading(true);
 
       // ✅ Reset fields after modal closes
       setPhoneNumber("");

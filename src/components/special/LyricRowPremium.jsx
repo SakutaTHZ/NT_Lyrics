@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import MessagePopup from "../common/MessagePopup";
-import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { BsHeartFill, BsThreeDotsVertical } from "react-icons/bs";
 import { useInView } from "react-intersection-observer";
@@ -12,6 +11,8 @@ import {
 import AddToCollectionBox from "./AddToCollectionBox";
 
 import { useTranslation } from "react-i18next";
+import ModalContainer from "./ModalContainer";
+import LyricsDetails from "../../pages/LyricsDetails";
 
 const LyricRowPremium = ({
   id,
@@ -35,13 +36,6 @@ const LyricRowPremium = ({
     triggerOnce: true, // Trigger only once when it first comes into view
     threshold: 0.5, // 50% of the element should be in view
   });
-
-  const navigate = useNavigate();
-
-  const goToLyricsDetails = () => {
-    // Pass the id dynamically in the URL
-    navigate(`/NT_Lyrics/lyricsdetail/${id}`);
-  };
 
   // eslint-disable-next-line no-unused-vars
   const changeLyricsStatus = async (shouldAdd) => {
@@ -77,12 +71,14 @@ const LyricRowPremium = ({
 
   const [imageError, setImageError] = useState(false);
 
+  const [showLyricDetails, setShowLyricDetails] = useState(false);
+  const [selectedLyric, setSelectedLyric] = useState(null);
+
   return (
     <>
       {showMessage && (
         <MessagePopup
           message_type={messageType}
-          isVisible={showMessage}
           closePopup={() => setShowMessage(false)}
         >
           <div className="message_text text-pretty text-left">
@@ -94,7 +90,10 @@ const LyricRowPremium = ({
       )}
       <motion.div
         className="relative flex items-center w-full border-b last:border-0 border-dashed border-gray-200 py-2"
-        onClick={goToLyricsDetails}
+        onClick={() => {
+          setSelectedLyric(id);
+          setShowLyricDetails(true);
+        }}
         ref={(node) => {
           // Combine your refs (still valid)
           if (ref) ref(node);
@@ -162,6 +161,18 @@ const LyricRowPremium = ({
           />
         )}
       </motion.div>
+
+      {showLyricDetails && (
+        <ModalContainer
+          isOpen={showLyricDetails}
+          onClose={() => setShowLyricDetails(false)}
+        >
+          <LyricsDetails
+            lyricsId={selectedLyric}
+            onClose={() => setShowLyricDetails(false)}
+          />
+        </ModalContainer>
+      )}
     </>
   );
 };

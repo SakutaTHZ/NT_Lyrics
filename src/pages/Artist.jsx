@@ -16,7 +16,6 @@ import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Artist = ({ artistId, onClose }) => {
-  console.log("ArtistId prop:", artistId);
   const { t } = useTranslation();
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
   const name = artistId;

@@ -25,6 +25,7 @@ import { useTranslation } from "react-i18next";
 import AnnouncementBoard from "../components/common/AnnouncementBoard";
 import MessagePopup from "../components/common/MessagePopup";
 import Artist from "./Artist";
+import ModalContainer from "../components/special/ModalContainer";
 
 const Landing = () => {
   const { t } = useTranslation();
@@ -188,7 +189,6 @@ const Landing = () => {
       {showMessage && (
         <MessagePopup
           message_type={messageType}
-          isVisible={showMessage}
           closePopup={() => {
             setShowMessage(false);
             changeToDefaultStatus(token);
@@ -369,10 +369,15 @@ const Landing = () => {
       )}
       {/* Artist Details Modal */}
       {showArtistDetails && selectedArtist && (
-        <Artist
-          artistId={selectedArtist}
+        <ModalContainer
+          isOpen={showArtistDetails}
           onClose={() => setShowArtistDetails(false)}
-        />
+        >
+          <Artist
+            artistId={selectedArtist}
+            onClose={() => setShowArtistDetails(false)}
+          />
+        </ModalContainer>
       )}
     </>
   );
