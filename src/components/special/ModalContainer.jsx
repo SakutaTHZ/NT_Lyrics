@@ -28,7 +28,7 @@ const ModalContainer = ({ isOpen, onClose, children }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center container w-screen h-screen"
+          className="fixed modal inset-0 z-[100] flex items-center justify-center container w-screen h-screen"
         >
           {/* backdrop */}
           <div className="absolute inset-0 bg-black/50 w-screen" onClick={onClose} />

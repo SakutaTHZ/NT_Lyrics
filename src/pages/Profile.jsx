@@ -12,12 +12,14 @@ import EmptyData from "../assets/images/Collection list is empty.jpg";
 import LyricsRow from "../components/special/LyricsRow";
 import axios from "axios";
 import { apiUrl } from "../assets/util/api";
-import EditGroup from "../components/common/EditGroup";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 import { Link } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { useTranslation } from "react-i18next";
 import MessagePopup from "../components/common/MessagePopup";
+import { CgTrash } from "react-icons/cg";
+import { ConfirmPopup } from "primereact/confirmpopup";
+import { confirmPopup } from "primereact/confirmpopup";
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -165,6 +167,9 @@ const Profile = () => {
     async (group, pageNum, override = false) => {
       setLoadingLyrics(true);
 
+      //if user is free just set the selected group to Default
+      if (userRole !== "premium-user") group = "Default";
+
       try {
         const token = localStorage.getItem("token");
 
@@ -235,14 +240,77 @@ const Profile = () => {
     getLyricsByGroup(group, 1, true);
   };
 
-  const [showGroupEdit, setShowGroupEdit] = useState(false);
-
   const handleCollectionStatusChange = useCallback(() => {
     if (selectedGroup) {
       getLyricsByGroup(selectedGroup, 1, true); // refresh lyrics
       getCollection(); // refresh counts
     }
   }, [selectedGroup, getLyricsByGroup, getCollection]);
+
+  const deleteGroup = async () => {
+    if (!selectedGroup) return;
+
+    if (selectedGroup === "Default") {
+      setMessageText("Default group cannot be deleted.");
+      setMessageType("error");
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 5000);
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `${apiUrl}/collections/removeCollection/${selectedGroup}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ collectionName: selectedGroup }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessageText(data.errors?.[0]?.message);
+        setMessageType("error");
+        throw new Error(data.message || "Failed to delete Group");
+      }
+
+      setMessageText("Group Deleted successfully");
+      setMessageType("success");
+
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 5000);
+
+      // Refresh collection and select another group
+      await getCollection();
+      setSelectedGroup((prevGroup) => {
+        const remainingGroups = collection?.collections
+          ?.map((col) => col.group)
+          .filter((group) => group !== prevGroup);
+        return remainingGroups.length > 0 ? remainingGroups[0] : null;
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDelete = (e) => {
+    confirmPopup({
+      target: e.currentTarget,
+      message: "Are you sure you want to delete this Group?",
+      icon: "pi pi-exclamation-triangle",
+      acceptClassName: "p-button-danger",
+      acceptLabel: "Yes",
+      rejectLabel: "No",
+      accept: async () => {
+        await deleteGroup();
+      },
+    });
+  };
 
   if (loadingProfile) {
     return (
@@ -468,8 +536,18 @@ const Profile = () => {
                         {collection?.collections?.find(
                           (item) => item.group === selectedGroup
                         )?.count || 0}
+                        {selectedGroup === "Default" ? " / ∞ " : " / 20"}
                       </span>
                     </p>
+
+                    {selectedGroup !== "Default" && (
+                      <button
+                        className="bg-red-50 rounded-md cursor-pointer px-3 py-1"
+                        onClick={handleDelete}
+                      >
+                        <CgTrash size={18} className="text-red-500" />
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -557,13 +635,6 @@ const Profile = () => {
           )}
         </div>
 
-        {showGroupEdit && (
-          <EditGroup
-            groupName={selectedGroup}
-            onClose={() => setShowGroupEdit(false)}
-          />
-        )}
-
         {showEdit && (
           <ProfileEdit
             userData={user}
@@ -582,6 +653,8 @@ const Profile = () => {
 
         <Footer />
       </div>
+
+      <ConfirmPopup className="w-10/12 md:w-auto" />
     </>
   );
 };
