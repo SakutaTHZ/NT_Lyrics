@@ -211,6 +211,45 @@ const AdminPanel = () => {
               <div className="w-full">
                 {/* Data preview */}
                 <div className="w-full flex flex-col md:flex-row gap-2 md:gap-4">
+                  
+                  <div
+                    className={`${
+                      paymentCount?.requestCount > 0 ? "rotatingBorder" : ""
+                    } p-2 border border-gray-200 rounded-md shadow-sm w-full h-fit`}
+                  >
+                    <p className="p-2 px-4 bg-blue-50 text-gray-700 font-semibold mb-2">
+                      Premium Requests
+                    </p>
+                    <p className="p-4 text-2xl font-bold flex items-center justify-between gap-2">
+                    <div className="flex gap-6 items-center">
+                      <div className={`${
+                      paymentCount?.requestCount > 0 ? "border border-blue-200" : ""
+                    } relative  w-12 h-12 rounded-full flex items-center justify-center`}>
+                        <span>{paymentCount?.requestCount}</span>
+                      </div>{" "}
+                      <div className="flex flex-col">
+                        <div className="font-normal text-sm text-gray-500">
+                          <p className="text-sm text-green-500">
+                            <span className="min-w-[20px] font-semibold">{paymentCount?.approveCount}</span> Approved
+                          </p>
+                          <p className="text-sm text-red-500">
+                            <span className="min-w-[20px] font-semibold">{paymentCount?.rejectCount}</span> Rejected
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                      <button
+                        className={`${
+                          paymentCount?.requestCount > 0 ? "rotatingBorder" : ""
+                        } bg-blue-100 hover:bg-blue-200 transition-colors h-full aspect-square p-2 rounded-md cursor-pointer`}
+                        onClick={() => setActiveIndex(4)}
+                      >
+                        <CgArrowTopRight size={20} />
+                      </button>
+                    </p>
+                  </div>
+
                   {/* Lyrics Tab */}
                   <div className="border border-gray-200 rounded-md shadow-sm w-full">
                     <p className="p-2 px-4 bg-gray-50 text-gray-400 font-semibold">
@@ -302,43 +341,7 @@ const AdminPanel = () => {
                 </div>
                 {/* Column 3 */}
                 <div className="flex flex-col gap-4">
-                  <div
-                    className={`${
-                      paymentCount?.requestCount > 0 ? "rotatingBorder" : ""
-                    } p-2 border border-gray-200 rounded-md shadow-sm w-full h-fit`}
-                  >
-                    <p className="p-2 px-4 bg-blue-50 text-gray-700 font-semibold mb-2">
-                      Premium Requests
-                    </p>
-                    <p className="p-4 text-2xl font-bold flex items-center justify-between gap-2">
-                    <div className="flex gap-6 items-center">
-                      <div className={`${
-                      paymentCount?.requestCount > 0 ? "border border-blue-200" : ""
-                    } relative  w-12 h-12 rounded-full flex items-center justify-center`}>
-                        <span>{paymentCount?.requestCount}</span>
-                      </div>{" "}
-                      <div className="flex flex-col">
-                        <div className="font-normal text-sm text-gray-500">
-                          <p className="text-sm text-green-500">
-                            <span className="min-w-[20px] font-semibold">{paymentCount?.approveCount}</span> Approved
-                          </p>
-                          <p className="text-sm text-red-500">
-                            <span className="min-w-[20px] font-semibold">{paymentCount?.rejectCount}</span> Rejected
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                      <button
-                        className={`${
-                          paymentCount?.requestCount > 0 ? "rotatingBorder" : ""
-                        } bg-blue-100 hover:bg-blue-200 transition-colors h-full aspect-square p-2 rounded-md cursor-pointer`}
-                        onClick={() => setActiveIndex(4)}
-                      >
-                        <CgArrowTopRight size={20} />
-                      </button>
-                    </p>
-                  </div>
+                  
 
                   <div className="p-2 border border-gray-200 rounded-md shadow-sm w-full h-fit">
                     <p className="p-2 px-4 bg-gray-50 text-gray-700 font-semibold mb-2">
