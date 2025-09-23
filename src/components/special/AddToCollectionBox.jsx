@@ -168,6 +168,7 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
       onHide={close}
       position="bottom"
       onClick={(e) => e.stopPropagation()}
+      modal
       pt={{
         header: {
           className: "customHeader h-fit border-none flex items-center",

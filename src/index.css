@@ -301,3 +301,13 @@ img {
     opacity: 1;
   }
 }
+
+.p-dialog-mask {
+  z-index: 2000 !important;
+}
+.p-dialog {
+  z-index: 2001 !important;
+}
+.modal {
+  z-index: 3000 !important; /* or less if you want dialogs on top */
+}

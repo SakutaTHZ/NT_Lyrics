@@ -91,6 +91,8 @@ const LyricRowPremium = ({
       <motion.div
         className="relative flex items-center w-full border-b last:border-0 border-dashed border-gray-200 py-2"
         onClick={() => {
+          //if addtocollection is not opening then open lyric details
+          if (addToCollection) return;
           setSelectedLyric(id);
           setShowLyricDetails(true);
         }}
@@ -154,6 +156,7 @@ const LyricRowPremium = ({
         </div>
 
         {addToCollection && (
+          
           <AddToCollectionBox
             id={id}
             addToCollection={addToCollection}
