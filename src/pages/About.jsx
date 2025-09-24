@@ -3,6 +3,7 @@ import KpayQR from "../assets/images/Kpaythz.jpg";
 import cover from "../assets/images/cover_bg.png";
 
 import { useTranslation } from "react-i18next";
+import CommitHistory from "../components/common/ComitHistory";
 
 const About = () => {
   const { t } = useTranslation();
@@ -29,6 +30,11 @@ const About = () => {
               <p className="leading-relaxed bg-white p-4 rounded-md text-md">
                 <strong>NT Lyric n Chord</strong> <span>{t("ntlyricsDescription").split("\n").map((line, i) => <span key={i}>{line}<br/></span>)}</span>
               </p>
+            </section>
+
+            {/* 🕐 History */}
+            <section>
+              <CommitHistory />
             </section>
 
             <hr />
