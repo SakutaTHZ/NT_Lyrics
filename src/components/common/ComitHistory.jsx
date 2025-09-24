@@ -1,34 +1,37 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-export default function CommitHistory() {
-  const [commits, setCommits] = useState([]);
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent);
+}
 
+export default function useBackButtonHandler(isOpen, onClose) {
   useEffect(() => {
-    async function fetchCommits() {
-      try {
-        const res = await fetch(
-          "https://api.github.com/repos/SakutaTHZ/NT_Lyrics/commits"
-        );
-        const data = await res.json();
-        setCommits(data);
-      } catch (err) {
-        console.error("Error fetching commits:", err);
-      }
-    }
-    fetchCommits();
-  }, []);
+    if (!isOpen || isIOS()) return;
 
-  return (
-    <div className="mx-4">
-      <ul>
-        {commits.map((commit) => (
-          <li key={commit.sha}>
-            <strong>{commit.commit.author.name}</strong>:{" "}
-            {commit.commit.message} <br />
-            <small>{new Date(commit.commit.author.date).toLocaleString()}</small>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+    // Push an extra dummy state before modal opens
+    window.history.pushState({ modal: true }, "", window.location.href);
+
+    const handlePopState = () => {
+      // Only handle if modal is open
+      if (isOpen) {
+        onClose(); // close modal
+        // Push state again so back button continues to work
+        window.history.pushState({ modal: true }, "", window.location.href);
+      }
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 }
