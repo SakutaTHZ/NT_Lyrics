@@ -6,15 +6,17 @@ function isIOS() {
 
 export default function useBackButtonHandler(isOpen, onClose) {
   useEffect(() => {
-    if (!isOpen || isIOS()) return; // skip iOS (swipe not a problem)
+    if (!isOpen || isIOS()) return;
 
-    window.history.pushState(null, "", window.location.href);
+    // Push an extra dummy state before modal opens
+    window.history.pushState({ modal: true }, "", window.location.href);
 
-    const handlePopState = (event) => {
-      event.preventDefault();
+    const handlePopState = () => {
+      // Only handle if modal is open
       if (isOpen) {
-        onClose();
-        window.history.pushState(null, "", window.location.href);
+        onClose(); // close modal
+        // Push state again so back button continues to work
+        window.history.pushState({ modal: true }, "", window.location.href);
       }
     };
 
