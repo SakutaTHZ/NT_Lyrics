@@ -3,8 +3,11 @@ import ReactDOM from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
+import useBackButtonHandler from "../hooks/useBackButtonHandler";
 
 const ModalContainer = ({ isOpen, onClose, children }) => {
+  useBackButtonHandler(isOpen, onClose);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
