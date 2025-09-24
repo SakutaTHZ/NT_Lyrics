@@ -14,7 +14,7 @@ const Chords = ({ chordKey, onClose }) => {
 
   const [isVisible, setIsVisible] = useState(true);
 
-  const [activeChord, setActiveChord] = useState(null);
+  const [activeChord, setActiveChord] = useState(Object.keys(chords)[0]);
 
   const handleClose = () => {
     setIsVisible(false);
@@ -73,7 +73,7 @@ const Chords = ({ chordKey, onClose }) => {
                             <img
                               src={img.src}
                               alt={img.name}
-                              className="w-full h-auto border border-gray-200 rounded object-cover aspect-square"
+                              className="w-full h-auto border border-gray-200 rounded object-contain aspect-square"
                             />
                           </div>
                         ))}
