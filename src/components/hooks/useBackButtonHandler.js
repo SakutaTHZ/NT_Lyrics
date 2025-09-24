@@ -1,23 +1,35 @@
-// hooks/useBackButtonHandler.js
 import { useEffect } from "react";
+
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent);
+}
 
 export default function useBackButtonHandler(isOpen, onClose) {
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || isIOS()) return; // skip iOS (swipe not a problem)
 
-    // Push a dummy state so the browser thinks it can "go back"
     window.history.pushState(null, "", window.location.href);
 
     const handlePopState = (event) => {
       event.preventDefault();
       if (isOpen) {
-        onClose(); // close modal instead of navigating
-        // push the state again so back button still works
+        onClose();
         window.history.pushState(null, "", window.location.href);
       }
     };
 
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+
     window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [isOpen, onClose]);
 }

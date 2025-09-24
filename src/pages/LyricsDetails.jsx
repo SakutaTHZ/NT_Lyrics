@@ -333,7 +333,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                     )}
                     {/* Feature Artist name */}
                     {lyric.featureArtists.length > 0 && (
-                      <div className="flex items-start gap-2">
+                      <div className="flex flex-wrap items-start gap-2">
                         <p
                           className={`text-sm text-gray-600 min-w-16 max-w-24 p-1`}
                         >
