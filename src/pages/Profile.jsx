@@ -260,7 +260,7 @@ const Profile = () => {
 
     try {
       const res = await fetch(
-        `${apiUrl}/collections/removeCollection/${selectedGroup}`,
+        `${apiUrl}/collections/removeCollection`,
         {
           method: "DELETE",
           headers: {

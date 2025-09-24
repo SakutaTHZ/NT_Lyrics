@@ -328,7 +328,7 @@ export const fetchLyricsByGroup = async (group, authToken) => {
   }
 }
 
-export const validateUser = async (id,token) => {
+/*export const validateUser = async (id,token) => {
   try {
     const res = await axios.get(`${apiUrl}/users/userProfile/${id}`, {
       headers: {
@@ -345,8 +345,52 @@ export const validateUser = async (id,token) => {
 
     window.location.href = "/login";
     
-    throw err; // optionally let the caller handle this
+    throw err; 
   }
+}*/
+
+export const validateUser = async (id, token) => {
+  try {
+    const res = await axios.get(`${apiUrl}/users/userProfile/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  } catch (err) {
+    const status = err.response?.status;
+
+    if (status === 401) {
+      // 🔄 try refresh token flow here (if supported)
+      // if refresh fails → logout
+      logout("Session expired, please log in again.");
+    }
+    else if (status === 403) {
+      showError("Your account has been deactivated or you don’t have access.");
+      logout();
+    }
+    else if (status === 400) {
+      showError("We couldn’t find your account. Please log in again.");
+      logout();
+    }
+    else if (status === 500) {
+      showError("Server error. Please try again later.");
+    } else {
+      showError("Unexpected error. Please try again.");
+    }
+
+    throw err;
+  }
+};
+
+function logout(message) {
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+  if (message) alert(message);
+  window.location.href = "/login";
+}
+
+function showError(message) {
+  // toast, modal, or error banner
+  console.error(message);
 }
 
 export const checkUserStatus = async (token) => {
