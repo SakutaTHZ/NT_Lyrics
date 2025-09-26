@@ -14,7 +14,10 @@ const Chords = ({ chordKey, onClose }) => {
 
   const [isVisible, setIsVisible] = useState(true);
 
-  const [activeChord, setActiveChord] = useState(Object.keys(chords)[0]);
+  const chordNames = Object.keys(chords);
+  const initialChord = chordNames.includes(chordKey) ? chordKey : chordNames[0];
+
+  const [activeChord, setActiveChord] = useState(initialChord);
 
   const handleClose = () => {
     setIsVisible(false);
@@ -64,20 +67,18 @@ const Chords = ({ chordKey, onClose }) => {
 
                 {/* Display chord variants if one is active */}
                 <div>
-                  {activeChord && (
-                    <div>
-                      <div className="grid grid-cols-2 gap-4">
-                        {chords[activeChord].map((img) => (
-                          <div key={img.name} className="text-center">
-                            <p className="text-sm text-left">{img.name}</p>
-                            <img
-                              src={img.src}
-                              alt={img.name}
-                              className="w-full h-auto border border-gray-200 rounded object-contain aspect-square"
-                            />
-                          </div>
-                        ))}
-                      </div>
+                  {activeChord && chords[activeChord] && (
+                    <div className="grid grid-cols-2 gap-4">
+                      {chords[activeChord].map((img) => (
+                        <div key={img.name} className="text-center">
+                          <p className="text-sm text-left">{img.name}</p>
+                          <img
+                            src={img.src}
+                            alt={img.name}
+                            className="w-full h-auto border border-gray-200 rounded object-contain aspect-square"
+                          />
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
