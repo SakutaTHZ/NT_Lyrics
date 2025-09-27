@@ -24,7 +24,7 @@ export default function CommitHistory() {
 
   return (
     <>
-      <b>{latestCommit.commit.message}</b>{latestCommit.commit.description ? ` - ${latestCommit.commit.description}` : ""}
+      <span className="font-semibold">{latestCommit.commit.message}</span> {latestCommit.commit.description ? ` - ${latestCommit.commit.description}` : ""}
     </>
   );
 }

@@ -145,7 +145,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
 
   return (
     <div className="absolute flex justify-center items-center top-0 left-0 w-screen h-screen bg-[#00000080] z-50">
-      <div className="fixed inset-0 animate-down-start w-screen h-screen md:h-fit min-h-screen overflow-y-scroll py-6 md:px-18 bg-gray-100 flex flex-col">
+      <div className="fixed inset-0 animate-down-start w-screen h-screen md:h-fit min-h-screen overflow-y-scroll py-6 md:px-18 c-bg flex flex-col">
         <div className="w-full flex items-center justify-center md:mt-12 pb-2 mb-2">
           {/* <div className="profileImageBox w-24 aspect-square rounded-full overflow-hidden border-8 border-white">
             
@@ -157,16 +157,16 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
           <p className="w-full px-6 font-bold text-lg italic">{t("setting")}</p>
         </div>
         <div className="w-full px-6 flex flex-col items-center justify-center gap-4">
-          <div className="w-full flex flex-col items-center gap-2 border-t border-gray-300 pt-2 border-dashed">
+          <div className="w-full flex flex-col items-center gap-2 border-t c-border pt-2 border-dashed">
             {/* Premium Info */}
 
             {user.role === "premium-user" ? (
-              <div className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 w-full p-5 rounded-xl shadow-sm space-y-3">
+              <div className="c-bg-2 border c-border w-full p-5 rounded-xl  space-y-3">
                 <div className="flex items-center gap-2">
                   <p className="text-gray-700 font-medium">
                     {t("yourAccountIs")}
                   </p>
-                  <span className="text-sm bg-yellow-100 text-yellow-800 py-1 px-2 rounded-md border border-yellow-300 font-semibold">
+                  <span className="text-sm c-premium-bg text-yellow-800 py-1 px-2 rounded-md font-semibold">
                     Premium
                   </span>
                   <Link to={"/NT_Lyrics/premium"} title="See Features" className="ml-auto text-blue-500 font-semibold underline">
@@ -190,7 +190,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
                 </div>
               </div>
             ) : (
-              <div className="bg-white w-full p-4 rounded-md flex flex-col gap-2">
+              <div className="c-bg-2 border c-border w-full p-4 rounded-md flex flex-col gap-2">
                 <p>
                   {t("yourAccountIs")}
                   <span className="text-blue-500 font-semibold pl-2">Free</span>{" "}
@@ -207,7 +207,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
               <p className="w-full font-semibold text-md italic text-gray-500">
                 {t("info")}
               </p>
-              <div className="bg-white w-full p-4 rounded-md flex flex-col gap-4">
+              <div className="c-bg-2 border c-border w-full p-4 rounded-md flex flex-col gap-4">
                 {/* name */}
                 <div className="flex flex-col w-full">
                   <label htmlFor="name" className={`${labelClass}`}>
@@ -311,11 +311,11 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
             </div>
 
             {/* App Data */}
-            <div className="w-full flex flex-col items-center pb-2 gap-2 border-t border-dashed border-gray-300 pt-2">
+            <div className="w-full flex flex-col items-center pb-2 gap-2 border-t border-dashed c-border pt-2">
               <p className="w-full font-semibold text-md italic text-gray-500">
                 {t("app")}
               </p>
-              <div className="bg-white w-full p-4 rounded-md flex flex-col gap-4">
+              <div className="c-bg-2 border c-border w-full p-4 rounded-md flex flex-col gap-4">
                 {/* Language */}
                 <div className="flex flex-col w-full py-1">
                   <label htmlFor="language" className={`${labelClass}`}>
@@ -387,7 +387,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
             </div>
 
             {/* Action Buttons */}
-            <div className="w-full flex flex-col items-center gap-2 border-t border-dashed border-gray-300 pt-2 pb-12 md:pb-0">
+            <div className="w-full flex flex-col items-center gap-2 border-t border-dashed c-border pt-2 pb-12 md:pb-0">
               <div className="w-full flex items-center gap-2 mt-2">
                 <button
                   className="w-full bg-blue-500 px-4 text-white font-semibold p-2 rounded-md"
@@ -407,7 +407,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
                   {t("cancel")}
                 </button>
               </div>
-              <hr className="w-full border-dashed border-gray-300" />
+              <hr className="w-full border-dashed c-border" />
               {/* Log Out */}
               <button
                 className="w-full bg-red-500 px-4 text-white font-semibold p-2 rounded-md mb-8"

@@ -341,7 +341,7 @@ const Profile = () => {
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
         <div className="relative flex flex-col gap-2 min-h-screen md:pt-12">
           <div className="w-full flex flex-col items-center justify-center customBackground rounded-b-4xl py-8 pb-4">
-            <div className="flex items-center flex-col gap-4 w-full px-8 md:px-24">
+            <div className="flex items-center flex-col gap-4 w-full px-8 md:px-24  z-20">
               <div className="relative profileImageBox flex items-center justify-center">
                 <img
                   src={
@@ -361,12 +361,12 @@ const Profile = () => {
                 </span>
               </div>
 
-              <div className="relative profileInfo shadow-md text-center">
+              <div className="relative profileInfo shadow-md text-center text-white">
                 <p className="font-bold text-2xl">{username}</p>
                 <p >{email}</p>
               </div>
 
-              <div className="relative w-full flex items-center justify-center md:gap-4 border p-2 rounded-full border-gray-300 bg-white c-reverse">
+              <div className="relative w-full flex items-center justify-center md:gap-4 border p-2 rounded-full c-border c-bg">
                 <div className="flex items-center gap-2">
                   <p className=" text-lg">Collected -</p>
                   <p className="pr-4">
@@ -496,7 +496,7 @@ const Profile = () => {
               </div>
 
               <button
-                className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2 absolute right-4 top-4"
+                className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2 absolute right-4 top-4 z-50"
                 onClick={() => setShowEdit(true)}
               >
                 <IoSettingsOutline size={20} className="text-gray-500" />

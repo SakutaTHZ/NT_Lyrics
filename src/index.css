@@ -552,6 +552,10 @@ img {
   background-color: rgb(var(--color-fade-overlay)) !important;
 }
 
+.c-bg-2{
+  background-color: rgb(var(--color-bg-card)) !important;
+}
+
 .c-primary{
   background-color: rgb(var(--color-primary-accent)) !important;
 }
