@@ -12,6 +12,12 @@
   <body>
     <div id="modal-root"></div>
     <div id="root"></div>
+
+    <script>
+      const savedTheme = localStorage.getItem("theme") || "light";
+      document.body.className = savedTheme;
+    </script>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
-</html> 
+</html>

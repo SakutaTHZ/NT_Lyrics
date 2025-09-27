@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BiExpand } from "react-icons/bi";
+import CommitHistory from "./ComitHistory";
 
 const AnnouncementBoard = () => {
   const { t } = useTranslation();
@@ -27,12 +28,7 @@ const AnnouncementBoard = () => {
             {expand && (
               <span className="mb-1 h-1 border-b border-dashed border-gray-400" />
             )}
-            <span className="w-full overflow-hidden text-ellipsis leading-relaxed">
-              NT Lyric & Chord မှ ကြိုဆိုပါသည်။ လက်ရှိတွင်
-              သီချင်းများ ထည့်သွင်းနေဆဲဖြစ်ပါသည်။
-              App ၏ တခြားသောလုပ်ဆောင်ချက်များကိုလည်း
-              စမ်းသပ်ပြုပြင်လျှက်ရှိပြီး မကြာခင် အားလုံးအသုံးပြုနိုင်ပါမည်။
-            </span>
+            <CommitHistory />
           </p>
           <p
             className={`absolute ${

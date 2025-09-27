@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
 import { Link } from "react-router-dom";
 
-// Assets
-import cover from "../assets/images/cover_bg.png";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
 
 // Components
@@ -171,7 +169,7 @@ const Landing = () => {
       .map((lyric, i) => (
         <div
           key={lyric._id}
-          className="border-b border-gray-200 last:border-0 border-dashed flex"
+          className="border-b c-border last:border-0 border-dashed flex"
         >
           <span className="py-5 px-2 w-2 mr-2 font-semibold">{i + 1}.</span>
           <LyricsRow
@@ -207,22 +205,17 @@ const Landing = () => {
       {userLoaded && (
         <div className="w-screen h-screen overflow-hidden overflow-y-auto">
           {/* Hero Section */}
-          <div className=" relative hero h-2/6 md:h-2/5 w-screen overflow-hidden flex justify-center items-center px-6 rounded-b-lg">
-            <img
-              src={cover}
-              loading="lazy"
-              className="absolute inset-0 sm:h-full md:w-full object-cover object-top"
-              alt="Cover Background"
-            />
+          <div className=" relative hero customBackground h-2/6 md:h-2/5 w-screen overflow-hidden flex justify-center items-center px-6 rounded-b-lg">
+            
 
-            <div className="animate-down-start relative z-10 w-full md:w-96 p-4 bg-white rounded-md shadow-md flex flex-col gap-4 md:translate-y-12">
+            <div className="animate-down-start relative z-10 w-full md:w-96 p-4 c-bg rounded-md shadow-md flex flex-col gap-4 md:translate-y-12">
               <div className="flex items-center gap-4 md:hidden">
-                <p className="font-bold text-sm italic text-blue-500 text-nowrap">
+                <p className="font-bold text-sm italic c-text-primary text-nowrap">
                   NT Lyric & Chord
                   <span
                     className={`animate-down-start text-xs font-normal px-3 py-0.5 ml-2 rounded-full ${
                       user?.role === "premium-user"
-                        ? "bg-amber-200 text-gray-800"
+                        ? "c-premium-bg text-black"
                         : "hidden"
                     }`}
                   >
@@ -231,10 +224,10 @@ const Landing = () => {
                 </p>
                 <span className="w-full h-[1px] bg-blue-100 "></span>
               </div>
-              <p className="text-lg font-semibold">
+              <p className="text-lg font-semibold c-text">
                 သီချင်းများနဲ့ ပျော်ရွှင်နိုင်ကြပါစေ ...
               </p>
-              <div className="border border-gray-300 rounded-md p-2 flex items-center gap-2">
+              <div className="border c-border rounded-md p-2 flex items-center gap-2">
                 <input
                   type="text"
                   placeholder={t("searchSongs")}
@@ -244,10 +237,10 @@ const Landing = () => {
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 />
                 <button
-                  className="p-2 bg-blue-500 rounded-md cursor-pointer"
+                  className="p-2 c-reverse c-primary  rounded-md cursor-pointer"
                   onClick={handleSearch}
                 >
-                  <BiSearch size={20} className="text-white" />
+                  <BiSearch size={20} className="c-reverse" />
                 </button>
               </div>
             </div>
@@ -288,11 +281,11 @@ const Landing = () => {
 
           {/* Featured Lyrics */}
           <div className="relative p-4 pb-0 md:px-24">
-            <div className="flex justify-between border-b py-4 border-gray-200 border-dashed gradientTitle">
+            <div className="flex justify-between border-b py-4 c-border border-dashed gradientTitle">
               <p className="font-bold text-lg italic">{t("featureLyrics")}</p>
               <Link
                 to="/NT_Lyrics/lyrics"
-                className="border border-gray-300 px-2 py-1 rounded-md text-sm text-white bg-blue-500 hover:bg-blue-600"
+                className="border c-border px-2 py-1 rounded-md text-sm c-reverse c-primary hover:bg-blue-600"
               >
                 {t("seeAll")}
               </Link>
@@ -309,11 +302,11 @@ const Landing = () => {
 
           {/* Featured Songs */}
           <div className="relative p-4 pb-0 md:px-24">
-            <div className="flex justify-between border-b py-4 border-gray-200 border-dashed  gradientTitle">
+            <div className="flex justify-between border-b py-4 c-border border-dashed  gradientTitle">
               <p className="font-bold text-lg italic">{t("popularArtists")}</p>
               <Link
                 to="/NT_Lyrics/artists"
-                className="border border-gray-300 px-2 py-1 rounded-md text-sm text-white bg-blue-500  hover:bg-blue-600 "
+                className="border c-border px-2 py-1 rounded-md text-sm c-reverse c-primary hover:bg-blue-600 "
               >
                 {t("seeAll")}
               </Link>
@@ -327,7 +320,7 @@ const Landing = () => {
               {popularArtists.slice(0, 5).map((artist, i) => (
                 <div
                   key={artist.name}
-                  className="border-b border-gray-200 last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
+                  className="border-b c-border last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
                   onClick={() => {
                     //navigate(`/NT_Lyrics/artist/${artist._id}`);
                     setSelectedArtist(artist.id);

@@ -11,9 +11,13 @@ import { RadioButton } from "primereact/radiobutton";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
+import { useTheme } from "../hooks/ThemeContext";
+
 const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate }) => {
 
   const localStorageUser = JSON.parse(localStorage.getItem("user") || "{}");
+  
+  const { theme, setTheme } = useTheme();
 
   const { t, i18n } = useTranslation();
   const { vibratePattern } = useVibration();
@@ -122,7 +126,6 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
         })
       );
       localStorage.setItem("language", language);
-      localStorage.setItem("theme", theme);
 
       i18n.changeLanguage(language);
     } catch (error) {
@@ -134,8 +137,6 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
   const [language, setLanguage] = useState(
     localStorage.getItem("language") || "my"
   );
-
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   useEffect(() => {
     setUsername(user?.name || "");

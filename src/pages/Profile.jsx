@@ -353,7 +353,7 @@ const Profile = () => {
                 <span
                   className={`text-xs font-normal absolute px-2 py-0.5 -bottom-2.5 rounded-full ${
                     userRole === "premium-user"
-                      ? "bg-amber-200 text-gray-600"
+                      ? "c-premium-bg text-gray-600"
                       : "bg-gray-200 text-gray-600"
                   }`}
                 >
@@ -362,11 +362,11 @@ const Profile = () => {
               </div>
 
               <div className="relative profileInfo shadow-md text-center">
-                <p className="font-bold text-2xl text-white">{username}</p>
-                <p className="text-white">{email}</p>
+                <p className="font-bold text-2xl">{username}</p>
+                <p >{email}</p>
               </div>
 
-              <div className="relative w-full flex items-center justify-center md:gap-4 border p-2 rounded-full border-gray-300 bg-white">
+              <div className="relative w-full flex items-center justify-center md:gap-4 border p-2 rounded-full border-gray-300 bg-white c-reverse">
                 <div className="flex items-center gap-2">
                   <p className=" text-lg">Collected -</p>
                   <p className="pr-4">

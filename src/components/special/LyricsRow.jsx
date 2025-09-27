@@ -104,7 +104,7 @@ const LyricsRow = ({
                 <span key={index}>{line}</span>
               ))}
             </p>
-            {(access < 1 ||
+            {((access === 1) ||
               (messageType === "error" &&
                 messageText ===
                   t("youCanOnlyAddUpTo20SongsToEachCollection"))) && (
@@ -144,7 +144,6 @@ const LyricsRow = ({
         animate={inView ? { scale: 1, opacity: 1, y: 0 } : false} // <- this is key
         transition={{ duration: 0.35, ease: "easeOut" }}
       >
-
         {/* Invisible image just for checking if lyrics is ready */}
         <img
           src={lyric.lyricsPhoto}

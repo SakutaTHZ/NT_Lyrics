@@ -68,7 +68,7 @@ const Chords = ({ chordKey, onClose }) => {
                 {/* Display chord variants if one is active */}
                 <div>
                   {activeChord && chords[activeChord] && (
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-8 gap-4">
                       {chords[activeChord].map((img) => (
                         <div key={img.name} className="text-center">
                           <p className="text-sm text-left">{img.name}</p>
