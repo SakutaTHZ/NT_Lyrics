@@ -28,7 +28,9 @@ const AnnouncementBoard = () => {
             {expand && (
               <span className="mb-1 h-1 border-b border-dashed border-gray-400" />
             )}
-            <CommitHistory />
+            <p className="w-full overflow-hidden text-ellipsis leading-relaxed">
+              <CommitHistory />
+            </p>
           </p>
           <p
             className={`absolute ${

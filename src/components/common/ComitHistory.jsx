@@ -23,8 +23,8 @@ export default function CommitHistory() {
   }
 
   return (
-    <p>
-      {latestCommit.commit.message}
-    </p>
+    <>
+      <b>{latestCommit.commit.message}</b>{latestCommit.commit.description ? ` - ${latestCommit.commit.description}` : ""}
+    </>
   );
 }
