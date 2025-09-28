@@ -1,4 +1,3 @@
-import { Dialog } from "primereact/dialog";
 import PropTypes from "prop-types";
 import { useState, useCallback, useEffect } from "react";
 import {
@@ -8,14 +7,25 @@ import {
   lookForGroups,
 } from "../../assets/util/api";
 import { Checkbox } from "primereact/checkbox";
-import { CgAdd } from "react-icons/cg";
+import { CgAdd, CgClose } from "react-icons/cg";
 
 import { useTranslation } from "react-i18next";
 import { useVibration } from "../hooks/useVibration";
+import { AnimatePresence, motion } from "framer-motion";
 
 const AddToCollectionBox = ({ id, addToCollection, close }) => {
   const { vibratePattern } = useVibration();
   const { t } = useTranslation();
+
+  const [isVisible, setIsVisible] = useState(true);
+
+  const handleClose = () => {
+    setIsVisible(false);
+    // after animation duration, call the parent onClose
+    setTimeout(() => {
+      close();
+    }, 300); // match your transition duration
+  };
 
   const token = localStorage.getItem("token");
   const [collection, setCollection] = useState([]);
@@ -149,6 +159,20 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
     }
   };
 
+  useEffect(() => {
+  if (addToCollection && isVisible) {
+    // lock scroll
+    document.body.style.overflow = "hidden";
+  } else {
+    // restore scroll
+    document.body.style.overflow = "";
+  }
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [addToCollection, isVisible]);
+
   const sortedCollections = [...collection].sort((a, b) => {
     if (a.group.toLowerCase() === "default") return -1;
     if (b.group.toLowerCase() === "default") return 1;
@@ -161,92 +185,124 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
     [...segmenter.segment(str)].map((seg) => seg.segment);
 
   return (
-    <Dialog
-      header={t("addToCollection")}
-      visible={addToCollection}
-      style={{ width: "90vw", maxWidth: "400px" }}
-      onHide={close}
-      position="bottom"
-      onClick={(e) => e.stopPropagation()}
-      modal
-      pt={{
-        header: {
-          className: "customHeader h-fit border-none flex items-center",
-        },
-        content: { className: "customContent p-4" },
-      }}
-    >
-      <div className="flex flex-col gap-3">
-        {showMessage && (
-          <small
-            className={`flex justify-between  items-center p-2 rounded-md ${
-              messageType === "success"
-                ? "bg-green-200 text-green-600"
-                : "bg-red-200 text-red-600"
-            }`}
-          >
-            {message}
-          </small>
-        )}
-        <div className="flex flex-col items-start justify-between gap-2  bg-blue-50 border border-gray-100 rounded-md p-2">
-          <p className="font-semibold">{t("createNewCollection")}</p>
-          <div className="flex items-center justify-between gap-2 w-full">
-            <input
-              type="text"
-              placeholder="Enter New Collection"
-              className="border border-gray-200 p-2 rounded w-full bg-white"
-              value={newCollectionName}
-              onChange={(e) => {
-                const graphemes = toGraphemes(e.target.value);
-
-                if (graphemes.length > 20) {
-                  handleMessageTimer(
-                    "You’ve reached the 20-character limit.",
-                    "warning"
-                  );
-                }
-
-                // Always set the truncated string
-                setNewCollectionName(graphemes.slice(0, 20).join(""));
-              }}
+    <>
+      <AnimatePresence>
+        {addToCollection && isVisible && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              key="overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black z-[1999]"
+              onClick={handleClose} // click outside closes
             />
-            <button
-              onClick={handleAddNewCollection}
-              className="p-2 bg-blue-500 text-white rounded"
+
+            {/* Modal */}
+            <motion.div
+              key="modal"
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 100 }}
+              transition={{ type: "spring", damping: 20, stiffness: 300 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+           bg-white rounded-xl shadow-lg p-4 w-[90vw] max-w-md z-[2000]"
             >
-              <CgAdd size={24} />
-            </button>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-3 max-h-60 overflow-y-auto p-2">
-          <p className="font-semibold pb-4 border-b border-dashed border-gray-300">
-            {t("collections")}
-          </p>
-          {!sortedCollections.length ? (
-            <p className="text-sm text-gray-400">Loading...</p>
-          ) : (
-            sortedCollections.map((col, i) => (
-              <div key={i} className="flex items-center justify-between">
-                {i + 1}. {col.group}
-                <Checkbox
-                  checked={selectedCollections.includes(col.group)}
-                  onChange={() => handleCheckboxChange(col.group)}
-                  className="checkbox-fade"
-                />
+              {/* Header */}
+              <div className="flex items-center justify-between mb-4 border-b border-dashed c-border pb-2">
+                <h2 className="text-lg font-bold">{t("addToCollection")}</h2>
+                <button
+                  onClick={() => {
+                    vibratePattern("short");
+                    handleClose();
+                  }}
+                >
+                  <CgClose size={24} />
+                </button>
               </div>
-            ))
-          )}
-        </div>
 
-        <button
-          onClick={() => handleCollectionsEdit()}
-          className="mt-2 p-2 bg-blue-500 text-white rounded"
-        >
-          Save Selections
-        </button>
-      </div>
-    </Dialog>
+              {/* Body */}
+              <div className="flex flex-col gap-3">
+                {showMessage && (
+                  <small
+                    className={`flex justify-between items-center p-2 rounded-md ${
+                      messageType === "success"
+                        ? "bg-green-200 text-green-600"
+                        : "bg-red-200 text-red-600"
+                    }`}
+                  >
+                    {message}
+                  </small>
+                )}
+
+                {/* Create new collection */}
+                <div className="flex flex-col items-start gap-2 bg-blue-50 border border-gray-100 rounded-md p-2">
+                  <p className="font-semibold">{t("createNewCollection")}</p>
+                  <div className="flex items-center gap-2 w-full">
+                    <input
+                      type="text"
+                      placeholder="Enter New Collection"
+                      className="border border-gray-200 p-2 rounded w-full bg-white"
+                      value={newCollectionName}
+                      onChange={(e) => {
+                        const graphemes = toGraphemes(e.target.value);
+                        if (graphemes.length > 20) {
+                          handleMessageTimer(
+                            "You’ve reached the 20-character limit.",
+                            "warning"
+                          );
+                        }
+                        setNewCollectionName(graphemes.slice(0, 20).join(""));
+                      }}
+                    />
+                    <button
+                      onClick={handleAddNewCollection}
+                      className="p-2 bg-blue-500 text-white rounded"
+                    >
+                      <CgAdd size={24} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Collections list */}
+                <div className="flex flex-col gap-3 max-h-60 overflow-y-auto p-2">
+                  <p className="font-semibold pb-2 border-b border-dashed border-gray-300">
+                    {t("collections")}
+                  </p>
+                  {!sortedCollections.length ? (
+                    <p className="text-sm text-gray-400">Loading...</p>
+                  ) : (
+                    sortedCollections.map((col, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center justify-between"
+                      >
+                        {i + 1}. {col.group}
+                        <Checkbox
+                          checked={selectedCollections.includes(col.group)}
+                          onChange={() => handleCheckboxChange(col.group)}
+                          className="checkbox-fade"
+                        />
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Save button */}
+                <button
+                  onClick={handleCollectionsEdit}
+                  className="mt-2 p-2 bg-blue-500 text-white rounded"
+                >
+                  Save Selections
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

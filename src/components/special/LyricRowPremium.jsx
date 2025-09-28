@@ -156,12 +156,16 @@ const LyricRowPremium = ({
         </div>
 
         {addToCollection && (
-          
-          <AddToCollectionBox
-            id={id}
-            addToCollection={addToCollection}
-            close={() => setAddToCollection(false)}
-          />
+          <ModalContainer
+            isOpen={addToCollection}
+            onClose={() => setAddToCollection(false)}
+          >
+            <AddToCollectionBox
+              id={id}
+              addToCollection={addToCollection}
+              close={() => setAddToCollection(false)}
+            />
+          </ModalContainer>
         )}
       </motion.div>
 

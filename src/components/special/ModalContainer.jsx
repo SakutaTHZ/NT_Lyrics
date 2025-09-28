@@ -35,7 +35,7 @@ const ModalContainer = ({ isOpen, onClose, children }) => {
           className="fixed modal inset-0 z-[100] flex items-center justify-center container w-screen h-screen"
         >
           {/* backdrop */}
-          <div className="absolute inset-0 bg-black/50 w-screen" onClick={onClose} />
+          <div className="absolute inset-0 bg-black/20 w-screen" onClick={onClose} />
 
           {/* modal box */}
           <motion.div
@@ -43,7 +43,7 @@ const ModalContainer = ({ isOpen, onClose, children }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="bg-white rounded-lg absolute inset-0 z-[101] shadow-xl w-screen"
+            className=" rounded-lg absolute inset-0 z-[101] shadow-xl w-screen"
           >
             {children}
           </motion.div>
