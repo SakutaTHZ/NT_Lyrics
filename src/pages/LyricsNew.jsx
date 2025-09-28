@@ -158,19 +158,19 @@ const Lyrics = () => {
       <div className="w-screen h-screen">
         <div className="relative flex flex-col w-screen min-h-screen pt-4 md:pt-16">
           <div className="flex justify-between px-4 md:px-24">
-            <p className="font-bold text-xl italic text-blue-500 pb-2">
+            <p className="font-bold text-xl italic c-text-primary pb-2">
               {t("songLyrics")}
             </p>
           </div>
 
           {/* Search */}
-          <div className="py-2 px-4 md:px-24 sticky md:top-12 top-0 bg-white z-10">
+          <div className="py-2 px-4 md:px-24 sticky md:top-12 top-0 c-bg z-10">
             <input
               type="text"
               placeholder={t("searchSongs")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border c-border rounded"
             />
           </div>
 
@@ -206,7 +206,7 @@ const Lyrics = () => {
                   return (
                     <div
                       key={lyric._id}
-                      className="border-b border-gray-200 last:border-0 border-dashed"
+                      className="border-b c-border last:border-0 border-dashed"
                     >
                       {user?.role === "premium-user" ? (
                         <LyricsRowPremium

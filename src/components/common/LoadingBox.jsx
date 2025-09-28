@@ -17,10 +17,10 @@ const LoadingBox = () => {
       </div> */}
 
       <div className="relative loading-box w-full min-h-16  rounded-md shadow-[0_0_20px_rgba(0,0,0,0.1)] p-2 flex gap-4">
-        <div className="imageContainer w-8 h-full rounded-sm bg-gradient-to-br from-gray-200 to-gray-50 loading-animation"></div>
+        <div className="imageContainer w-8 h-full rounded-sm c-loading-box-gradient"></div>
         <div className="textContainer w-full h-full flex flex-col gap-2">
-          <div className="titleContainer h-full rounded-sm w-32 bg-gradient-to-br from-gray-200 to-gray-50 loading-animation"></div>
-          <div className="nameContainer h-full rounded-sm w-24 bg-gradient-to-br from-gray-200 to-gray-50 loading-animation"></div>
+          <div className="titleContainer h-full rounded-sm w-32 c-loading-box-gradient"></div>
+          <div className="nameContainer h-full rounded-sm w-24 c-loading-box-gradient"></div>
         </div>
 
         <div className="hidden items-center gap-1 font-semibold absolute top-0 left-0 bg-transparent rounded-br-2xl p-3 py-1 shadow-md text-gray-800">

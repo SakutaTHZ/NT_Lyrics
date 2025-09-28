@@ -28,7 +28,7 @@ const MessagePopup = ({
       <div className="animate-down fixed top-4 z-[1000] water-drop w-full h-12 rounded-full py-4 flex items-center justify-center" onClick={closePopup}>
         <div className={`waterDrop w-8 h-8  rounded-full shadow-lg mx-auto border ${
             message_type === "error"
-              ? "bg-red-200 border-red-200"
+              ? "c-error-box"
               : message_type === "alert"
               ? "bg-yellow-200 border-yellow-200"
               : message_type === "success"
@@ -39,7 +39,7 @@ const MessagePopup = ({
         <div
           className={`expandBox absolute w-[90vw] md:w-[400px] top-0 flex justify-center items-start rounded-2xl border p-2 px-4 shadow-lg gap-4 md:gap-2 ${custom_class} ${
             message_type === "error"
-              ? "bg-gradient-to-br from-white to-red-50 border-red-200"
+              ? "c-error-box"
               : message_type === "alert"
               ? "bg-gradient-to-br from-white to-yellow-50 border-yellow-200"
               : message_type === "success"
@@ -49,7 +49,7 @@ const MessagePopup = ({
         >
           <div className="icon h-full flex items-center justify-center">
             {message_type === "error" ? (
-              <BiErrorCircle className="flex-shrink-0 text-red-500" size={32} />
+              <BiErrorCircle className="flex-shrink-0" size={32} />
             ) : message_type === "alert" ? (
               <FiAlertCircle
                 className="flex-shrink-0 text-yellow-500"
@@ -67,7 +67,17 @@ const MessagePopup = ({
               />
             )}
           </div>
-          <div className="message_text flex-1">{children}</div>
+          <div className="message_text flex-1">
+            {message_type === "error" ? (
+              <div>{children}</div>
+            ) : message_type === "alert" ? (
+              <div className=" text-yellow-500">{children}</div>
+            ) : message_type === "success" ? (
+              <div className=" text-green-500">{children}</div>
+            ) : (
+              <div className=" text-blue-400">{children}</div>
+            )}
+          </div>
         </div>
       </div>
     </>,

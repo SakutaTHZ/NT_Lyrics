@@ -19,7 +19,7 @@ export default function CommitHistory() {
   }, []);
 
   if (!latestCommit) {
-    return <p className="mx-4">Loading latest commit...</p>;
+    return <span className="mx-4">Loading latest commit...</span>;
   }
 
   return (

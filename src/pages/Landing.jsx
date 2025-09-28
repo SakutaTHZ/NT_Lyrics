@@ -95,7 +95,6 @@ const Landing = () => {
         const userData = await validateUser(id, token);
         if (!userData) throw new Error("No user returned");
         setUser(userData.user);
-        console.log("User data:", userData);
         // Check for user status and show message if needed
         if (userData.user.status === 1) {
           setMessageText(t("youAreNowAPremiumUser"));
@@ -269,7 +268,7 @@ const Landing = () => {
                     Support us by buying the Premium version
                   </p>
                   <button
-                    className="border border-white px-4 py-2 rounded-md text-sm font-semibold bg-white text-blue-500 hover:bg-blue-200 self-center z-10"
+                    className="border border-white px-4 py-2 rounded-md text-sm font-semibold bg-white text-blue-500 self-center z-10"
                     onClick={() => navigate("/NT_Lyrics/premium")}
                   >
                     {t("upgradeNow")}
@@ -325,7 +324,6 @@ const Landing = () => {
                     //navigate(`/NT_Lyrics/artist/${artist._id}`);
                     setSelectedArtist(artist.id);
                     setShowArtistDetails(true);
-                    console.log("Selected artist ID:", artist.id);
                   }}
                 >
                   <span className="py-5 w-2 font-semibold">{i + 1}.</span>

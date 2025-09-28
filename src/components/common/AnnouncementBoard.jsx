@@ -10,7 +10,7 @@ const AnnouncementBoard = () => {
     <>
       <div className="w-full relative p-0 md:px-0">
         <div
-          className={`flex transition-all duration-300 relative c-card-bg rounded-md p-2 c-text text-md md:text-base border border-dashed c-border ${
+          className={`flex transition-all duration-300 relative c-announcement-bg rounded-md p-2 c-text text-md md:text-base border border-dashed c-border ${
             expand ? "p-4" : "pr-8"
           }`}
           onClick={() => setExpand(!expand)}
@@ -28,9 +28,9 @@ const AnnouncementBoard = () => {
             {expand && (
               <span className="mb-1 h-1 border-b border-dashed border-gray-400" />
             )}
-            <p className="w-full overflow-hidden text-ellipsis leading-relaxed">
+            <span className="w-full overflow-hidden text-ellipsis leading-relaxed">
               <CommitHistory />
-            </p>
+            </span>
           </p>
           <p
             className={`absolute ${

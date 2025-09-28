@@ -109,7 +109,7 @@ const LyricsRow = ({
                 messageText ===
                   t("youCanOnlyAddUpTo20SongsToEachCollection"))) && (
               <button
-                className="rotatingBorder w-full bg-white shadow-sm text-sm line-clamp-3 hover:bg-gray-50 p-2 rounded-md text-left font-medium"
+                className="rotatingBorder w-full c-bg shadow-sm text-sm line-clamp-3 hover:bg-gray-50 p-2 rounded-md text-left font-medium"
                 onClick={() => navigate("/NT_Lyrics/premium")}
               >
                 {t("upgraedToGetTheseExclusiveFeaturesAndBenifits")}

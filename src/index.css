@@ -16,6 +16,7 @@
 
   --color-premium-yellow: 255, 193, 7; /* amber-100 - For premium features */
   --color-premium-yellow-light: 255, 243, 205; /* amber-200 - Lighter shade for hover effects */
+  --color-light-blue-accent: 191, 219, 255; /* Blue-50 - For lighter accents */
 
   /* Specific Components */
   --loading-shine-alpha: 0.2; /* Opacity of the loading animation shine */
@@ -26,6 +27,10 @@
   --mesh-color-2: 96, 165, 250; /* blue-400 */
   --mesh-color-3: 59, 130, 246; /* blue-500 */
 
+  /* Grey Gradient for Skeleton Loader with transparency */
+  --skeleton-gradient-start: 243, 244, 246, 0.5; /* gray-100 */
+  --skeleton-gradient-end: 229, 231, 235, 0.5; /* gray-50 */
+
   /* Rotating Border Colors (Fixed Rainbow for flair) */
   --rotating-border-c1: 255, 0, 0, 0.3;
   --rotating-border-c2: 0, 255, 0, 0.3;
@@ -33,6 +38,29 @@
   --rotating-border-c4: 255, 0, 255, 0.3;
   --rotating-border-c5: 0, 255, 255, 0.3;
   --rotating-border-c6: 255, 255, 0, 0.3;
+
+  /* Message Colors */
+  /* LIGHT MODE MESSAGE COLORS */
+  
+  /* Error (Red) */
+  --color-error-strong: 239, 68, 68; /* Red-500: Text/Icon */
+  --color-error-medium: 254, 202, 202; /* Red-200: Border/Water Drop */
+  --color-error-tint: 254, 242, 242; /* Red-50: Light Gradient End */
+
+  /* Alert (Yellow/Amber) */
+  --color-alert-strong: 245, 158, 11; /* Amber-500: Text/Icon */
+  --color-alert-medium: 253, 230, 138; /* Yellow-200: Border/Water Drop */
+  --color-alert-tint: 255, 251, 235; /* Yellow-50: Light Gradient End */
+
+  /* Success (Green) */
+  --color-success-strong: 34, 197, 94; /* Green-500: Text/Icon */
+  --color-success-medium: 187, 247, 208; /* Green-200: Border/Water Drop */
+  --color-success-tint: 236, 253, 245; /* Green-50: Light Gradient End */
+
+  /* Info (Blue/Default) */
+  --color-info-strong: 96, 165, 250; /* Blue-400: Text/Icon */
+  --color-info-medium: 191, 219, 254; /* Blue-200: Border/Water Drop */
+  --color-info-tint: 239, 246, 255; /* Blue-50: Light Gradient End */
 }
 
 /* -------------------------------------------------------------------------- */
@@ -54,10 +82,34 @@ body.dark {
   --loading-shine-alpha: 0.1;
   --role-color: 147, 197, 253; /* Blue-300 for dark mode accent */
 
+  /* Grey Gradient for Skeleton Loader with transparency */
+  --skeleton-gradient-start: 243, 244, 246, 0.1; /* gray-100 */
+  --skeleton-gradient-end: 229, 231, 235, 0.1; /* gray-50 */
+
   /* Mesh Background - Optional change for dark theme */
   --mesh-color-1: 30, 55, 80;
   --mesh-color-2: 31, 41, 55;
   --mesh-color-3: 17, 24, 39;
+
+  /* Dark Error */
+  --color-error-strong: 252, 165, 165; /* Red-300 */
+  --color-error-medium: 153, 27, 27; /* Red-800 */
+  --color-error-tint: 43, 8, 8; /* Dark Red-950 */
+
+  /* Dark Alert */
+  --color-alert-strong: 251, 191, 36; /* Amber-400 */
+  --color-alert-medium: 113, 63, 18; /* Amber-900 */
+  --color-alert-tint: 38, 24, 6; /* Dark Amber-950 */
+
+  /* Dark Success */
+  --color-success-strong: 134, 239, 172; /* Green-300 */
+  --color-success-medium: 16, 185, 129; /* Green-500 */
+  --color-success-tint: 4, 15, 8; /* Dark Green-950 */
+
+  /* Dark Info */
+  --color-info-strong: 147, 197, 253; /* Blue-300 */
+  --color-info-medium: 29, 78, 216; /* Blue-700 */
+  --color-info-tint: 6, 17, 34; /* Dark Blue-950 */
 }
 
 
@@ -580,6 +632,10 @@ img {
   color: rgb(var(--color-primary-accent)) !important;
 }
 
+.c-text-accent{
+  color: rgb(var(--color-primary-accent)) !important;
+}
+
 .c-premium-bg{
   background: linear-gradient(90deg, rgb(var(--color-premium-yellow)), rgb(var(--color-premium-yellow-light))
   );
@@ -590,5 +646,24 @@ img {
 }
 
 .c-linear-bg{
-  background: linear-gradient(to bottom right, rgb(var(--color-primary-accent)), rgb(var(--color-bg-body))) !important;
+  background: linear-gradient(to bottom right, rgb(var(--color-primary-accent)), rgb(var(--color-fade-overlay))) !important;
+}
+
+.c-loading-box-gradient{
+  background: linear-gradient(90deg, rgba(var(--skeleton-gradient-start)) 0%, rgba(var(--skeleton-gradient-end)) 50%, rgba(var(--skeleton-gradient-start)) 100%);
+  animation: loadingGradient 1.5s infinite;
+}
+
+.c-announcement-bg{
+  background-color: rgb(var(--color-light-blue-accent)) !important;
+}
+
+body.dark .c-announcement-bg{
+  background-color: rgb(var(--color-bg-card)) !important;
+}
+
+.c-error-box{
+  background: rgb(var(--color-error-tint)) !important;
+  color: rgb(var(--color-error-strong)) !important;
+  border: 1px solid rgb(var(--color-error-medium)) !important;
 }
