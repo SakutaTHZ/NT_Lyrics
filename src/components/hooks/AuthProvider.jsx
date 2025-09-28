@@ -48,7 +48,6 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("token", res.token);
         
         localStorage.setItem("language", "my");
-        localStorage.setItem("theme", "light");
         
         if(res.user.role === "admin"){
           navigate("/NT_Lyrics/admin");

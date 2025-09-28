@@ -55,8 +55,8 @@ body.dark {
   --role-color: 147, 197, 253; /* Blue-300 for dark mode accent */
 
   /* Mesh Background - Optional change for dark theme */
-  --mesh-color-1: 31, 41, 55;
-  --mesh-color-2: 55, 65, 81;
+  --mesh-color-1: 30, 55, 80;
+  --mesh-color-2: 31, 41, 55;
   --mesh-color-3: 17, 24, 39;
 }
 
@@ -583,4 +583,12 @@ img {
 .c-premium-bg{
   background: linear-gradient(90deg, rgb(var(--color-premium-yellow)), rgb(var(--color-premium-yellow-light))
   );
+}
+
+.c-card-bg{
+  background-color: rgb(var(--color-bg-card)) !important;
+}
+
+.c-linear-bg{
+  background: linear-gradient(to bottom right, rgb(var(--color-primary-accent)), rgb(var(--color-bg-body))) !important;
 }

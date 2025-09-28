@@ -38,7 +38,6 @@ const OAuthSuccess = () => {
         localStorage.setItem("user", JSON.stringify(userDetails));
         
         localStorage.setItem("language", "my");
-        localStorage.setItem("theme", "light");
 
         // Update context state
         setToken(newToken);

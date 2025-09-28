@@ -253,7 +253,7 @@ const Landing = () => {
             {/* Support Us */}
             {user?.role === "free-user" && (
               <div className="relative w-full">
-                <div className="relative flex justify-between border py-4 border-gray-200 rounded-md px-4 bg-linear-to-br from-blue-400 to-blue-200 mx-auto overflow-hidden">
+                <div className="relative flex justify-between border py-4 c-border rounded-md px-4 c-linear-bg mx-auto overflow-hidden">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 1440 320"

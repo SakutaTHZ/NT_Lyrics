@@ -10,7 +10,7 @@ const AnnouncementBoard = () => {
     <>
       <div className="w-full relative p-0 md:px-0">
         <div
-          className={`flex transition-all duration-300 relative bg-blue-50 rounded-md p-2 text-blue-950 text-md md:text-base border border-dashed border-blue-200 ${
+          className={`flex transition-all duration-300 relative c-card-bg rounded-md p-2 c-text text-md md:text-base border border-dashed c-border ${
             expand ? "p-4" : "pr-8"
           }`}
           onClick={() => setExpand(!expand)}
