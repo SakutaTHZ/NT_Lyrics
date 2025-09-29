@@ -163,7 +163,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
       <AnimatePresence>
         {isVisible && userLoaded && (
           <motion.div
-            className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto"
+            className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto pb-8"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
@@ -248,7 +248,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                       className="w-full h-auto object-cover"
                     />
                   ) : (
-                    <div className="flex p-4 w-full md:w-122 bg-red-100 text-red-700 rounded border border-red-300 text-left">
+                    <div className="flex p-4 w-full md:w-122  c-error-box rounded border border-red-300 text-left">
                       🎶 The lyric image hit a wrong note and vanished! <br />
                       Our backstage crew is tuning things up.
                     </div>
