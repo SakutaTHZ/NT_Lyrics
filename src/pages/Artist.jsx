@@ -25,13 +25,13 @@ const Artist = ({ artistId, onClose }) => {
 
   const [isVisible, setIsVisible] = useState(true);
 
-const handleClose = () => {
-  setIsVisible(false);
-  // after animation duration, call the parent onClose
-  setTimeout(() => {
-    onClose();
-  }, 300); // match your transition duration
-};
+  const handleClose = () => {
+    setIsVisible(false);
+    // after animation duration, call the parent onClose
+    setTimeout(() => {
+      onClose();
+    }, 300); // match your transition duration
+  };
 
   const [artist, setArtist] = useState();
   const [lyrics, setLyrics] = useState([]);
@@ -206,7 +206,7 @@ const handleClose = () => {
       <AnimatePresence>
         {isVisible && artistId && (
           <motion.div
-            className="w-screen h-screen absolute inset-0 z-20 bg-white overflow-hidden overflow-y-auto"
+            className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
@@ -255,7 +255,7 @@ const handleClose = () => {
               </div>
             </div>
 
-            <div className="flex justify-between gap-2 py-4 px-4 md:px-24 sticky top-0 md:top-12 bg-white  z-10">
+            <div className="flex justify-between gap-2 py-4 px-4 md:px-24 sticky top-0 md:top-12 c-bg z-10">
               <AutoComplete
                 value={searchTerm}
                 suggestions={items}
@@ -265,8 +265,8 @@ const handleClose = () => {
                 placeholder="သီချင်းရှာကြမယ်"
                 pt={{
                   root: "lyrics-searchBox border-gray-300 rounded-md w-full relative",
-                  input: "text-gray-900",
-                  panel: "shadow-lg border border-gray-200 bg-white",
+                  input: "text-gray-900 c-bg",
+                  panel: "shadow-lg border c-border",
                   item: "px-4 py-2 hover:bg-gray-200 cursor-pointer",
                 }}
               />

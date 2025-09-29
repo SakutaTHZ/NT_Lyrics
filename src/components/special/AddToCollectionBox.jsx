@@ -208,7 +208,7 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
               exit={{ opacity: 0, y: 100 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
               className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-           bg-white rounded-xl shadow-lg p-4 w-[90vw] max-w-md z-[2000]"
+           c-bg rounded-xl shadow-lg p-4 w-[90vw] max-w-md z-[2000]"
             >
               {/* Header */}
               <div className="flex items-center justify-between mb-4 border-b border-dashed c-border pb-2">
@@ -238,13 +238,13 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
                 )}
 
                 {/* Create new collection */}
-                <div className="flex flex-col items-start gap-2 bg-blue-50 border border-gray-100 rounded-md p-2">
+                <div className="flex flex-col items-start gap-2 c-bg-2 border c-border rounded-md p-2">
                   <p className="font-semibold">{t("createNewCollection")}</p>
                   <div className="flex items-center gap-2 w-full">
                     <input
                       type="text"
                       placeholder="Enter New Collection"
-                      className="border border-gray-200 p-2 rounded w-full bg-white"
+                      className="border c-border p-2 rounded w-full c-bg"
                       value={newCollectionName}
                       onChange={(e) => {
                         const graphemes = toGraphemes(e.target.value);

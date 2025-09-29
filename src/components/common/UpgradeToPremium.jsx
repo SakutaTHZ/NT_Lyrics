@@ -268,7 +268,7 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: "100%", opacity: 0 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="bg-white p-6 rounded-lg shadow-lg relative z-[101] w-full max-w-md"
+              className="c-bg p-6 rounded-lg shadow-lg relative z-[101] w-full max-w-md"
             >
               <div className="header flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">

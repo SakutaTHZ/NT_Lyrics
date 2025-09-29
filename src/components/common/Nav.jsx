@@ -78,7 +78,7 @@ const Nav = () => {
     <>
       {/* Desktop Nav */}
       {!isMobile ? (
-        <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-20 bg-white z-[1000]">
+        <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-20 meshBg z-[1000]">
           <button
             onClick={() => handleNav("/")}
             className="font-bold text-lg italic text-left w-full overflow-hidden text-ellipsis whitespace-nowrap"
@@ -136,7 +136,7 @@ const Nav = () => {
           </div>
 
           {isHamburgerOpen && (
-            <div className="animate-down flex flex-col absolute top-12 shadow-sm w-full left-0 z-[99] bg-white">
+            <div className="animate-down flex flex-col absolute top-12 shadow-sm w-full left-0 z-[99] c-bg">
               {[...NAV_LINKS].map(({ path, label, icon }) => (
                 <button
                   key={path}

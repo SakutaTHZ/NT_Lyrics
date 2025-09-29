@@ -26,7 +26,7 @@ const About = () => {
               <h2 className="font-bold text-2xl text-white italic mb-2 flex gap-2 items-center py-4">
                 {t("aboutNtLyrics")}
               </h2>
-              <p className="leading-relaxed bg-white p-4 rounded-md text-md">
+              <p className="leading-relaxed c-bg p-4 rounded-md text-md">
                 <strong>NT Lyric n Chord</strong> <span>{t("ntlyricsDescription").split("\n").map((line, i) => <span key={i}>{line}<br/></span>)}</span>
               </p>
             </section>

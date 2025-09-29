@@ -21,7 +21,7 @@ const Nav = () => {
 
   return (
     <>
-      <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-24 bg-white z-[100]">
+      <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-24 meshBg z-[100]">
         <Link to="/NT_Lyrics/admin" className="font-bold text-lg italic">
           NT Lyrics & Chords <span className="text-blue-500">[ Admin ]</span>
         </Link>
@@ -45,7 +45,7 @@ const Nav = () => {
         </div>
 
         {isHamburgerOpen && (
-          <button className="animate-down flex flex-col absolute top-12 shadow-sm w-full left-0 z-[99] bg-white" onClick={logOut}>
+          <button className="animate-down flex flex-col absolute top-12 shadow-sm w-full left-0 z-[99] c-bg" onClick={logOut}>
               <a
                 className={`${mobileNavStyle} border-transparent ${isActive(
                   "/NT_Lyrics/login"

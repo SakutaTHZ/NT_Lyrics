@@ -104,16 +104,16 @@ const Artists = () => {
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
         <div className="relative flex flex-col w-screen min-h-screen pt-4 md:pt-16">
           <div className="flex flex-col gap-2 px-4 md:px-24">
-            <p className="font-bold text-xl italic flex gap-2 items-center md:gap-4 text-blue-500">
+            <p className="font-bold text-xl italic flex gap-2 items-center md:gap-4 c-text-primary">
               {t("artistsList")}
             </p>
 
             {/* Search */}
-            <div className="w-full py-2 sticky md:top-12 top-0 bg-white z-10">
+            <div className="w-full py-2 sticky md:top-12 top-0 c-bg z-10">
               <input
                 type="text"
                 placeholder={t("searchforArtists")}
-                className="border border-gray-300 rounded-md px-3 py-2 w-full h-[42px]"
+                className="border c-border rounded-md px-3 py-2 w-full h-[42px]"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -126,7 +126,7 @@ const Artists = () => {
               return (
                 <div
                   key={artist._id || idx}
-                  className="border-b md:border border-gray-200 last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
+                  className="border-b md:border c-border last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
                   onClick={() => {
                     //navigate(`/NT_Lyrics/artist/${artist._id}`);
                     setSelectedArtist(artist._id);
