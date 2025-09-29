@@ -209,7 +209,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                 className="w-full md:w-122 flex gap-2 items-center"
                 onClick={handleClose}
               >
-                <BiArrowBack size={20} /> 
+                <BiArrowBack size={20} />
               </button>
 
               {/* Image Section */}
@@ -277,7 +277,10 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                     <p className="text-lg font-semibold flex items-center">
                       {lyric.title}{" "}
                     </p>
-                    <button className="bg-blue-500 p-2 rounded-full hover:bg-blue-600 text-white flex items-center justify-center" onClick={() => setShowChords(true)}>
+                    <button
+                      className="bg-blue-500 p-2 rounded-full hover:bg-blue-600 text-white flex items-center justify-center"
+                      onClick={() => setShowChords(true)}
+                    >
                       <BiMusic size={18} />
                     </button>
                   </div>
@@ -305,9 +308,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                     {/* Artist name */}
                     {lyric.singers.length > 0 && (
                       <div className="flex items-start gap-2">
-                        <p
-                          className={`text-sm   min-w-16 max-w-24 p-1`}
-                        >
+                        <p className={`text-sm   min-w-16 max-w-24 p-1`}>
                           {t("singer")}:
                         </p>
 
@@ -340,9 +341,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                     {/* Feature Artist name */}
                     {lyric.featureArtists.length > 0 && (
                       <div className="flex flex-wrap items-start gap-2">
-                        <p
-                          className={`text-sm  min-w-16 max-w-24 p-1`}
-                        >
+                        <p className={`text-sm  min-w-16 max-w-24 p-1`}>
                           {t("featuring")}:
                         </p>
 
@@ -375,9 +374,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                     {/* Writer name */}
                     {lyric.writers.length > 0 && (
                       <div className="flex items-start gap-2">
-                        <p
-                          className={`text-sm  min-w-16 max-w-24 p-1`}
-                        >
+                        <p className={`text-sm  min-w-16 max-w-24 p-1`}>
                           {t("wrtier")}:
                         </p>
                         <div className="w-1/2 flex flex-wrap gap-2">
@@ -469,6 +466,9 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                 id={id}
                 addToCollection={addToCollection}
                 close={() => setAddToCollection(false)}
+                onCollectionsUpdated={(updatedCollections) => {
+                  setIsInCollection(updatedCollections.length > 0);
+                }}
               />
             )}
           </motion.div>
