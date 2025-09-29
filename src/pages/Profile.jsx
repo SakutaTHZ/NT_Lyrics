@@ -212,7 +212,7 @@ const Profile = () => {
         setLoadingLyrics(false);
       }
     },
-    []
+    [userRole] // FIX: Added userRole to dependencies
   );
 
   useEffect(() => {
@@ -235,6 +235,7 @@ const Profile = () => {
   }, [collection, getLyricsByGroup]);
 
   const handleGroupChange = (group) => {
+    console.log("Group changed to:", group);
     if (!group || group === selectedGroup) return;
     setSelectedGroup(group);
     getLyricsByGroup(group, 1, true);
@@ -341,7 +342,7 @@ const Profile = () => {
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
         <div className="relative flex flex-col gap-2 min-h-screen md:pt-12">
           <div className="w-full flex flex-col items-center justify-center customBackground rounded-b-4xl py-8 pb-4">
-            <div className="flex items-center flex-col gap-4 w-full px-8 md:px-24  z-20">
+            <div className="flex items-center flex-col gap-4 w-full px-8 md:px-24  z-20">
               <div className="relative profileImageBox flex items-center justify-center">
                 <img
                   src={
@@ -583,6 +584,7 @@ const Profile = () => {
                             lyric={lyric}
                             isLast={isLast}
                             lastUserRef={lastUserRef}
+                            onCollectionStatusChange={handleCollectionStatusChange}
                           />
                         </div>
                       );
