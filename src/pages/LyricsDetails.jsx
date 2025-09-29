@@ -1,4 +1,3 @@
-import Footer from "../components/common/Footer";
 import "react-medium-image-zoom/dist/styles.css";
 import Normal_Button from "../components/common/Normal_Button";
 import { CgClose, CgMaximize, CgRemove } from "react-icons/cg";
@@ -164,7 +163,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
       <AnimatePresence>
         {isVisible && userLoaded && (
           <motion.div
-            className="w-screen h-screen absolute inset-0 z-20 bg-white overflow-hidden overflow-y-auto"
+            className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
@@ -271,7 +270,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
               )}
 
               {/* Details Section */}
-              <div className="lyrics-width animate-down-start w-full md:w-122 h-full bg-white rounded-lg shadow-lg p-4 md:p-8 border border-gray-200">
+              <div className="lyrics-width animate-down-start w-full md:w-122 h-full c-bg-2 rounded-lg shadow-lg p-4 md:p-8 border c-border">
                 <div className="flex flex-col justify-center items-start ml-4 gap-2">
                   {/* Title and Album */}
                   <div className="flex items-center justify-between gap-2 w-full">
@@ -301,13 +300,13 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                       </span>
                     ))}
                   </div>
-                  <hr className="w-full border border-dashed border-gray-200 my-1" />
+                  <hr className="w-full border border-dashed c-border my-1" />
                   <div className="flex flex-col gap-2">
                     {/* Artist name */}
                     {lyric.singers.length > 0 && (
                       <div className="flex items-start gap-2">
                         <p
-                          className={`text-sm text-gray-600  min-w-16 max-w-24 p-1`}
+                          className={`text-sm   min-w-16 max-w-24 p-1`}
                         >
                           {t("singer")}:
                         </p>
@@ -316,7 +315,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                           {lyric.singers.map((artistData, index) => (
                             <div
                               key={index}
-                              className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
+                              className={`flex items-center gap-2 border c-border p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
                               onClick={() => {
                                 //navigate(`/NT_Lyrics/artist/${artist._id}`);
                                 setSelectedArtist(artistData._id);
@@ -342,7 +341,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                     {lyric.featureArtists.length > 0 && (
                       <div className="flex flex-wrap items-start gap-2">
                         <p
-                          className={`text-sm text-gray-600 min-w-16 max-w-24 p-1`}
+                          className={`text-sm  min-w-16 max-w-24 p-1`}
                         >
                           {t("featuring")}:
                         </p>
@@ -351,7 +350,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                           {lyric.featureArtists.map((featuringData, index) => (
                             <div
                               key={index}
-                              className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
+                              className={`flex items-center gap-2 border c-border p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
                               onClick={() => {
                                 //navigate(`/NT_Lyrics/artist/${artist._id}`);
                                 setSelectedArtist(featuringData._id);
@@ -377,7 +376,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                     {lyric.writers.length > 0 && (
                       <div className="flex items-start gap-2">
                         <p
-                          className={`text-sm text-gray-600  min-w-16 max-w-24 p-1`}
+                          className={`text-sm  min-w-16 max-w-24 p-1`}
                         >
                           {t("wrtier")}:
                         </p>
@@ -385,7 +384,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                           {lyric.writers.map((writerData, index) => (
                             <div
                               key={index}
-                              className={`flex items-center gap-2 border border-gray-200 p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
+                              className={`flex items-center gap-2 border c-border p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
                               onClick={() => {
                                 //navigate(`/NT_Lyrics/artist/${artist._id}`);
                                 setSelectedArtist(writerData._id);
@@ -409,7 +408,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                     )}
                   </div>
 
-                  <hr className="w-full border border-dashed border-gray-200 my-1" />
+                  <hr className="w-full border border-dashed c-border my-1" />
                   <div className="flex justify-between w-full">
                     <div className="flex items-center gap-1 font-semibold">
                       <FaEye size={16} className="translate-y-[1px]" />{" "}
@@ -433,7 +432,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                         <Normal_Button
                           icon={FaRegHeart}
                           text={t("addToCollection")}
-                          custom_class={`w-8 h-8 border-transparent shadow-sm bg-white transition-all`}
+                          custom_class={`w-8 h-8 border-transparent shadow-sm c-primary transition-all`}
                           onClick={(e) => {
                             e.stopPropagation();
                             user?.role === "premium-user"
@@ -458,7 +457,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
               </div>
 
               <button
-                className="w-full md:w-122 border p-2 flex gap-2 items-center meshBg rounded-md text-white border-gray-100 shadow-2xl"
+                className="w-full md:w-122 border p-2 flex gap-2 items-center meshBg rounded-md c-border shadow-2xl"
                 onClick={handleClose}
               >
                 <BiArrowBack size={20} /> <p>{t("backtoLyrics")}</p>
@@ -472,8 +471,6 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                 close={() => setAddToCollection(false)}
               />
             )}
-
-            <Footer />
           </motion.div>
         )}
 

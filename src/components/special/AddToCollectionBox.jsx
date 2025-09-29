@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { useVibration } from "../hooks/useVibration";
 import { AnimatePresence, motion } from "framer-motion";
 
-const AddToCollectionBox = ({ id, addToCollection, close }) => {
+const AddToCollectionBox = ({ id, addToCollection, close, onCollectionsUpdated }) => {
   const { vibratePattern } = useVibration();
   const { t } = useTranslation();
 
@@ -126,6 +126,8 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
     }, 5000);
   };
 
+  const [saving, setSaving] = useState(false);
+
   const handleCollectionsEdit = async () => {
     const currentSet = new Set(currentCollections);
     const selectedSet = new Set(selectedCollections);
@@ -136,6 +138,7 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
     );
 
     try {
+      setSaving(true);
       const token = localStorage.getItem("token");
       const lyricId = id;
 
@@ -149,13 +152,14 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
 
       handleMessageTimer(t("lyricHasBeenAddedToCollection"), "success");
 
-      // Delay a bit to let the user see the message, then reload
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000); // 1 second delay to show success message
+      onCollectionsUpdated?.(selectedCollections);
+
+      handleClose();
     } catch (err) {
       console.error("Error updating lyric collections:", err);
       handleMessageTimer("Failed to update collections", "error");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -268,7 +272,7 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
 
                 {/* Collections list */}
                 <div className="flex flex-col gap-3 max-h-60 overflow-y-auto p-2">
-                  <p className="font-semibold pb-2 border-b border-dashed border-gray-300">
+                  <p className="font-semibold pb-4 border-b border-dashed c-border">
                     {t("collections")}
                   </p>
                   {!sortedCollections.length ? (
@@ -295,7 +299,7 @@ const AddToCollectionBox = ({ id, addToCollection, close }) => {
                   onClick={handleCollectionsEdit}
                   className="mt-2 p-2 bg-blue-500 text-white rounded"
                 >
-                  Save Selections
+                  {saving ? "Saving..." : "Save Selections"}
                 </button>
               </div>
             </motion.div>
@@ -310,7 +314,8 @@ AddToCollectionBox.propTypes = {
   id: PropTypes.string.isRequired,
   addToCollection: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
-  currentCollections: PropTypes.arrayOf(PropTypes.string), // new prop
+  currentCollections: PropTypes.arrayOf(PropTypes.string),
+  onCollectionsUpdated: PropTypes.func,
 };
 
 export default AddToCollectionBox;

@@ -1,8 +1,9 @@
-import { FaFacebook } from "react-icons/fa6";
+//import { FaFacebook } from "react-icons/fa6";
 
 const Footer = () => {
     return (
-      <footer className="flex items-center justify-between md:bg-gray-900bg-white mt-8 text-white  p-4 md:px-24 text-center">
+      <></>
+      /*<footer className="flex items-center justify-between md:bg-gray-900bg-white mt-8 text-white  p-4 md:px-24 text-center">
         <p>© {new Date().getFullYear()} Developed by SakutaTHZ</p>
         <a 
           href="https://www.facebook.com/yourpage" 
@@ -12,7 +13,7 @@ const Footer = () => {
         >
           <FaFacebook size={20}/>
         </a>
-      </footer>
+      </footer>*/
     );
   };
   

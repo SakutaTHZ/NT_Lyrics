@@ -342,7 +342,7 @@ const Profile = () => {
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
         <div className="relative flex flex-col gap-2 min-h-screen md:pt-12">
           <div className="w-full flex flex-col items-center justify-center customBackground rounded-b-4xl py-8 pb-4">
-            <div className="flex items-center flex-col gap-4 w-full px-8 md:px-24  z-20">
+            <div className="flex items-center flex-col gap-4 w-full px-8 md:px-24 z-[50]">
               <div className="relative profileImageBox flex items-center justify-center">
                 <img
                   src={
@@ -510,14 +510,14 @@ const Profile = () => {
               <div className="flex flex-col py-2 px-4 md:px-24">
                 <div className="flex flex-col items-center justify-between md:gap-4 sticky top-0 z-20">
                   {/* Groups */}
-                  <div className="w-full flex items-center justify-between gap-2 bg-white">
-                    <div className="w-full bg-white sticky top-0 overflow-auto flex gap-2 py-3">
+                  <div className="w-full flex items-center justify-between gap-2 c-bg">
+                    <div className="w-full c-bg sticky top-0 overflow-auto flex gap-2 py-3">
                       {(collection?.collections || []).map((col, idx) => (
                         <span
                           key={idx}
-                          className={`px-2 py-1 rounded-md border border-gray-300 font-semibold cursor-pointer text-nowrap ${
+                          className={`px-2 py-1 rounded-md border c-border font-semibold cursor-pointer text-nowrap ${
                             selectedGroup === col.group
-                              ? "bg-blue-500 text-white"
+                              ? "c-primary c-reverse"
                               : ""
                           }`}
                           onClick={() => handleGroupChange(col.group)}
@@ -528,12 +528,9 @@ const Profile = () => {
                     </div>
                   </div>
 
-                  <div className="w-full border border-b-0 px-2 py-2 rounded-t-md bg-white border-gray-300 font-semibold flex items-center justify-between">
+                  <div className="w-full border border-b-0 px-2 py-2 rounded-t-md c-bg c-border font-semibold flex items-center justify-between">
                     <p>
-                      <span className="truncate text-nowrap overflow-hidden text-ellipsis pr-2">
-                        {selectedGroup}
-                      </span>
-                      <span className="flex-shrink-0 border p-.5 rounded-md px-2 border-gray-100 bg-gray-100 font-semibold">
+                      <span className="flex-shrink-0 border p-.5 rounded-md px-2 c-border c-bg font-semibold">
                         {collection?.collections?.find(
                           (item) => item.group === selectedGroup
                         )?.count || 0}
@@ -543,7 +540,7 @@ const Profile = () => {
 
                     {selectedGroup !== "Default" && (
                       <button
-                        className="bg-red-50 rounded-md cursor-pointer px-3 py-1"
+                        className="c-error-box rounded-md cursor-pointer px-3 py-1"
                         onClick={handleDelete}
                       >
                         <CgTrash size={18} className="text-red-500" />
@@ -557,7 +554,7 @@ const Profile = () => {
                     loadingLyrics || selectedGroupLyrics.length > 0
                       ? "md:gap-6"
                       : "grid-cols-1 md:gap-12"
-                  } p-2 py-4 gap-0 border border-gray-200 rounded-b-md`}
+                  } p-2 py-0 gap-0 border c-border rounded-b-md`}
                 >
                   {loadingLyrics && !initialLoadDone ? (
                     Array.from({ length: 12 }).map((_, index) => (
@@ -577,7 +574,7 @@ const Profile = () => {
                       return (
                         <div
                           key={lyric._id}
-                          className="border-b border-gray-200 last:border-0 border-dashed"
+                          className="border-b c-border last:border-0 border-dashed"
                         >
                           <LyricsRowPremium
                             id={lyric._id}

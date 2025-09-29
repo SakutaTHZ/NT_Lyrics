@@ -133,7 +133,7 @@ const LyricRowPremium = ({
               </span>
 
               {imageError && (
-                <span className="border px-1 py-0.5 text-xs rounded-md border-gray-300 bg-gray-100 shrink-0">
+                <span className="border px-1 py-0.5 text-xs rounded-md c-bg-2 c-border shrink-0">
                   Coming Soon
                 </span>
               )}
@@ -164,6 +164,9 @@ const LyricRowPremium = ({
               id={id}
               addToCollection={addToCollection}
               close={() => setAddToCollection(false)}
+              onCollectionsUpdated={(updatedCollections) => {
+                setIsInCollection(updatedCollections.length > 0);
+              }}
             />
           </ModalContainer>
         )}

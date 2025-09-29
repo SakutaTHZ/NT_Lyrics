@@ -213,7 +213,7 @@ const Artist = ({ artistId, onClose }) => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             {/* ...all your modal content here... */}
-            <div className="relative p-4 py-2 md:px-24 pt-4 md:pt-16 border-b border-dashed border-gray-300">
+            <div className="relative p-4 py-4 md:px-24 md:pt-16 border-b border-dashed c-border">
               <div className="flex items-center justify-between gap-4">
                 {/* header content */}
 

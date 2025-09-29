@@ -30,10 +30,10 @@ const MessagePopup = ({
             message_type === "error"
               ? "c-error-box"
               : message_type === "alert"
-              ? "bg-yellow-200 border-yellow-200"
+              ? "c-alert-box"
               : message_type === "success"
-              ? "bg-green-200 border-green-200"
-              : "bg-blue-200 border-blue-200"
+              ? "c-success-box"
+              : "c-info-box"
           }`}></div>
 
         <div
@@ -41,10 +41,10 @@ const MessagePopup = ({
             message_type === "error"
               ? "c-error-box"
               : message_type === "alert"
-              ? "bg-gradient-to-br from-white to-yellow-50 border-yellow-200"
+              ? "c-alert-box"
               : message_type === "success"
-              ? "bg-gradient-to-br from-white to-green-50 border-green-200"
-              : "bg-gradient-to-br from-white to-blue-50 border-blue-200"
+              ? "c-success-box"
+              : "c-info-box"
           }`}
         >
           <div className="icon h-full flex items-center justify-center">

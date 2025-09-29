@@ -597,6 +597,12 @@ img {
   font-weight: 700;
 }
 
+.p-inputtext{
+  background-color: transparent !important;
+  color: rgb(var(--color-text-base)) !important;
+  border: 1px solid rgb(var(--color-border-base)) !important;
+}
+
 /* -------------------------------------------------------------------------- */
 /* 3. Custom Classes                                                          */
 /* -------------------------------------------------------------------------- */
@@ -666,4 +672,21 @@ body.dark .c-announcement-bg{
   background: rgb(var(--color-error-tint)) !important;
   color: rgb(var(--color-error-strong)) !important;
   border: 1px solid rgb(var(--color-error-medium)) !important;
+}
+
+.c-alert-box{
+  background: rgb(var(--color-alert-tint)) !important;
+  color: rgb(var(--color-alert-strong)) !important;
+  border: 1px solid rgb(var(--color-alert-medium)) !important;
+}
+
+.c-success-box{
+  background: rgb(var(--color-success-tint)) !important;
+  color: rgb(var(--color-success-strong)) !important;
+  border: 1px solid rgb(var(--color-success-medium)) !important;
+}
+.c-info-box{
+  background: rgb(var(--color-info-tint)) !important;
+  color: rgb(var(--color-info-strong)) !important;
+  border: 1px solid rgb(var(--color-info-medium)) !important;
 }
