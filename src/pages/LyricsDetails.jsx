@@ -206,6 +206,13 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
             )}
 
             <div className="lyrics-wrapper">
+              <button
+                className="w-full md:w-122 flex gap-2 items-center"
+                onClick={handleClose}
+              >
+                <BiArrowBack size={20} /> 
+              </button>
+
               {/* Image Section */}
               <div className="flex justify-center items-center w-full">
                 <div
