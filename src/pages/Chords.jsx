@@ -44,21 +44,21 @@ const Chords = ({ chordKey, onClose }) => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="w-screen h-screen absolute inset-0 z-20 bg-white overflow-hidden overflow-y-auto"
+          className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between p-4 border-b c-border">
             <h1 className="text-lg font-semibold">{t("chordsList")}</h1>
             <button onClick={handleClose} className="text-blue-500">
               <BiArrowBack size={20} />
             </button>
           </div>
 
-          <div className="p-4 space-y-6">
+          <div className="p-4 space-y-4">
             {/* Top row of chord buttons (C, Db, D...) */}
             <div className="flex flex-wrap gap-2">
               {Object.keys(chords).map((chord) => (
@@ -68,10 +68,10 @@ const Chords = ({ chordKey, onClose }) => {
                     setActiveChord(chord);
                     setActiveVariant(null); // reset sub-variant
                   }}
-                  className={`px-4 py-1 rounded border border-gray-200 ${
+                  className={`px-4 py-1 rounded border c-border ${
                     activeChord === chord
                       ? "bg-blue-500 text-white"
-                      : "bg-gray-100 hover:bg-gray-300"
+                      : ""
                   }`}
                 >
                   {chord}
@@ -81,15 +81,15 @@ const Chords = ({ chordKey, onClose }) => {
 
             {/* Sub-buttons for chord variants (C, Cm, Cm7, etc.) */}
             {activeChord && (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 border c-border p-2 rounded-md border-dashed c-announcement-bg text-sm">
                 {Object.keys(groupedVariants).map((variant) => (
                   <button
                     key={variant}
                     onClick={() => setActiveVariant(variant)}
-                    className={`px-3 py-1 rounded border border-gray-200 ${
+                    className={`px-3 py-1 rounded border c-border ${
                       activeVariant === variant
-                        ? "bg-green-500 text-white"
-                        : "bg-gray-50 hover:bg-gray-200"
+                        ? "c-primary c-reverse"
+                        : "c-bg"
                     }`}
                   >
                     {variant}
@@ -107,7 +107,7 @@ const Chords = ({ chordKey, onClose }) => {
                     <img
                       src={img.src}
                       alt={img.name}
-                      className="w-full h-auto border border-gray-200 rounded object-contain aspect-square"
+                      className="w-full h-auto border c-border rounded object-contain aspect-square"
                     />
                   </div>
                 ))}
