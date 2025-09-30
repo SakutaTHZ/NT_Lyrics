@@ -28,7 +28,7 @@ export const ThemeProvider = ({ children }) => {
 
     // 🔑 Get the CSS variable from :root or body
     const rootStyles = getComputedStyle(document.body);
-    const fadeOverlay = rootStyles.getPropertyValue("--color-fade-overlay").trim();
+    const fadeOverlay = rootStyles.getPropertyValue("--color-bg-body").trim();
 
     if (fadeOverlay) {
       themeColor.setAttribute("content", fadeOverlay);
