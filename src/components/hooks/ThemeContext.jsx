@@ -14,8 +14,23 @@ export const ThemeProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    // Apply theme class to body
     document.body.className = theme;
     localStorage.setItem("theme", theme);
+
+    // Update the <meta name="theme-color">
+    let themeColor = document.querySelector('meta[name="theme-color"]');
+    if (!themeColor) {
+      themeColor = document.createElement("meta");
+      themeColor.name = "theme-color";
+      document.head.appendChild(themeColor);
+    }
+
+    if (theme === "dark") {
+      themeColor.setAttribute("content", "#000000"); // dark bar
+    } else {
+      themeColor.setAttribute("content", "#ffffff"); // light bar
+    }
   }, [theme]);
 
   return (
