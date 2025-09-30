@@ -26,10 +26,12 @@ export const ThemeProvider = ({ children }) => {
       document.head.appendChild(themeColor);
     }
 
-    if (theme === "dark") {
-      themeColor.setAttribute("content", "#000000"); // dark bar
-    } else {
-      themeColor.setAttribute("content", "#ffffff"); // light bar
+    // 🔑 Get the CSS variable from :root or body
+    const rootStyles = getComputedStyle(document.body);
+    const fadeOverlay = rootStyles.getPropertyValue("--color-fade-overlay").trim();
+
+    if (fadeOverlay) {
+      themeColor.setAttribute("content", fadeOverlay);
     }
   }, [theme]);
 
