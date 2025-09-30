@@ -23,7 +23,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
   const { vibratePattern } = useVibration();
 
   const { logOut } = useAuth();
-  const labelClass = "text-gray-700 font-semibold pb-2";
+  const labelClass = "c-gray-text font-semibold pb-2";
   const inputClass = "p-2 border border-gray-400 rounded-md";
 
   const [user, setUser] = useState(userData || null);
@@ -163,7 +163,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
             {user.role === "premium-user" ? (
               <div className="c-bg-2 border c-border w-full p-5 rounded-xl  space-y-3">
                 <div className="flex items-center gap-2">
-                  <p className="text-gray-700 font-medium">
+                  <p className="c-gray-text font-medium">
                     {t("yourAccountIs")}
                   </p>
                   <span className="text-sm c-premium-bg text-yellow-800 py-1 px-2 rounded-md font-semibold">
@@ -175,7 +175,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
                 </div>
 
                 <div className="flex items-center gap-2 bg-gray-100 p-2 rounded-md">
-                  <p className="text-gray-700 font-medium">
+                  <p className="c-reverse font-medium">
                     {t("subscriptionEndson")}
                     <span className="text-sm text-blue-600 font-semibold pl-2 text-nowrap">
                       {user?.premiumEndDate
@@ -242,7 +242,7 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
                     type="text"
                     id="email"
                     className={
-                      `${localStorageUser.isOAuth && "bg-gray-100"} ` + inputClass
+                      `${localStorageUser.isOAuth && "c-bg"} ` + inputClass
                     }
                     placeholder={t("enterEmail")}
                     value={email}

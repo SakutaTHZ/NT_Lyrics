@@ -119,7 +119,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
   }
 
   const genreTagClass =
-    "text-xs border border-dashed border-gray-300 text-gray-600 px-2 py-1 rounded-full  ";
+    "text-xs border border-dashed c-border c-text px-2 py-1 rounded-full  ";
 
   const changeLyricsStatus = async (shouldAdd) => {
     const token = localStorage.getItem("token");
@@ -429,7 +429,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                         <Normal_Button
                           icon={FaRegHeart}
                           text={t("addToCollection")}
-                          custom_class={`w-8 h-8 border-transparent shadow-sm c-primary transition-all`}
+                          custom_class={`w-8 h-8 border-transparent shadow-sm c-primary c-reverse transition-all`}
                           onClick={(e) => {
                             e.stopPropagation();
                             user?.role === "premium-user"
@@ -442,7 +442,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                       <>
                         <Link
                           to="/NT_Lyrics/login"
-                          className={` flex items-center gap-2 border px-2 py-1 rounded-xl border-gray-300`}
+                          className={` flex items-center gap-2 border px-2 py-1 rounded-xl c-border`}
                         >
                           <LuLogIn size={18} />
                           {t("loginToTryCollection")}

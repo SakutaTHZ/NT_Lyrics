@@ -18,6 +18,8 @@
   --color-premium-yellow-light: 255, 243, 205; /* amber-200 - Lighter shade for hover effects */
   --color-light-blue-accent: 191, 219, 255; /* Blue-50 - For lighter accents */
 
+  --color-gray-text: 107, 114, 128;
+
   /* Specific Components */
   --loading-shine-alpha: 0.2; /* Opacity of the loading animation shine */
   --role-color: 59, 130, 246; /* Blue-500 - For premium checkbox */
@@ -77,6 +79,8 @@ body.dark {
   --color-fade-overlay: 17, 24, 39; /* Should match the dark body background */
 
   --color-premium-yellow: 255, 193, 7; /* amber-300 - For premium features */
+
+  --color-gray-text: 229, 231, 235;
 
   /* Specific Components */
   --loading-shine-alpha: 0.1;
@@ -689,4 +693,13 @@ body.dark .c-announcement-bg{
   background: rgb(var(--color-info-tint)) !important;
   color: rgb(var(--color-info-strong)) !important;
   border: 1px solid rgb(var(--color-info-medium)) !important;
+}
+
+.c-gray-text{
+  color:rgb(var(--color-gray-text))
+}
+
+
+.blend {
+  mix-blend-mode: multiply; /* or screen/difference depending on effect */
 }
