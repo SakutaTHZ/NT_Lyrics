@@ -607,6 +607,13 @@ img {
   border: 1px solid rgb(var(--color-border-base)) !important;
 }
 
+#modal-root {
+  position: fixed;
+  top: 0; left: 0;
+  width: 0; height: 0;
+  z-index: 9999;
+}
+
 /* -------------------------------------------------------------------------- */
 /* 3. Custom Classes                                                          */
 /* -------------------------------------------------------------------------- */
