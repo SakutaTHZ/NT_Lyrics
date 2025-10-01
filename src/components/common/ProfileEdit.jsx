@@ -174,8 +174,8 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
                   </Link>
                 </div>
 
-                <div className="flex items-center gap-2 bg-gray-100 p-2 rounded-md">
-                  <p className="c-reverse font-medium">
+                <div className="flex items-center gap-2 c-bg p-2 rounded-md border c-border">
+                  <p className="font-medium">
                     {t("subscriptionEndson")}
                     <span className="text-sm text-blue-600 font-semibold pl-2 text-nowrap">
                       {user?.premiumEndDate

@@ -340,7 +340,7 @@ const Profile = () => {
         </MessagePopup>
       )}
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
-        <div className="relative flex flex-col gap-2 min-h-screen md:pt-12">
+        <div className="relative flex flex-col gap-2 min-h-screen md:pt-12 pb-16">
           <div className="w-full flex flex-col items-center justify-center customBackground rounded-b-4xl py-8 pb-4">
             <div className="flex items-center flex-col gap-4 w-full px-8 md:px-24 z-[50]">
               <div className="relative profileImageBox flex items-center justify-center">
