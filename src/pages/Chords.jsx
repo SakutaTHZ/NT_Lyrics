@@ -104,11 +104,11 @@ const Chords = ({ chordKey, onClose }) => {
                 {groupedVariants[activeVariant].map((img) => (
                   <div key={img.name} className="text-center">
                     <p className="text-sm text-left mb-2">{img.name}</p>
-                    <div className=" c-bg-2">
+                    <div className="bg-white">
                     <img
                       src={img.src}
                       alt={img.name}
-                      className="w-full h-auto border c-border rounded object-contain aspect-square blend"
+                      className="w-full h-auto border c-border rounded object-contain aspect-square"
                     />
                     </div>
                   </div>
