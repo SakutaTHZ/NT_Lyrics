@@ -319,7 +319,7 @@ const Landing = () => {
               {popularArtists.slice(0, 5).map((artist, i) => (
                 <div
                   key={artist.name}
-                  className="border-b c-border last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
+                  className="border-b c-border last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md  cursor-pointer"
                   onClick={() => {
                     //navigate(`/NT_Lyrics/artist/${artist._id}`);
                     setSelectedArtist(artist.id);

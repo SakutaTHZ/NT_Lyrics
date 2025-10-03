@@ -126,7 +126,7 @@ const Artists = () => {
               return (
                 <div
                   key={artist._id || idx}
-                  className="border-b md:border c-border last:border-0 border-dashed flex items-center gap-4 p-2 md:px-4 md:w-full md:rounded-md hover:bg-gray-50 cursor-pointer md:bg-white"
+                  className="relative flex items-center w-full border-b last:border-0 gap-4 border-dashed c-border py-2 cursor-pointer"
                   onClick={() => {
                     //navigate(`/NT_Lyrics/artist/${artist._id}`);
                     setSelectedArtist(artist._id);

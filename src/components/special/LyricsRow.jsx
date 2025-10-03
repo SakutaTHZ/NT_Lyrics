@@ -109,7 +109,7 @@ const LyricsRow = ({
                 messageText ===
                   t("youCanOnlyAddUpTo20SongsToEachCollection"))) && (
               <button
-                className="rotatingBorder w-full c-bg shadow-sm text-sm line-clamp-3 hover:bg-gray-50 p-2 rounded-md text-left font-medium"
+                className="rotatingBorder w-full c-bg shadow-sm text-sm line-clamp-3 p-2 rounded-md text-left font-medium"
                 onClick={() => navigate("/NT_Lyrics/premium")}
               >
                 {t("upgraedToGetTheseExclusiveFeaturesAndBenifits")}
@@ -119,7 +119,7 @@ const LyricsRow = ({
         </MessagePopup>
       )}
       <motion.div
-        className={`relative flex items-center w-full border-b last:border-0 border-dashed border-gray-200 py-2 hover:bg-gray-50 cursor-pointer ${
+        className={`relative flex items-center w-full border-b last:border-0 border-dashed c-border py-2 cursor-pointer ${
           access ? "opacity-100" : "opacity-50 text-gray-500"
         } ${imageError && "opacity-50 text-gray-500"}`}
         onClick={

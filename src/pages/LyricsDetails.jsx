@@ -206,7 +206,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
 
             <div className="lyrics-wrapper">
               <button
-                className="w-full md:w-122 flex gap-2 items-center"
+                className="w-full flex gap-2 items-center lyrics-width cursor-pointer"
                 onClick={handleClose}
               >
                 <BiArrowBack size={20} />
@@ -258,7 +258,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
 
               {/* Video Box */}
               {lyric.youTubeLink && user?.role == "premium-user" && (
-                <div className="w-full md:w-122 aspect-video bg-gray-300 rounded-md">
+                <div className="w-full md:w-122 aspect-video bg-gray-300 rounded-md lyrics-width">
                   <iframe
                     className="w-full h-full rounded-md"
                     src={lyric.youTubeLink}

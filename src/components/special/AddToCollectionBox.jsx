@@ -13,7 +13,12 @@ import { useTranslation } from "react-i18next";
 import { useVibration } from "../hooks/useVibration";
 import { AnimatePresence, motion } from "framer-motion";
 
-const AddToCollectionBox = ({ id, addToCollection, close, onCollectionsUpdated }) => {
+const AddToCollectionBox = ({
+  id,
+  addToCollection,
+  close,
+  onCollectionsUpdated,
+}) => {
   const { vibratePattern } = useVibration();
   const { t } = useTranslation();
 
@@ -51,7 +56,19 @@ const AddToCollectionBox = ({ id, addToCollection, close, onCollectionsUpdated }
   const getCollection = useCallback(async () => {
     try {
       const collections = await fetchCollectionOverview(token);
-      setCollection(collections.collections || []);
+      let userCollections = collections.collections || [];
+
+      // Ensure everything is in { group: "name" } format
+      userCollections = userCollections.map((col) =>
+        typeof col === "string" ? { group: col } : col
+      );
+
+      // Ensure "Default" is always included
+      if (!userCollections.some((c) => c.group === "Default")) {
+        userCollections = [{ group: "Default" }, ...userCollections];
+      }
+
+      setCollection(userCollections);
     } catch (err) {
       console.error("Error fetching user overview:", err);
     }
@@ -65,21 +82,14 @@ const AddToCollectionBox = ({ id, addToCollection, close, onCollectionsUpdated }
     }
   }, [addToCollection, getCollection]);
 
-  const [hasInitializedSelection, setHasInitializedSelection] = useState(false);
-
   useEffect(() => {
-    if (
-      !hasInitializedSelection &&
-      collection.length > 0 &&
-      currentCollections.length > 0
-    ) {
-      const currentSet = collection
-        .map((col) => col.group)
-        .filter((group) => currentCollections.includes(group));
-      setSelectedCollections(currentSet);
-      setHasInitializedSelection(true);
-    }
-  }, [collection, currentCollections, hasInitializedSelection]);
+  if (collection.length > 0 && currentCollections.length > 0) {
+    const currentSet = collection
+      .map((col) => col.group)
+      .filter((group) => currentCollections.includes(group));
+    setSelectedCollections(currentSet);
+  }
+}, [collection, currentCollections, addToCollection]);
 
   const handleCheckboxChange = (group) => {
     setSelectedCollections((prev) =>
@@ -152,7 +162,7 @@ const AddToCollectionBox = ({ id, addToCollection, close, onCollectionsUpdated }
 
       handleMessageTimer(t("lyricHasBeenAddedToCollection"), "success");
 
-      onCollectionsUpdated?.(selectedCollections);
+      onCollectionsUpdated?.(Array.from(selectedCollections));
 
       handleClose();
     } catch (err) {
@@ -164,18 +174,18 @@ const AddToCollectionBox = ({ id, addToCollection, close, onCollectionsUpdated }
   };
 
   useEffect(() => {
-  if (addToCollection && isVisible) {
-    // lock scroll
-    document.body.style.overflow = "hidden";
-  } else {
-    // restore scroll
-    document.body.style.overflow = "";
-  }
+    if (addToCollection && isVisible) {
+      // lock scroll
+      document.body.style.overflow = "hidden";
+    } else {
+      // restore scroll
+      document.body.style.overflow = "";
+    }
 
-  return () => {
-    document.body.style.overflow = "";
-  };
-}, [addToCollection, isVisible]);
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [addToCollection, isVisible]);
 
   const sortedCollections = [...collection].sort((a, b) => {
     if (a.group.toLowerCase() === "default") return -1;

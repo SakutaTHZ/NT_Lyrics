@@ -5,7 +5,7 @@ import { BsQuestionCircle } from "react-icons/bs";
 import { createPortal } from "react-dom";
 import { useVibration } from "../hooks/useVibration";
 
-const portalRoot = document.getElementById("modal-root");
+const portalRoot = document.body;
 
 const MessagePopup = ({
   custom_class = "",

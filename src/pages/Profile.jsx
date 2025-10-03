@@ -121,11 +121,25 @@ const Profile = () => {
     setLoadingProfile(true);
     try {
       const collections = await fetchCollectionOverview(token);
-      const sortedCollections = [...collections.collections].sort((a, b) => {
+      let userCollections = collections.collections || [];
+
+      // ✅ Normalize to objects { group: "name" }
+      userCollections = userCollections.map((col) =>
+        typeof col === "string" ? { group: col } : col
+      );
+
+      // ✅ Add Default if missing
+      if (!userCollections.some((c) => c.group === "Default")) {
+        userCollections = [{ group: "Default" }, ...userCollections];
+      }
+
+      // ✅ Sort with Default always on top
+      const sortedCollections = [...userCollections].sort((a, b) => {
         if (a.group === "Default") return -1;
         if (b.group === "Default") return 1;
-        return 0;
+        return a.group.localeCompare(b.group); // optional alphabetical sort
       });
+
       setCollection({ ...collections, collections: sortedCollections });
     } catch (err) {
       console.error("Error fetching user overview:", err);
@@ -260,17 +274,14 @@ const Profile = () => {
     }
 
     try {
-      const res = await fetch(
-        `${apiUrl}/collections/removeCollection`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ collectionName: selectedGroup }),
-        }
-      );
+      const res = await fetch(`${apiUrl}/collections/removeCollection`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ collectionName: selectedGroup }),
+      });
 
       const data = await res.json();
 
@@ -364,7 +375,7 @@ const Profile = () => {
 
               <div className="relative profileInfo shadow-md text-center text-white">
                 <p className="font-bold text-2xl">{username}</p>
-                <p >{email}</p>
+                <p>{email}</p>
               </div>
 
               <div className="relative w-full flex items-center justify-center md:gap-4 border p-2 rounded-full c-border c-bg">
@@ -581,7 +592,9 @@ const Profile = () => {
                             lyric={lyric}
                             isLast={isLast}
                             lastUserRef={lastUserRef}
-                            onCollectionStatusChange={handleCollectionStatusChange}
+                            onCollectionStatusChange={
+                              handleCollectionStatusChange
+                            }
                           />
                         </div>
                       );
