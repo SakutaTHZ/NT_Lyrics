@@ -2,7 +2,6 @@ import Footer from "../components/common/Footer";
 import { BiArrowBack, BiSearch } from "react-icons/bi";
 import { AutoComplete } from "primereact/autocomplete";
 import { useState, useEffect } from "react";
-import EmptyData from "../assets/images/Collection list is empty.jpg";
 import { useCallback } from "react";
 import axios from "axios";
 import { apiUrl, fetchArtistById, validateUser } from "../assets/util/api";
@@ -274,14 +273,10 @@ const Artist = ({ artistId, onClose }) => {
             {/* Featured Lyrics */}
             <div className="min-h-5/6 relative p-4 py-0 md:py-2 pt-0 md:px-24">
               <div className="grid grid-cols-1 py-0 gap-0">
-                {lyrics.length === 0 ? (
-                  <div className="w-full">
-                    <img
-                      src={EmptyData}
-                      alt="No data Found"
-                      className="w-full opacity-50"
-                    />
-                  </div>
+                {loading && !initialLoadDone ? (
+                  Array.from({ length: 12 }).map((_, i) => (
+                    <LoadingBox key={i} />
+                  ))
                 ) : (
                   <>
                     {userLoaded &&
@@ -313,19 +308,19 @@ const Artist = ({ artistId, onClose }) => {
                         );
                       })}
                     {loading && (
-                      <div className="text-center py-4 text-gray-500 flex items-center justify-center gap-2">
+                      <div className="text-center  c-gray-text flex items-center justify-center gap-2 opacity-30">
                         <BiSearch
                           style={{
                             display: "inline-block",
                             animation: "wave 3s infinite",
                           }}
                         />
-                        Searching more lyrics...
+                        Searching for lyrics...
                       </div>
                     )}
                     {!loading && lyrics.length === 0 && initialLoadDone && (
-                      <div className="text-center py-4 text-gray-400 italic">
-                        No lyrics found.
+                      <div className="w-full flex flex-col items-center md:items-start c-bg justify-center gap-4 text-center c-gray-text opacity-30">
+                        No Lyrics Found
                       </div>
                     )}
                   </>
@@ -342,6 +337,7 @@ const Artist = ({ artistId, onClose }) => {
 };
 
 import PropTypes from "prop-types";
+import LoadingBox from "../components/common/LoadingBox";
 
 Artist.propTypes = {
   artistId: PropTypes.string,
