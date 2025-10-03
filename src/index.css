@@ -43,7 +43,7 @@
 
   /* Message Colors */
   /* LIGHT MODE MESSAGE COLORS */
-  
+
   /* Error (Red) */
   --color-error-strong: 239, 68, 68; /* Red-500: Text/Icon */
   --color-error-medium: 254, 202, 202; /* Red-200: Border/Water Drop */
@@ -116,7 +116,6 @@ body.dark {
   --color-info-tint: 6, 17, 34; /* Dark Blue-950 */
 }
 
-
 /* -------------------------------------------------------------------------- */
 /* 3. Themed CSS Logic                             */
 /* -------------------------------------------------------------------------- */
@@ -166,7 +165,7 @@ body {
   color: rgb(var(--color-text-base));
   transition: background-color 0.3s, color 0.3s;
   position: relative; /* creates a stacking context */
-  z-index: 0;         /* puts body content above ::before/::after */
+  z-index: 0; /* puts body content above ::before/::after */
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -186,7 +185,7 @@ body::before {
   opacity: 0.1;
   z-index: -2; /* safely behind everything */
 }
-body.dark::before{
+body.dark::before {
   background-blend-mode: difference;
   opacity: 1;
 }
@@ -438,12 +437,13 @@ img {
   }
 }
 
-.expandBox{
+.expandBox {
   animation: expandFrom 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes expandFrom {
-  0%,70% {
+  0%,
+  70% {
     transform: scale(0);
     opacity: 0;
   }
@@ -601,7 +601,7 @@ img {
   font-weight: 700;
 }
 
-.p-inputtext{
+.p-inputtext {
   background-color: transparent !important;
   color: rgb(var(--color-text-base)) !important;
   border: 1px solid rgb(var(--color-border-base)) !important;
@@ -609,104 +609,125 @@ img {
 
 #modal-root {
   position: fixed;
-  top: 0; left: 0;
-  width: 0; height: 0;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
   z-index: 9999;
 }
 
 /* -------------------------------------------------------------------------- */
 /* 3. Custom Classes                                                          */
 /* -------------------------------------------------------------------------- */
-.c-bg{
+.c-bg {
   background-color: rgb(var(--color-fade-overlay)) !important;
 }
 
-.c-bg-2{
+.c-bg-2 {
   background-color: rgb(var(--color-bg-card)) !important;
 }
 
-.c-primary{
+.c-primary {
   background-color: rgb(var(--color-primary-accent)) !important;
 }
 
-.c-reverse{
+.c-reverse {
   color: rgb(var(--color-text-reverse)) !important;
 }
 
-.c-bg-white{
+.c-bg-white {
   background-color: rgb(var(--color-bg-body)) !important;
 }
 
-.c-border{
+.c-border {
   border-color: rgb(var(--color-border-base)) !important;
 }
 
-.c-text{
+.c-text {
   color: rgb(var(--color-text-base)) !important;
 }
 
-.c-text-primary{
+.c-text-primary {
   color: rgb(var(--color-primary-accent)) !important;
 }
 
-.c-text-accent{
+.c-text-accent {
   color: rgb(var(--color-primary-accent)) !important;
 }
 
-.c-premium-bg{
-  background: linear-gradient(90deg, rgb(var(--color-premium-yellow)), rgb(var(--color-premium-yellow-light))
+.c-premium-bg {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-premium-yellow)),
+    rgb(var(--color-premium-yellow-light))
   );
 }
 
-.c-card-bg{
+.c-card-bg {
   background-color: rgb(var(--color-bg-card)) !important;
 }
 
-.c-linear-bg{
-  background: linear-gradient(to bottom right, rgb(var(--color-primary-accent)), rgb(var(--color-fade-overlay))) !important;
+.c-linear-bg {
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--color-primary-accent)),
+    rgb(var(--color-fade-overlay))
+  ) !important;
 }
 
-.c-loading-box-gradient{
-  background: linear-gradient(90deg, rgba(var(--skeleton-gradient-start)) 0%, rgba(var(--skeleton-gradient-end)) 50%, rgba(var(--skeleton-gradient-start)) 100%);
+.c-loading-box-gradient {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--skeleton-gradient-start)) 0%,
+    rgba(var(--skeleton-gradient-end)) 50%,
+    rgba(var(--skeleton-gradient-start)) 100%
+  );
   animation: loadingGradient 1.5s infinite;
 }
 
-.c-announcement-bg{
+.c-announcement-bg {
   background-color: rgb(var(--color-light-blue-accent)) !important;
 }
 
-body.dark .c-announcement-bg{
+body.dark .c-announcement-bg {
   background-color: rgb(var(--color-bg-card)) !important;
 }
 
-.c-error-box{
+.c-error-box {
   background: rgb(var(--color-error-tint)) !important;
   color: rgb(var(--color-error-strong)) !important;
   border: 1px solid rgb(var(--color-error-medium)) !important;
 }
 
-.c-alert-box{
+.c-alert-box {
   background: rgb(var(--color-alert-tint)) !important;
   color: rgb(var(--color-alert-strong)) !important;
   border: 1px solid rgb(var(--color-alert-medium)) !important;
 }
 
-.c-success-box{
+.c-success-box {
   background: rgb(var(--color-success-tint)) !important;
   color: rgb(var(--color-success-strong)) !important;
   border: 1px solid rgb(var(--color-success-medium)) !important;
 }
-.c-info-box{
+.c-info-box {
   background: rgb(var(--color-info-tint)) !important;
   color: rgb(var(--color-info-strong)) !important;
   border: 1px solid rgb(var(--color-info-medium)) !important;
 }
 
-.c-gray-text{
-  color:rgb(var(--color-gray-text))
+.c-gray-text {
+  color: rgb(var(--color-gray-text));
 }
-
 
 .blend {
   mix-blend-mode: multiply; /* or screen/difference depending on effect */
+}
+.image-blend {
+  mix-blend-mode: difference; /* or screen/difference depending on effect */
+}
+body.dark {
+  .invertColor {
+    filter: invert(1);
+  }
 }

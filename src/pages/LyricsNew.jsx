@@ -10,7 +10,6 @@ import useDebounce from "../components/hooks/useDebounce";
 import axios from "axios";
 import { apiUrl, validateUser } from "../assets/util/api";
 import LoadingBox from "../components/common/LoadingBox";
-import EmptyData from "../assets/images/Collection list is empty.jpg";
 import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 import { useTranslation } from "react-i18next";
@@ -190,12 +189,8 @@ const Lyrics = () => {
 
                 if (lyrics.length === 0) {
                   return (
-                    <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
-                      <img
-                        src={EmptyData}
-                        alt="No data Found"
-                        className="w-full md:w-96 opacity-50"
-                      />
+                    <div className="w-full flex flex-col items-center md:items-start c-bg justify-center gap-4 text-center py-4 c-gray-text opacity-30">
+                      No Lyrics Found with &#39;{debouncedSearchTerm}&#39;
                     </div>
                   );
                 }

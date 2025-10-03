@@ -147,7 +147,7 @@ const Artists = () => {
             })}
 
             {loading && (
-              <div className="text-center py-4 text-gray-500 flex items-center justify-center gap-2">
+              <div className="text-center flex items-center justify-center gap-2">
                 <BiSearch
                   style={{
                     display: "inline-block",
@@ -159,7 +159,9 @@ const Artists = () => {
             )}
 
             {!loading && artists.length === 0 && initialLoadDone && (
-              <p>No artists found.</p>
+              <div className="w-full flex flex-col items-center md:items-start c-bg justify-center gap-4 text-center py-0 c-gray-text opacity-30">
+                No Lyrics Found with &#39;{debouncedSearchTerm}&#39;
+              </div>
             )}
           </div>
         </div>

@@ -17,7 +17,7 @@ import EmailVerificationDialog from "../components/common/EmailVerificationDialo
 
 const Login = () => {
   const labelClass = "text-gray-700 font-semibold";
-  const inputClass = "p-2 border border-gray-300 rounded-md";
+  const inputClass = "p-2 border c-border rounded-md";
   const { loginAction } = useAuth(); // ✅ Use loginAction from context
   // const navigate = useNavigate();
 
@@ -126,7 +126,7 @@ const Login = () => {
           NT Lyrics & Chords
         </h1>
         <p className="text-gray-500">Please Enter your Login details!</p>
-        <hr className="border-dashed border-gray-300" />
+        <hr className="border-dashed c-border" />
 
         {/* Email Input */}
         <div className="flex flex-col">
@@ -259,7 +259,7 @@ const Login = () => {
               setForgotEmailError("");
               setForgotSuccessMsg("");
             }}
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border c-border rounded-md"
             placeholder="user@example.com"
           />
           {forgotEmailError && (

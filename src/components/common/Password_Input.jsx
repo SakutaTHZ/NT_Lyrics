@@ -19,7 +19,7 @@ const PasswordInput = ({
     ${
       disabled
         ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-        : "border-gray-300 text-black"
+        : "c-border text-black"
     }`}
         value={value}
         onChange={(e) => onChange(e.target.value)}

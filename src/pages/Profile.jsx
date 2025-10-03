@@ -8,7 +8,6 @@ import {
   validateUser,
 } from "../assets/util/api";
 import LoadingBox from "../components/common/LoadingBox";
-import EmptyData from "../assets/images/Collection list is empty.jpg";
 import LyricsRow from "../components/special/LyricsRow";
 import axios from "axios";
 import { apiUrl } from "../assets/util/api";
@@ -572,12 +571,8 @@ const Profile = () => {
                       <LoadingBox key={index} />
                     ))
                   ) : selectedGroupLyrics.length === 0 ? (
-                    <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
-                      <img
-                        src={EmptyData}
-                        alt="No data Found"
-                        className="w-full md:w-96 opacity-50"
-                      />
+                    <div className="w-full py-4 flex flex-col items-center md:items-start c-bg justify-center gap-4 text-center c-gray-text opacity-30">
+                      No Lyrics Found in this Collection
                     </div>
                   ) : (
                     selectedGroupLyrics.map((lyric, index) => {
@@ -616,12 +611,8 @@ const Profile = () => {
                   <LoadingBox key={index} />
                 ))
               ) : selectedGroupLyrics.length === 0 ? (
-                <div className="w-full flex flex-col items-center justify-center gap-4 text-center py-6 text-gray-400">
-                  <img
-                    src={EmptyData}
-                    alt="No data Found"
-                    className="w-full md:w-96 opacity-50"
-                  />
+                <div className="w-full flex flex-col items-center md:items-start c-bg justify-center gap-4 text-center py-0 c-gray-text opacity-30">
+                  No Lyrics Found in Collection yet
                 </div>
               ) : (
                 selectedGroupLyrics.map((lyric, index) => {
