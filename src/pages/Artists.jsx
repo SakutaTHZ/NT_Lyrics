@@ -160,7 +160,7 @@ const Artists = () => {
 
             {!loading && artists.length === 0 && initialLoadDone && (
               <div className="w-full flex flex-col items-center md:items-start c-bg justify-center gap-4 text-center py-0 c-gray-text opacity-30">
-                No Lyrics Found with &#39;{debouncedSearchTerm}&#39;
+                No Artists Found with &#39;{debouncedSearchTerm}&#39;
               </div>
             )}
           </div>
