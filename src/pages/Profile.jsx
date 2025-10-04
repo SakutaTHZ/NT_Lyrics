@@ -5,6 +5,8 @@ import ProfileEdit from "../components/common/ProfileEdit";
 import {
   checkIfPaymentRequested,
   fetchCollectionOverview,
+  logout,
+  showError,
   validateUser,
 } from "../assets/util/api";
 import LoadingBox from "../components/common/LoadingBox";
@@ -54,9 +56,11 @@ const Profile = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
-    const id = JSON.parse(localStorage.getItem("user") || "{}")?.id;
-    if (!id) {
+    const storedUser = localStorage.getItem("user");
+    
+    // Safely parse the ID. If no stored user or ID, we're done.
+    const id = JSON.parse(storedUser || "{}")?.id;
+    if (!id || !token) {
       setUserLoaded(true);
       return;
     }
@@ -64,11 +68,38 @@ const Profile = () => {
     const getUser = async () => {
       setLoadingProfile(true);
       try {
+        // 1. Successful validation
         const userData = await validateUser(id, token);
-        if (!userData) throw new Error("No user returned");
-        setUser(userData.user);
+        if (!userData) throw new Error("No user data returned from API.");
+        // 2. Update state with the user profile
+        setUser(userData); // Assuming validateUser returns the full user object
+        
       } catch (err) {
         console.error("Failed to fetch user:", err);
+        
+        // --- 3. CRITICAL: Handle the custom error object thrown by validateUser ---
+        const status = err.customError?.status;
+        const message = err.customError?.message;
+
+        if (status === 401) {
+          // 401: Token invalid/expired. Attempt refresh first, then logout.
+          // 🔄 tryRefreshTokenFlow(token);
+          // Assuming refresh failed or isn't supported yet:
+          logout(message);
+        } 
+        else if (status === 403) {
+          // 403: Account deactivated. Show error and force logout.
+          showError(message);
+          logout();
+        } 
+        else if (status === 500) {
+          // 500: Server error. Just show the error.
+          showError(message);
+        } else {
+          // Catch any other unexpected error.
+          showError("Could not load user profile. Please try refreshing.");
+        }
+        
       } finally {
         setUserLoaded(true);
         setLoadingProfile(false);
@@ -76,7 +107,7 @@ const Profile = () => {
     };
 
     getUser();
-  }, []);
+}, []);
 
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
   const [payment, setPayment] = useState(null);

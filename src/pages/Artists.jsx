@@ -2,12 +2,13 @@ import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Footer from "../components/common/Footer";
 import useDebounce from "../components/hooks/useDebounce";
 //import { useNavigate } from "react-router-dom";
-import { BiSearch } from "react-icons/bi";
+import { BiArrowBack, BiSearch } from "react-icons/bi";
 import { apiUrl } from "../assets/util/api";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import Artist from "./Artist";
 import ModalContainer from "../components/special/ModalContainer";
+import { Link } from "react-router-dom";
 
 const Artists = () => {
   const { t } = useTranslation();
@@ -104,9 +105,14 @@ const Artists = () => {
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
         <div className="relative flex flex-col w-screen min-h-screen pt-4 md:pt-16">
           <div className="flex flex-col gap-2 px-4 md:px-24">
-            <p className="font-bold text-xl italic flex gap-2 items-center md:gap-4 c-text-primary">
-              {t("artistsList")}
-            </p>
+            <div className="flex items-center justify-between c-text-primary">
+              <p className="font-bold text-xl italic flex gap-2 items-center md:gap-4">
+                {t("artistsList")}
+              </p>
+              <Link to={"/"}>
+                <BiArrowBack size={24} />
+              </Link>
+            </div>
 
             {/* Search */}
             <div className="w-full py-2 sticky md:top-12 top-0 c-bg z-10">

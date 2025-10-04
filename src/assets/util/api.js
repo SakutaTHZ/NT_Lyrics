@@ -357,11 +357,59 @@ export const validateUser = async (id, token) => {
     return res.data;
   } catch (err) {
     const status = err.response?.status;
+    let message = "Unexpected error. Please try again.";
+
+    // Map status codes to clear messages based on your backend logic
+    if (status === 401) {
+      // 401: Token expired, invalid, or user not found in DB
+      message = "Session expired or invalid. Please log in again.";
+    } else if (status === 403) {
+      // 403: User exists but is deactivated (isValid: false)
+      message = "Your account has been deactivated or you don’t have access.";
+    } else if (status === 500) {
+      message = "Server error. Please try again later.";
+    } 
+    
+    // Re-throw the error with the necessary context
+    throw {
+      ...err,
+      customError: { status, message }
+    };
+  }
+};
+
+export function logout(message) {
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+  if (message) alert(message);
+  window.location.href = "/login";
+}
+
+
+/*export const validateUser = async (
+  id,
+  token,
+  dependencies
+) => {
+  const { apiUrl, axios, logout, showError, attemptTokenRefresh } = dependencies;
+
+  try {
+    const res = await axios.get(`${apiUrl}/users/userProfile/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  } catch (err) {
+    const status = err.response?.status;
+
+    // --- Specific Error Handling ---
 
     if (status === 401) {
-      // 🔄 try refresh token flow here (if supported)
-      // if refresh fails → logout
-      logout("Session expired, please log in again.");
+      // The best approach: delegate the refresh/retry logic
+      // If you are NOT using an interceptor, you would place the
+      // 'try refresh token and retry API call' logic here.
+
+      // If refresh is unsupported or fails:
+      logout("Session expired. Please log in again.");
     }
     else if (status === 403) {
       showError("Your account has been deactivated or you don’t have access.");
@@ -373,24 +421,26 @@ export const validateUser = async (id, token) => {
     }
     else if (status === 500) {
       showError("Server error. Please try again later.");
+    } 
+    
+    // --- Fallback & Propagation ---
+    
+    else if (status) {
+      // Catch all other explicit HTTP errors (e.g., 404, 503)
+      showError(`API Error (${status}): Could not complete your request.`);
     } else {
-      showError("Unexpected error. Please try again.");
+      // Handle network errors (no response status)
+      showError("Network error. Please check your connection.");
     }
 
+    // Re-throw the error so the calling function can handle it if needed
     throw err;
   }
-};
+};*/
 
-function logout(message) {
-  localStorage.removeItem("user");
-  localStorage.removeItem("token");
-  if (message) alert(message);
-  window.location.href = "/login";
-}
-
-function showError(message) {
+export function showError(message) {
   // toast, modal, or error banner
-  console.error(message);
+  alert(message);
 }
 
 export const checkUserStatus = async (token) => {

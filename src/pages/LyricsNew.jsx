@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import useDebounce from "../components/hooks/useDebounce";
 import axios from "axios";
 import { apiUrl, validateUser } from "../assets/util/api";
@@ -13,6 +13,7 @@ import LoadingBox from "../components/common/LoadingBox";
 import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 import { useTranslation } from "react-i18next";
+import { BiArrowBack } from "react-icons/bi";
 
 const Footer = React.lazy(() => import("../components/common/Footer"));
 
@@ -156,11 +157,15 @@ const Lyrics = () => {
     <Suspense fallback={<div>Loading...</div>}>
       <div className="w-screen h-screen">
         <div className="relative flex flex-col w-screen min-h-screen pt-4 md:pt-16">
-          <div className="flex justify-between px-4 md:px-24">
-            <p className="font-bold text-xl italic c-text-primary pb-2">
-              {t("songLyrics")}
-            </p>
-          </div>
+
+          <div className="flex items-center justify-between pb-2 c-text-primary px-4 md:px-24">
+              <p className="font-bold text-xl italic flex gap-2 items-center md:gap-4">
+                {t("songLyrics")}
+              </p>
+              <Link to={"/"}>
+                <BiArrowBack size={24} />
+              </Link>
+            </div>
 
           {/* Search */}
           <div className="py-2 px-4 md:px-24 sticky md:top-12 top-0 c-bg z-10">
