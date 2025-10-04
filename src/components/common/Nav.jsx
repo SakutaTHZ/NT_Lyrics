@@ -62,7 +62,7 @@ const Nav = () => {
   const isActive = (path) =>
     location.pathname === path
       ? "md:bg-blue-500 hover:bg-blue-600 font-bold text-white"
-      : "text-gray-700";
+      : "";
 
   const isActiveIcon = (path) =>
     location.pathname === path

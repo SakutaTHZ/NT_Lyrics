@@ -69,9 +69,7 @@ const Chords = ({ chordKey, onClose }) => {
                     setActiveVariant(null); // reset sub-variant
                   }}
                   className={`px-4 py-1 rounded border c-border ${
-                    activeChord === chord
-                      ? "bg-blue-500 text-white"
-                      : ""
+                    activeChord === chord ? "bg-blue-500 text-white" : ""
                   }`}
                 >
                   {chord}
@@ -87,9 +85,7 @@ const Chords = ({ chordKey, onClose }) => {
                     key={variant}
                     onClick={() => setActiveVariant(variant)}
                     className={`px-3 py-1 rounded border c-border ${
-                      activeVariant === variant
-                        ? "c-primary c-reverse"
-                        : "c-bg"
+                      activeVariant === variant ? "c-primary c-reverse" : "c-bg"
                     }`}
                   >
                     {variant}
@@ -104,12 +100,12 @@ const Chords = ({ chordKey, onClose }) => {
                 {groupedVariants[activeVariant].map((img) => (
                   <div key={img.name} className="text-center">
                     <p className="text-sm text-left mb-2">{img.name}</p>
-                    <div className="bg-white">
-                    <img
-                      src={img.src}
-                      alt={img.name}
-                      className="w-full h-auto border c-border rounded object-contain aspect-square"
-                    />
+                    <div className="bg-white opacity-75">
+                      <img
+                        src={img.src}
+                        alt={img.name}
+                        className="w-full h-auto border c-border rounded object-contain aspect-square"
+                      />
                     </div>
                   </div>
                 ))}

@@ -278,7 +278,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                       {lyric.title}{" "}
                     </p>
                     <button
-                      className="bg-blue-500 p-2 rounded-full hover:bg-blue-600 text-white flex items-center justify-center"
+                      className="bg-blue-500 p-2 rounded-full hover:bg-blue-600 text-white flex items-center justify-center opacity-75"
                       onClick={() => setShowChords(true)}
                     >
                       <BiMusic size={18} />

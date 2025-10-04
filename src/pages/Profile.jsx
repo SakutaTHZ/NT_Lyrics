@@ -571,7 +571,7 @@ const Profile = () => {
                       <LoadingBox key={index} />
                     ))
                   ) : selectedGroupLyrics.length === 0 ? (
-                    <div className="w-full py-4 flex flex-col items-center md:items-start c-bg justify-center gap-4 text-center c-gray-text opacity-30">
+                    <div className="w-full py-4 flex flex-col items-center c-bg justify-center gap-4 text-center c-gray-text opacity-30">
                       No Lyrics Found in this Collection
                     </div>
                   ) : (
@@ -611,7 +611,7 @@ const Profile = () => {
                   <LoadingBox key={index} />
                 ))
               ) : selectedGroupLyrics.length === 0 ? (
-                <div className="w-full flex flex-col items-center md:items-start c-bg justify-center gap-4 text-center py-0 c-gray-text opacity-30">
+                <div className="w-full flex flex-col items-center c-bg justify-center gap-4 text-center py-0 c-gray-text opacity-30">
                   No Lyrics Found in Collection yet
                 </div>
               ) : (
