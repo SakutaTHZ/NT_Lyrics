@@ -1,38 +1,40 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import Footer from "../components/common/Footer";
+import { Link } from "react-router-dom";
 import { IoInformationCircleOutline, IoSettingsOutline } from "react-icons/io5";
+import { CgTrash } from "react-icons/cg";
+import { Dialog } from "primereact/dialog";
+import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
+import { useTranslation } from "react-i18next";
+import axios from "axios";
+
+import Footer from "../components/common/Footer";
 import ProfileEdit from "../components/common/ProfileEdit";
+import LoadingBox from "../components/common/LoadingBox";
+import LyricsRow from "../components/special/LyricsRow";
+import LyricsRowPremium from "../components/special/LyricRowPremium";
+import MessagePopup from "../components/common/MessagePopup";
+
 import {
   checkIfPaymentRequested,
   fetchCollectionOverview,
   logout,
   showError,
   validateUser,
+  apiUrl,
 } from "../assets/util/api";
-import LoadingBox from "../components/common/LoadingBox";
-import LyricsRow from "../components/special/LyricsRow";
-import axios from "axios";
-import { apiUrl } from "../assets/util/api";
-import LyricsRowPremium from "../components/special/LyricRowPremium";
-import { Link } from "react-router-dom";
-import { Dialog } from "primereact/dialog";
-import { useTranslation } from "react-i18next";
-import MessagePopup from "../components/common/MessagePopup";
-import { CgTrash } from "react-icons/cg";
-import { ConfirmPopup } from "primereact/confirmpopup";
-import { confirmPopup } from "primereact/confirmpopup";
 
 const Profile = () => {
   const { t } = useTranslation();
-  const [page, setPage] = useState(1);
-  const observer = useRef(null);
 
-  // Separate loading states
+  // Loading states
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [loadingLyrics, setLoadingLyrics] = useState(false);
 
+  // Pagination & intersection observer
+  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
+  const observer = useRef(null);
 
   const lastUserRef = useCallback(
     (node) => {
@@ -50,77 +52,91 @@ const Profile = () => {
     [loadingLyrics, totalPages, page]
   );
 
+  // User state
   const [user, setUser] = useState(null);
   const [userRole, setUserRole] = useState("free-user");
   const [userLoaded, setUserLoaded] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-    
-    // Safely parse the ID. If no stored user or ID, we're done.
-    const id = JSON.parse(storedUser || "{}")?.id;
-    if (!id || !token) {
-      setUserLoaded(true);
-      return;
-    }
+  // Payment state
+  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+  const [payment, setPayment] = useState(null);
+  const [visible, setVisible] = useState(false);
 
+  // Profile info
+  const [username, setUsername] = useState(user?.name);
+  const [email, setEmail] = useState(user?.email);
+
+  // UI state
+  const [showEdit, setShowEdit] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
+  const [messageText, setMessageText] = useState("");
+  const [messageType, setMessageType] = useState("success");
+
+  // Collections & Lyrics
+  const [collection, setCollection] = useState(null);
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [selectedGroupLyrics, setSelectedGroupLyrics] = useState([]);
+
+  const token = localStorage.getItem("token");
+  const storedUser = localStorage.getItem("user");
+  const id = JSON.parse(storedUser || "{}")?.id;
+
+  if (!id || !token) {
+    setMessageText("ID and token are missing! Please Log in again");
+    setMessageType("error");
+    setShowMessage(true);
+    setTimeout(() => setShowMessage(false), 5000);
+    setUserLoaded(true);
+  }
+
+  /** ===================
+   * USER FETCH & VALIDATION
+   * =================== */
+  useEffect(() => {
     const getUser = async () => {
       setLoadingProfile(true);
       try {
-        // 1. Successful validation
         const userData = await validateUser(id, token);
-        if (!userData) throw new Error("No user data returned from API.");
-        // 2. Update state with the user profile
-        setUser(userData); // Assuming validateUser returns the full user object
-        
+        if (!userData) {
+          alert("User data not fetched correctly");
+          throw new Error("No user data returned from API.");
+        }
+        setUser(userData.user);
       } catch (err) {
         console.error("Failed to fetch user:", err);
-        
-        // --- 3. CRITICAL: Handle the custom error object thrown by validateUser ---
         const status = err.customError?.status;
         const message = err.customError?.message;
 
         if (status === 401) {
-          // 401: Token invalid/expired. Attempt refresh first, then logout.
-          // 🔄 tryRefreshTokenFlow(token);
-          // Assuming refresh failed or isn't supported yet:
-          logout(message);
-        } 
-        else if (status === 403) {
-          // 403: Account deactivated. Show error and force logout.
+          logout(message); // token expired
+        } else if (status === 403) {
           showError(message);
           logout();
-        } 
-        else if (status === 500) {
-          // 500: Server error. Just show the error.
+        } else if (status === 500) {
           showError(message);
         } else {
-          // Catch any other unexpected error.
           showError("Could not load user profile. Please try refreshing.");
         }
-        
       } finally {
         setUserLoaded(true);
         setLoadingProfile(false);
+        console.log("User Loaded");
       }
     };
 
     getUser();
-}, []);
+  }, [token, storedUser, id]);
 
-  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
-  const [payment, setPayment] = useState(null);
-
+  /** ===================
+   * PAYMENT CHECK
+   * =================== */
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
+    if (!user) return;
     const checkPayment = async () => {
       try {
         const paymentData = await checkIfPaymentRequested(token);
         if (!paymentData) throw new Error("No payment returned");
-        const exists = paymentData.isExist;
-        setIsPaymentProcessing(exists);
+        setIsPaymentProcessing(paymentData.isExist);
         setPayment(paymentData.payment || null);
       } catch (err) {
         console.error("Failed to fetch payment:", err);
@@ -128,13 +144,11 @@ const Profile = () => {
     };
 
     checkPayment();
-  }, []);
+  }, [user,token]);
 
-  const [username, setUsername] = useState(user?.name);
-  const [email, setEmail] = useState(user?.email);
-
-  const [visible, setVisible] = useState(false);
-
+  /** ===================
+   * SYNC USER INFO
+   * =================== */
   useEffect(() => {
     if (!user) return;
     setUsername(user.name);
@@ -142,32 +156,27 @@ const Profile = () => {
     setUserRole(user.role);
   }, [user]);
 
-  const [showEdit, setShowEdit] = useState(false);
-  const [collection, setCollection] = useState(null);
-
-  const token = localStorage.getItem("token");
-
+  /** ===================
+   * COLLECTION FETCH
+   * =================== */
   const getCollection = useCallback(async () => {
     setLoadingProfile(true);
     try {
       const collections = await fetchCollectionOverview(token);
       let userCollections = collections.collections || [];
 
-      // ✅ Normalize to objects { group: "name" }
       userCollections = userCollections.map((col) =>
         typeof col === "string" ? { group: col } : col
       );
 
-      // ✅ Add Default if missing
       if (!userCollections.some((c) => c.group === "Default")) {
         userCollections = [{ group: "Default" }, ...userCollections];
       }
 
-      // ✅ Sort with Default always on top
       const sortedCollections = [...userCollections].sort((a, b) => {
         if (a.group === "Default") return -1;
         if (b.group === "Default") return 1;
-        return a.group.localeCompare(b.group); // optional alphabetical sort
+        return a.group.localeCompare(b.group);
       });
 
       setCollection({ ...collections, collections: sortedCollections });
@@ -178,52 +187,25 @@ const Profile = () => {
     }
   }, [token]);
 
-  const defaultGroup = collection?.collections?.find(
-    (item) => item.group === "Default"
-  );
-  const defaultGroupCount = defaultGroup?.count ?? 0;
+  useEffect(() => {
+    if (!user) return;
+    getCollection();
+  }, [user,getCollection]);
 
-  const [selectedGroup, setSelectedGroup] = useState(null);
-  const [selectedGroupLyrics, setSelectedGroupLyrics] = useState([]);
-
-  const [showMessage, setShowMessage] = useState(false);
-  const [messageText, setMessageText] = useState("");
-  const [messageType, setMessageType] = useState("success");
-
-  const tierMap = {
-    guest: 0,
-    free: 1,
-    premium: 2,
-  };
-
-  const getUserType = () => {
-    if (!user) return "guest";
-    if (userRole === "premium-user") return "premium";
-    return "free";
-  };
-
-  const userType = getUserType(); // "guest", "free", or "premium"
-  const userTier = tierMap[userType]; // 0, 1, or 2
-
-  const shouldHideCollection = (lyricTier = 0) => userTier >= lyricTier;
-
+  /** ===================
+   * LYRICS FETCH
+   * =================== */
   const getLyricsByGroup = useCallback(
     async (group, pageNum, override = false) => {
       setLoadingLyrics(true);
 
-      //if user is free just set the selected group to Default
       if (userRole !== "premium-user") group = "Default";
 
       try {
-        const token = localStorage.getItem("token");
-
         const res = await axios.get(
           `${apiUrl}/collections/getLyricsByGroup?group=${group}`,
           {
-            params: {
-              page: pageNum,
-              limit: 20,
-            },
+            params: { page: pageNum, limit: 20 },
             headers: {
               "Content-Type": "application/json",
               ...(token && { Authorization: `Bearer ${token}` }),
@@ -232,7 +214,6 @@ const Profile = () => {
         );
 
         const data = res.data.lyrics;
-
         if (!Array.isArray(data)) {
           console.error("Expected array, got:", data);
           return [];
@@ -240,10 +221,7 @@ const Profile = () => {
 
         setSelectedGroupLyrics((prev) => {
           const merged = override || pageNum === 1 ? data : [...prev, ...data];
-          const unique = Array.from(
-            new Map(merged.map((item) => [item._id, item])).values()
-          );
-          return unique;
+          return Array.from(new Map(merged.map((i) => [i._id, i])).values());
         });
 
         setTotalPages(res.data.totalPages);
@@ -256,30 +234,27 @@ const Profile = () => {
         setLoadingLyrics(false);
       }
     },
-    [userRole] // FIX: Added userRole to dependencies
+    [userRole, token]
   );
 
   useEffect(() => {
-    getCollection();
-  }, [getCollection]);
-
-  // Trigger lyrics fetch once collection is ready and group is determined
-  useEffect(() => {
-    if (!collection?.collections || collection.collections.length === 0) return;
-
+    if (!user) return;
+    if (!collection?.collections?.length) return;
     const defaultCol = collection.collections.find(
       (c) => c.group === "Default"
     );
     const firstGroup = defaultCol
       ? defaultCol.group
       : collection.collections[0].group;
-
     setSelectedGroup(firstGroup);
     getLyricsByGroup(firstGroup, 1, true);
-  }, [collection, getLyricsByGroup]);
+    
+  }, [user,collection, getLyricsByGroup]);
 
+  /** ===================
+   * GROUP HANDLERS
+   * =================== */
   const handleGroupChange = (group) => {
-    console.log("Group changed to:", group);
     if (!group || group === selectedGroup) return;
     setSelectedGroup(group);
     getLyricsByGroup(group, 1, true);
@@ -287,8 +262,8 @@ const Profile = () => {
 
   const handleCollectionStatusChange = useCallback(() => {
     if (selectedGroup) {
-      getLyricsByGroup(selectedGroup, 1, true); // refresh lyrics
-      getCollection(); // refresh counts
+      getLyricsByGroup(selectedGroup, 1, true);
+      getCollection();
     }
   }, [selectedGroup, getLyricsByGroup, getCollection]);
 
@@ -314,26 +289,19 @@ const Profile = () => {
       });
 
       const data = await res.json();
-
-      if (!res.ok) {
-        setMessageText(data.errors?.[0]?.message);
-        setMessageType("error");
-        throw new Error(data.message || "Failed to delete Group");
-      }
+      if (!res.ok) throw new Error(data.message || "Failed to delete Group");
 
       setMessageText("Group Deleted successfully");
       setMessageType("success");
-
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 5000);
 
-      // Refresh collection and select another group
       await getCollection();
-      setSelectedGroup((prevGroup) => {
-        const remainingGroups = collection?.collections
+      setSelectedGroup((prev) => {
+        const remaining = collection?.collections
           ?.map((col) => col.group)
-          .filter((group) => group !== prevGroup);
-        return remainingGroups.length > 0 ? remainingGroups[0] : null;
+          .filter((g) => g !== prev);
+        return remaining?.[0] || null;
       });
     } catch (err) {
       console.error(err);
@@ -348,12 +316,31 @@ const Profile = () => {
       acceptClassName: "p-button-danger",
       acceptLabel: "Yes",
       rejectLabel: "No",
-      accept: async () => {
-        await deleteGroup();
-      },
+      accept: deleteGroup,
     });
   };
 
+  /** ===================
+   * UTILS
+   * =================== */
+  const tierMap = { guest: 0, free: 1, premium: 2 };
+  const getUserType = () => {
+    if (!user) return "guest";
+    return userRole === "premium-user" ? "premium" : "free";
+  };
+
+  const userType = getUserType();
+  const userTier = tierMap[userType];
+  const shouldHideCollection = (lyricTier = 0) => userTier >= lyricTier;
+
+  const defaultGroup = collection?.collections?.find(
+    (c) => c.group === "Default"
+  );
+  const defaultGroupCount = defaultGroup?.count ?? 0;
+
+  /** ===================
+   * RENDER
+   * =================== */
   if (loadingProfile) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">

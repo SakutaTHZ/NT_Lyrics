@@ -382,7 +382,7 @@ export function logout(message) {
   localStorage.removeItem("user");
   localStorage.removeItem("token");
   if (message) alert(message);
-  window.location.href = "/login";
+  window.location.href = "/NT_Lyrics/login";
 }
 
 
