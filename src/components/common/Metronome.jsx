@@ -148,7 +148,7 @@ const Metronome = ({ initialBPM = 120, timeSignature = 2 }) => {
               style={{
                 width: "20px",
                 height: "20px",
-                border: "20px solid",
+                border: "10px solid",
                 borderRadius: "50%",
                 borderColor:
                   currentBeat === 1
