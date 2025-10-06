@@ -273,9 +273,6 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                 </div>
               )}
 
-              {/* Metronome */}
-              <Metronome/>
-
               {/* Details Section */}
               <div className="lyrics-width animate-down-start w-full md:w-122 h-full c-bg-2 rounded-lg shadow-lg p-4 md:p-8 border c-border">
                 <div className="flex flex-col justify-center items-start ml-4 gap-2">
@@ -459,6 +456,10 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                   </div>
                 </div>
               </div>
+
+              
+              {/* Metronome */}
+              <Metronome/>
 
               <button
                 className="w-full md:w-122 border p-2 flex gap-2 items-center meshBg rounded-md c-border shadow-2xl"

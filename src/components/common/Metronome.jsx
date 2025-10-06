@@ -142,26 +142,26 @@ const Metronome = ({ initialBPM = 120, timeSignature = 2 }) => {
     <div className="c-bg-2 w-full md:w-122 p-4 rounded-md border c-border overscroll-contain space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold">Metronome</h1>
-        
-            <div
-              className="flex items-center justify-center metronomeSpin"
-              style={{
-                width: "20px",
-                height: "20px",
-                border: "10px solid",
-                borderRadius: "50%",
-                borderColor:
-                  currentBeat === 1
-                    ? "red" // Accent beat
-                    : currentBeat > 1 && isPlaying
-                    ? "yellow" // Regular beat
-                    : "gray",
-                animationDuration: bpm / 60,
-                animationPlayState: isPlaying,
-              }}
-            >
-              {/*<div className="metronome" style={{animationDuration:bpm/60,animationPlayState:isPlaying,}}></div>*/}
-            </div>
+
+        <div
+          className="flex items-center justify-center metronomeSpin"
+          style={{
+            width: "20px",
+            height: "20px",
+            border: "10px solid",
+            borderRadius: "50%",
+            borderColor:
+              currentBeat === 1
+                ? "red" // Accent beat
+                : currentBeat > 1 && isPlaying
+                ? "yellow" // Regular beat
+                : "gray",
+            animationDuration: bpm / 60,
+            animationPlayState: isPlaying,
+          }}
+        >
+          {/*<div className="metronome" style={{animationDuration:bpm/60,animationPlayState:isPlaying,}}></div>*/}
+        </div>
       </div>
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-center gap-4">
@@ -171,7 +171,13 @@ const Metronome = ({ initialBPM = 120, timeSignature = 2 }) => {
               type="number"
               className="w-full text-center text-2xl c-bg-2 border c-border rounded-md"
               value={signature}
-              onChange={(e) => setSignature(Number(e.target.value))}
+              max={30}
+              min={1}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                if (value > 30) setSignature(30);
+                else setSignature(value);
+              }}
               disabled={isPlaying}
             />
           </div>
@@ -180,18 +186,24 @@ const Metronome = ({ initialBPM = 120, timeSignature = 2 }) => {
               value={bpm}
               onChange={(e) => setBPM(e.value)}
               min={10}
-              max={501}
+              max={250}
               className="z-10"
             />
           </div>
           <div>
             <p className="text-center mb-2">BPM</p>
             <input
-                type="number"
-                className="w-full text-center text-2xl c-bg-2 border c-border rounded-md"
-                value={bpm}
-                onChange={(e) => setBPM(Number(e.target.value))}
-                disabled={isPlaying}
+              type="number"
+              className="w-full text-center text-2xl c-bg-2 border c-border rounded-md"
+              value={bpm}
+              max={250}
+              min={1}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                if (value > 100) setBPM(100);
+                else setBPM(value);
+              }}
+              disabled={isPlaying}
             />
           </div>
         </div>
