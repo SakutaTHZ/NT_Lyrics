@@ -616,6 +616,57 @@ img {
   z-index: 9999;
 }
 
+.metronome{
+  width: 2px;
+  height: 100%;
+  background: red;
+  position: absolute;
+  bottom: 0;
+  transform-origin: bottom;
+  animation-name: metronomeMoving;
+  animation-timing-function: cubic-bezier(0.87, 0, 0.13, 1);
+  animation-direction:  infinite alternate;
+}
+
+@keyframes metronomeMoving {
+  from{
+    transform: rotate(-90deg);
+  }to{
+    transform: rotate(90deg);
+  }
+}
+.metronomeSpin {
+  z-index: 1;
+}
+
+.metronomeSpin{
+  width: 105px;
+  height: 105px;
+  z-index: 2;
+  border-radius: 50%;
+  
+  /* Retained border setup from your original code */
+  border: 10px solid rgb(var(--color-bg-card));
+  border-bottom: 0;
+  
+  /* 🔥 FIX 1: COMBINE animation properties */
+  animation-name: metronomeSpinning;
+  animation-duration: 2s; /* Temporary placeholder. We'll set this via React. */
+  animation-timing-function: cubic-bezier(0.87, 0, 0.13, 1);
+  animation-iteration-count: infinite; /* Equivalent to your "infinite" direction */
+  animation-direction: alternate; /* The actual direction property */
+  animation-play-state: paused; /* Start paused, control via React */
+}
+
+@keyframes metronomeSpinning {
+  from {
+    transform: rotate(-45deg); /* Start slightly left */
+  }
+  to {
+    transform: rotate(45deg); /* Swing to the right */
+}
+}
+
 /* -------------------------------------------------------------------------- */
 /* 3. Custom Classes                                                          */
 /* -------------------------------------------------------------------------- */

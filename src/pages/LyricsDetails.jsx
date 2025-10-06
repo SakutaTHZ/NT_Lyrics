@@ -23,6 +23,7 @@ import PropTypes from "prop-types";
 import ModalContainer from "../components/special/ModalContainer";
 import { motion, AnimatePresence } from "framer-motion";
 import Chords from "./Chords";
+import Metronome from "../components/common/Metronome";
 
 const LyricsDetails = ({ lyricsId, onClose }) => {
   const { t } = useTranslation();
@@ -271,6 +272,9 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
                   ></iframe>
                 </div>
               )}
+
+              {/* Metronome */}
+              <Metronome/>
 
               {/* Details Section */}
               <div className="lyrics-width animate-down-start w-full md:w-122 h-full c-bg-2 rounded-lg shadow-lg p-4 md:p-8 border c-border">
