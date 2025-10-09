@@ -13,10 +13,15 @@ import { Link } from "react-router-dom";
 
 import { useTheme } from "../hooks/ThemeContext";
 
-const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate }) => {
-
+const ProfileEdit = ({
+  userData,
+  usernameChange,
+  emailChange,
+  closeBox,
+  onUpdate,
+}) => {
   const localStorageUser = JSON.parse(localStorage.getItem("user") || "{}");
-  
+
   const { theme, setTheme } = useTheme();
 
   const { t, i18n } = useTranslation();
@@ -32,6 +37,9 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
 
   const [name, setUsername] = useState("");
   const [isUsernameCorrect, setIsUsernameCorrect] = useState(true);
+
+  const [isChanged, setIsChanged] = useState(false);
+
   const checkUsername = (input) => {
     setUsername(input);
     if (input.length < 3 || input.length > 20) {
@@ -139,6 +147,17 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
   );
 
   useEffect(() => {
+    const hasChanges =
+      name !== (user?.name || "") ||
+      email !== (user?.email || "") ||
+      language !== (localStorage.getItem("language") || "my") ||
+      passwordChange ||
+      theme !== (localStorage.getItem("theme") || theme); // optional, depending where theme is stored
+
+    setIsChanged(hasChanges);
+  }, [name, email, passwordChange, newPassword, language, theme, user]);
+
+  useEffect(() => {
     setUsername(user?.name || "");
     setEmail(user?.email || "");
   }, [user]);
@@ -169,8 +188,12 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
                   <span className="text-sm c-premium-bg text-yellow-800 py-1 px-2 rounded-md font-semibold">
                     Premium
                   </span>
-                  <Link to={"/NT_Lyrics/premium"} title="See Features" className="ml-auto text-blue-500 font-semibold underline">
-                    <BiInfoCircle size={24}/>
+                  <Link
+                    to={"/NT_Lyrics/premium"}
+                    title="See Features"
+                    className="ml-auto text-blue-500 font-semibold underline"
+                  >
+                    <BiInfoCircle size={24} />
                   </Link>
                 </div>
 
@@ -193,10 +216,15 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
               <div className="c-bg-2 border c-border w-full p-4 rounded-md flex flex-col gap-2">
                 <p>
                   {t("yourAccountIs")}
-                  <span className="text-blue-500 font-semibold pl-2">Free</span>{" "}
+                  <span className="text-blue-500 font-semibold pl-2">
+                    Free
+                  </span>{" "}
                 </p>
                 <p className="text-gray-500">[{t("tryPremium")}]</p>
-                <Link to={"/NT_Lyrics/premium"} className="bg-blue-100 px-2 py-2 rounded-md text-center">
+                <Link
+                  to={"/NT_Lyrics/premium"}
+                  className="c-primary text-black px-2 py-2 rounded-md text-center"
+                >
                   {t("learnMore")}...
                 </Link>
               </div>
@@ -256,7 +284,9 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
                   )}
                 </div>
                 {/* Password */}
-                <div className={`w-full ${localStorageUser.isOAuth && "hidden"} `}>
+                <div
+                  className={`w-full ${localStorageUser.isOAuth && "hidden"} `}
+                >
                   <label
                     htmlFor="Change Password"
                     className={`${labelClass} flex justify-between items-center`}
@@ -390,8 +420,13 @@ const ProfileEdit = ({ userData, usernameChange, emailChange, closeBox, onUpdate
             <div className="w-full flex flex-col items-center gap-2 border-t border-dashed c-border pt-2 pb-12 md:pb-0">
               <div className="w-full flex items-center gap-2 mt-2">
                 <button
-                  className="w-full bg-blue-500 px-4 text-white font-semibold p-2 rounded-md"
+                  className={`w-full px-4 text-white font-semibold p-2 rounded-md ${
+                    isChanged
+                      ? "bg-blue-500 hover:bg-blue-600"
+                      : "bg-gray-400 cursor-not-allowed"
+                  }`}
                   onClick={() => {
+                    if (!isChanged) return;
                     vibratePattern("doubleTap");
                     updateUser();
                     closeBox();

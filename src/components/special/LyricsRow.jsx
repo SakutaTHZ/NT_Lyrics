@@ -80,7 +80,7 @@ const LyricsRow = ({
     } catch (err) {
       console.error(err.message);
       setMessageType("error");
-      if (err.message === "You can add only 20 collections") {
+      if (err.message === "You can only add 20 collections") {
         setMessageText(t("youCanOnlyAddUpTo20SongsToEachCollection"));
       } else {
         setMessageText(t("somethingWentWrongPleaseTryAgainLater"));
@@ -104,7 +104,7 @@ const LyricsRow = ({
                 <span key={index}>{line}</span>
               ))}
             </p>
-            {((access === 1) ||
+            {(access === 1 ||
               (messageType === "error" &&
                 messageText ===
                   t("youCanOnlyAddUpTo20SongsToEachCollection"))) && (
@@ -212,6 +212,10 @@ const LyricsRow = ({
           <LyricsDetails
             lyricsId={selectedLyric}
             onClose={() => setShowLyricDetails(false)}
+            onCollectionStatusChange={(newStatus) => {
+              setIsInCollection(newStatus);
+              onCollectionStatusChange();
+            }}
           />
         </ModalContainer>
       )}

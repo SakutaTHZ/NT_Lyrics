@@ -25,7 +25,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Chords from "./Chords";
 import Metronome from "../components/common/Metronome";
 
-const LyricsDetails = ({ lyricsId, onClose }) => {
+const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange  }) => {
+  console.log("Rendering LyricsDetails for ID:", lyricsId);
   const { t } = useTranslation();
 
   const [isVisible, setIsVisible] = useState(true);
@@ -33,6 +34,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
   const [showChords, setShowChords] = useState(false);
 
   const handleClose = () => {
+    onCollectionStatusChange && onCollectionStatusChange(isInCollection);
     setIsVisible(false);
     // after animation duration, call the parent onClose
     setTimeout(() => {
@@ -147,6 +149,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
       }
 
       setIsInCollection(shouldAdd);
+      if (onCollectionStatusChange) onCollectionStatusChange(shouldAdd); 
       setMessageText(successMessage);
 
       return res;
@@ -515,6 +518,7 @@ const LyricsDetails = ({ lyricsId, onClose }) => {
 LyricsDetails.propTypes = {
   lyricsId: PropTypes.string,
   onClose: PropTypes.func,
+  onCollectionStatusChange: PropTypes.func,
 };
 
 export default LyricsDetails;

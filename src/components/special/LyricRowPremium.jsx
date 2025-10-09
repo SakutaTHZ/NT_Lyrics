@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MessagePopup from "../common/MessagePopup";
 import { motion } from "framer-motion";
 import { BsHeartFill, BsThreeDotsVertical } from "react-icons/bs";
@@ -20,6 +20,7 @@ const LyricRowPremium = ({
   isLast,
   lastUserRef,
   hideCollection = false,
+  onCollectionStatusChange,
 }) => {
   const { t } = useTranslation();
 
@@ -36,6 +37,10 @@ const LyricRowPremium = ({
     triggerOnce: true, // Trigger only once when it first comes into view
     threshold: 0.5, // 50% of the element should be in view
   });
+
+  useEffect(() => {
+    setIsInCollection(lyric.isFavourite);
+  }, [lyric.isFavourite]);
 
   // eslint-disable-next-line no-unused-vars
   const changeLyricsStatus = async (shouldAdd) => {
@@ -166,6 +171,9 @@ const LyricRowPremium = ({
               close={() => setAddToCollection(false)}
               onCollectionsUpdated={(updatedCollections) => {
                 setIsInCollection(updatedCollections.length > 0);
+                if (typeof onCollectionStatusChange === "function") {
+                  onCollectionStatusChange(id, updatedCollections);
+                }
               }}
             />
           </ModalContainer>
@@ -180,6 +188,13 @@ const LyricRowPremium = ({
           <LyricsDetails
             lyricsId={selectedLyric}
             onClose={() => setShowLyricDetails(false)}
+            onCollectionStatusChange={(newStatus) => {
+              console.log("Collection status changed:", newStatus);
+              setIsInCollection(newStatus); // update this row
+              if (typeof onCollectionStatusChange === "function") {
+                onCollectionStatusChange(selectedLyric, newStatus); // notify parent
+              }
+            }}
           />
         </ModalContainer>
       )}
@@ -193,6 +208,7 @@ LyricRowPremium.propTypes = {
   lastUserRef: PropTypes.object,
   isLast: PropTypes.bool,
   hideCollection: PropTypes.bool,
+  onCollectionStatusChange: PropTypes.func,
 };
 
 export default LyricRowPremium;

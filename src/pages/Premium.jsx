@@ -156,7 +156,7 @@ const Premium = () => {
                         className={`${columnClass} c-bg-2 w-24`}
                       >
                         <button
-                          className="w-full c-primary text-black px-4 py-2 rounded-lg hover:bg-blue-600"
+                          className="loading-animation w-full c-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                           onClick={openUpgradeModal}
                         >
                           {t("upgradeNow")}
@@ -171,7 +171,7 @@ const Premium = () => {
             {/* Unlock All Lyrics */}
             <div
               id="unlockAllLyrics"
-              className="unlockAllLyrics w-full flex flex-col c-bg-2 p-2 rounded-lg mt-4"
+              className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
             >
               <div className="flex items-center gap-2">
                 <CgCheck size={24} className="text-green-500" />
@@ -189,7 +189,7 @@ const Premium = () => {
             {/* Collections */}
             <div
               id="collections"
-              className="unlockAllLyrics w-full flex flex-col c-bg-2 p-2 rounded-lg mt-4"
+              className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
             >
               <div className="flex items-center gap-2">
                 <CgCheck size={24} className="text-green-500" />
@@ -211,7 +211,7 @@ const Premium = () => {
             {/* Theme */}
             <div
               id="themes"
-              className="unlockAllLyrics w-full flex flex-col c-bg-2 p-2 rounded-lg mt-4"
+              className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
             >
               <div className="flex items-center gap-2">
                 <CgCheck size={24} className="text-green-500" />
@@ -229,7 +229,7 @@ const Premium = () => {
             {console.log("Render: isPaymentProcessing =", isPaymentProcessing)}
             {!isPaymentProcessing && (
               <button
-                className="loading-animation w-full c-primary text-black px-4 py-2 rounded-lg hover:bg-blue-600 my-2 mb-8"
+                className="loading-animation w-full c-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 my-2 mb-8"
                 onClick={openUpgradeModal}
               >
                 {t("upgradeNow")}

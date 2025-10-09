@@ -24,12 +24,12 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-    document.documentElement.style.height = "100vh";
+    document.body.style.overflow = "hidden";
+    document.body.style.height = "100vh";
     return () => {
       document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
-      document.documentElement.style.height = "auto";
+      document.body.style.overflow = "auto";
+      document.body.style.height = "auto";
     };
   }, []);
 
@@ -44,7 +44,7 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
   const paymentinfo = ({ selectedpayment }) => {
     if (selectedpayment === "KPay") {
       return (
-        <div className="animate-down-start p-4 bg-gray-100 rounded-md flex gap-4 items-start">
+        <div className="animate-down-start p-4 c-bg-2 rounded-md flex gap-4 items-start border c-border my-2">
           <img
             src={kpay}
             alt="Payment"
@@ -74,7 +74,7 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
       );
     } else if (selectedpayment === "AYAPay") {
       return (
-        <div className="animate-down-start p-4 bg-gray-100 rounded-md flex gap-4 items-start">
+        <div className="animate-down-start p-4 c-bg-2 rounded-md flex gap-4 items-start border c-border my-2">
           <img
             src={ayapay}
             alt="Payment"
@@ -104,7 +104,7 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
       );
     } else if (selectedpayment === "WaveMoney") {
       return (
-        <div className="animate-down-start p-4 bg-gray-100 rounded-md flex gap-4 items-start">
+        <div className="animate-down-start p-4 c-bg-2 rounded-md flex gap-4 items-start border c-border my-2">
           <img
             src={wavemoney}
             alt="Payment"
@@ -275,16 +275,16 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
                   {t("upgradePremium.title")}
                 </h2>
                 <button
-                  className="text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={onClose}
                   disabled={isLoading}
                 >
-                  <BiX size={24} />
+                  <BiX size={30} />
                 </button>
               </div>
               {/* Body content */}
               <div className="flex flex-col gap-2">
-                <hr className="border-gray-300 border-dashed" />
+                <hr className="c-border border-dashed" />
 
                 {errorMessage && (
                   <div className="p-2 bg-red-100 text-red-700 border border-red-300 rounded text-sm">
@@ -327,7 +327,7 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
                 {/* File Upload */}
                 {phoneNumber && selectedpayment && selectedDuration && (
                   <div className="w-full animate-left">
-                    <label className="block mb-2 text-sm font-medium text-gray-700">
+                    <label className="block mb-2 text-sm font-medium opacity-80">
                       {t("upgradePremium.uploadAValidPaymentProof")}
                       <span className="pl-1 text-red-500">
                         {t("upgradePremium.uploadFileRequired")}
@@ -365,7 +365,7 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
                           console.error("Image compression failed:", error);
                         }
                       }}
-                      className="w-full p-2 border border-gray-300 rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      className="w-full p-2 border c-border rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed"
                     />
                     {/* Notice */}
                     <p className="mt-1 text-sm bg-red-100 p-2 rounded text-red-800">
@@ -376,7 +376,7 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
 
                 {paymentinfo({ selectedpayment })}
 
-                <hr className="border-gray-300 border-dashed" />
+                <hr className="c-border border-dashed" />
                 {/* Total */}
                 <div className="flex justify-between items-center">
                   <span className="font-semibold">

@@ -786,3 +786,9 @@ body.dark {
     filter: invert(1);
   }
 }
+
+.c-dd{
+  .p-inputtext{
+    border: 0 !important;
+  }
+}

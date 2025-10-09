@@ -144,7 +144,7 @@ const Profile = () => {
     };
 
     checkPayment();
-  }, [user,token]);
+  }, [user, token]);
 
   /** ===================
    * SYNC USER INFO
@@ -190,7 +190,7 @@ const Profile = () => {
   useEffect(() => {
     if (!user) return;
     getCollection();
-  }, [user,getCollection]);
+  }, [user, getCollection]);
 
   /** ===================
    * LYRICS FETCH
@@ -248,8 +248,7 @@ const Profile = () => {
       : collection.collections[0].group;
     setSelectedGroup(firstGroup);
     getLyricsByGroup(firstGroup, 1, true);
-    
-  }, [user,collection, getLyricsByGroup]);
+  }, [user, collection, getLyricsByGroup]);
 
   /** ===================
    * GROUP HANDLERS
@@ -260,12 +259,19 @@ const Profile = () => {
     getLyricsByGroup(group, 1, true);
   };
 
-  const handleCollectionStatusChange = useCallback(() => {
-    if (selectedGroup) {
-      getLyricsByGroup(selectedGroup, 1, true);
-      getCollection();
-    }
-  }, [selectedGroup, getLyricsByGroup, getCollection]);
+  const handleCollectionStatusChange = useCallback(
+    (lyricId, isFavourite) => {
+      setSelectedGroupLyrics((prev) =>
+        prev.map((l) => (l._id === lyricId ? { ...l, isFavourite } : l))
+      );
+      // Then re-fetch to sync with backend
+      if (selectedGroup) {
+        getLyricsByGroup(selectedGroup, 1, true);
+        getCollection();
+      }
+    },
+    [selectedGroup, getLyricsByGroup, getCollection]
+  );
 
   const deleteGroup = async () => {
     if (!selectedGroup) return;
@@ -512,7 +518,7 @@ const Profile = () => {
 
               <div className="relative">
                 {userRole !== "premium-user" && defaultGroupCount >= 20 && (
-                  <button className="bg-amber-200 px-5 py-1 rounded-full w-full">
+                  <button className="bg-amber-200 text-black px-5 py-1 rounded-full w-full">
                     More features in Premium{" "}
                     <Link
                       to="/NT_Lyrics/premium"
@@ -608,6 +614,7 @@ const Profile = () => {
                             onCollectionStatusChange={
                               handleCollectionStatusChange
                             }
+                            refresh={true}
                           />
                         </div>
                       );
@@ -638,7 +645,7 @@ const Profile = () => {
                   return (
                     <div
                       key={lyric._id}
-                      className="border-b border-gray-200 last:border-0 border-dashed"
+                      className="border-b c-border last:border-0 border-dashed"
                     >
                       <LyricsRow
                         id={lyric._id}

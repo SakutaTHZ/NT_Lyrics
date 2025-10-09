@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 
-const InputField = ({ label, value, onChange, placeholder,required,disabled }) => (
+const InputField = ({ label, value, onChange, placeholder, required, disabled }) => (
     <div>
-      <label className="block mb-1 text-sm font-medium text-gray-700">{label}{required && (<span className="pl-1 text-red-500">*</span>)}</label>
+      <label className="block mb-1 text-sm font-medium opacity-80">{label}{required && (<span className="pl-1 text-red-500">*</span>)}</label>
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full p-2 border border-gray-300 rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed"
+        className="w-full p-2 border c-border rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed"
         disabled={disabled}
       />
     </div>
