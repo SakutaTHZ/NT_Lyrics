@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 
 import PropTypes from "prop-types";
 import PasswordInput from "./Password_Input";
@@ -133,9 +133,6 @@ const ProfileEdit = ({
           isOAuth: localStorageUser.isOAuth,
         })
       );
-      localStorage.setItem("language", language);
-
-      i18n.changeLanguage(language);
     } catch (error) {
       console.error("Error updating user:", error);
       alert(t("updateFailed"));
@@ -147,15 +144,23 @@ const ProfileEdit = ({
   );
 
   useEffect(() => {
-    const hasChanges =
+    i18n.changeLanguage(language);
+    localStorage.setItem("language", language);
+  }, [language, i18n]);
+
+  useEffect(() => {
+    const lang = localStorage.getItem("language") || "my";
+    setLanguage(lang);
+  }, []);
+
+  useEffect(() => {
+    const hasProfileChanges =
       name !== (user?.name || "") ||
       email !== (user?.email || "") ||
-      language !== (localStorage.getItem("language") || "my") ||
-      passwordChange ||
-      theme !== (localStorage.getItem("theme") || theme); // optional, depending where theme is stored
+      passwordChange;
 
-    setIsChanged(hasChanges);
-  }, [name, email, passwordChange, newPassword, language, theme, user]);
+    setIsChanged(hasProfileChanges);
+  }, [name, email, passwordChange, newPassword, user]);
 
   useEffect(() => {
     setUsername(user?.name || "");
@@ -176,11 +181,11 @@ const ProfileEdit = ({
           <p className="w-full px-6 font-bold text-lg italic">{t("setting")}</p>
         </div>
         <div className="w-full px-6 flex flex-col items-center justify-center gap-4">
-          <div className="w-full flex flex-col items-center gap-2 border-t c-border pt-2 border-dashed">
+          <div className="w-full flex flex-col items-center gap-4 border-t c-border pt-4 border-dashed">
             {/* Premium Info */}
 
             {user.role === "premium-user" ? (
-              <div className="c-bg-2 border c-border w-full p-5 rounded-xl  space-y-3">
+              <div className="c-bg-2 border c-border w-full p-5 rounded-xl  space-y-4">
                 <div className="flex items-center gap-2">
                   <p className="c-gray-text font-medium">
                     {t("yourAccountIs")}
@@ -213,7 +218,7 @@ const ProfileEdit = ({
                 </div>
               </div>
             ) : (
-              <div className="c-bg-2 border c-border w-full p-4 rounded-md flex flex-col gap-2">
+              <div className="c-bg-2 border c-border w-full p-5 rounded-md flex flex-col gap-2">
                 <p>
                   {t("yourAccountIs")}
                   <span className="text-blue-500 font-semibold pl-2">
@@ -229,9 +234,85 @@ const ProfileEdit = ({
                 </Link>
               </div>
             )}
+            
+            {/* App Data */}
+            <div className="w-full flex flex-col items-center pb-2 gap-2 border-t border-dashed c-border pt-4">
+              <p className="w-full font-semibold text-md italic text-gray-500">
+                {t("app")}
+              </p>
+              <div className="c-bg-2 border c-border w-full p-4 rounded-md flex flex-col gap-4">
+                {/* Language */}
+                <div className="flex flex-col w-full py-1">
+                  <label htmlFor="language" className={`${labelClass}`}>
+                    {t("language")}
+                  </label>
+
+                  <div className="flex flex-wrap gap-3 pt-2">
+                    <div className="flex align-items-center">
+                      <RadioButton
+                        inputId="language"
+                        name="language"
+                        value="my"
+                        onChange={(e) => setLanguage(e.value)}
+                        checked={language === "my"}
+                      />
+                      <label htmlFor="language" className="ml-2">
+                        {t("myanmar")}
+                      </label>
+                    </div>
+                    <div className="flex align-items-center">
+                      <RadioButton
+                        inputId="language"
+                        name="language"
+                        value="en"
+                        onChange={(e) => setLanguage(e.value)}
+                        checked={language === "en"}
+                      />
+                      <label htmlFor="language" className="ml-2">
+                        {t("english")}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Theme */}
+                <div className="flex flex-col w-full">
+                  <label htmlFor="theme" className={`${labelClass}`}>
+                    {t("theme")}
+                  </label>
+
+                  <div className="flex flex-wrap gap-3 pt-2">
+                    <div className="flex align-items-center">
+                      <RadioButton
+                        inputId="theme"
+                        name="theme"
+                        value="light"
+                        onChange={(e) => setTheme(e.value)}
+                        checked={theme === "light"}
+                      />
+                      <label htmlFor="theme" className="ml-2">
+                        Light
+                      </label>
+                    </div>
+                    <div className="flex align-items-center">
+                      <RadioButton
+                        inputId="theme"
+                        name="theme"
+                        value="dark"
+                        onChange={(e) => setTheme(e.value)}
+                        checked={theme === "dark"}
+                      />
+                      <label htmlFor="theme" className="ml-2">
+                        Dark
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             {/* Profile Datas */}
-            <div className="w-full flex flex-col items-center pb-2 gap-2">
+            <div className="w-full flex flex-col items-center pb-2 gap-2 border-t border-dashed c-border pt-4">
               <p className="w-full font-semibold text-md italic text-gray-500">
                 {t("info")}
               </p>
@@ -336,82 +417,6 @@ const ProfileEdit = ({
                       )}
                     </>
                   )}
-                </div>
-              </div>
-            </div>
-
-            {/* App Data */}
-            <div className="w-full flex flex-col items-center pb-2 gap-2 border-t border-dashed c-border pt-2">
-              <p className="w-full font-semibold text-md italic text-gray-500">
-                {t("app")}
-              </p>
-              <div className="c-bg-2 border c-border w-full p-4 rounded-md flex flex-col gap-4">
-                {/* Language */}
-                <div className="flex flex-col w-full py-1">
-                  <label htmlFor="language" className={`${labelClass}`}>
-                    {t("language")}
-                  </label>
-
-                  <div className="flex flex-wrap gap-3 pt-2">
-                    <div className="flex align-items-center">
-                      <RadioButton
-                        inputId="language"
-                        name="language"
-                        value="my"
-                        onChange={(e) => setLanguage(e.value)}
-                        checked={language === "my"}
-                      />
-                      <label htmlFor="language" className="ml-2">
-                        {t("myanmar")}
-                      </label>
-                    </div>
-                    <div className="flex align-items-center">
-                      <RadioButton
-                        inputId="language"
-                        name="language"
-                        value="en"
-                        onChange={(e) => setLanguage(e.value)}
-                        checked={language === "en"}
-                      />
-                      <label htmlFor="language" className="ml-2">
-                        {t("english")}
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Theme */}
-                <div className="flex flex-col w-full">
-                  <label htmlFor="theme" className={`${labelClass}`}>
-                    {t("theme")}
-                  </label>
-
-                  <div className="flex flex-wrap gap-3 pt-2">
-                    <div className="flex align-items-center">
-                      <RadioButton
-                        inputId="theme"
-                        name="theme"
-                        value="light"
-                        onChange={(e) => setTheme(e.value)}
-                        checked={theme === "light"}
-                      />
-                      <label htmlFor="theme" className="ml-2">
-                        Light
-                      </label>
-                    </div>
-                    <div className="flex align-items-center">
-                      <RadioButton
-                        inputId="theme"
-                        name="theme"
-                        value="dark"
-                        onChange={(e) => setTheme(e.value)}
-                        checked={theme === "dark"}
-                      />
-                      <label htmlFor="theme" className="ml-2">
-                        Dark
-                      </label>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

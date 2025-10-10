@@ -168,7 +168,7 @@ const LyricsRow = ({
               </span>
 
               {imageError && (
-                <span className="border px-1 py-0.5 text-xs rounded-md border-gray-300 bg-gray-100 shrink-0">
+                <span className="border ml-2 px-1 py-0.5 text-xs rounded-md c-bg-2 c-border shrink-0 opacity-50">
                   Coming Soon
                 </span>
               )}
