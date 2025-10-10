@@ -189,7 +189,6 @@ const LyricRowPremium = ({
             lyricsId={selectedLyric}
             onClose={() => setShowLyricDetails(false)}
             onCollectionStatusChange={(newStatus) => {
-              console.log("Collection status changed:", newStatus);
               setIsInCollection(newStatus); // update this row
               if (typeof onCollectionStatusChange === "function") {
                 onCollectionStatusChange(selectedLyric, newStatus); // notify parent

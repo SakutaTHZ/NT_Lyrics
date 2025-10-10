@@ -48,6 +48,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange  }) => {
 
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
+  const [messageType, setMessageType] = useState("success");
 
   const id = lyricsId;
 
@@ -135,17 +136,19 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange  }) => {
     }
 
     const successMessage = shouldAdd
-      ? "Lyrics has been added to the collection"
-      : "Lyrics has been removed from the collection";
+      ? t("lyricHasBeenAddedToCollection")
+      : t("lyricHasBeenRemovedFromCollection")
 
     try {
       let res = null;
       if (shouldAdd) {
         // Add lyrics to collection
         res = await addLyricsToCollection(id, token);
+        setMessageType("success");
       } else {
         // Remove lyrics from collection
         res = await removeLyricsFromCollection(id, "Default", token);
+        setMessageType("error");
       }
 
       setIsInCollection(shouldAdd);
@@ -175,7 +178,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange  }) => {
           >
             {showMessage && (
               <MessagePopup
-                message_type={"success"}
+                message_type={messageType}
                 closePopup={() => setShowMessage(false)}
               >
                 <div className="message_text text-pretty text-left">

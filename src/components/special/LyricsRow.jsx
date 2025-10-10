@@ -192,7 +192,7 @@ const LyricsRow = ({
               <Normal_Button
                 icon={FaRegHeart}
                 text=""
-                custom_class={`w-8 h-8 border-transparent shadow-sm bg-white text-black transition-all`}
+                custom_class={`w-8 h-8 border-transparent shadow-sm c-bg-2 transition-all`}
                 onClick={(e) => {
                   e.stopPropagation();
                   vibrateOnce();

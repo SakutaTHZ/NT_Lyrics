@@ -13,7 +13,7 @@ const MessagePopup = ({
   children,
   closePopup = () => {},
 }) => {
-  
+  console.log("Rendering MessagePopup");
   const { vibratePattern } = useVibration();
   if (message_type === "error") {
     vibratePattern("errorBuzz");
@@ -25,7 +25,7 @@ const MessagePopup = ({
 
   return createPortal(
     <>
-      <div className="animate-down fixed top-4 z-[2000] water-drop w-full h-12 rounded-full py-4 flex items-center justify-center" onClick={closePopup}>
+      <div className="animate-down fixed top-4 z-[9999999] water-drop w-full h-12 rounded-full py-4 flex items-center justify-center" onClick={closePopup}>
         <div className={`waterDrop w-8 h-8  rounded-full shadow-lg mx-auto border ${
             message_type === "error"
               ? "c-error-box"
