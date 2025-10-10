@@ -33,9 +33,17 @@ const ChordsDisplay = ({ originalChords, error, reading }) => {
 
   return (
     <div className="flex justify-center items-center w-full">
+      {/* 1. Show Error State */}
       {error && <div className="text-red-500">{error}</div>}
 
-      {!error && chordDataForGrid.length > 0 && (
+      {/* 2. Show Loading/Reading State (PRIORITY) */}
+      {!error && reading && (
+        <div className="text-center c-text italic p-4 py-2 lyrics-width">
+          Reading chords from image...
+        </div>
+      )}
+
+      {!error && !reading && chordDataForGrid.length > 0 && (
         <div className="lyrics-width animate-down-start w-full md:w-122 h-full c-bg-2 rounded-lg shadow-lg p-4 md:p-8 border c-border">
           <div className="flex justify-between items-center mb-2">
             <h1 className="text-lg font-semibold">Possible Chords</h1>
@@ -66,12 +74,11 @@ const ChordsDisplay = ({ originalChords, error, reading }) => {
             </div>
           </div>
 
-
-          {/* 💡 Chords Extracted */}
+          {/* 💡 Chords Extracted (List) */}
           <div className="c-announcement-bg c-border rounded-md p-2 mb-2 overflow-x-auto whitespace-nowrap">
-            {chordDataForGrid.map((chordItem) => (
+            {chordDataForGrid.map((chordItem, index) => (
               <span
-                key={chordItem.original}
+                key={index} // Use index as key if original isn't unique enough
                 className="text-base font-mono font-medium c-text mr-2"
               >
                 {chordItem.original}
@@ -129,13 +136,8 @@ const ChordsDisplay = ({ originalChords, error, reading }) => {
         </div>
       )}
 
-      {/* Loading/No Chords state */}
-      {!error && chordDataForGrid.length === 0 && reading && (
-        <div className="text-center c-text italic p-4 lyrics-width">
-          Reading chords from image...
-        </div>
-      )}
-      {!error && chordDataForGrid.length === 0 && !reading && (
+      {/* 4. Show Empty Result State (Only if NOT reading and no chords) */}
+      {!error && !reading && chordDataForGrid.length === 0 && (
         <div className="text-center c-text italic p-4 lyrics-width">
           No chords found.
         </div>
