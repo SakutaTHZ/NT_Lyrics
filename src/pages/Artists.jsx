@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import Artist from "./Artist";
 import ModalContainer from "../components/special/ModalContainer";
 import { Link } from "react-router-dom";
+import StickySearch from "../components/common/StickySearch";
 
 const Artists = () => {
   const { t } = useTranslation();
@@ -104,8 +105,7 @@ const Artists = () => {
     <Suspense fallback={<div>Loading...</div>}>
       <div className="w-screen h-screen overflow-hidden overflow-y-auto">
         <div className="relative flex flex-col w-screen min-h-screen pt-4 md:pt-16">
-          <div className="flex flex-col gap-2 px-4 md:px-24">
-            <div className="flex items-center justify-between c-text-primary">
+            <div className="flex items-center justify-between c-text-primary  px-4 md:px-24 pb-2">
               <p className="font-bold text-xl italic flex gap-2 items-center md:gap-4">
                 {t("artistsList")}
               </p>
@@ -115,15 +115,7 @@ const Artists = () => {
             </div>
 
             {/* Search */}
-            <div className="w-full py-2 sticky md:top-12 top-0 c-bg z-10">
-              <input
-                type="text"
-                placeholder={t("searchforArtists")}
-                className="border c-border rounded-md px-3 py-2 w-full h-[42px]"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+            <StickySearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} title={t("searchforArtists")} />
 
             {/* Artists */}
             {artists.map((artist, idx) => {
@@ -132,7 +124,7 @@ const Artists = () => {
               return (
                 <div
                   key={artist._id || idx}
-                  className="relative flex items-center w-full border-b last:border-0 gap-4 border-dashed c-border py-2 cursor-pointer"
+                  className="relative flex items-center w-full border-b last:border-0 gap-4 border-dashed c-border py-2 cursor-pointer mx-4 md:mx-24"
                   onClick={() => {
                     //navigate(`/NT_Lyrics/artist/${artist._id}`);
                     setSelectedArtist(artist._id);
@@ -173,7 +165,6 @@ const Artists = () => {
         </div>
 
         <Footer />
-      </div>
 
       {/* Artist Details Modal */}
       {showArtistDetails && selectedArtist && (

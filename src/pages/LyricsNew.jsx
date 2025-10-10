@@ -14,6 +14,7 @@ import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 import { useTranslation } from "react-i18next";
 import { BiArrowBack } from "react-icons/bi";
+import StickySearch from "../components/common/StickySearch";
 
 const Footer = React.lazy(() => import("../components/common/Footer"));
 
@@ -106,8 +107,7 @@ const Lyrics = () => {
         }
 
         setLyrics((prev) => {
-          const merged =
-            override || pageNum === 1 ? data : [...prev, ...data];
+          const merged = override || pageNum === 1 ? data : [...prev, ...data];
           return Array.from(
             new Map(merged.map((item) => [item._id, item])).values()
           );
@@ -134,7 +134,7 @@ const Lyrics = () => {
         fetchLyrics(2);
       }
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm, fetchLyrics]);
 
   // Fetch when page changes (after prefetch, will be instant if cached)
@@ -157,26 +157,17 @@ const Lyrics = () => {
     <Suspense fallback={<div>Loading...</div>}>
       <div className="w-screen h-screen">
         <div className="relative flex flex-col w-screen min-h-screen pt-4 md:pt-16">
-
           <div className="flex items-center justify-between pb-2 c-text-primary px-4 md:px-24">
-              <p className="font-bold text-xl italic flex gap-2 items-center md:gap-4">
-                {t("songLyrics")}
-              </p>
-              <Link to={"/"}>
-                <BiArrowBack size={24} />
-              </Link>
-            </div>
+            <p className="font-bold text-xl italic flex gap-2 items-center md:gap-4">
+              {t("songLyrics")}
+            </p>
+            <Link to={"/"} className="sticky md:top-12 top-0">
+              <BiArrowBack size={24} />
+            </Link>
+          </div>
 
           {/* Search */}
-          <div className="py-2 px-4 md:px-24 sticky md:top-12 top-0 c-bg z-10">
-            <input
-              type="text"
-              placeholder={t("searchSongs")}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 border c-border rounded"
-            />
-          </div>
+          <StickySearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} title={t("searchSongs")} />
 
           {/* Lyrics List */}
           {userLoaded && (
@@ -234,6 +225,7 @@ const Lyrics = () => {
           )}
         </div>
       </div>
+
       <Footer />
     </Suspense>
   );

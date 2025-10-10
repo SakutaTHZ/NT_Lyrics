@@ -1,6 +1,6 @@
 import Footer from "../components/common/Footer";
 import { BiArrowBack, BiSearch } from "react-icons/bi";
-import { AutoComplete } from "primereact/autocomplete";
+//import { AutoComplete } from "primereact/autocomplete";
 import { useState, useEffect } from "react";
 import { useCallback } from "react";
 import axios from "axios";
@@ -41,16 +41,16 @@ const Artist = ({ artistId, onClose }) => {
   const [totalPages, setTotalPages] = useState(0);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
-  const [items, setItems] = useState([]);
+  //const [items, setItems] = useState([]);
 
-  const search = (event) => {
+  /*const search = (event) => {
     const filteredTitles = lyrics
       .filter(
         (item) => item.title.toLowerCase().includes(event.query.toLowerCase()) // Search by title
       )
       .map((item) => item.title); // Return titles
     setItems(filteredTitles); // Set filtered titles
-  };
+  };*/
 
   const lastUserRef = useCallback(
     (node) => {
@@ -212,7 +212,7 @@ const Artist = ({ artistId, onClose }) => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             {/* ...all your modal content here... */}
-            <div className="relative p-4 py-4 md:px-24 md:pt-16 border-b border-dashed c-border">
+            <div className="relative p-4 py-4 md:px-24 md:pt-16">
               <div className="flex items-center justify-between gap-4">
                 {/* header content */}
 
@@ -254,8 +254,8 @@ const Artist = ({ artistId, onClose }) => {
               </div>
             </div>
 
-            <div className="flex justify-between gap-2 py-4 px-4 md:px-24 sticky top-0 md:top-12 c-bg z-10">
-              <AutoComplete
+            <div className="flex justify-between gap-2  px-4 md:px-24 sticky top-0 md:top-12 c-bg z-10">
+              {/*<AutoComplete
                 value={searchTerm}
                 suggestions={items}
                 completeMethod={search}
@@ -268,8 +268,10 @@ const Artist = ({ artistId, onClose }) => {
                   panel: "shadow-lg border c-border",
                   item: "px-4 py-2 hover:bg-gray-200 cursor-pointer",
                 }}
-              />
+              />*/}
             </div>
+            
+              <StickySearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} title={t("searchSongs")} />
             {/* Featured Lyrics */}
             <div className="min-h-5/6 relative p-4 py-0 md:py-2 pt-0 md:px-24">
               <div className="grid grid-cols-1 py-0 gap-0">
@@ -283,9 +285,8 @@ const Artist = ({ artistId, onClose }) => {
                       lyrics.map((lyric, index) => {
                         const isLast = index === lyrics.length - 1;
                         return (
-                          <div key={index} className="m-0 p-0">
+                          <div key={index} className="border-b c-border last:border-0 border-dashed">
                             {user?.role === "premium-user" ? (
-                              <>
                                 <LyricsRowPremium
                                   id={lyric._id}
                                   lyric={lyric}
@@ -293,7 +294,6 @@ const Artist = ({ artistId, onClose }) => {
                                   lastUserRef={lastUserRef}
                                   hideCollection={!hasToken}
                                 />
-                              </>
                             ) : (
                               <LyricsRow
                                 id={lyric._id}
@@ -338,6 +338,7 @@ const Artist = ({ artistId, onClose }) => {
 
 import PropTypes from "prop-types";
 import LoadingBox from "../components/common/LoadingBox";
+import StickySearch from "../components/common/StickySearch";
 
 Artist.propTypes = {
   artistId: PropTypes.string,

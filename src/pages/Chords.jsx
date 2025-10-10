@@ -1,17 +1,43 @@
 import Footer from "../components/common/Footer";
 import { BiArrowBack } from "react-icons/bi";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 import { getChordData } from "../assets/js/chordLoader";
 
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import PropTypes from "prop-types";
+import ChordsDisplay from "../components/common/ChordsDisplay";
+import { extractChordsFromImage } from "../assets/util/ocrChords";
 
-const Chords = ({ chordKey, onClose }) => {
+const Chords = ({ imageLink, chordKey, onClose }) => {
   const { t } = useTranslation();
 
   const chords = getChordData();
+
+  const [reading, setReading] = useState(false);
+  const [text, setText] = useState("");
+  const [error, setError] = useState(null);
+
+  const handleReadImage = async (link) => {
+    setReading(true);
+    setError(null);
+    setText("");
+
+    try {
+      const chords = await extractChordsFromImage(link);
+      setText(chords.length ? chords.join(" ") : "No valid chords detected.");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to read chords from image.");
+    } finally {
+      setReading(false);
+    }
+  };
+
+  useEffect(() => {
+    handleReadImage(imageLink); // Sample image path
+  }, [imageLink]);
 
   const [isVisible, setIsVisible] = useState(true);
 
@@ -44,21 +70,28 @@ const Chords = ({ chordKey, onClose }) => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto"
+          className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto px-4 md:px-24"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b c-border">
+          <div className="flex items-center justify-between py-4 ">
             <h1 className="text-lg font-semibold">{t("chordsList")}</h1>
             <button onClick={handleClose} className="text-blue-500">
               <BiArrowBack size={20} />
             </button>
           </div>
 
-          <div className="p-4 space-y-4">
+          {/* Chords Display */}
+          <ChordsDisplay
+            originalChords={text.split(" ")} // pass chords as an array
+            error={error}
+            reading={reading}
+          />
+
+          <div className="py-4 space-y-4">
             {/* Top row of chord buttons (C, Db, D...) */}
             <div className="flex flex-wrap gap-2">
               {Object.keys(chords).map((chord) => (
@@ -121,6 +154,7 @@ const Chords = ({ chordKey, onClose }) => {
 };
 
 Chords.propTypes = {
+  imageLink: PropTypes.string,
   chordKey: PropTypes.string,
   onClose: PropTypes.func,
 };

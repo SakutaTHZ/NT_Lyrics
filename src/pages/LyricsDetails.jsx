@@ -29,32 +29,9 @@ import Chords from "./Chords";
 import Metronome from "../components/common/Metronome";
 import ImageGallery from "../components/common/ImageGallery";
 
-import { extractChordsFromImage } from "../assets/util/ocrChords";
-import ChordsDisplay from "../components/common/ChordsDisplay";
-
 const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
   console.log("Rendering LyricsDetails for ID:", lyricsId);
   const { t } = useTranslation();
-
-  const [reading, setReading] = useState(false);
-  const [text, setText] = useState("");
-  const [error, setError] = useState(null);
-
-  const handleReadImage = async (link) => {
-    setReading(true);
-    setError(null);
-    setText("");
-
-    try {
-      const chords = await extractChordsFromImage(link);
-      setText(chords.length ? chords.join(" ") : "No valid chords detected.");
-    } catch (err) {
-      console.error(err);
-      setError("Failed to read chords from image.");
-    } finally {
-      setReading(false);
-    }
-  };
 
   const [isVisible, setIsVisible] = useState(true);
 
@@ -91,11 +68,6 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
         );
         setLyrics(lyrics); // only the actual lyrics object
         setIsInCollection(lyrics.isFavourite);
-
-        // Auto-read chords after lyrics are fetched
-        if (lyrics.lyricsPhoto) {
-          handleReadImage(lyrics.lyricsPhoto); // call the OCR
-        }
       } catch (err) {
         console.error("Error fetching lyric:", err);
       }
@@ -284,12 +256,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
                 </div>
               </div>
 
-              {/* Chords Display */}
-              <ChordsDisplay
-                originalChords={text.split(" ")} // pass chords as an array
-                error={error}
-                reading={reading}
-              />
+              
 
               {/* Video Box */}
               {lyric.youTubeLink && user?.role == "premium-user" && (
@@ -532,6 +499,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
             onClose={() => setShowChords(false)}
           >
             <Chords
+              imageLink={lyric.lyricsPhoto}
               chordKey={lyric.majorKey}
               onClose={() => setShowChords(false)}
             />
