@@ -236,7 +236,7 @@ const ProfileEdit = ({
             )}
             
             {/* App Data */}
-            <div className="w-full flex flex-col items-center pb-2 gap-2 border-t border-dashed c-border pt-4">
+            <div className="w-full flex flex-col items-center pb-2 gap-2 border-t border-dashed c-border pt-2">
               <p className="w-full font-semibold text-md italic text-gray-500">
                 {t("app")}
               </p>
@@ -312,7 +312,7 @@ const ProfileEdit = ({
             </div>
 
             {/* Profile Datas */}
-            <div className="w-full flex flex-col items-center pb-2 gap-2 border-t border-dashed c-border pt-4">
+            <div className="w-full flex flex-col items-center pb-2 gap-2 border-t border-dashed c-border pt-2">
               <p className="w-full font-semibold text-md italic text-gray-500">
                 {t("info")}
               </p>

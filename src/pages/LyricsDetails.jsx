@@ -1,11 +1,14 @@
 import "react-medium-image-zoom/dist/styles.css";
 import Normal_Button from "../components/common/Normal_Button";
-import { CgClose, CgMaximize, CgRemove } from "react-icons/cg";
+import { CgMaximize, CgRemove } from "react-icons/cg";
 import { FaRegHeart, FaEye } from "react-icons/fa6";
 import { LuLogIn } from "react-icons/lu";
 import MessagePopup from "../components/common/MessagePopup";
 import { useEffect, useState } from "react";
-import { BiArrowBack, BiMusic } from "react-icons/bi";
+import {
+  BiArrowBack,
+  BiMusic,
+} from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { fetchLyricById } from "../assets/util/api";
 import charcoal from "../assets/images/charcoal.jpg";
@@ -24,10 +27,34 @@ import ModalContainer from "../components/special/ModalContainer";
 import { motion, AnimatePresence } from "framer-motion";
 import Chords from "./Chords";
 import Metronome from "../components/common/Metronome";
+import ImageGallery from "../components/common/ImageGallery";
 
-const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange  }) => {
+import { extractChordsFromImage } from "../assets/util/ocrChords";
+import ChordsDisplay from "../components/common/ChordsDisplay";
+
+const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
   console.log("Rendering LyricsDetails for ID:", lyricsId);
   const { t } = useTranslation();
+
+  const [reading, setReading] = useState(false);
+  const [text, setText] = useState("");
+  const [error, setError] = useState(null);
+
+  const handleReadImage = async (link) => {
+    setReading(true);
+    setError(null);
+    setText("");
+
+    try {
+      const chords = await extractChordsFromImage(link);
+      setText(chords.length ? chords.join(" ") : "No valid chords detected.");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to read chords from image.");
+    } finally {
+      setReading(false);
+    }
+  };
 
   const [isVisible, setIsVisible] = useState(true);
 
@@ -64,6 +91,11 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange  }) => {
         );
         setLyrics(lyrics); // only the actual lyrics object
         setIsInCollection(lyrics.isFavourite);
+
+        // Auto-read chords after lyrics are fetched
+        if (lyrics.lyricsPhoto) {
+          handleReadImage(lyrics.lyricsPhoto); // call the OCR
+        }
       } catch (err) {
         console.error("Error fetching lyric:", err);
       }
@@ -137,7 +169,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange  }) => {
 
     const successMessage = shouldAdd
       ? t("lyricHasBeenAddedToCollection")
-      : t("lyricHasBeenRemovedFromCollection")
+      : t("lyricHasBeenRemovedFromCollection");
 
     try {
       let res = null;
@@ -152,7 +184,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange  }) => {
       }
 
       setIsInCollection(shouldAdd);
-      if (onCollectionStatusChange) onCollectionStatusChange(shouldAdd); 
+      if (onCollectionStatusChange) onCollectionStatusChange(shouldAdd);
       setMessageText(successMessage);
 
       return res;
@@ -190,25 +222,11 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange  }) => {
             )}
 
             {showGallery && (
-              <div className="animate-appear fixed inset-0 bg-[#00000090] backdrop-blur-md bg-opacity-50 flex items-center justify-center z-[10000] p-2">
-                <button
-                  className="absolute flex justify-center items-center top-2 right-2 text-white bg-[#ffffff20] rounded-full p-2 hover:bg-red-600 transition-all"
-                  onClick={() => setShowGallery(false)}
-                >
-                  <CgClose size={24} />
-                </button>
-
-                <img
-                  src={lyric.lyricsPhoto}
-                  alt="Lyrics"
-                  onError={() => setImageError(true)}
-                  onContextMenu={(e) => e.preventDefault()}
-                  draggable={false}
-                  loading="lazy"
-                  style={{ pointerEvents: "none", userSelect: "none" }}
-                  className="w-full h-auto object-cover animate-down"
-                />
-              </div>
+              <ImageGallery
+                lyric={lyric}
+                setShowGallery={setShowGallery}
+                setImageError={setImageError}
+              />
             )}
 
             <div className="lyrics-wrapper">
@@ -266,6 +284,13 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange  }) => {
                 </div>
               </div>
 
+              {/* Chords Display */}
+              <ChordsDisplay
+                originalChords={text.split(" ")} // pass chords as an array
+                error={error}
+                reading={reading}
+              />
+
               {/* Video Box */}
               {lyric.youTubeLink && user?.role == "premium-user" && (
                 <div className="w-full md:w-122 aspect-video bg-gray-300 rounded-md lyrics-width">
@@ -281,7 +306,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange  }) => {
 
               {/* Details Section */}
               <div className="lyrics-width animate-down-start w-full md:w-122 h-full c-bg-2 rounded-lg shadow-lg p-4 md:p-8 border c-border">
-                <div className="flex flex-col justify-center items-start ml-4 gap-2">
+                <div className="flex flex-col justify-center items-start gap-2">
                   {/* Title and Album */}
                   <div className="flex items-center justify-between gap-2 w-full">
                     <p className="text-lg font-semibold flex items-center">
@@ -463,9 +488,8 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange  }) => {
                 </div>
               </div>
 
-              
               {/* Metronome */}
-              <Metronome/>
+              <Metronome />
 
               <button
                 className="w-full md:w-122 border p-2 flex gap-2 items-center meshBg rounded-md c-border shadow-2xl"

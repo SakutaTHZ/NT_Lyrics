@@ -338,7 +338,7 @@ const Landing = () => {
           </div>
 
           {/* Featured Videos */}
-          <div className="relative p-4 md:px-24">
+          <div className="relative p-4 md:px-24 pb-16">
             <div className="flex justify-between">
               <p className="font-bold text-lg italic">{t("featureVideos")}</p>
             </div>
