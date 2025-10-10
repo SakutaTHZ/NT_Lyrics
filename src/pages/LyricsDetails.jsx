@@ -229,11 +229,11 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
               />
             )}
 
-            <div className="lyrics-wrapper">
-              <div className="flex items-center w-full">
+            <div className="lyrics-wrapper ">
+              <div className="flex items-end w-full lyrics-width">
                 <p className="w-full font-medium"></p>
                 <button
-                  className="flex gap-2 items-center lyrics-width cursor-pointer text-right"
+                  className="flex gap-2 cursor-pointer text-right items-end"
                   onClick={handleClose}
                 >
                   <BiArrowBack size={20} />
@@ -293,7 +293,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
 
               {/* Video Box */}
               {lyric.youTubeLink && user?.role == "premium-user" && (
-                <div className="w-full md:w-122 aspect-video bg-gray-300 rounded-md lyrics-width">
+                <div className="lyrics-width w-full md:w-122 aspect-video bg-gray-300 rounded-md lyrics-width">
                   <iframe
                     className="w-full h-full rounded-md"
                     src={lyric.youTubeLink}
@@ -492,7 +492,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
               <Metronome />
 
               <button
-                className="w-full md:w-122 border p-2 flex gap-2 items-center meshBg rounded-md c-border shadow-2xl"
+                className=" lyrics-width w-full md:w-122 border p-2 flex gap-2 items-center meshBg rounded-md c-border shadow-2xl"
                 onClick={handleClose}
               >
                 <BiArrowBack size={20} /> <p>{t("backtoLyrics")}</p>

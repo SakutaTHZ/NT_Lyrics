@@ -143,7 +143,7 @@ const Metronome = ({ initialBPM = 120, timeSignature = 4 }) => {
 
   // Render the UI
   return (
-    <div className={`c-bg-2 w-full md:w-122 ${show ? "p-4" : "p-2 px-4"} rounded-md border c-border overscroll-contain space-y-4 shadow-lg`}>
+    <div className={` lyrics-width c-bg-2 w-full md:w-122 ${show ? "p-4" : "p-2 px-4"} rounded-md border c-border overscroll-contain space-y-4 shadow-lg`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {show && (
