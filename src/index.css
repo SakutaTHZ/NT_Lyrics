@@ -457,7 +457,7 @@ img {
   }
 }
 
-.p-dialog-mask {
+.p-dialog-mask,.p-multiselect-panel {
   z-index: 2000 !important;
 }
 .p-dialog {
