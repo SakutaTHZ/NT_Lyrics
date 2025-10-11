@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import useDebounce from "../components/hooks/useDebounce";
 import axios from "axios";
 import { apiUrl, validateUser } from "../assets/util/api";
@@ -25,6 +25,7 @@ const Lyrics = () => {
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
   const debouncedSearchTerm = useDebounce(searchTerm);
+  const navigate = useNavigate();
 
   // State
   const [lyrics, setLyrics] = useState([]);
@@ -167,7 +168,12 @@ const Lyrics = () => {
           </div>
 
           {/* Search */}
-          <StickySearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} title={t("searchSongs")} />
+          <StickySearch
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            title={t("searchSongs")}
+            redirectTo={() => navigate("/")}
+          />
 
           {/* Lyrics List */}
           {userLoaded && (

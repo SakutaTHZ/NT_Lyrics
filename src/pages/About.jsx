@@ -13,25 +13,24 @@ const About = () => {
       <div className="w-screen min-h-screen overflow-hidden overflow-y-auto c-text">
         <div className="flex w-full min-h-screen pt-4 md:pt-16 pb-16 px-4 md:px-24 gap-6">
           {/* Left: Main content */}
-          <div className="flex flex-col w-full gap-6">
+          <div className="flex flex-col w-full gap-4">
             {/* 🎸 About */}
             <section>
               <img
                 src={cover}
-                loading="lazy"
-                className="fixed inset-0 w-screen -z-10"
+                className="absolute inset-0 w-screen"
                 alt="Cover Background"
               />
 
-              <h2 className="font-bold text-2xl text-white italic mb-2 flex gap-2 items-center py-4">
+              <h2 className="font-bold text-2xl text-white italic mb-2 flex gap-2 items-center py-4 z-10 relative">
                 {t("aboutNtLyrics")}
               </h2>
-              <p className="leading-relaxed c-bg p-4 rounded-md text-md">
+              <p className="leading-relaxed c-bg p-4 rounded-md text-md z-10 relative">
                 <strong>NT Lyric n Chord</strong> <span>{t("ntlyricsDescription").split("\n").map((line, i) => <span key={i}>{line}<br/></span>)}</span>
               </p>
             </section>
 
-            <hr />
+            <hr className="c-border"/>
 
             {/* 🧭 How to Read */}
             <section>

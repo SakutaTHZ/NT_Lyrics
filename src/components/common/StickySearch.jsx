@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { BiArrowBack } from "react-icons/bi";
-import { Link } from "react-router-dom";
 
-export default function StickySearch({ searchTerm, setSearchTerm, title }) {
+export default function StickySearch({ searchTerm, setSearchTerm, title, redirectTo }) {
   const headerRef = useRef(null);
   const [isSticky, setIsSticky] = useState(false);
 
@@ -35,8 +34,8 @@ export default function StickySearch({ searchTerm, setSearchTerm, title }) {
         />
 
         {/* Back Arrow — fades in when stuck */}
-        <Link
-          to={"/"}
+        <button
+          onClick={redirectTo}
           className={`flex items-center gap-2 transition-all duration-300  c-text-primary ${
             isSticky
               ? "w-auto pl-2 opacity-100 translate-x-0"
@@ -44,7 +43,7 @@ export default function StickySearch({ searchTerm, setSearchTerm, title }) {
           }`}
         >
           <BiArrowBack size={24} />
-        </Link>
+        </button>
       </div>
     </>
   );
@@ -54,4 +53,5 @@ StickySearch.propTypes = {
   title: PropTypes.string.isRequired,
   searchTerm: PropTypes.string.isRequired,
   setSearchTerm: PropTypes.func.isRequired,
+  redirectTo: PropTypes.func.isRequired,
 };
