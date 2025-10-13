@@ -1,10 +1,10 @@
-import { useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../components/hooks/AuthProvider"; // adjust path as needed
+import { useEffect} from "react";
+import { useNavigate } from "react-router-dom";// adjust path as needed
+import { useAuth } from "./authContext";
 
 const OAuthSuccess = () => {
   const navigate = useNavigate();
-  const { setUser, setToken } = useContext(AuthContext); // Expose setters if not already
+  const { setUser, setToken } = useAuth(); // Expose setters if not already
 
   useEffect(() => {
     const token = localStorage.getItem("token");

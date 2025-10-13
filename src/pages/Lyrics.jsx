@@ -10,7 +10,7 @@ import { AutoComplete } from "primereact/autocomplete";
 import { RadioButton } from "primereact/radiobutton";
 import { Dropdown } from "primereact/dropdown";
 import EmptyData from "../assets/images/Collection list is empty.jpg";
-import { fetchSingers, validateUser } from "../assets/util/api";
+import { fetchSingers} from "../assets/util/api";
 import { majorkeys } from "../assets/js/constantDatas";
 import { apiUrl } from "../assets/util/api";
 import axios from "axios";
@@ -21,11 +21,14 @@ import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 import LoadingBox from "../components/common/LoadingBox";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../components/hooks/authContext";
 
 const Footer = React.lazy(() => import("../components/common/Footer"));
 
 const Lyrics = () => {
   const { t } = useTranslation();
+
+  const { user, token, isLoading } = useAuth();
 
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
@@ -46,9 +49,9 @@ const Lyrics = () => {
   const [singers, setSingers] = useState([]);
   const [writers, setWriters] = useState([]);
 
-  const [hasToken, setHasToken] = useState(false);
-  const [user, setUser] = useState(null);
-  const [userLoaded, setUserLoaded] = useState(false);
+  //const [hasToken, setHasToken] = useState(false);
+  //const [user, setUser] = useState(null);
+  //const [userLoaded, setUserLoaded] = useState(false);
 
   const isMobile = useIsMobile();
   const observer = useRef(null);
@@ -155,7 +158,7 @@ const Lyrics = () => {
     getArtists();
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) setHasToken(true);
 
@@ -174,7 +177,7 @@ const Lyrics = () => {
       }
     };
     getUser();
-  }, []);
+  }, []);*/
 
   const search = (event) => {
     const filtered = lyrics
@@ -185,33 +188,6 @@ const Lyrics = () => {
 
   const valueTemplate = (option) => <span>{option?.name || "Unknown"}</span>;
   const itemTemplate = (option) => <div className="p-2">{option?.name || "Unknown"}</div>;
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setHasToken(true);
-    }
-
-    const id = JSON.parse(localStorage.getItem("user") || "{}")?.id;
-    if (!id) {
-      setUserLoaded(true);
-      return;
-    }
-
-    const getUser = async () => {
-      try {
-        const userData = await validateUser(id, token);
-        if (!userData) throw new Error("No user returned");
-        setUser(userData.user);
-      } catch (err) {
-        console.error("Failed to fetch user:", err);
-      } finally {
-        setUserLoaded(true);
-      }
-    };
-
-    getUser();
-  }, []);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -344,7 +320,7 @@ const Lyrics = () => {
             </div>
           </div>
 
-          {userLoaded && (
+          {!isLoading && (
             <div
               className={`grid ${
                 loading || lyrics.length > 0
@@ -377,7 +353,7 @@ const Lyrics = () => {
 
                 return (
                   <>
-                    {userLoaded &&
+                    {!isLoading &&
                       lyrics.map((lyric, index) => {
                         const isLast = index === lyrics.length - 3;
                         return (
@@ -393,7 +369,7 @@ const Lyrics = () => {
                                     lyric={lyric}
                                     isLast={isLast}
                                     lastUserRef={lastUserRef}
-                                    hideCollection={!hasToken}
+                                    hideCollection={!token}
                                   />
                                 </>
                               ) : (
@@ -402,7 +378,7 @@ const Lyrics = () => {
                                   lyric={lyric}
                                   isLast={isLast}
                                   lastUserRef={lastUserRef}
-                                  hideCollection={!hasToken}
+                                  hideCollection={!token}
                                 />
                               )
                             ) : (
@@ -411,7 +387,7 @@ const Lyrics = () => {
                                 lyric={lyric}
                                 lastUserRef={lastUserRef}
                                 isLast={isLast}
-                                hideCollection={!hasToken}
+                                hideCollection={!token}
                               />
                             )}
                           </div>

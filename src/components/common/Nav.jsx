@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { BiMenu } from "react-icons/bi";
 import { GoHome } from "react-icons/go";
@@ -8,8 +8,8 @@ import { CgProfile } from "react-icons/cg";
 import { LuLogIn } from "react-icons/lu";
 import { BsPeople } from "react-icons/bs";
 import useIsMobile from "../hooks/useIsMobile";
-import { AuthContext } from "../hooks/AuthProvider";
 import { useVibration } from "../hooks/useVibration";
+import { useAuth } from "../hooks/authContext";
 
 const HIDDEN_PATHS = [
   "/NT_Lyrics/login",
@@ -47,7 +47,7 @@ const Nav = () => {
   const { vibratePattern } = useVibration();
   const isMobile = useIsMobile();
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
   const isLoggedIn = user !== null && typeof user === "object";
   const isHidden = HIDDEN_PATHS.some((path) =>

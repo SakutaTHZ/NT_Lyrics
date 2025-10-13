@@ -3,9 +3,11 @@ import KpayQR from "../assets/images/Kpaythz.jpg";
 import cover from "../assets/images/cover_bg.png";
 
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../components/hooks/authContext";
 
 const About = () => {
   const { t } = useTranslation();
+  const { user } = useAuth();
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -26,6 +28,7 @@ const About = () => {
                 {t("aboutNtLyrics")}
               </h2>
               <p className="leading-relaxed c-bg p-4 rounded-md text-md z-10 relative">
+                <span>Welcome <strong>{user?.name || "Guest"}</strong>,</span> <br /><br />
                 <strong>NT Lyric n Chord</strong> <span>{t("ntlyricsDescription").split("\n").map((line, i) => <span key={i}>{line}<br/></span>)}</span>
               </p>
             </section>

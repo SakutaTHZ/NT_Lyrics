@@ -17,7 +17,6 @@ import {
   addLyricsToCollection,
   removeLyricsFromCollection,
 } from "../assets/util/api";
-import { validateUser } from "../assets/util/api";
 
 import { useTranslation } from "react-i18next";
 import AddToCollectionBox from "../components/special/AddToCollectionBox";
@@ -28,10 +27,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import Chords from "./Chords";
 import Metronome from "../components/common/Metronome";
 import ImageGallery from "../components/common/ImageGallery";
+import { useAuth } from "../components/hooks/authContext";
 
 const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
   console.log("Rendering LyricsDetails for ID:", lyricsId);
   const { t } = useTranslation();
+
+  const { user , token, isLoading} = useAuth();
 
   const [isVisible, setIsVisible] = useState(true);
 
@@ -64,7 +66,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
       try {
         const { lyrics } = await fetchLyricById(
           id,
-          localStorage.getItem("token")
+          token
         );
         setLyrics(lyrics); // only the actual lyrics object
         setIsInCollection(lyrics.isFavourite);
@@ -74,18 +76,18 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
     };
 
     getLyric();
-  }, [id]);
+  }, [id,token]);
 
   const [addToCollection, setAddToCollection] = useState(false);
 
-  const [hasToken, setHasToken] = useState(false);
-  const [user, setUser] = useState(null);
-  const [userLoaded, setUserLoaded] = useState(false);
+  //const [hasToken, setHasToken] = useState(false);
+  //const [user, setUser] = useState(null);
+  //const [userLoaded, setUserLoaded] = useState(false);
 
   const [showArtistDetails, setShowArtistDetails] = useState(false);
   const [selectedArtist, setSelectedArtist] = useState(null);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) setHasToken(true);
 
@@ -104,7 +106,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
       }
     };
     getUser();
-  }, []);
+  }, []);*/
 
   useEffect(() => {
     if (showGallery) {
@@ -130,7 +132,6 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
     "text-xs border border-dashed c-border c-text px-2 py-1 rounded-full  ";
 
   const changeLyricsStatus = async (shouldAdd) => {
-    const token = localStorage.getItem("token");
 
     if (!token) {
       setMessageText("Please login to add to collection");
@@ -172,7 +173,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
   return (
     <>
       <AnimatePresence>
-        {isVisible && userLoaded && (
+        {isVisible && !isLoading && (
           <motion.div
             className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto pb-8"
             initial={{ opacity: 0, y: 50 }}
@@ -414,7 +415,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
                       <span className="viewCount">{lyric.viewCount}</span>
                     </div>
 
-                    {hasToken ? (
+                    {token ? (
                       isInCollection ? (
                         <Normal_Button
                           icon={CgRemove}

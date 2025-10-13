@@ -8,18 +8,21 @@ import React, {
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import useDebounce from "../components/hooks/useDebounce";
 import axios from "axios";
-import { apiUrl, validateUser } from "../assets/util/api";
+import { apiUrl } from "../assets/util/api";
 import LoadingBox from "../components/common/LoadingBox";
 import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 import { useTranslation } from "react-i18next";
 import { BiArrowBack } from "react-icons/bi";
 import StickySearch from "../components/common/StickySearch";
+import { useAuth } from "../components/hooks/authContext";
 
 const Footer = React.lazy(() => import("../components/common/Footer"));
 
 const Lyrics = () => {
   const { t } = useTranslation();
+
+  const { user, token , isLoading } = useAuth();
 
   // Search params
   const [searchParams] = useSearchParams();
@@ -33,9 +36,9 @@ const Lyrics = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
-  const [user, setUser] = useState(null);
-  const [userLoaded, setUserLoaded] = useState(false);
-  const [hasToken, setHasToken] = useState(false);
+  //const [user, setUser] = useState(null);
+  //const [userLoaded, setUserLoaded] = useState(false);
+  //const [hasToken, setHasToken] = useState(false);
   const [page, setPage] = useState(1);
 
   const observer = useRef(null);
@@ -58,7 +61,7 @@ const Lyrics = () => {
   );
 
   // User authentication
-  useEffect(() => {
+  /*useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) setHasToken(true);
 
@@ -81,7 +84,7 @@ const Lyrics = () => {
     };
 
     getUser();
-  }, []);
+  }, []);*/
 
   // Fetch function
   const fetchLyrics = useCallback(
@@ -176,7 +179,7 @@ const Lyrics = () => {
           />
 
           {/* Lyrics List */}
-          {userLoaded && (
+          {!isLoading && (
             <div
               className={`grid ${
                 loading || lyrics.length > 0 ? "" : "grid-cols-1"
@@ -211,7 +214,7 @@ const Lyrics = () => {
                           lyric={lyric}
                           isLast={isLast}
                           lastUserRef={lastUserRef}
-                          hideCollection={!hasToken}
+                          hideCollection={!token}
                         />
                       ) : (
                         <LyricsRow
@@ -219,7 +222,7 @@ const Lyrics = () => {
                           lyric={lyric}
                           isLast={isLast}
                           lastUserRef={lastUserRef}
-                          hideCollection={!hasToken}
+                          hideCollection={!token}
                           access={shouldHideCollection(lyric.tier)}
                         />
                       )}

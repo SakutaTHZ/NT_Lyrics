@@ -4,7 +4,7 @@ import { BiArrowBack, BiSearch } from "react-icons/bi";
 import { useState, useEffect } from "react";
 import { useCallback } from "react";
 import axios from "axios";
-import { apiUrl, fetchArtistById, validateUser } from "../assets/util/api";
+import { apiUrl, fetchArtistById} from "../assets/util/api";
 import useDebounce from "../components/hooks/useDebounce";
 import { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -16,6 +16,9 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const Artist = ({ artistId, onClose }) => {
   const { t } = useTranslation();
+  
+  const { user, token, isLoading } = useAuth();
+
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
   const name = artistId;
   const [searchParams] = useSearchParams();
@@ -139,11 +142,11 @@ const Artist = ({ artistId, onClose }) => {
     [debouncedSearchTerm, name]
   );
 
-  const [hasToken, setHasToken] = useState(false);
-  const [user, setUser] = useState(null);
-  const [userLoaded, setUserLoaded] = useState(false);
+  //const [hasToken, setHasToken] = useState(false);
+  //const [user, setUser] = useState(null);
+  //const [userLoaded, setUserLoaded] = useState(false);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       setHasToken(true);
@@ -168,7 +171,7 @@ const Artist = ({ artistId, onClose }) => {
     };
 
     getUser();
-  }, []);
+  }, []);*/
 
   useEffect(() => {
     fetchLyrics(1, true);
@@ -281,7 +284,7 @@ const Artist = ({ artistId, onClose }) => {
                   ))
                 ) : (
                   <>
-                    {userLoaded &&
+                    {!isLoading &&
                       lyrics.map((lyric, index) => {
                         const isLast = index === lyrics.length - 1;
                         return (
@@ -292,7 +295,7 @@ const Artist = ({ artistId, onClose }) => {
                                   lyric={lyric}
                                   isLast={isLast}
                                   lastUserRef={lastUserRef}
-                                  hideCollection={!hasToken}
+                                  hideCollection={!token}
                                 />
                             ) : (
                               <LyricsRow
@@ -300,7 +303,7 @@ const Artist = ({ artistId, onClose }) => {
                                 lyric={lyric}
                                 isLast={isLast}
                                 lastUserRef={lastUserRef}
-                                hideCollection={!hasToken}
+                                hideCollection={!token}
                                 access={shouldHideCollection(lyric.tier)}
                               />
                             )}
@@ -339,6 +342,7 @@ const Artist = ({ artistId, onClose }) => {
 import PropTypes from "prop-types";
 import LoadingBox from "../components/common/LoadingBox";
 import StickySearch from "../components/common/StickySearch";
+import { useAuth } from "../components/hooks/authContext";
 
 Artist.propTypes = {
   artistId: PropTypes.string,

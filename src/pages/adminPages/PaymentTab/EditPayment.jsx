@@ -3,10 +3,12 @@ import { useEffect } from "react";
 import { useState } from "react";
 import ModalPortal from "../../../components/special/ModalPortal";
 import useModalEscClose from "../../../components/hooks/useModalEscClose";
-import { apiUrl, validateUser } from "../../../assets/util/api";
+import { apiUrl} from "../../../assets/util/api";
 import { RoleTab } from "../UsersTab/UserRow";
+import { useAuth } from "../../../components/hooks/authContext";
 
 const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
+  const { user, token } = useAuth();
   useModalEscClose(onClose);
 
   useEffect(() => {
@@ -20,25 +22,8 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
     };
   }, []);
 
-  const [user, setUser] = useState(null);
   const [duration, setDuration] = useState(request.durationInMonths || 6);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    const getUser = async () => {
-      try {
-        const userData = await validateUser(request.userId, token);
-        if (!userData) throw new Error("No user returned");
-        console.log("Fetched user data:", userData);
-        setUser(userData.user);
-      } catch (err) {
-        console.error("Failed to fetch user:", err);
-      }
-    };
-
-    getUser();
-  }, [request.userId]);
 
   const ApprovePayment = async (requestId, token) => {
     const response = await fetch(
@@ -209,7 +194,7 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
               <div className="flex justify-end gap-2 mt-4">
                 <button
                   onClick={async () => {
-                    await RejectPayment(request._id, localStorage.getItem("token"));
+                    await RejectPayment(request._id,token);
                     onUpdate();
                     onClose();
                   }}
@@ -219,7 +204,7 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
                 </button>
                 <button
                   onClick={async () => {
-                    await ApprovePayment(request._id, localStorage.getItem("token"));
+                    await ApprovePayment(request._id, token);
                     onUpdate();
                     onClose();
                   }}

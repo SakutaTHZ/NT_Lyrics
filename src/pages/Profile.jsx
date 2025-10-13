@@ -17,17 +17,16 @@ import MessagePopup from "../components/common/MessagePopup";
 import {
   checkIfPaymentRequested,
   fetchCollectionOverview,
-  logout,
-  showError,
-  validateUser,
   apiUrl,
 } from "../assets/util/api";
+import { useAuth } from "../components/hooks/authContext";
 
 const Profile = () => {
   const { t } = useTranslation();
 
+  const { user, token, isLoading } = useAuth();
+
   // Loading states
-  const [loadingProfile, setLoadingProfile] = useState(false);
   const [loadingLyrics, setLoadingLyrics] = useState(false);
 
   // Pagination & intersection observer
@@ -53,9 +52,7 @@ const Profile = () => {
   );
 
   // User state
-  const [user, setUser] = useState(null);
   const [userRole, setUserRole] = useState("free-user");
-  const [userLoaded, setUserLoaded] = useState(false);
 
   // Payment state
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
@@ -77,7 +74,6 @@ const Profile = () => {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedGroupLyrics, setSelectedGroupLyrics] = useState([]);
 
-  const token = localStorage.getItem("token");
   const storedUser = localStorage.getItem("user");
   const id = JSON.parse(storedUser || "{}")?.id;
 
@@ -86,46 +82,11 @@ const Profile = () => {
     setMessageType("error");
     setShowMessage(true);
     setTimeout(() => setShowMessage(false), 5000);
-    setUserLoaded(true);
   }
 
   /** ===================
    * USER FETCH & VALIDATION
    * =================== */
-  useEffect(() => {
-    const getUser = async () => {
-      setLoadingProfile(true);
-      try {
-        const userData = await validateUser(id, token);
-        if (!userData) {
-          alert("User data not fetched correctly");
-          throw new Error("No user data returned from API.");
-        }
-        setUser(userData.user);
-      } catch (err) {
-        console.error("Failed to fetch user:", err);
-        const status = err.customError?.status;
-        const message = err.customError?.message;
-
-        if (status === 401) {
-          logout(message); // token expired
-        } else if (status === 403) {
-          showError(message);
-          logout();
-        } else if (status === 500) {
-          showError(message);
-        } else {
-          showError("Could not load user profile. Please try refreshing.");
-        }
-      } finally {
-        setUserLoaded(true);
-        setLoadingProfile(false);
-        console.log("User Loaded");
-      }
-    };
-
-    getUser();
-  }, [token, storedUser, id]);
 
   /** ===================
    * PAYMENT CHECK
@@ -160,7 +121,6 @@ const Profile = () => {
    * COLLECTION FETCH
    * =================== */
   const getCollection = useCallback(async () => {
-    setLoadingProfile(true);
     try {
       const collections = await fetchCollectionOverview(token);
       let userCollections = collections.collections || [];
@@ -182,8 +142,6 @@ const Profile = () => {
       setCollection({ ...collections, collections: sortedCollections });
     } catch (err) {
       console.error("Error fetching user overview:", err);
-    } finally {
-      setLoadingProfile(false);
     }
   }, [token]);
 
@@ -347,7 +305,7 @@ const Profile = () => {
   /** ===================
    * RENDER
    * =================== */
-  if (loadingProfile) {
+  if (isLoading) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
         <p className="text-xl font-semibold">Loading profile...</p>
@@ -355,7 +313,7 @@ const Profile = () => {
     );
   }
 
-  if (!userLoaded) return null;
+  if (isLoading) return null;
 
   return (
     <>

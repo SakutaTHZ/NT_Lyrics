@@ -15,7 +15,7 @@ import {
   changeToDefaultStatus,
   fetchPopularLyrics,
   fetchTop10Artists,
-  validateUser,
+  //validateUser,
 } from "../assets/util/api";
 import LoadingBox from "../components/common/LoadingBox";
 
@@ -24,9 +24,12 @@ import AnnouncementBoard from "../components/common/AnnouncementBoard";
 import MessagePopup from "../components/common/MessagePopup";
 import Artist from "./Artist";
 import ModalContainer from "../components/special/ModalContainer";
+import { useAuth } from "../components/hooks/authContext";
 
 const Landing = () => {
   const { t } = useTranslation();
+
+  const { user, isLoading, authError } = useAuth();
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -73,15 +76,36 @@ const Landing = () => {
   useEffect(() => {
     getPopularArtists();
   }, [getPopularArtists]);
+  //const [userLoaded, setUserLoaded] = useState(false);
 
-  const [user, setUser] = useState(null);
-  const [userLoaded, setUserLoaded] = useState(false);
+  useEffect(() => {
+    if (authError && authError.toLowerCase().includes("expired")) {
+      setTimeout(() => {
+        navigate("/NT_Lyrics/login");
+      }, 3000);
+    }
+  }, [authError, navigate]);
 
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
   const [messageType, setMessageType] = useState("success");
 
+  //Check For user status and show message if needed
   useEffect(() => {
+    if (user && user.status === 1) {
+      setMessageText(t("youAreNowAPremiumUser"));
+      setMessageType("success");
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 10000);
+    } else if (user && user.status === 2) {
+      setMessageText(t("yourPremiumRequestHasBeenRejected"));
+      setMessageType("error");
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 10000);
+    }
+  }, [user,user?.status, t]);
+
+  /*useEffect(() => {
     const token = localStorage.getItem("token");
 
     const id = JSON.parse(localStorage.getItem("user") || "{}")?.id;
@@ -116,7 +140,7 @@ const Landing = () => {
 
     getUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []);*/
 
   const tierMap = {
     guest: 0,
@@ -201,7 +225,7 @@ const Landing = () => {
         </MessagePopup>
       )}
 
-      {userLoaded && (
+      {!isLoading && (
         <div className="w-screen h-screen overflow-hidden overflow-y-auto">
           {/* Hero Section */}
           <div className=" relative hero customBackground h-2/6 md:h-2/5 w-screen overflow-hidden flex justify-center items-center px-6 rounded-b-lg">

@@ -1,12 +1,11 @@
-import { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "../hooks/AuthProvider";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./authContext";
 
 const RequireAdmin = ({ children }) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
