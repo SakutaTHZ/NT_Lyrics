@@ -17,6 +17,7 @@ import { useVibration } from "../hooks/useVibration";
 import { useTranslation } from "react-i18next";
 import LyricsDetails from "../../pages/LyricsDetails";
 import ModalContainer from "./ModalContainer";
+import { useAuth } from "../hooks/authContext";
 
 const LyricsRow = ({
   id,
@@ -29,6 +30,8 @@ const LyricsRow = ({
   onCollectionStatusChange = () => {},
 }) => {
   const { t } = useTranslation();
+
+  const { token } = useAuth();
 
   const { vibrateOnce } = useVibration();
   const [imageError, setImageError] = useState(false);
@@ -55,7 +58,6 @@ const LyricsRow = ({
   };*/
 
   const changeLyricsStatus = async (shouldAdd) => {
-    const token = localStorage.getItem("token");
     const message = shouldAdd
       ? t("lyricHasBeenAddedToCollection")
       : t("lyricHasBeenRemovedFromCollection");

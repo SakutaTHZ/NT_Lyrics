@@ -4,7 +4,7 @@ import { BiArrowBack, BiSearch } from "react-icons/bi";
 import { useState, useEffect } from "react";
 import { useCallback } from "react";
 import axios from "axios";
-import { apiUrl, fetchArtistById} from "../assets/util/api";
+import { apiUrl, fetchArtistById } from "../assets/util/api";
 import useDebounce from "../components/hooks/useDebounce";
 import { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -16,7 +16,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const Artist = ({ artistId, onClose }) => {
   const { t } = useTranslation();
-  
+
   const { user, token, isLoading } = useAuth();
 
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
@@ -115,21 +115,26 @@ const Artist = ({ artistId, onClose }) => {
               limit: 20,
               keyword: debouncedSearchTerm,
             },
+            headers: {
+              "Content-Type": "application/json",
+              ...(token && { Authorization: `Bearer ${token}` }),
+            },
           }
         );
 
-        const data = res.data.lyrics;
+        const data = res.data.lyrics || [];
 
         if (!Array.isArray(data)) {
           console.error("Expected array, got:", data);
           return [];
         }
 
-        setLyrics((prev) =>
-          override || pageNum === 1
-            ? res.data.lyrics
-            : [...prev, ...res.data.lyrics]
-        );
+        setLyrics((prev) => {
+          const merged = override || pageNum === 1 ? data : [...prev, ...data];
+          return Array.from(
+            new Map(merged.map((item) => [item._id, item])).values()
+          );
+        });
         setTotalPages(res.data.totalPages);
         setInitialLoadDone(true);
       } catch (error) {
@@ -224,7 +229,7 @@ const Artist = ({ artistId, onClose }) => {
                     src={artist?.photoLink || "https://via.placeholder.com/150"}
                     loading="lazy"
                     alt="Lyrics"
-                    className="w-16 h-16 rounded-full"
+                    className="w-16 h-16 object-contain rounded-full"
                   />
                   <div>
                     {artist ? (
@@ -273,8 +278,13 @@ const Artist = ({ artistId, onClose }) => {
                 }}
               />*/}
             </div>
-            
-            <StickySearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} title={t("searchSongs")} redirectTo={handleClose}/>
+
+            <StickySearch
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              title={t("searchSongs")}
+              redirectTo={handleClose}
+            />
             {/* Featured Lyrics */}
             <div className="min-h-5/6 relative p-4 py-0 md:py-2 pt-0 md:px-24">
               <div className="grid grid-cols-1 py-0 gap-0">
@@ -288,15 +298,18 @@ const Artist = ({ artistId, onClose }) => {
                       lyrics.map((lyric, index) => {
                         const isLast = index === lyrics.length - 1;
                         return (
-                          <div key={index} className="border-b c-border last:border-0 border-dashed">
+                          <div
+                            key={index}
+                            className="border-b c-border last:border-0 border-dashed"
+                          >
                             {user?.role === "premium-user" ? (
-                                <LyricsRowPremium
-                                  id={lyric._id}
-                                  lyric={lyric}
-                                  isLast={isLast}
-                                  lastUserRef={lastUserRef}
-                                  hideCollection={!token}
-                                />
+                              <LyricsRowPremium
+                                id={lyric._id}
+                                lyric={lyric}
+                                isLast={isLast}
+                                lastUserRef={lastUserRef}
+                                hideCollection={!token}
+                              />
                             ) : (
                               <LyricsRow
                                 id={lyric._id}

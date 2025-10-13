@@ -28,6 +28,7 @@ const ProfileEdit = ({
   const { vibratePattern } = useVibration();
 
   const { logOut } = useAuth();
+  
   const labelClass = "c-gray-text font-semibold pb-2";
   const inputClass = "p-2 border border-gray-400 rounded-md";
 

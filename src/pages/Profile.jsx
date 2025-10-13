@@ -77,12 +77,20 @@ const Profile = () => {
   const storedUser = localStorage.getItem("user");
   const id = JSON.parse(storedUser || "{}")?.id;
 
-  if (!id || !token) {
-    setMessageText("ID and token are missing! Please Log in again");
-    setMessageType("error");
-    setShowMessage(true);
-    setTimeout(() => setShowMessage(false), 5000);
-  }
+  useEffect(() => {
+    // Only run this validation logic if ID or token is missing
+    if (!id || !token) {
+      // Set state to show the error message only if needed
+      setMessageText("ID and token are missing! Please Log in again");
+      setMessageType("error");
+      setShowMessage(true);
+
+      // This setTimeout is fine because it runs once inside the useEffect
+      setTimeout(() => setShowMessage(false), 5000);
+    }
+    // Dependency array ensures this only runs when 'id' or 'token' change
+    // or once on mount if they are already missing.
+  }, [id, token]);
 
   /** ===================
    * USER FETCH & VALIDATION
