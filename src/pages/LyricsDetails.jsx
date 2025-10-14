@@ -10,11 +10,12 @@ import {
   BiMusic,
 } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import { fetchLyricById } from "../assets/util/api";
+//import { fetchLyricById } from "../assets/util/api";
 import charcoal from "../assets/images/charcoal.jpg";
 import loading from "../assets/images/playing.png";
 import {
   addLyricsToCollection,
+  fetchLyricById,
   removeLyricsFromCollection,
 } from "../assets/util/api";
 
@@ -29,8 +30,7 @@ import Metronome from "../components/common/Metronome";
 import ImageGallery from "../components/common/ImageGallery";
 import { useAuth } from "../components/hooks/authContext";
 
-const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
-  console.log("Rendering LyricsDetails for ID:", lyricsId);
+const LyricsDetails = ({ lyricsId, lyricData, isInCollection, onClose, onCollectionStatusChange }) => {
   const { t } = useTranslation();
 
   const { user , token, isLoading} = useAuth();
@@ -38,6 +38,28 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
   const [isVisible, setIsVisible] = useState(true);
 
   const [showChords, setShowChords] = useState(false);
+
+  const [lyric,setLyric] = useState(lyricData || null);
+
+  // Fetch lyric details if not provided via props
+  useEffect(() => {
+    const getLyric = async () => {
+      try {
+        const { lyrics } = await fetchLyricById(
+          lyricsId,
+          token
+        );
+        // Only set lyricData if it's not provided via props
+        if (!lyricData) {
+          setLyric(lyrics);
+        }
+      } catch (err) {
+        console.error("Error fetching lyric:", err);
+      }
+    };
+
+    getLyric();
+  }, [lyricsId, token, lyricData]);
 
   const handleClose = () => {
     onCollectionStatusChange && onCollectionStatusChange(isInCollection);
@@ -58,55 +80,12 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
 
   const id = lyricsId;
 
-  const [lyric, setLyrics] = useState(null);
-  const [isInCollection, setIsInCollection] = useState(false);
-
-  useEffect(() => {
-    const getLyric = async () => {
-      try {
-        const { lyrics } = await fetchLyricById(
-          id,
-          token
-        );
-        setLyrics(lyrics); // only the actual lyrics object
-        setIsInCollection(lyrics.isFavourite);
-      } catch (err) {
-        console.error("Error fetching lyric:", err);
-      }
-    };
-
-    getLyric();
-  }, [id,token]);
+  const [isInCollectionNow, setIsInCollection] = useState(isInCollection);
 
   const [addToCollection, setAddToCollection] = useState(false);
 
-  //const [hasToken, setHasToken] = useState(false);
-  //const [user, setUser] = useState(null);
-  //const [userLoaded, setUserLoaded] = useState(false);
-
   const [showArtistDetails, setShowArtistDetails] = useState(false);
   const [selectedArtist, setSelectedArtist] = useState(null);
-
-  /*useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) setHasToken(true);
-
-    const id = JSON.parse(localStorage.getItem("user") || "{}")?.id;
-    if (!id) return setUserLoaded(true);
-
-    const getUser = async () => {
-      try {
-        const userData = await validateUser(id, token);
-        if (!userData) throw new Error("No user returned");
-        setUser(userData.user);
-      } catch (err) {
-        console.error("Failed to fetch user:", err);
-      } finally {
-        setUserLoaded(true);
-      }
-    };
-    getUser();
-  }, []);*/
 
   useEffect(() => {
     if (showGallery) {
@@ -196,7 +175,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
 
             {showGallery && (
               <ImageGallery
-                lyric={lyric}
+                lyric={lyric.lyricsPhoto}
                 setShowGallery={setShowGallery}
                 setImageError={setImageError}
               />
@@ -416,7 +395,7 @@ const LyricsDetails = ({ lyricsId, onClose, onCollectionStatusChange }) => {
                     </div>
 
                     {token ? (
-                      isInCollection ? (
+                      isInCollectionNow ? (
                         <Normal_Button
                           icon={CgRemove}
                           text={t("removeFromCollection")}
@@ -515,6 +494,9 @@ LyricsDetails.propTypes = {
   lyricsId: PropTypes.string,
   onClose: PropTypes.func,
   onCollectionStatusChange: PropTypes.func,
+  lyricData: PropTypes.object,
+  isInCollection: PropTypes.bool,
+  access: PropTypes.bool,
 };
 
 export default LyricsDetails;

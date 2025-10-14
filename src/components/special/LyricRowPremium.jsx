@@ -187,6 +187,8 @@ const LyricRowPremium = ({
         >
           <LyricsDetails
             lyricsId={selectedLyric}
+            lyricData={lyric}
+            isInCollection={isInCollection}
             onClose={() => setShowLyricDetails(false)}
             onCollectionStatusChange={(newStatus) => {
               setIsInCollection(newStatus); // update this row
