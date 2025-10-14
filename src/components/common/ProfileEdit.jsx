@@ -333,7 +333,11 @@ const ProfileEdit = ({
                           inputId="language"
                           name="language"
                           value="my"
-                          onChange={(e) => setLanguage(e.value)}
+                          onChange={(e) => {
+                            setIsGlitching(true);
+                            setTimeout(() => setLanguage(e.value), 300);
+                            setTimeout(() => setIsGlitching(false), 500);
+                          }}
                           checked={language === "my"}
                         />
                         <label htmlFor="language" className="ml-2">
@@ -345,7 +349,11 @@ const ProfileEdit = ({
                           inputId="language"
                           name="language"
                           value="en"
-                          onChange={(e) => setLanguage(e.value)}
+                          onChange={(e) => {
+                            setIsGlitching(true);
+                            setTimeout(() => setLanguage(e.value), 300);
+                            setTimeout(() => setIsGlitching(false), 500);
+                          }}
                           checked={language === "en"}
                         />
                         <label htmlFor="language" className="ml-2">
