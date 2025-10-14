@@ -2,14 +2,11 @@ import "react-medium-image-zoom/dist/styles.css";
 import Normal_Button from "../components/common/Normal_Button";
 import { CgMaximize, CgRemove } from "react-icons/cg";
 import { FaRegHeart, FaEye } from "react-icons/fa6";
-import { LuLogIn } from "react-icons/lu";
+//import { LuLogIn } from "react-icons/lu";
 import MessagePopup from "../components/common/MessagePopup";
 import { useEffect, useState } from "react";
-import {
-  BiArrowBack,
-  BiMusic,
-} from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { BiArrowBack, BiMusic } from "react-icons/bi";
+import googleLogo from "../assets/images/svgs/google.svg";
 //import { fetchLyricById } from "../assets/util/api";
 import charcoal from "../assets/images/charcoal.jpg";
 import loading from "../assets/images/playing.png";
@@ -17,6 +14,7 @@ import {
   addLyricsToCollection,
   fetchLyricById,
   removeLyricsFromCollection,
+  siteUrl,
 } from "../assets/util/api";
 
 import { useTranslation } from "react-i18next";
@@ -30,25 +28,28 @@ import Metronome from "../components/common/Metronome";
 import ImageGallery from "../components/common/ImageGallery";
 import { useAuth } from "../components/hooks/authContext";
 
-const LyricsDetails = ({ lyricsId, lyricData, isInCollection, onClose, onCollectionStatusChange }) => {
+const LyricsDetails = ({
+  lyricsId,
+  lyricData,
+  isInCollection,
+  onClose,
+  onCollectionStatusChange,
+}) => {
   const { t } = useTranslation();
 
-  const { user , token, isLoading} = useAuth();
+  const { user, token, isLoading } = useAuth();
 
   const [isVisible, setIsVisible] = useState(true);
 
   const [showChords, setShowChords] = useState(false);
 
-  const [lyric,setLyric] = useState(lyricData || null);
+  const [lyric, setLyric] = useState(lyricData || null);
 
   // Fetch lyric details if not provided via props
   useEffect(() => {
     const getLyric = async () => {
       try {
-        const { lyrics } = await fetchLyricById(
-          lyricsId,
-          token
-        );
+        const { lyrics } = await fetchLyricById(lyricsId, token);
         // Only set lyricData if it's not provided via props
         if (!lyricData) {
           setLyric(lyrics);
@@ -111,7 +112,6 @@ const LyricsDetails = ({ lyricsId, lyricData, isInCollection, onClose, onCollect
     "text-xs border border-dashed c-border c-text px-2 py-1 rounded-full  ";
 
   const changeLyricsStatus = async (shouldAdd) => {
-
     if (!token) {
       setMessageText("Please login to add to collection");
       setShowMessage(true);
@@ -235,8 +235,6 @@ const LyricsDetails = ({ lyricsId, lyricData, isInCollection, onClose, onCollect
                   )}
                 </div>
               </div>
-
-              
 
               {/* Video Box */}
               {lyric.youTubeLink && user?.role == "premium-user" && (
@@ -422,13 +420,23 @@ const LyricsDetails = ({ lyricsId, lyricData, isInCollection, onClose, onCollect
                       )
                     ) : (
                       <>
-                        <Link
-                          to="/NT_Lyrics/login"
-                          className={` flex items-center gap-2 border px-2 py-1 rounded-xl c-border`}
+                        <button
+                          onClick={() => {
+                            window.location.href = `${siteUrl}/auth/google`;
+                          }}
+                          className={`max-w-60 flex items-center gap-4 text-left border px-4 py-1 rounded-xl c-border`}
                         >
-                          <LuLogIn size={18} />
+                          {/* <LuLogIn size={18} /> */}
+                          <img
+                            src={googleLogo}
+                            alt="Google Logo"
+                            className="w-4 h-4 inline-block"
+                            style={{
+                              animation: "wave 3s infinite",
+                            }}
+                          />
                           {t("loginToTryCollection")}
-                        </Link>
+                        </button>
                       </>
                     )}
                   </div>

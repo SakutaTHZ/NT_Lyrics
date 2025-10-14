@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { RadioButton } from "primereact/radiobutton";
-import { ConfirmPopup } from "primereact/confirmpopup";
-import { confirmPopup } from "primereact/confirmpopup";
+//import { ConfirmPopup } from "primereact/confirmpopup";
+//import { confirmPopup } from "primereact/confirmpopup";
 import ModalPortal from "../../../components/special/ModalPortal";
 import useModalEscClose from "../../../components/hooks/useModalEscClose";
 import { apiUrl } from "../../../assets/util/api";
@@ -87,8 +87,8 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
     onClose();
   };
 
-  const handleDelete = (e) => {
-    confirmPopup({
+  const handleDelete = () => {
+    /*confirmPopup({
       target: e.currentTarget,
       message: "Are you sure you want to delete this artist?",
       icon: "pi pi-exclamation-triangle",
@@ -100,7 +100,14 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
         onUpdate();
         onClose();
       },
-    });
+    });*/
+    if (
+      window.confirm("Are you sure you want to delete this artist? This action cannot be undone.")
+    ) {
+      deleteArtist();
+      onUpdate();
+      onClose();
+    }
   };
 
   return (
@@ -215,7 +222,7 @@ const EditArtist = ({ onClose, artist, onUpdate, showNewMessage }) => {
           </div>
         </div>
       </div>
-      <ConfirmPopup />
+      {/* <ConfirmPopup className="z-[9999]" appendTo={"window"} /> */}
     </ModalPortal>
   );
 };

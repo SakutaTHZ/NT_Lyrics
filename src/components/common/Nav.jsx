@@ -1,15 +1,17 @@
-import { useState} from "react";
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { BiMenu } from "react-icons/bi";
 import { GoHome } from "react-icons/go";
 import { MdOutlineLyrics } from "react-icons/md";
 import { GrInfo } from "react-icons/gr";
 import { CgProfile } from "react-icons/cg";
-import { LuLogIn } from "react-icons/lu";
+//import { LuLogIn } from "react-icons/lu";
 import { BsPeople } from "react-icons/bs";
 import useIsMobile from "../hooks/useIsMobile";
 import { useVibration } from "../hooks/useVibration";
 import { useAuth } from "../hooks/authContext";
+import googleLogo from "../../assets/images/svgs/google.svg";
+import { siteUrl } from "../../assets/util/api";
 
 const HIDDEN_PATHS = [
   "/NT_Lyrics/login",
@@ -57,6 +59,11 @@ const Nav = () => {
   const handleNav = (path, pattern = "short") => {
     vibratePattern(pattern);
     setTimeout(() => navigate(path), 80); // slight delay for haptic to register
+  };
+
+  const googleSignin = () => {
+    vibratePattern("short");
+    window.location.href = `${siteUrl}/auth/google`;
   };
 
   const isActive = (path) =>
@@ -116,10 +123,19 @@ const Nav = () => {
               </button>
             ) : (
               <button
-                onClick={() => handleNav("/NT_Lyrics/login", "dandadan")}
+                //onClick={() => handleNav("/NT_Lyrics/login", "dandadan")}
+                onClick={googleSignin}
                 className={`${mobileNavStyle} ${isActive("/NT_Lyrics/login")}`}
               >
-                <LuLogIn size={18} />
+                {/* <LuLogIn size={18} /> */}
+                <img
+                  src={googleLogo}
+                  alt="Google Logo"
+                  className="w-4 h-4 inline-block"
+                  style={{
+                    animation: "wave 3s infinite",
+                  }}
+                />
                 Login
               </button>
             )}
@@ -159,12 +175,21 @@ const Nav = () => {
                 </button>
               ) : (
                 <button
-                  onClick={() => handleNav("/NT_Lyrics/login", "dandadan")}
+                  //onClick={() => handleNav("/NT_Lyrics/login", "dandadan")}
+                  onClick={googleSignin}
                   className={`${mobileNavStyle} ${isActive(
                     "/NT_Lyrics/login"
                   )}`}
                 >
-                  <LuLogIn size={18} />
+                  {/* <LuLogIn size={18} /> */}
+                  <img
+                    src={googleLogo}
+                    alt="Google Logo"
+                    className="w-4 h-4 inline-block"
+                    style={{
+                      animation: "wave 3s infinite",
+                    }}
+                  />
                   Login
                 </button>
               )}
@@ -218,7 +243,8 @@ const Nav = () => {
               </button>
             ) : (
               <button
-                onClick={() => handleNav("/NT_Lyrics/login", "dandadan")}
+                //onClick={() => handleNav("/NT_Lyrics/login", "dandadan")}
+                onClick={googleSignin}
                 className={`${isActive(
                   "/NT_Lyrics/login"
                 )} w-full p-2 flex items-center justify-center flex-col`}
@@ -228,7 +254,19 @@ const Nav = () => {
                     "/NT_Lyrics/login"
                   )}`}
                 >
-                  <LuLogIn size={20} className="text-white" />
+                  {/* <LuLogIn size={18} /> */}
+                  <div className="flex-shrink-0 w-6 flex justify-center items-center aspect-square bg-white rounded-full">
+                    <img
+                      src={googleLogo}
+                      alt="Google Logo"
+                      className="w-4 h-4 inline-block"
+                      style={{
+                        animation: `wave 5s ease-in-out ${
+                          Math.random() * 2
+                        }s infinite`,
+                      }}
+                    />
+                  </div>
                 </div>
                 <p className="text-white drop-shadow-sm text-sm translate-y-2">
                   Login
