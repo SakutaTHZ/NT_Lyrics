@@ -17,7 +17,6 @@ import GlitchAssets from "../special/GlitchEffect";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ProfileEdit = ({
-  userData,
   usernameChange,
   emailChange,
   closeBox,
@@ -32,6 +31,8 @@ const ProfileEdit = ({
       closeBox();
     }, 300); // match your transition duration
   };
+
+  const { user, isLoading, setUser } = useAuth();
 
   const localStorageUser = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -54,11 +55,9 @@ const ProfileEdit = ({
   const labelClass = "c-gray-text font-semibold pb-2";
   const inputClass = "p-2 border border-gray-400 rounded-md";
 
-  const [user, setUser] = useState(userData || null);
-
   const [passwordChange, setPasswordChange] = useState(false);
 
-  const [name, setUsername] = useState("");
+  const [name, setUsername] = useState(user?.name);
   const [isUsernameCorrect, setIsUsernameCorrect] = useState(true);
 
   const [isChanged, setIsChanged] = useState(false);
@@ -142,7 +141,9 @@ const ProfileEdit = ({
       if (!response.ok) throw new Error("Update failed");
 
       const result = await response.json();
-      setUser(result);
+
+      setUser(result.user);
+
       usernameChange(result.user.name);
       emailChange(result.user.email);
 
@@ -159,7 +160,7 @@ const ProfileEdit = ({
     } catch (error) {
       console.error("Error updating user:", error);
       alert(t("updateFailed"));
-    }
+    } 
   };
 
   const [language, setLanguage] = useState(
@@ -186,9 +187,22 @@ const ProfileEdit = ({
   }, [name, email, passwordChange, newPassword, user]);
 
   useEffect(() => {
+  if (isVisible) {
     setUsername(user?.name || "");
     setEmail(user?.email || "");
-  }, [user]);
+  }
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [isVisible]);
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-[#00000080] z-50">
+        <div className="c-bg p-6 rounded-md shadow-lg">
+          <p className="text-white">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -203,10 +217,10 @@ const ProfileEdit = ({
             exit={{ opacity: 0, y: 50 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            <div className="fixed inset-0 animate-down-start w-screen h-screen md:h-fit min-h-screen overflow-y-scroll py-6 md:px-18 c-bg flex flex-col">
+            <div className="fixed inset-0 w-screen h-screen md:h-fit min-h-screen overflow-y-scroll py-6 md:px-18 c-bg flex flex-col">
               <button
                 className="ml-4 rounded-md cursor-pointer p-2 absolute right-4 top-4 z-50"
-                onClick={handleClose}
+                onClick={() => setTimeout(() => handleClose(), 200)}
               >
                 <BiArrowBack size={20} className="" />
               </button>
@@ -495,20 +509,20 @@ const ProfileEdit = ({
                             ? "bg-blue-500 hover:bg-blue-600"
                             : "bg-gray-400 cursor-not-allowed"
                         }`}
-                        onClick={() => {
+                        onClick={async () => {
                           if (!isChanged) return;
                           vibratePattern("doubleTap");
-                          updateUser();
-                          handleClose();
-                          onUpdate();
+                          await updateUser();
+                          await onUpdate();
+                          setTimeout(() => handleClose(), 200);
                         }}
                       >
                         {t("save")}
                       </button>
                       <button
                         onClick={() => {
-                          handleClose();
                           vibratePattern("short");
+                          setTimeout(() => handleClose(), 200);
                         }}
                         className="w-full bg-gray-200 px-4 text-black font-semibold p-2 rounded-md"
                       >
@@ -537,7 +551,6 @@ const ProfileEdit = ({
   );
 };
 ProfileEdit.propTypes = {
-  userData: PropTypes.object.isRequired,
   usernameChange: PropTypes.func.isRequired,
   emailChange: PropTypes.func.isRequired,
   closeBox: PropTypes.func.isRequired,

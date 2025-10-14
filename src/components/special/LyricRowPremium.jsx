@@ -120,10 +120,10 @@ const LyricRowPremium = ({
           />
         </div>
         <div className="flex justify-between items-center w-full p-2 pl-4">
-          <div className="relative flex flex-col gap-2">
+          <div className="relative flex flex-col gap-2 transition-all">
             <p className="font-semibold">
               {isInCollection && (
-                <BsHeartFill size={16} className="text-red-500 inline mr-2" />
+                <BsHeartFill size={16} className="text-red-500 inline mr-2 animate-heart-pop" />
               )}
               {lyric?.title ?? "Sample Title"}{" "}
             </p>

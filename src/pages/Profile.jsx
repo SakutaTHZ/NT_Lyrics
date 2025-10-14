@@ -345,7 +345,7 @@ const Profile = () => {
             <div className="flex items-center flex-col gap-4 w-full px-8 md:px-24 z-[50]">
               <div className="relative profileImageBox flex items-center justify-center">
                 <img
-                  src={
+                  src={ user?.profilePicture ||
                     "https://i.pinimg.com/736x/81/ec/02/81ec02c841e7aa13d0f099b5df02b25c.jpg"
                   }
                   alt="Profile"
@@ -631,7 +631,6 @@ const Profile = () => {
 
         {showEdit && (
           <ProfileEdit
-            userData={user}
             usernameChange={setUsername}
             emailChange={setEmail}
             closeBox={() => setShowEdit(false)}

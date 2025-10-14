@@ -145,7 +145,7 @@ body {
   width: 100%;
   height: 100%;
   background: url("../src/assets/images/cover_bg.png");
-  opacity: .95;
+  opacity: 0.95;
   background-size: cover;
 }
 
@@ -457,7 +457,8 @@ img {
   }
 }
 
-.p-dialog-mask,.p-multiselect-panel {
+.p-dialog-mask,
+.p-multiselect-panel {
   z-index: 2000 !important;
 }
 .p-dialog {
@@ -620,7 +621,7 @@ img {
   z-index: 9999;
 }
 
-.metronome{
+.metronome {
   width: 2px;
   height: 100%;
   background: red;
@@ -629,13 +630,14 @@ img {
   transform-origin: bottom;
   animation-name: metronomeMoving;
   animation-timing-function: cubic-bezier(0.87, 0, 0.13, 1);
-  animation-direction:  infinite alternate;
+  animation-direction: infinite alternate;
 }
 
 @keyframes metronomeMoving {
-  from{
+  from {
     transform: rotate(-90deg);
-  }to{
+  }
+  to {
     transform: rotate(90deg);
   }
 }
@@ -643,16 +645,16 @@ img {
   z-index: 1;
 }
 
-.metronomeSpin{
+.metronomeSpin {
   width: 105px;
   height: 105px;
   z-index: 2;
   border-radius: 50%;
-  
+
   /* Retained border setup from your original code */
   border: 10px solid rgb(var(--color-bg-card));
   border-bottom: 0;
-  
+
   /* 🔥 FIX 1: COMBINE animation properties */
   animation-name: metronomeSpinning;
   animation-duration: 2s; /* Temporary placeholder. We'll set this via React. */
@@ -668,7 +670,35 @@ img {
   }
   to {
     transform: rotate(45deg); /* Swing to the right */
+  }
 }
+
+@keyframes heart-pop-burst {
+  /* Start small, rotated, and invisible */
+  0% {
+    transform: scale(0) rotate(-30deg);
+    opacity: 0;
+  }
+  /* Burst to maximum size with a subtle glow */
+  50% {
+    transform: scale(1.6) rotate(10deg);
+    opacity: 1;
+    filter: brightness(1.5);
+  }
+  /* Settle back to final size and rotation */
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+.animate-heart-pop {
+  /* Apply the animation once (forwards) over 0.7 seconds */
+  animation: heart-pop-burst 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1
+    forwards;
+  /* Ensure transform can be applied */
+  display: inline-block;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -787,8 +817,8 @@ body.dark {
   }
 }
 
-.c-dd{
-  .p-inputtext{
+.c-dd {
+  .p-inputtext {
     border: 0 !important;
   }
 }

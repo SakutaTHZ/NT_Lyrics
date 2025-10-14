@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { BsHeartFill } from "react-icons/bs";
 
 const Normal_Button = ({
   custom_class,
@@ -12,8 +13,14 @@ const Normal_Button = ({
         className={`w-fit flex gap-2 items-center justify-center p-2 rounded-md cursor-pointer border text-nowrap ${custom_class}`}
         onClick={onClick}
       >
-        {Icon && <Icon className='w-fit'/>} 
-        {text!="" && <p className="w-full truncate">{text}</p>}
+        {Icon && (
+          <Icon
+            className={`w-fit ${
+              Icon === BsHeartFill ? "animate-heart-pop" : ""
+            }`}
+          />
+        )}
+        {text != "" && <p className="w-full truncate">{text}</p>}
       </button>
     </>
   );
