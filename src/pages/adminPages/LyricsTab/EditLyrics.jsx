@@ -6,8 +6,9 @@ import DropdownField from "../../../components/common/DropdownField";
 import MultiSelectField from "../../../components/common/MultiSelectField";
 import ModalPortal from "../../../components/special/ModalPortal";
 import useModalEscClose from "../../../components/hooks/useModalEscClose";
-import { ConfirmPopup } from "primereact/confirmpopup";
-import { confirmPopup } from "primereact/confirmpopup";
+//import { ConfirmPopup } from "primereact/confirmpopup";
+//import { confirmPopup } from "primereact/confirmpopup";
+
 
 import imageCompression from "browser-image-compression";
 
@@ -166,8 +167,8 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
     }
   };
 
-  const handleDelete = (e) => {
-    confirmPopup({
+  const handleDelete = () => {
+    /*confirmPopup({
       target: e.currentTarget,
       message: "Are you sure you want to delete this lyric?",
       icon: "pi pi-exclamation-triangle",
@@ -179,7 +180,14 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
         onUpdate();
         onClose();
       },
-    });
+    });*/
+    if (
+      window.confirm("Are you sure you want to delete this lyric? This action cannot be undone.")
+    ) {
+      deleteLyric();
+      onUpdate();
+      onClose();
+    }
   };
 
   const validateForm = () => {
@@ -434,7 +442,8 @@ const EditLyric = ({ lyric, onClose, onUpdate, showNewMessage }) => {
         </div>
       </div>
 
-      <ConfirmPopup />
+      {/* <ConfirmPopup className="z-[9999]" appendTo={"window"} /> */}
+      
     </ModalPortal>
   );
 };
