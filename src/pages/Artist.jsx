@@ -7,7 +7,6 @@ import axios from "axios";
 import { apiUrl, fetchArtistById } from "../assets/util/api";
 import useDebounce from "../components/hooks/useDebounce";
 import { useRef } from "react";
-import { useSearchParams } from "react-router-dom";
 import LyricsRow from "../components/special/LyricsRow";
 import LyricsRowPremium from "../components/special/LyricRowPremium";
 
@@ -21,8 +20,7 @@ const Artist = ({ artistId, onClose }) => {
 
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
   const name = artistId;
-  const [searchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
+  const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
 
   const [isVisible, setIsVisible] = useState(true);
@@ -144,7 +142,7 @@ const Artist = ({ artistId, onClose }) => {
         setLoading(false);
       }
     },
-    [debouncedSearchTerm, name]
+    [debouncedSearchTerm, name,token]
   );
 
   //const [hasToken, setHasToken] = useState(false);
@@ -213,14 +211,14 @@ const Artist = ({ artistId, onClose }) => {
       <AnimatePresence>
         {isVisible && artistId && (
           <motion.div
-            className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto"
+            className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto  pb-20 md:pb-8"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             {/* ...all your modal content here... */}
-            <div className="relative p-4 py-4 md:px-24 md:pt-16">
+            <div className="relative p-4 py-4 md:px-24 md:pt-16 ">
               <div className="flex items-center justify-between gap-4">
                 {/* header content */}
 
@@ -324,7 +322,7 @@ const Artist = ({ artistId, onClose }) => {
                         );
                       })}
                     {loading && (
-                      <div className="text-center  c-gray-text flex items-center justify-center gap-2 opacity-30">
+                      <div className="text-center p-4 c-gray-text flex items-center justify-center gap-2 opacity-30">
                         <BiSearch
                           style={{
                             display: "inline-block",
@@ -335,7 +333,7 @@ const Artist = ({ artistId, onClose }) => {
                       </div>
                     )}
                     {!loading && lyrics.length === 0 && initialLoadDone && (
-                      <div className="w-full flex flex-col items-center md:items-start c-bg justify-center gap-4 text-center c-gray-text opacity-30">
+                      <div className="w-full flex flex-col items-center md:items-start c-bg justify-center gap-4 p-4 text-center c-gray-text opacity-30">
                         No Lyrics Found
                       </div>
                     )}

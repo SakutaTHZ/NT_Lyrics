@@ -85,7 +85,7 @@ const Nav = () => {
     <>
       {/* Desktop Nav */}
       {!isMobile ? (
-        <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-20 c-bg z-[1000]">
+        <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-20 c-bg z-[10000]">
           <button
             onClick={() => handleNav("/")}
             className="font-bold text-lg italic text-left w-full overflow-hidden text-ellipsis whitespace-nowrap"
@@ -198,7 +198,7 @@ const Nav = () => {
         </nav>
       ) : (
         // Mobile Bottom Nav
-        <div className="fixed bottom-0 w-11/12 h-16 translate-y-2 meshBg shadow-sm rounded-t-4xl flex justify-center items-center z-[999] md:hidden">
+        <div className="fixed bottom-0 w-11/12 h-16 translate-y-2 meshBg shadow-sm rounded-t-4xl flex justify-center items-center z-[10000] md:hidden">
           <div className="flex items-center w-full">
             {NAV_LINKS.map(({ path, label, icon }) => (
               <button

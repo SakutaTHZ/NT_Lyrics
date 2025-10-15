@@ -67,7 +67,7 @@ const LyricsGrid = ({ fetchLyrics }) => {
       })}
       <div ref={observerRef}></div>
       {isLoading && (
-        <div className="text-center py-4 text-gray-500 flex items-center justify-center gap-2">
+        <div className="text-center p-4 text-gray-500 flex items-center justify-center gap-2">
           <BiSearch
             style={{
               display: "inline-block",
