@@ -180,17 +180,17 @@ const LyricsDetails = ({
                       <span key={index}>{line}</span>
                     ))}
                   </p>
-                {(access === 1 ||
-                  (messageType === "error" &&
-                    messageText ===
-                      t("youCanOnlyAddUpTo20SongsToEachCollection"))) && (
-                  <button
-                    className="rotatingBorder w-full c-bg shadow-sm text-sm line-clamp-3 p-2 rounded-md text-left font-medium"
-                    onClick={() => Navigate("/NT_Lyrics/premium")}
-                  >
-                    {t("upgraedToGetTheseExclusiveFeaturesAndBenifits")}
-                  </button>
-                )}
+                  {(access === 1 ||
+                    (messageType === "error" &&
+                      messageText ===
+                        t("youCanOnlyAddUpTo20SongsToEachCollection"))) && (
+                    <button
+                      className="rotatingBorder w-full c-bg shadow-sm text-sm line-clamp-3 p-2 rounded-md text-left font-medium"
+                      onClick={() => Navigate("/NT_Lyrics/premium")}
+                    >
+                      {t("upgraedToGetTheseExclusiveFeaturesAndBenifits")}
+                    </button>
+                  )}
                 </div>
               </MessagePopup>
             )}
