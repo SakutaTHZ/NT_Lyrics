@@ -128,5 +128,6 @@
   "youAreNowAPremiumUser": "သင်သည် ယခု Premium အသုံးပြုသူ ဖြစ်ပါပြီ။",
   "yourPremiumHasExpired": "သင့် Premium သက်တမ်းကုန်ဆုံးသွားပါပြီ။",
   "yourPremiumRequestHasBeenRejected": "သင့် Premium တောင်းဆိုမှုကို ငြင်းပယ်လိုက်ပါပြီ။",
-  "chordsList": "Chords စာရင်း"
+  "chordsList": "Chords စာရင်း",
+  "chordReadingAvailableForPremiumUsers": "Chord ဖတ်ရှုခြင်းသည် Premium အသုံးပြုသူများအတွက်သာ ရရှိနိုင်ပါသည်။"
 }

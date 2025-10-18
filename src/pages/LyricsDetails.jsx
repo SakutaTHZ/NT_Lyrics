@@ -27,8 +27,10 @@ import Chords from "./Chords";
 import Metronome from "../components/common/Metronome";
 import ImageGallery from "../components/common/ImageGallery";
 import { useAuth } from "../components/hooks/authContext";
+import { Navigate } from "react-router-dom";
 
 const LyricsDetails = ({
+  access,
   lyricsId,
   lyricData,
   isInCollection,
@@ -44,6 +46,8 @@ const LyricsDetails = ({
   const [showChords, setShowChords] = useState(false);
 
   const [lyric, setLyric] = useState(lyricData || null);
+
+  const isPremiumUser = user?.role === "premium-user";
 
   // Fetch lyric details if not provided via props
   useEffect(() => {
@@ -142,10 +146,15 @@ const LyricsDetails = ({
       return res;
     } catch (err) {
       console.error("Error changing lyrics status:", err);
-      setMessageText("Failed to change lyrics status");
+      setMessageType("error");
+      if (err.message === "You can only add 20 collections") {
+        setMessageText(t("youCanOnlyAddUpTo20SongsToEachCollection"));
+      } else {
+        setMessageText(t("somethingWentWrongPleaseTryAgainLater"));
+      }
     } finally {
       setShowMessage(true);
-      setTimeout(() => setShowMessage(false), 2000);
+      setTimeout(() => setShowMessage(false), 5000);
     }
   };
 
@@ -165,10 +174,23 @@ const LyricsDetails = ({
                 message_type={messageType}
                 closePopup={() => setShowMessage(false)}
               >
-                <div className="message_text text-pretty text-left">
-                  {messageText.split("\n").map((line, index) => (
-                    <span key={index}>{line}</span>
-                  ))}
+                <div className="message_text text-pretty text-left flex flex-col gap-3">
+                  <p>
+                    {messageText.split("\n").map((line, index) => (
+                      <span key={index}>{line}</span>
+                    ))}
+                  </p>
+                {(access === 1 ||
+                  (messageType === "error" &&
+                    messageText ===
+                      t("youCanOnlyAddUpTo20SongsToEachCollection"))) && (
+                  <button
+                    className="rotatingBorder w-full c-bg shadow-sm text-sm line-clamp-3 p-2 rounded-md text-left font-medium"
+                    onClick={() => Navigate("/NT_Lyrics/premium")}
+                  >
+                    {t("upgraedToGetTheseExclusiveFeaturesAndBenifits")}
+                  </button>
+                )}
                 </div>
               </MessagePopup>
             )}
@@ -257,12 +279,28 @@ const LyricsDetails = ({
                     <p className="text-lg font-semibold flex items-center">
                       {lyric.title}{" "}
                     </p>
-                    <button
-                      className="bg-blue-500 p-2 rounded-full hover:bg-blue-600 text-white flex items-center justify-center opacity-75"
-                      onClick={() => setShowChords(true)}
-                    >
-                      <BiMusic size={18} />
-                    </button>
+                    {isPremiumUser ? (
+                      <button
+                        className="bg-blue-500 p-2 rounded-full hover:bg-blue-600 text-white flex items-center justify-center opacity-75"
+                        onClick={() => setShowChords(true)}
+                      >
+                        <BiMusic size={18} />
+                      </button>
+                    ) : (
+                      <button
+                        className="bg-amber-200 p-2 rounded-full hover:bg-amber-300 text-black flex items-center justify-center opacity-75"
+                        onClick={() => {
+                          setMessageType("error");
+                          setMessageText(
+                            t("chordReadingAvailableForPremiumUsers")
+                          );
+                          setShowMessage(true);
+                          setTimeout(() => setShowMessage(false), 10000);
+                        }}
+                      >
+                        <BiMusic size={18} />
+                      </button>
+                    )}
                   </div>
                   {lyric.albumName && lyric.albumName !== "?" && (
                     <p className="text-sm text-gray-600 pb-2">
@@ -400,7 +438,7 @@ const LyricsDetails = ({
                           custom_class={`w-8 h-8 border-transparent shadow-sm bg-red-50 text-red-500 transition-all`}
                           onClick={(e) => {
                             e.stopPropagation();
-                            user?.role === "premium-user"
+                            isPremiumUser
                               ? setAddToCollection(true)
                               : changeLyricsStatus(false);
                           }}
@@ -412,7 +450,7 @@ const LyricsDetails = ({
                           custom_class={`w-8 h-8 border-transparent shadow-sm c-primary c-reverse transition-all`}
                           onClick={(e) => {
                             e.stopPropagation();
-                            user?.role === "premium-user"
+                            isPremiumUser
                               ? setAddToCollection(true)
                               : changeLyricsStatus(true);
                           }}
@@ -490,6 +528,7 @@ const LyricsDetails = ({
               imageLink={lyric.lyricsPhoto}
               chordKey={lyric.majorKey}
               onClose={() => setShowChords(false)}
+              isPremium={isPremiumUser}
             />
           </ModalContainer>
         )}

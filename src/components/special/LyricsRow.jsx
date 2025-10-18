@@ -220,6 +220,7 @@ const LyricsRow = ({
               setIsInCollection(newStatus);
               onCollectionStatusChange();
             }}
+            access={access}
           />
         </ModalContainer>
       )}

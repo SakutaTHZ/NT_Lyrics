@@ -9,8 +9,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import PropTypes from "prop-types";
 import ChordsDisplay from "../components/common/ChordsDisplay";
 import { extractChordsFromImage } from "../assets/util/ocrChords";
+import { Link } from "react-router-dom";
 
-const Chords = ({ imageLink, chordKey, onClose }) => {
+const Chords = ({ imageLink, chordKey, onClose, isPremium }) => {
   const { t } = useTranslation();
 
   const chords = getChordData();
@@ -84,12 +85,23 @@ const Chords = ({ imageLink, chordKey, onClose }) => {
             </button>
           </div>
 
-          {/* Chords Display */}
-          <ChordsDisplay
-            originalChords={text.split(" ")} // pass chords as an array
-            error={error}
-            reading={reading}
-          />
+          {isPremium ? (
+            <ChordsDisplay
+              originalChords={text.split(" ")} // pass chords as an array
+              error={error}
+              reading={reading}
+            />
+          ) : (
+            <button className="bg-amber-200 text-black px-5 py-1 rounded-lg w-full text-left space-y-1">
+              <p>{t("chordReadingAvailableForPremiumUsers")}</p>
+              <Link
+                to="/NT_Lyrics/premium"
+                className="text-blue-700 animate-pulse"
+              >
+                Learn more ...
+              </Link>
+            </button>
+          )}
 
           <div className="py-4 space-y-4">
             {/* Top row of chord buttons (C, Db, D...) */}
@@ -157,6 +169,7 @@ Chords.propTypes = {
   imageLink: PropTypes.string,
   chordKey: PropTypes.string,
   onClose: PropTypes.func,
+  isPremium: PropTypes.bool,
 };
 
 export default Chords;

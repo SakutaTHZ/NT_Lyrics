@@ -92,7 +92,7 @@ const Lyrics = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`${apiUrl}/lyrics/searchLyrics`, {
+        const res = await axios.get(`${apiUrl}/lyrics/searchLyricsByTitleAndAlbum`, {
           params: {
             page: pageNum,
             limit: 30,

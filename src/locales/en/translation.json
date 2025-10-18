@@ -130,5 +130,6 @@
   "yourPremiumHasExpired": "Your Premium has expired.",
   "yourPremiumRequestHasBeenRejected": "Your Premium request has been rejected.",
   "youHaveReachedTheMaximumNumberOfCollections": "You have reached the maximum number of collections.",
-  "chordsList": "Chords List"
+  "chordsList": "Chords List",
+  "chordReadingAvailableForPremiumUsers": "Chord reading is available for Premium users."
 }
