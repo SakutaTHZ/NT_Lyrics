@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BiExpand } from "react-icons/bi";
-import CommitHistory from "./ComitHistory";
 
 const AnnouncementBoard = () => {
   const { t } = useTranslation();
@@ -29,7 +28,7 @@ const AnnouncementBoard = () => {
               <span className="mb-1 h-1 border-b border-dashed border-gray-400" />
             )}
             <span className="w-full overflow-hidden text-ellipsis leading-relaxed">
-              <CommitHistory />
+              {t("WelcomeToNTLyrics")}
             </span>
           </p>
           <p

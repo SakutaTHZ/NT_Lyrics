@@ -73,6 +73,10 @@
   "aboutNtLyrics": "About NT Lyrics",
   "ntlyricsDescription": "began as a humble Facebook page — created out of necessity to help beginner musicians navigate the often messy world of Burmese music chords. Back in the early days, finding accurate chords and lyrics for local songs was more about guesswork than guidance. That frustration gave birth to this project. What started as a few shared posts quickly gained traction. Musicians, singers, and hobbyists began using and contributing, turning the page into a quiet but growing hub. Today, NT Lyric n Chord is a dedicated space — built not just to host lyrics and chords, but to make playing and learning music feel accessible for everyone. We’re not a corporation, and we’re not some faceless aggregator. This project is run by people who play music too.",
 
+  "aboutApp": "About App",
+  "appDescription": "With over 3000 song lyrics and chords, we strive to provide accurate lyrics and chords for every song.",
+  "premiumToo": "Not only do we provide song lyrics, but we also include YouTube videos for audio listening and practice.",
+
   "youDontHaveAccessToThisFeature": "You don't have access to this feature.",
   "youHaveToBePremiumUserToAccessThisFeature": "You have to be a Premium user to access this feature.",
 
@@ -131,5 +135,7 @@
   "yourPremiumRequestHasBeenRejected": "Your Premium request has been rejected.",
   "youHaveReachedTheMaximumNumberOfCollections": "You have reached the maximum number of collections.",
   "chordsList": "Chords List",
-  "chordReadingAvailableForPremiumUsers": "Chord reading is available for Premium users."
+  "chordReadingAvailableForPremiumUsers": "Chord reading is available for Premium users.",
+
+  "WelcomeToNTLyrics": "Welcome to NT Lyrics\n We are currently uploading more lyrics. Stay tuned!. \n New App Features are coming soon!"
 }

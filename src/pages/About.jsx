@@ -3,11 +3,9 @@ import KpayQR from "../assets/images/Kpaythz.jpg";
 import cover from "../assets/images/cover_bg.png";
 
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../components/hooks/authContext";
 
 const About = () => {
   const { t } = useTranslation();
-  const { user } = useAuth();
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -28,8 +26,7 @@ const About = () => {
                 {t("aboutNtLyrics")}
               </h2>
               <p className="leading-relaxed c-bg p-4 rounded-md text-md z-10 relative">
-                <span>Welcome <strong>{user?.name || "Guest"}</strong>,</span> <br /><br />
-                <strong>NT Lyric n Chord</strong> <span>{t("ntlyricsDescription").split("\n").map((line, i) => <span key={i}>{line}<br/></span>)}</span>
+                <strong className="text-lg">NT Lyric n Chord</strong> <span>{t("ntlyricsDescription").split("\n").map((line, i) => <span key={i}>{line}<br/></span>)}</span>
               </p>
             </section>
 
@@ -38,53 +35,14 @@ const About = () => {
             {/* 🧭 How to Read */}
             <section>
               <h2 className="font-bold text-2xl italic mb-2">
-                How to Read Lyrics and Chords
+                {t("aboutApp")}
               </h2>
-              <p className="leading-relaxed">
-                We keep things simple but consistent. Here’s how to understand
-                the structure:
-              </p>
-
-              <ul className="list-disc list-inside mt-2 space-y-1 text-sm md:text-base">
+              <ul className="list-disc list-inside mt-2 space-y-1 text-sm md:text-base c-bg p-4 rounded-md text-md z-10 relative">
                 <li>
-                  <strong>🔤 Chord Placement:</strong> Chords appear{" "}
-                  <em>above</em> the lyrics at the exact point they should be
-                  played.
+                  {t("appDescription")}
                 </li>
                 <li>
-                  <strong>🪕 Common Markings:</strong>
-                  <ul className="list-disc list-inside ml-4 mt-1">
-                    <li>
-                      <code>(*)</code> — Indicates chorus repetition.
-                    </li>
-                    <li>
-                      <code>[Intro]</code>, <code>[Verse]</code>,{" "}
-                      <code>[Chorus]</code> — Structural parts of the song.
-                    </li>
-                    <li>
-                      <code>{"//"}</code> — Used for transliteration or repeated
-                      lines.
-                    </li>
-                    <li>
-                      <code>Capo: 2</code> — Use a capo on the 2nd fret.
-                    </li>
-                    <li>
-                      <code>(x2)</code>, <code>(x4)</code> — Repeat a section
-                      this many times.
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <strong>📝 Translations & Notes:</strong> Some songs include
-                  Romanized lyrics or rhythm guidance for clarity.
-                </li>
-                <li>
-                  If something feels off, or you’d like to see a new format or
-                  song,{" "}
-                  <a href="#" className="text-blue-500 underline">
-                    contact us here
-                  </a>
-                  .
+                  {t("premiumToo")}
                 </li>
               </ul>
             </section>

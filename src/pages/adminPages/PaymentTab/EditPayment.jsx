@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import ModalPortal from "../../../components/special/ModalPortal";
 import useModalEscClose from "../../../components/hooks/useModalEscClose";
-import { apiUrl} from "../../../assets/util/api";
+import { apiUrl } from "../../../assets/util/api";
 import { RoleTab } from "../UsersTab/UserRow";
 import { useAuth } from "../../../components/hooks/authContext";
 
@@ -24,6 +24,32 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
 
   const [duration, setDuration] = useState(request.durationInMonths || 6);
 
+  // Get User Details
+  const [userDetails, setUserDetails] = useState(null);
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/users/userProfile/${request.userId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          const errorData = await response.json();
+          showNewMessage("error", errorData.message);
+          throw new Error(errorData.message || "Failed to fetch user details");
+        }
+        const data = await response.json();
+        setUserDetails(data.user);
+        console.log("Fetched user details:", data);
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+    fetchUserDetails();
+  }, [request.userId, token, showNewMessage]);
 
   const ApprovePayment = async (requestId, token) => {
     const response = await fetch(
@@ -100,17 +126,17 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
                   </h1>
                   <div className="grid grid-cols-2 gap-y-3 gap-x-4">
                     <span className="font-medium text-gray-600">Name</span>
-                    <span className="text-gray-900">{user?.name}</span>
+                    <span className="text-gray-900">{userDetails?.name}</span>
 
                     <span className="font-medium text-gray-600">Email</span>
-                    <span className="text-gray-900">{user?.email}</span>
+                    <span className="text-gray-900">{userDetails?.email}</span>
 
                     <span className="font-medium text-gray-600">Role</span>
                     <span className="text-gray-900">
-                      <RoleTab role={user?.role} />
+                      <RoleTab role={userDetails?.role} />
                     </span>
 
-                    {user?.role === "premium-user" && (
+                    {userDetails?.role === "premium-user" && (
                       <>
                         <span className="font-medium text-gray-600">
                           Premium Start
@@ -194,7 +220,7 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
               <div className="flex justify-end gap-2 mt-4">
                 <button
                   onClick={async () => {
-                    await RejectPayment(request._id,token);
+                    await RejectPayment(request._id, token);
                     onUpdate();
                     onClose();
                   }}

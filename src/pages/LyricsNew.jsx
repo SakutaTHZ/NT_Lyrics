@@ -116,6 +116,7 @@ const Lyrics = () => {
             new Map(merged.map((item) => [item._id, item])).values()
           );
         });
+        console.log("Fetched lyrics data:", data);
 
         setTotalPages(res.data.totalPages);
         setInitialLoadDone(true);
