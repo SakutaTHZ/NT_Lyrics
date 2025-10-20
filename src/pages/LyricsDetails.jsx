@@ -37,6 +37,7 @@ const LyricsDetails = ({
   onClose,
   onCollectionStatusChange,
 }) => {
+  console.log("LyricsDetails passed : ", lyricData);
   const { t } = useTranslation();
 
   const { user, token, isLoading } = useAuth();
@@ -45,7 +46,7 @@ const LyricsDetails = ({
 
   const [showChords, setShowChords] = useState(false);
 
-  const [lyric, setLyric] = useState(lyricData || null);
+  const [lyric, setLyric] = useState(null);
 
   const isPremiumUser = user?.role === "premium-user";
 
@@ -55,16 +56,15 @@ const LyricsDetails = ({
       try {
         const { lyrics } = await fetchLyricById(lyricsId, token);
         // Only set lyricData if it's not provided via props
-        if (!lyricData) {
-          setLyric(lyrics);
-        }
+        console.log("Fetched lyric data:", lyrics);
+        setLyric(lyrics);
       } catch (err) {
         console.error("Error fetching lyric:", err);
       }
     };
 
     getLyric();
-  }, [lyricsId, token, lyricData]);
+  }, [lyricsId, token]);
 
   const handleClose = () => {
     onCollectionStatusChange && onCollectionStatusChange(isInCollection);
