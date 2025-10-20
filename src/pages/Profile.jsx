@@ -508,7 +508,7 @@ const Profile = () => {
           {userRole === "premium-user" ? (
             collection?.collections?.length > 0 && (
               <div className="flex flex-col py-2 px-4 md:px-24">
-                <div className="flex flex-col items-center justify-between md:gap-4 sticky top-0 z-20">
+                <div className="flex flex-col items-center justify-between sticky top-0 z-20">
                   {/* Groups */}
                   <div className="w-full flex items-center justify-between gap-2 c-bg">
                     <div className="w-full c-bg sticky top-0 overflow-auto flex gap-2 py-3">
@@ -593,7 +593,7 @@ const Profile = () => {
             <div
               className={`grid ${
                 loadingLyrics || selectedGroupLyrics.length > 0
-                  ? "md:gap-6"
+                  ? ""
                   : "grid-cols-1 md:gap-12"
               } p-2 py-4 gap-0 px-4 md:px-24`}
             >

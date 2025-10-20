@@ -71,7 +71,7 @@ const Chords = ({ imageLink, chordKey, onClose, isPremium }) => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto px-4 md:px-24"
+          className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto px-4 md:pt-12 md:px-24"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}

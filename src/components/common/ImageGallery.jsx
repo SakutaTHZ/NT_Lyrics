@@ -8,7 +8,7 @@ const ImageGallery = ({ lyric, setShowGallery, setImageError }) => {
 
       {/* Close Button */}
       <button
-        className="absolute flex justify-center items-center top-2 right-2 text-white bg-[#ffffff20] rounded-full p-2 hover:bg-red-600 transition-all"
+        className="absolute flex justify-center items-center top-2 md:top-16 right-2 md:right-4 text-white bg-[#ffffff20] rounded-full p-2 hover:bg-red-600 transition-all"
         onClick={() => setShowGallery(false)}
       >
         <CgClose size={24} />
@@ -23,7 +23,7 @@ const ImageGallery = ({ lyric, setShowGallery, setImageError }) => {
         draggable={false}
         loading="lazy"
         style={{ pointerEvents: "none", userSelect: "none" }}
-        className="w-full max-w-3xl h-auto object-contain rounded-lg shadow-md"
+        className="w-full max-w-3xl md:h-10/12 h-auto object-contain rounded-lg "
       />
 
     </div>

@@ -204,7 +204,7 @@ const LyricsDetails = ({
             )}
 
             <div className="lyrics-wrapper ">
-              <div className="flex items-end w-full lyrics-width">
+              <div className="flex items-end w-full md:w-122 lyrics-width">
                 <p className="w-full font-medium"></p>
                 <button
                   className="flex gap-2 cursor-pointer text-right items-end"
@@ -215,14 +215,14 @@ const LyricsDetails = ({
               </div>
 
               {/* Image Section */}
-              <div className="flex justify-center items-center w-full">
+              <div className="flex justify-center items-center w-full md:w-122 lyrics-width">
                 <div
                   className={`relative w-full lyrics-width rounded-lg shadow-lg overflow-hidden ${
                     user?.role === "free-user" ? "watermark-wrapper" : ""
                   }`}
                 >
                   <button
-                    className={`absolute md:hidden bottom-2 right-2 z-10 p-3 bg-gray-500 text-white rounded-full shadow-md hover:bg-gray-100 transition-all opacity-40 ${
+                    className={`absolute  bottom-2 right-2 z-10 p-3 bg-gray-500 text-white rounded-full shadow-md hover:bg-gray-100 transition-all opacity-40 ${
                       imageError && "hidden"
                     }`}
                     onClick={() => setShowGallery(true)}
@@ -260,7 +260,7 @@ const LyricsDetails = ({
 
               {/* Video Box */}
               {lyric.youTubeLink && user?.role == "premium-user" && (
-                <div className="lyrics-width w-full md:w-122 aspect-video bg-gray-300 rounded-md lyrics-width">
+                <div className="w-full md:w-122 aspect-video bg-gray-300 rounded-md lyrics-width">
                   <iframe
                     className="w-full h-full rounded-md"
                     src={lyric.youTubeLink}

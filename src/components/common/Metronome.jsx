@@ -186,7 +186,7 @@ const Metronome = ({ initialBPM = 120, timeSignature = 4 }) => {
 
       {show && (
         <>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center">
             <div className="flex items-center justify-center gap-4">
               <div>
                 <p className="text-center mb-2">Beat</p>
