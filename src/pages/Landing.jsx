@@ -28,14 +28,15 @@ import { useAuth } from "../components/hooks/authContext";
 import useAddToHomePrompt from "../components/hooks/useAddToHomePrompt";
 
 const Landing = () => {
-  const { promptInstall, isInstalled } = useAddToHomePrompt();
+  const { promptInstall, isInstalled, isIOS, showIOSBanner } =
+    useAddToHomePrompt();
 
   const handleInstallClick = async () => {
     const accepted = await promptInstall();
     if (accepted) {
-      console.log("✅ App installed successfully");
+      alert("✅ App installed successfully");
     } else {
-      console.log("❌ User dismissed installation");
+      alert("❌ User dismissed installation");
     }
   };
 
@@ -276,21 +277,42 @@ const Landing = () => {
                   <BiSearch size={20} className="c-reverse" />
                 </button>
               </div>
-
-              {!isInstalled && (
-                <button
-                  onClick={handleInstallClick}
-                  className="px-3 py-2 c-primary text-white rounded-md"
-                >
-                  📲 Install App
-                </button>
-              )}
             </div>
           </div>
 
           <div className="flex flex-col items-center  p-4 py-0 md:px-24 mt-4 gap-4">
             {/* Announcement Board */}
             <AnnouncementBoard />
+
+            {!isInstalled && !isIOS && (
+              <div className=" bg-white border c-border rounded-xl px-4 py-3 w-full flex items-center justify-between gap-2 text-sm">
+                  <p>
+                    {t("AddThisApptoYourPhone")}
+                  </p>
+
+                  <button
+                    onClick={handleInstallClick}
+                    className="px-4 py-2 w-fit rounded-md c-primary text-white shadow-md transition"
+                  >
+                    Install App
+                  </button>
+              </div>
+            )}
+
+            {/* Custom iOS Banner */}
+            {!isInstalled && showIOSBanner && (
+              <div className=" bg-white border c-border rounded-xl px-4 py-3 w-full flex items-start gap-2 text-sm">
+                <div className="w-full ">
+                  <p className="text-gray-600">
+                    {t("AddThisApptoYourPhone")}
+                  </p>
+                  <p className=" mt-2">
+                    Tap <span className="font-semibold">Share</span> →{" "}
+                    <span className="font-semibold">Add to Home Screen</span>
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Support Us */}
             {user?.role === "free-user" && (
