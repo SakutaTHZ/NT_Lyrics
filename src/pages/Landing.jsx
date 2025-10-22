@@ -25,8 +25,20 @@ import MessagePopup from "../components/common/MessagePopup";
 import Artist from "./Artist";
 import ModalContainer from "../components/special/ModalContainer";
 import { useAuth } from "../components/hooks/authContext";
+import useAddToHomePrompt from "../components/hooks/useAddToHomePrompt";
 
 const Landing = () => {
+  const { promptInstall, isInstalled } = useAddToHomePrompt();
+
+  const handleInstallClick = async () => {
+    const accepted = await promptInstall();
+    if (accepted) {
+      console.log("✅ App installed successfully");
+    } else {
+      console.log("❌ User dismissed installation");
+    }
+  };
+
   const { t } = useTranslation();
 
   const { user, isLoading, authError } = useAuth();
@@ -103,7 +115,7 @@ const Landing = () => {
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 10000);
     }
-  }, [user,user?.status, t]);
+  }, [user, user?.status, t]);
 
   /*useEffect(() => {
     const token = localStorage.getItem("token");
@@ -229,8 +241,6 @@ const Landing = () => {
         <div className="w-screen h-screen overflow-hidden overflow-y-auto">
           {/* Hero Section */}
           <div className=" relative hero customBackground h-2/6 md:h-2/5 w-screen overflow-hidden flex justify-center items-center px-6 rounded-b-lg">
-            
-
             <div className="animate-down-start relative z-10 w-full md:w-96 p-4 c-bg rounded-md shadow-md flex flex-col gap-4 md:translate-y-12">
               <div className="flex items-center gap-4 md:hidden">
                 <p className="font-bold text-sm italic c-text-primary text-nowrap">
@@ -266,6 +276,15 @@ const Landing = () => {
                   <BiSearch size={20} className="c-reverse" />
                 </button>
               </div>
+
+              {!isInstalled && (
+                <button
+                  onClick={handleInstallClick}
+                  className="px-3 py-2 c-primary text-white rounded-md"
+                >
+                  📲 Install App
+                </button>
+              )}
             </div>
           </div>
 
@@ -378,7 +397,6 @@ const Landing = () => {
               </div>
             </div>
           </div>
-
           <Footer />
         </div>
       )}

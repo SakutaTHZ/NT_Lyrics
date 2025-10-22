@@ -204,10 +204,10 @@ const LyricsDetails = ({
             )}
 
             <div className="lyrics-wrapper ">
-              <div className="flex items-end w-full md:w-122 lyrics-width">
+              <div className="flex items-end w-full md:w-122 lyrics-width md:hidden">
                 <p className="w-full font-medium"></p>
                 <button
-                  className="flex gap-2 cursor-pointer text-right items-end"
+                  className="flex cursor-pointer text-right items-end  p-1 c-bg hover:c-bg-2 transition-all"
                   onClick={handleClose}
                 >
                   <BiArrowBack size={20} />
@@ -215,12 +215,18 @@ const LyricsDetails = ({
               </div>
 
               {/* Image Section */}
-              <div className="flex justify-center items-center w-full md:w-122 lyrics-width">
+              <div className="flex justify-center items-center w-full">
                 <div
                   className={`relative w-full lyrics-width rounded-lg shadow-lg overflow-hidden ${
                     user?.role === "free-user" ? "watermark-wrapper" : ""
                   }`}
                 >
+                <button
+                  className="absolute right-2 top-2 md:flex gap-2 cursor-pointer text-right items-end shadow-md p-2 rounded-md c-primary hover:c-bg-2 transition-all text-white z-10 hidden "
+                  onClick={handleClose}
+                >
+                  <BiArrowBack size={20} />
+                </button>
                   <button
                     className={`absolute  bottom-2 right-2 z-10 p-3 bg-gray-500 text-white rounded-full shadow-md hover:bg-gray-100 transition-all opacity-40 ${
                       imageError && "hidden"
