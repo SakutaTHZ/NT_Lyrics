@@ -3,9 +3,13 @@ import { BiMinusCircle, BiPlusCircle } from "react-icons/bi";
 // 🚨 FIX 1: Ensure you import the utility for transposing a SINGLE chord
 import { transposeChord } from "../../assets/util/transpose";
 import PropTypes from "prop-types";
+import { CgChevronLeft } from "react-icons/cg";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Assume 'originalChords' is the array of chords returned from your OCR function
 const ChordsDisplay = ({ originalChords, error, reading }) => {
+  const [minimize, setMinimize] = useState(true);
+
   const [transposeValue, setTransposeValue] = useState(0);
 
   const handleTranspose = (amount) => {
@@ -32,7 +36,7 @@ const ChordsDisplay = ({ originalChords, error, reading }) => {
   }, [originalChords, transposeValue]);
 
   return (
-    <div className="flex justify-center items-center w-full">
+    <div className="flex justify-center items-center w-full transition-all">
       {/* 1. Show Error State */}
       {error && <div className="text-red-500">{error}</div>}
 
@@ -49,99 +53,137 @@ const ChordsDisplay = ({ originalChords, error, reading }) => {
       )}
 
       {!error && !reading && chordDataForGrid.length > 0 && (
-        <div className="lyrics-width animate-down-start w-full h-full c-bg-2 rounded-lg p-4 md:p-8 border c-border">
-          <div className="flex justify-between items-center mb-2">
-            <h1 className="text-lg font-semibold">Tranpose <span
-            className={` text-xs font-normal px-2 rounded-full c-premium-bg text-gray-600`}
+        <div
+          className={`lyrics-width animate-down-start w-full h-full c-bg-2 rounded-lg ${
+            minimize ? "p-2" : "p-4 md:p-8"
+          } border c-border`}
+        >
+          <div
+            className={`flex justify-between items-center ${
+              !minimize && "mb-2"
+            }`}
           >
-            Beta
-          </span></h1>
-            <div className="flex items-center gap-2 text-sm c-text opacity-75">
-              {/* Minus Button: Decrease transpose (down) */}
-              <button
-                onClick={() => handleTranspose(-1)}
-                aria-label="Transpose down"
-                className="hover:opacity-100 transition duration-150"
-              >
-                <BiMinusCircle size={20} />
-              </button>
+            <div className="flex items-center gap-2">
+              {minimize ? (
+                <h1 className="text-lg font-semibold">
+                  Tranpose{" "}
+                  <span
+                    className={` text-xs font-normal px-2 rounded-full c-premium-bg text-gray-600`}
+                  >
+                    Beta
+                  </span>
+                </h1>
+              ) : (
+                <div className="flex items-center gap-2 text-sm c-text">
+                  {/* Minus Button: Decrease transpose (down) */}
+                  <button
+                    onClick={() => handleTranspose(-1)}
+                    aria-label="Transpose down"
+                    className="hover:opacity-100 transition duration-150"
+                  >
+                    <BiMinusCircle size={20} />
+                  </button>
 
-              {/* Display Transpose Value */}
-              <p>
-                Transpose (
-                {transposeValue > 0 ? `+${transposeValue}` : transposeValue})
-              </p>
+                  {/* Display Transpose Value */}
+                  <p className="text-lg font-semibold">
+                    Transpose (
+                    {transposeValue > 0 ? `+${transposeValue}` : transposeValue}
+                    )
+                  </p>
 
-              {/* Plus Button: Increase transpose (up) */}
-              <button
-                onClick={() => handleTranspose(1)}
-                aria-label="Transpose up"
-                className="hover:opacity-100 transition duration-150"
-              >
-                <BiPlusCircle size={20} />
-              </button>
+                  {/* Plus Button: Increase transpose (up) */}
+                  <button
+                    onClick={() => handleTranspose(1)}
+                    aria-label="Transpose up"
+                    className="hover:opacity-100 transition duration-150"
+                  >
+                    <BiPlusCircle size={20} />
+                  </button>
+
+                  <span
+                    className={` text-xs font-normal px-2 rounded-full c-premium-bg text-gray-600`}
+                  >
+                    Beta
+                  </span>
+                </div>
+              )}
             </div>
+
+            <CgChevronLeft
+              size={20}
+              onClick={() => setMinimize(!minimize)}
+              className={`${
+                minimize ? "-rotate-90" : "rotate-90"
+              } transition-all`}
+            />
           </div>
 
-          {/* 💡 Chords Extracted (List) */}
-          <div className="c-announcement-bg c-border rounded-md p-2 mb-2 overflow-x-auto whitespace-nowrap">
-            {chordDataForGrid.map((chordItem, index) => (
-              <span
-                key={index} // Use index as key if original isn't unique enough
-                className="text-base font-mono font-medium c-text mr-2"
+          <AnimatePresence initial={false}>
+            {!minimize && (
+              <motion.div
+                key="expanded"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="overflow-hidden"
               >
-                {chordItem.original}
-              </span>
-            ))}
-          </div>
+                <div className="c-announcement-bg c-border rounded-md p-2 mb-2 overflow-x-auto whitespace-nowrap">
+                  {chordDataForGrid.map((chordItem, index) => (
+                    <span
+                      key={index}
+                      className="text-base font-mono font-medium c-text mr-2"
+                    >
+                      {chordItem.original}
+                    </span>
+                  ))}
+                </div>
 
-          {/* 💡 Grid Display Area */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 c-text-2 p-2">
-            {chordDataForGrid.map((chordItem, index) => (
-              // Outer div remains the grid item
-              <div
-                key={index}
-                // Add Flexbox here to treat the content as a single row
-                className="text-base font-medium whitespace-nowrap flex"
-              >
-                {/* 1. Original Chord Column (Fixed Width) */}
-                <span
-                  // Set a fixed width or maximum width for the original chord slot
-                  // You may need to adjust 'w-1/2' or 'w-10' based on your font/longest chord
-                  className="w-[20px] text-left"
-                >
-                  {chordItem.original}
-                </span>
+                {/* 🎵 Animated transpose grid */}
+                <AnimatePresence mode="wait">
+                  {Number(transposeValue) !== 0 && (
+                    <motion.div
+                      key="transposed-grid"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                      className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 c-text-2 p-2"
+                    >
+                      {chordDataForGrid.map((chordItem, index) => (
+                        <div
+                          key={index}
+                          className="text-base font-medium whitespace-nowrap flex"
+                        >
+                          <span className="w-[20px] text-left">
+                            {chordItem.original}
+                          </span>
+                          {chordItem.isTransposed && (
+                            <span className="flex items-center">
+                              <span className="text-gray-500 mx-1">&rarr;</span>
 
-                {/* 2. Transposed Content Column (Flex to fill/Conditional Display) */}
-                {chordItem.isTransposed ? (
-                  <span className="flex items-center">
-                    {/* Arrow (aligned with the middle of the cell) */}
-                    <span className="text-gray-500 mx-1">
-                      &nbsp; &rarr; &nbsp; {/* Unicode right arrow */}
-                    </span>
-                    {/* Transposed Chord (aligned right if necessary) */}
-                    <span className="font-semibold text-yellow-600">
-                      {chordItem.transposed}
-                    </span>
-                  </span>
-                ) : (
-                  // When not transposed, display an empty, fixed-width placeholder
-                  // to maintain the layout integrity of the entire grid.
-                  <span className="flex items-center">
-                    {/* Arrow (aligned with the middle of the cell) */}
-                    <span className="text-gray-500 mx-1">
-                      &nbsp; &rarr; &nbsp; {/* Unicode right arrow */}
-                    </span>
-                    {/* Transposed Chord (aligned right if necessary) */}
-                    <span className="font-semibold text-yellow-600">
-                      {chordItem.transposed}
-                    </span>
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
+                              <AnimatePresence mode="wait">
+                                <motion.span
+                                  key={chordItem.transposed} // 👈 triggers re-animation when transposed value changes
+                                  initial={{ opacity: 0, x: -5, skewX: -10 }}
+                                  animate={{ opacity: 1, x: 0, skewX: 0 }}
+                                  exit={{ opacity: 0, x: 5, skewX: 10 }}
+                                  transition={{ duration: 0.15 }}
+                                  className="font-semibold text-yellow-600 relative glitch-text"
+                                >
+                                  {chordItem.transposed}
+                                </motion.span>
+                              </AnimatePresence>
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       )}
 

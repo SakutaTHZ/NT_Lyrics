@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import ChordsDisplay from "../components/common/ChordsDisplay";
 import { extractChordsFromImage } from "../assets/util/ocrChords";
 import { Link } from "react-router-dom";
+import { Dropdown } from "primereact/dropdown";
 
 const Chords = ({ imageLink, chordKey, onClose, isPremium }) => {
   const { t } = useTranslation();
@@ -105,6 +106,7 @@ const Chords = ({ imageLink, chordKey, onClose, isPremium }) => {
 
           <div className="py-4 space-y-4 pb-20">
             {/* Top row of chord buttons (C, Db, D...) */}
+            <h1 className="font-semibold">Chords</h1>
             <div className="flex flex-wrap gap-2">
               {Object.keys(chords).map((chord) => (
                 <button
@@ -123,39 +125,41 @@ const Chords = ({ imageLink, chordKey, onClose, isPremium }) => {
             </div>
 
             {/* Sub-buttons for chord variants (C, Cm, Cm7, etc.) */}
-            {activeChord && (
-              <div className="flex flex-wrap gap-2 border c-border p-2 rounded-md border-dashed c-announcement-bg text-sm">
-                {Object.keys(groupedVariants).map((variant) => (
-                  <button
-                    key={variant}
-                    onClick={() => setActiveVariant(variant)}
-                    className={`px-3 py-1 rounded border c-border ${
-                      activeVariant === variant ? "c-primary c-reverse" : "c-bg"
-                    }`}
-                  >
-                    {variant}
-                  </button>
-                ))}
+            <div className="border c-border rounded-md p-4 space-y-2">
+              <h1 className="font-semibold">Variants</h1>
+              <div className=" rounded-md  text-sm flex items-center gap-3 c-dd ">
+                <Dropdown
+                  value={activeVariant}
+                  options={Object.keys(groupedVariants).map((variant) => ({
+                    label: variant,
+                    value: variant,
+                  }))}
+                  onChange={(e) => setActiveVariant(e.value)}
+                  placeholder="Select a variant"
+                  className="w-full capitalize-first-letter c-bg c-border border-0"
+                  panelClassName="text-sm"
+                  appendTo="self"
+                />
               </div>
-            )}
 
-            {/* Display chord images */}
-            {activeVariant && groupedVariants[activeVariant] && (
-              <div className="grid grid-cols-2 md:grid-cols-8 gap-4">
-                {groupedVariants[activeVariant].map((img) => (
-                  <div key={img.name} className="text-center">
-                    <p className="text-sm text-left mb-2">{img.name}</p>
-                    <div className="bg-white opacity-75">
-                      <img
-                        src={img.src}
-                        alt={img.name}
-                        className="w-full h-auto border c-border rounded object-contain aspect-square"
-                      />
+              {/* Display chord images */}
+              {activeVariant && groupedVariants[activeVariant] && (
+                <div className="grid grid-cols-2 md:grid-cols-8 gap-4 py-2">
+                  {groupedVariants[activeVariant].map((img) => (
+                    <div key={img.name} className="text-center">
+                      <p className="text-sm text-left mb-2">{img.name}</p>
+                      <div className="bg-white opacity-75">
+                        <img
+                          src={img.src}
+                          alt={img.name}
+                          className="w-full h-auto border c-border rounded object-contain aspect-square"
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           <Footer />

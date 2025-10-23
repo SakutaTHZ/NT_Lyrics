@@ -333,6 +333,10 @@ img {
   );
 }
 
+.p-dropdown-label{
+  border: 0 !important;
+}
+
 /* This uses the theme's mesh color variables */
 .meshBg {
   background: rgb(var(--mesh-color-3));
@@ -533,6 +537,78 @@ img {
 
 .glitching {
   /* animation: glitching 5s infinite; */
+}
+
+/* Glitch Text Base */
+.glitch-text {
+  position: relative;
+}
+
+/* Primary Color Displacement/Shadow */
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text); /* Important: You might need to add data-text prop to your motion.span */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Red Channel Displacement */
+.glitch-text::before {
+  left: 1px; /* Slight offset */
+  text-shadow: -1px 0 red;
+  /* Add an animation to constantly flicker this layer */
+  animation: glitch-shadow-1 0.7s infinite linear alternate-reverse;
+}
+
+/* Cyan/Blue Channel Displacement */
+.glitch-text::after {
+  left: -1px; /* Slight offset in the opposite direction */
+  text-shadow: 1px 0 cyan;
+  /* Add an animation to constantly flicker this layer */
+  animation: glitch-shadow-2 0.7s infinite linear alternate;
+}
+
+/* Keyframes for the glitch flicker and constant movement */
+@keyframes glitch-shadow-1 {
+  0% {
+    clip-path: inset(10% 0 85% 0); /* Random vertical slice */
+  }
+  25% {
+    clip-path: inset(80% 0 5% 0);
+  }
+  50% {
+    clip-path: inset(25% 0 60% 0);
+  }
+  75% {
+    clip-path: inset(5% 0 90% 0);
+  }
+  100% {
+    clip-path: inset(50% 0 45% 0);
+  }
+}
+
+@keyframes glitch-shadow-2 {
+  0% {
+    clip-path: inset(50% 0 45% 0);
+  }
+  20% {
+    clip-path: inset(5% 0 90% 0);
+  }
+  40% {
+    clip-path: inset(30% 0 65% 0);
+  }
+  60% {
+    clip-path: inset(90% 0 5% 0);
+  }
+  80% {
+    clip-path: inset(15% 0 80% 0);
+  }
+  100% {
+    clip-path: inset(70% 0 10% 0);
+  }
 }
 
 @keyframes glitching {
