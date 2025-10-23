@@ -213,7 +213,7 @@ const Artist = ({ artistId, onClose }) => {
       <AnimatePresence>
         {isVisible && artistId && (
           <motion.div
-            className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto  pb-20 md:pb-8"
+            className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto pb-20 md:pb-8"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}

@@ -34,9 +34,15 @@ const Landing = () => {
   const handleInstallClick = async () => {
     const accepted = await promptInstall();
     if (accepted) {
-      alert("✅ App installed successfully");
+      setMessageText(t("AppInstalling"));
+      setMessageType("success");
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 10000);
     } else {
-      alert("❌ User dismissed installation");
+      setMessageText(t("AppIsAlreadyInstalled"));
+      setMessageType("error");
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 10000);
     }
   };
 

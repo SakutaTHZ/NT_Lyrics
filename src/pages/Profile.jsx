@@ -369,7 +369,7 @@ const Profile = () => {
 
               <div className="relative w-full flex items-center justify-center md:gap-4 border p-2 rounded-full c-border c-bg">
                 <div className="flex items-center gap-2">
-                  <p className=" text-lg">Collected -</p>
+                  <p className=" text-lg">Collected</p>
                   <p className="pr-4">
                     <span
                       className={`${
@@ -390,7 +390,7 @@ const Profile = () => {
                 </div>
                 {userRole === "premium-user" && (
                   <div className="flex items-center gap-2 px-4 border-l border-gray-300">
-                    <p className=" text-lg">Collections -</p>
+                    <p className=" text-lg">Collections</p>
                     <span
                       className={`font-semibold ${
                         collection?.collections?.length >= 20

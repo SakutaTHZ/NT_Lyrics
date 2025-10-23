@@ -163,7 +163,7 @@ const LyricsDetails = ({
       <AnimatePresence>
         {isVisible && !isLoading && (
           <motion.div
-            className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto pb-20 md:pb-8"
+            className="w-screen h-screen absolute inset-0 z-20 c-bg overflow-hidden overflow-y-auto"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
@@ -203,7 +203,7 @@ const LyricsDetails = ({
               />
             )}
 
-            <div className="lyrics-wrapper ">
+            <div className="lyrics-wrapper pb-24">
               <div className="flex items-end w-full md:w-122 lyrics-width md:hidden">
                 <p className="w-full font-medium"></p>
                 <button

@@ -103,7 +103,7 @@ const Chords = ({ imageLink, chordKey, onClose, isPremium }) => {
             </button>
           )}
 
-          <div className="py-4 space-y-4">
+          <div className="py-4 space-y-4 pb-20">
             {/* Top row of chord buttons (C, Db, D...) */}
             <div className="flex flex-wrap gap-2">
               {Object.keys(chords).map((chord) => (

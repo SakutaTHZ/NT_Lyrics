@@ -139,5 +139,7 @@
 
   "WelcomeToNTLyrics": "Welcome to NT Lyrics\n We are currently uploading more lyrics. Stay tuned!. \n New App Features are coming soon!",
 
-  "AddThisApptoYourPhone": "Add This App to Your Phone"
+  "AddThisApptoYourPhone": "Add This App to Your Phone",
+  "AppInstalling": "App Installing...",
+  "AppIsAlreadyInstalled": "App is already installed."
 }

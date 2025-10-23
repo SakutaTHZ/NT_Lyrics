@@ -217,7 +217,7 @@ const ProfileEdit = ({
             exit={{ opacity: 0, y: 50 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            <div className="fixed inset-0 w-screen h-screen md:h-fit min-h-screen overflow-y-scroll py-6 md:px-18 c-bg flex flex-col">
+            <div className="fixed inset-0 w-screen h-screen md:h-fit min-h-screen overflow-y-scroll py-6 md:px-18  pb-20 c-bg flex flex-col">
               <button
                 className="ml-4 rounded-md cursor-pointer p-2 absolute right-4 top-4 z-50"
                 onClick={() => setTimeout(() => handleClose(), 200)}
