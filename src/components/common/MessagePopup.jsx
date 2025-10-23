@@ -13,7 +13,6 @@ const MessagePopup = ({
   children,
   closePopup = () => {},
 }) => {
-  console.log("Rendering MessagePopup");
   const { vibratePattern } = useVibration();
   if (message_type === "error") {
     vibratePattern("errorBuzz");

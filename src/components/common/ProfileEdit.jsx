@@ -240,7 +240,7 @@ const ProfileEdit = ({
                 <div className="w-full flex flex-col items-center gap-4 border-t c-border pt-4 border-dashed">
                   {/* Premium Info */}
 
-                  {user.role === "premium-user" ? (
+                  {user?.role === "premium-user" ? (
                     <div className="c-bg-2 border c-border w-full p-5 rounded-xl  space-y-4">
                       <div className="flex items-center gap-2">
                         <p className="c-gray-text font-medium">

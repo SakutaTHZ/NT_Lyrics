@@ -3,7 +3,9 @@ import { useTranslation } from "react-i18next";
 import { BiArrowBack, BiX } from "react-icons/bi";
 import { CgCheck } from "react-icons/cg";
 import UpgradeToPremium from "../components/common/UpgradeToPremium";
-import { checkIfPaymentRequested } from "../assets/util/api";
+import { checkIfPaymentRequested, siteUrl } from "../assets/util/api";
+import { useAuth } from "../components/hooks/authContext";
+import googleLogo from "../assets/images/svgs/google.svg";
 
 const Premium = () => {
   const { t } = useTranslation();
@@ -11,15 +13,9 @@ const Premium = () => {
 
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
 
+  const { token } = useAuth();
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    // If no token, redirect to home
-    if (!token) {
-      window.location.href = "/";
-      return;
-    }
-
     const checkPayment = async () => {
       try {
         const paymentData = await checkIfPaymentRequested(token);
@@ -32,7 +28,7 @@ const Premium = () => {
     };
 
     checkPayment();
-  }, []);
+  }, [token]);
 
   const openUpgradeModal = () => {
     setIsModalOpen(true);
@@ -80,24 +76,12 @@ const Premium = () => {
                   <tr>
                     <td className={`${columnClass}`}>Features</td>
                     <td className={`${columnClass} c-bg w-24`}>Free</td>
-                    <td className={`${columnClass} c-bg-2 w-24`}>
-                      Premium
-                    </td>
+                    <td className={`${columnClass} c-bg-2 w-24`}>Premium</td>
                   </tr>
                 </thead>
 
                 <tbody>
                   <tr className="border c-border">
-                    <td className={`${columnClass}`}>{t("noAds")}</td>
-                    <td className={`${columnClass} c-bg w-24`}>
-                      <CgCheck size={20} className="text-green-500" />
-                    </td>
-                    <td className={`${columnClass} c-bg-2 w-24`}>
-                      <CgCheck size={20} className="text-green-500" />
-                    </td>
-                  </tr>
-
-                  <tr className="border c-border c-bg">
                     <td className={`${columnClass}`}>
                       <a href="#unlockAllLyrics">{t("unlockAllLyrics")}</a>
                     </td>
@@ -111,7 +95,7 @@ const Premium = () => {
 
                   <tr className="border c-border">
                     <td className={`${columnClass}`}>
-                      <a href="#collections">{t("collections")}</a>
+                      <a href="#canWatchYoutube">{t("canWatchYoutube")}</a>
                     </td>
                     <td className={`${columnClass} c-bg w-24`}>
                       <BiX size={20} className="text-red-500" />
@@ -121,12 +105,60 @@ const Premium = () => {
                     </td>
                   </tr>
 
-                  <tr className="border c-border c-bg">
+                  <tr className="border c-border">
                     <td className={`${columnClass}`}>
-                      <a href="#themes">{t("theme")}</a>
+                      <a href="#collectionsexplained">
+                        {t("collectionsexplained.title")}
+                      </a>
                     </td>
                     <td className={`${columnClass} c-bg w-24`}>
                       <BiX size={20} className="text-red-500" />
+                    </td>
+                    <td className={`${columnClass} c-bg-2 w-24`}>
+                      <CgCheck size={20} className="text-green-500" />
+                    </td>
+                  </tr>
+
+                  <tr className="border c-border">
+                    <td className={`${columnClass}`}>
+                      <a href="#chordsExplained">{t("chordsExplained.title")}</a>
+                    </td>
+                    <td className={`${columnClass} c-bg w-24`}>
+                      <BiX size={20} className="text-red-500" />
+                    </td>
+                    <td className={`${columnClass} c-bg-2 w-24`}>
+                      <CgCheck size={20} className="text-green-500" />
+                    </td>
+                  </tr>
+
+                  <tr className="border c-border">
+                    <td className={`${columnClass}`}>
+                      <a href="#metronomeExplained">{t("metronomeExplained.title")}</a>
+                    </td>
+                    <td className={`${columnClass} c-bg w-24`}>
+                      <BiX size={20} className="text-red-500" />
+                    </td>
+                    <td className={`${columnClass} c-bg-2 w-24`}>
+                      <CgCheck size={20} className="text-green-500" />
+                    </td>
+                  </tr>
+
+                  <tr className="border c-border">
+                    <td className={`${columnClass}`}>
+                      <a href="#transposeExplained">{t("transposeExplained.title")}</a>
+                    </td>
+                    <td className={`${columnClass} c-bg w-24`}>
+                      <BiX size={20} className="text-red-500" />
+                    </td>
+                    <td className={`${columnClass} c-bg-2 w-24`}>
+                      <CgCheck size={20} className="text-green-500" />
+                    </td>
+                  </tr>
+
+                  <tr className="border c-border">
+                    <td className={`${columnClass}`}>{t("noAds")}</td>
+                    <td className={`${columnClass} c-bg w-24`}>
+                      <CgCheck size={20} className="text-green-500" />
                     </td>
                     <td className={`${columnClass} c-bg-2 w-24`}>
                       <CgCheck size={20} className="text-green-500" />
@@ -135,10 +167,7 @@ const Premium = () => {
 
                   {isPaymentProcessing ? (
                     <tr className="border c-border">
-                      <td
-                        colSpan={3}
-                        className={`${columnClass} c-bg-2 w-24`}
-                      >
+                      <td colSpan={3} className={`${columnClass} c-bg-2 w-24`}>
                         <div className="w-full bg-yellow-100 text-yellow-900 p-4 rounded-lg border border-yellow-500">
                           <p>
                             {t(
@@ -148,13 +177,32 @@ const Premium = () => {
                         </div>
                       </td>
                     </tr>
+                  ) : !token ? (
+                    <tr className="border c-border">
+                      <td colSpan={3} className={`${columnClass} c-bg-2 w-24`}>
+                        <button
+                          onClick={() => {
+                            window.location.href = `${siteUrl}/auth/google`;
+                          }}
+                          className={`w-full flex items-center gap-4 text-left border px-4 py-2 rounded-xl c-border`}
+                        >
+                          {/* <LuLogIn size={18} /> */}
+                          <img
+                            src={googleLogo}
+                            alt="Google Logo"
+                            className="w-4 h-4 inline-block"
+                            style={{
+                              animation: "wave 3s infinite",
+                            }}
+                          />
+                          {t("loginToTryCollection")}
+                        </button>
+                      </td>
+                    </tr>
                   ) : (
                     <tr className="border c-border">
                       <td className={`${columnClass}`}></td>
-                      <td
-                        colSpan={2}
-                        className={`${columnClass} c-bg-2 w-24`}
-                      >
+                      <td colSpan={2} className={`${columnClass} c-bg-2 w-24`}>
                         <button
                           className="loading-animation w-full c-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                           onClick={openUpgradeModal}
@@ -181,52 +229,92 @@ const Premium = () => {
               </div>
 
               <div className="c-bg p-2 rounded-lg mt-2">
-                <p>{t("allTheLyricsAreUnlockedForPremiumUsers")}</p>
-                <p className="mt-2">{t("thisAlsoUnlocksCollections")}</p>
+                <p>{t("unlockAllLyricsExplained")}</p>
               </div>
             </div>
 
-            {/* Collections */}
+            {/* canWatchYoutube */}
             <div
-              id="collections"
+              id="canWatchYoutube"
               className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
             >
               <div className="flex items-center gap-2">
                 <CgCheck size={24} className="text-green-500" />
                 <span className="text-md font-semibold">
-                  {t("collections")}
+                  {t("canWatchYoutube")}
                 </span>
               </div>
 
               <div className="c-bg p-2 rounded-lg mt-2">
-                <p>{t("collectionsexplained.description")}</p>
-                <ul className="list-disc list-inside mt-2 space-y-1">
-                  <li>{t("collectionsexplained.limitInfo")}</li>
-                  <li>{t("collectionsexplained.defaultInfo")}</li>
-                </ul>
-                <p className="mt-2">{t("collectionsexplained.benefit")}</p>
+                <p>{t("canWatchYoutubeExplained")}</p>
               </div>
             </div>
 
-            {/* Theme */}
             <div
-              id="themes"
+              id="collectionsexplained"
               className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
             >
               <div className="flex items-center gap-2">
                 <CgCheck size={24} className="text-green-500" />
-                <span className="text-md font-semibold">{t("theme")}</span>
+                <span className="text-md font-semibold">
+                  {t("collectionsexplained.title")}
+                </span>
               </div>
 
               <div className="c-bg p-2 rounded-lg mt-2">
-                <p>{t("themesexplained.description")}</p>
-                <ul className="list-disc list-inside mt-2 space-y-1">
-                  <li>{t("themesexplained.lightDark")}</li>
-                  <li>{t("themesexplained.custom")}</li>
-                </ul>
+                <p>{t("collectionsexplained.explained")}</p>
               </div>
             </div>
-            {console.log("Render: isPaymentProcessing =", isPaymentProcessing)}
+
+            <div
+              id="chordsExplained"
+              className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+            >
+              <div className="flex items-center gap-2">
+                <CgCheck size={24} className="text-green-500" />
+                <span className="text-md font-semibold">
+                  {t("chordsExplained.title")}
+                </span>
+              </div>
+
+              <div className="c-bg p-2 rounded-lg mt-2">
+                <p>{t("chordsExplained.explained")}</p>
+              </div>
+            </div>
+
+            <div
+              id="metronomeExplained"
+              className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+            >
+              <div className="flex items-center gap-2">
+                <CgCheck size={24} className="text-green-500" />
+                <span className="text-md font-semibold">
+                  {t("metronomeExplained.title")}
+                </span>
+              </div>
+
+              <div className="c-bg p-2 rounded-lg mt-2">
+                <p>{t("metronomeExplained.explained")}</p>
+              </div>
+            </div>
+
+            <div
+              id="transposeExplained"
+              className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+            >
+              <div className="flex items-center gap-2">
+                <CgCheck size={24} className="text-green-500" />
+                <span className="text-md font-semibold">
+                  {t("transposeExplained.title")}
+                </span>
+              </div>
+
+              <div className="c-bg p-2 rounded-lg mt-2">
+                <p>{t("transposeExplained.explained")}</p>
+              </div>
+            </div>
+            
+
             {!isPaymentProcessing && (
               <button
                 className="loading-animation w-full c-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 my-2 mb-8"
@@ -243,7 +331,7 @@ const Premium = () => {
         <UpgradeToPremium
           onClose={() => setIsModalOpen(false)}
           onSuccess={() => {
-            setIsPaymentProcessing(true)
+            setIsPaymentProcessing(true);
           }}
         />
       )}

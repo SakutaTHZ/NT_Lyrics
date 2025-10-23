@@ -399,7 +399,7 @@ const LyricsDetails = ({
                     {lyric.writers.length > 0 && (
                       <div className="flex items-start gap-2">
                         <p className={`text-sm  min-w-16 max-w-24 p-1`}>
-                          {t("wrtier")}:
+                          {t("writer")}:
                         </p>
                         <div className="w-1/2 flex flex-wrap gap-2">
                           {lyric.writers.map((writerData, index) => (

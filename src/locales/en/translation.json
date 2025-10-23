@@ -77,6 +77,28 @@
   "appDescription": "With over 3000 song lyrics and chords, we strive to provide accurate lyrics and chords for every song.",
   "premiumToo": "Not only do we provide song lyrics, but we also include YouTube videos for audio listening and practice.",
 
+  "3UserTypes": "In the app, users are categorized into 3 types:",
+  "guestUsers": "1. Free User: Can check out a limited number of lyrics and features without creating an account. (Can access 50 free lyrics)",
+  "freeUsers": "2. Registered User: By creating an account, users can access more lyrics and features. (Can access 200 free lyrics)",
+  "premiumUsers": "3. Premium User: By subscribing to Premium, users unlock all lyrics and exclusive features. (Can access all lyrics and Youtube videos)",
+
+  "userExtraNote": "Lyrics can be organized into custom collections for easy access and practice whenever needed.",
+  "learnMoreBoutPremium": "Learn more about the benefits of being a Premium User #.",
+
+  "aboutPayment": "About Payment",
+  "paymentDescription": "The Premium User subscription is priced at \n6 months = 10,000 MMK  and \n1 year = 20,000 MMK.",
+
+  "noteForPayment": "* Please make sure to double-check your payment details before submitting your request. Incorrect information may lead to delays in processing your subscription.",
+
+  "messageToUser": "Message to User",
+  "futurePlans": "In the near future we will try to upgrade it to a mobile app and add more features. Current Premium Users will be able to use the mobile app without any extra charges.",
+  "weWillAddMoreSongs" : "We will continuously add more songs and features to enhance your experience.",
+  "weWillCorrectMistakes": "We will correct any mistakes in lyrics and chords to ensure accuracy.",
+
+  "WeWillTryOurBestToMakeThisAppBetter": "We will try our best to make this app better for all music lovers.",
+
+  "supportNT" : "The app’s owner, NT, is a cancer patient. If you wish to make a medical donation, you can scan the QR code below or directly support by purchasing a Premium account.",
+
   "youDontHaveAccessToThisFeature": "You don't have access to this feature.",
   "youHaveToBePremiumUserToAccessThisFeature": "You have to be a Premium user to access this feature.",
 
@@ -85,15 +107,26 @@
 
   "upgradeNow": "Upgrade Now",
   "unlockAllLyrics": "Unlock all lyrics",
+  "unlockAllLyricsExplained": "Premium users can access and view all available songs.Guest accounts and free users can only open and view a limited number of songs.",
   "allTheLyricsAreUnlockedForPremiumUsers": "All the lyrics are unlocked for Premium users. No more waiting for lyrics to be added!",
   "thisAlsoUnlocksCollections": "This also unlocks Collections, allowing you to create and manage your own lyric collections.",
   "collectionsexplained": {
-    "title": "Collections",
+    "title": "Save Lyrics in Collections",
     "description": "Collections are like your own albums for lyrics. You can group your favorite lyrics into categories you love.",
     "limitInfo": "You can create up to 20 collections, each holding up to 20 lyrics.",
     "defaultInfo": "Your Default Collection is unlimited, so you can always save more lyrics there.",
     "benefit": "Collections make it easy to keep your favorite lyrics organized in a way that feels personal to you."
   },
+  "chordsExplained": {
+    "title": "Learn How to hold Chords"
+  },
+  "metronomeExplained": {
+    "title": "Use Metronomme"
+  },
+  "transposeExplained": {
+    "title": "Can Transpose Keys"
+  },
+  "canWatchYoutube" : "Can Watch Youtube Videos",
   "SeeFeatures": "See Features",
   "noAds": "No Ads",
   "Themes": "Themes",
@@ -141,5 +174,9 @@
 
   "AddThisApptoYourPhone": "Add This App to Your Phone",
   "AppInstalling": "App Installing...",
-  "AppIsAlreadyInstalled": "App is already installed."
+  "AppIsAlreadyInstalled": "App is already installed.",
+
+  "ThreeTypesOfUsers": "There are three types of users in NT Lyrics:",
+
+  "signInToSeeMoreLyrics": "Sign In to see more lyrics"
 }

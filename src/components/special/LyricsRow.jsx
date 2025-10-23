@@ -31,7 +31,7 @@ const LyricsRow = ({
 }) => {
   const { t } = useTranslation();
 
-  const { token } = useAuth();
+  const { token, user } = useAuth();
 
   const { vibrateOnce } = useVibration();
   const [imageError, setImageError] = useState(false);
@@ -131,7 +131,11 @@ const LyricsRow = ({
                 setShowLyricDetails(true);
               }
             : () => {
-                setMessageText(t("youHaveToBePremiumUserToAccessThisFeature"));
+                setMessageText(
+                  user
+                    ? t("youHaveToBePremiumUserToAccessThisFeature")
+                    : t("signInToSeeMoreLyrics")
+                );
                 setMessageType("error");
                 setShowMessage(true);
                 setTimeout(() => setShowMessage(false), 10000);
