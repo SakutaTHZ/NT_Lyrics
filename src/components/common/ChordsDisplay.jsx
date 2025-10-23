@@ -38,7 +38,12 @@ const ChordsDisplay = ({ originalChords, error, reading }) => {
 
       {/* 2. Show Loading/Reading State (PRIORITY) */}
       {!error && reading && (
-        <div className="text-center c-text italic p-4 py-2 lyrics-width">
+        <div className="text-center c-text italic p-4 py-2 lyrics-width border c-border">
+          <span
+            className={`text-xs font-normal px-2 rounded-full c-premium-bg text-gray-600`}
+          >
+            Beta
+          </span>{" "}
           Reading chords from image...
         </div>
       )}
@@ -46,7 +51,11 @@ const ChordsDisplay = ({ originalChords, error, reading }) => {
       {!error && !reading && chordDataForGrid.length > 0 && (
         <div className="lyrics-width animate-down-start w-full h-full c-bg-2 rounded-lg p-4 md:p-8 border c-border">
           <div className="flex justify-between items-center mb-2">
-            <h1 className="text-lg font-semibold">Possible Chords</h1>
+            <h1 className="text-lg font-semibold">Tranpose <span
+            className={` text-xs font-normal px-2 rounded-full c-premium-bg text-gray-600`}
+          >
+            Beta
+          </span></h1>
             <div className="flex items-center gap-2 text-sm c-text opacity-75">
               {/* Minus Button: Decrease transpose (down) */}
               <button

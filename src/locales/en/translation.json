@@ -112,21 +112,26 @@
   "thisAlsoUnlocksCollections": "This also unlocks Collections, allowing you to create and manage your own lyric collections.",
   "collectionsexplained": {
     "title": "Save Lyrics in Collections",
+    "explained" : "You can save your favourite lyrics to collection so You don't have to search for it again",
     "description": "Collections are like your own albums for lyrics. You can group your favorite lyrics into categories you love.",
     "limitInfo": "You can create up to 20 collections, each holding up to 20 lyrics.",
     "defaultInfo": "Your Default Collection is unlimited, so you can always save more lyrics there.",
     "benefit": "Collections make it easy to keep your favorite lyrics organized in a way that feels personal to you."
   },
   "chordsExplained": {
-    "title": "Learn How to hold Chords"
+    "title": "Learn How to hold Chords",
+    "explained" : "If there is a chord you don't know You can search it easily"
   },
   "metronomeExplained": {
-    "title": "Use Metronomme"
+    "title": "Use Metronomme",
+    "explained" : "You can use this feature to have a better timing when you play"
   },
   "transposeExplained": {
-    "title": "Can Transpose Keys"
+    "title": "Can Transpose Keys",
+    "explained": "If you want to change the chords different from the original chords you can use this transpose feature"
   },
   "canWatchYoutube" : "Can Watch Youtube Videos",
+  "canWatchYoutubeExplained" : "Not only Lyrics, you can also watch and play with Youtube Videos for the Lyrics",
   "SeeFeatures": "See Features",
   "noAds": "No Ads",
   "Themes": "Themes",
