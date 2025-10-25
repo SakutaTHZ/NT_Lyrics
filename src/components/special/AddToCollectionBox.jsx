@@ -12,6 +12,7 @@ import { CgAdd, CgClose } from "react-icons/cg";
 import { useTranslation } from "react-i18next";
 import { useVibration } from "../hooks/useVibration";
 import { AnimatePresence, motion } from "framer-motion";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const AddToCollectionBox = ({
   id,
@@ -37,26 +38,23 @@ const AddToCollectionBox = ({
   const [newCollectionName, setNewCollectionName] = useState("");
 
   const [currentCollections, setCurrentCollections] = useState([]);
+  const [selectedCollections, setSelectedCollections] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // 👈 NEW LOADING STATE
 
-  const getCurrentCollections = useCallback(async () => {
-    try {
-      const groups = await lookForGroups(id, token);
-      setCurrentCollections(groups || []);
-    } catch (err) {
-      console.error("Error fetching current collections:", err);
-    }
-  }, [id, token]);
-  useEffect(() => {
-    if (addToCollection) {
-      getCurrentCollections();
-    }
-  }, [addToCollection, getCurrentCollections]);
+  // 🚀 OPTIMIZATION: Combine both API calls and state setting into one function
+  const fetchAllCollectionsData = useCallback(async () => {
+    if (!token) return;
 
-  // Fetch user's collections from API
-  const getCollection = useCallback(async () => {
+    setIsLoading(true);
     try {
-      const collections = await fetchCollectionOverview(token);
-      let userCollections = collections.collections || [];
+      // Fetch both user collections and current groups simultaneously
+      const [collectionsResponse, currentGroups] = await Promise.all([
+        fetchCollectionOverview(token),
+        lookForGroups(id, token),
+      ]);
+
+      // --- Process User Collections ---
+      let userCollections = collectionsResponse.collections || [];
 
       // Ensure everything is in { group: "name" } format
       userCollections = userCollections.map((col) =>
@@ -64,41 +62,48 @@ const AddToCollectionBox = ({
       );
 
       // Ensure "Default" is always included
-      if (!userCollections.some((c) => c.group === "Default")) {
+      if (!userCollections.some((c) => c.group.toLowerCase() === "default")) {
         userCollections = [{ group: "Default" }, ...userCollections];
       }
 
+      // --- Process Current Collections (Groups the lyric is already in) ---
+      const currentGroupsArray = currentGroups || [];
+
+      // --- Set Initial Selected State ---
+      const initialSelected = userCollections
+        .map((col) => col.group)
+        .filter((group) => currentGroupsArray.includes(group));
+
+      // Update all necessary states in one go
       setCollection(userCollections);
+      setCurrentCollections(currentGroupsArray);
+      setSelectedCollections(initialSelected);
+
     } catch (err) {
-      console.error("Error fetching user overview:", err);
+      console.error("Error fetching collections data:", err);
+    } finally {
+      setIsLoading(false);
     }
-  }, [token]);
+  }, [id, token]);
 
-  const [selectedCollections, setSelectedCollections] = useState([]);
-
+  // 🧹 CLEANUP: Use a single useEffect to initiate the combined fetch
   useEffect(() => {
     if (addToCollection) {
-      getCollection();
+      fetchAllCollectionsData();
     }
-  }, [addToCollection, getCollection]);
+  }, [addToCollection, fetchAllCollectionsData]);
 
-  useEffect(() => {
-  if (collection.length > 0 && currentCollections.length > 0) {
-    const currentSet = collection
-      .map((col) => col.group)
-      .filter((group) => currentCollections.includes(group));
-    setSelectedCollections(currentSet);
-  }
-}, [collection, currentCollections, addToCollection]);
+  // 🗑️ DELETED: The two original separate useEffects and the third effect for
+  //             setting selectedCollections are no longer needed.
 
   const handleCheckboxChange = (group) => {
-    setSelectedCollections((prev) =>
-      prev.includes(group) ? prev.filter((g) => g !== group) : [...prev, group]
-    );
+    setSelectedCollections((prev) => {
+      vibratePattern("tick"); // Small vibration feedback for interaction
+      return prev.includes(group) ? prev.filter((g) => g !== group) : [...prev, group];
+    });
   };
 
   const handleAddNewCollection = () => {
-    console.log("Adding new collection:", newCollectionName);
     if (!newCollectionName.trim()) return;
 
     // return if collections length is 20
@@ -111,7 +116,17 @@ const AddToCollectionBox = ({
     const newGroup = newCollectionName.trim();
 
     // Prevent duplicates
-    if (collection.some((col) => col.group === newGroup)) {
+    const trimmedGroup = newGroup.trim();
+    if (!trimmedGroup) {
+      handleMessageTimer(t("invalidGroupName"), "error");
+      return;
+    }
+
+    if (
+      collection.some(
+        (col) => col.group.toLowerCase() === trimmedGroup.toLowerCase()
+      )
+    ) {
       vibratePattern("short");
       handleMessageTimer(t("collectionAlreadyExists"), "error");
       return;
@@ -167,7 +182,12 @@ const AddToCollectionBox = ({
       handleClose();
     } catch (err) {
       console.error("Error updating lyric collections:", err);
-      handleMessageTimer("Failed to update collections", "error");
+      console.log(err);
+      if (String(err.message).startsWith("Collection Limit Reached")) { // Check err.message as a string
+        handleMessageTimer(t("collectionLimitReached"), "error");
+      } else {
+        handleMessageTimer(err.message, "error");
+      }
     } finally {
       setSaving(false);
     }
@@ -198,6 +218,8 @@ const AddToCollectionBox = ({
   const toGraphemes = (str) =>
     [...segmenter.segment(str)].map((seg) => seg.segment);
 
+  const isSaveDisabled = saving || isLoading; // Disable save while loading or saving
+
   return (
     <>
       <AnimatePresence>
@@ -222,7 +244,7 @@ const AddToCollectionBox = ({
               exit={{ opacity: 0, y: 100 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
               className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-           c-bg rounded-xl shadow-lg p-4 w-[90vw] max-w-md z-[2000]"
+              c-bg rounded-xl shadow-lg p-4 w-[90vw] max-w-md z-[2000]"
             >
               {/* Header */}
               <div className="flex items-center justify-between mb-4 border-b border-dashed c-border pb-2">
@@ -232,6 +254,7 @@ const AddToCollectionBox = ({
                     vibratePattern("short");
                     handleClose();
                   }}
+                  disabled={saving}
                 >
                   <CgClose size={24} />
                 </button>
@@ -257,7 +280,7 @@ const AddToCollectionBox = ({
                   <div className="flex items-center gap-2 w-full">
                     <input
                       type="text"
-                      placeholder="Enter New Collection"
+                      placeholder={t("name")}
                       className="border c-border p-2 rounded w-full c-bg"
                       value={newCollectionName}
                       onChange={(e) => {
@@ -270,10 +293,12 @@ const AddToCollectionBox = ({
                         }
                         setNewCollectionName(graphemes.slice(0, 20).join(""));
                       }}
+                      disabled={isLoading} // Disable input while loading
                     />
                     <button
                       onClick={handleAddNewCollection}
                       className="p-2 bg-blue-500 text-white rounded"
+                      disabled={isLoading} // Disable button while loading
                     >
                       <CgAdd size={24} />
                     </button>
@@ -285,31 +310,48 @@ const AddToCollectionBox = ({
                   <p className="font-semibold pb-4 border-b border-dashed c-border">
                     {t("collections")}
                   </p>
-                  {!sortedCollections.length ? (
-                    <p className="text-sm text-gray-400">Loading...</p>
+                  {isLoading ? ( // 👈 RENDER LOADING MESSAGE
+                    <p className="text-sm text-gray-400 flex items-center gap-2">
+                      <AiOutlineLoading3Quarters className="animate-spin" size={16} />
+                      {t("loadingCollections") || "Loading Collections..."}
+                    </p>
                   ) : (
-                    sortedCollections.map((col, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center justify-between"
-                      >
-                        {i + 1}. {col.group}
-                        <Checkbox
-                          checked={selectedCollections.includes(col.group)}
-                          onChange={() => handleCheckboxChange(col.group)}
-                          className="checkbox-fade"
-                        />
-                      </div>
-                    ))
+                    !sortedCollections.length ? (
+                      <p className="text-sm text-gray-400">
+                        {t("noCollections") || "No collections found."}
+                      </p>
+                    ) : (
+                      sortedCollections.map((col, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center justify-between"
+                        >
+                          {i + 1}. {col.group}
+                          <Checkbox
+                            checked={selectedCollections.includes(col.group)}
+                            onChange={() => handleCheckboxChange(col.group)}
+                            className="checkbox-fade"
+                            disabled={isLoading} // 👈 DISABLE WHILE LOADING
+                          />
+                        </div>
+                      ))
+                    )
                   )}
                 </div>
 
                 {/* Save button */}
                 <button
                   onClick={handleCollectionsEdit}
-                  className="mt-2 p-2 bg-blue-500 text-white rounded"
+                  className="mt-2 p-2 bg-blue-500 text-white rounded flex items-center justify-center gap-2"
+                  disabled={isSaveDisabled} // 👈 DISABLE WHILE LOADING OR SAVING
                 >
-                  {saving ? "Saving..." : "Save Selections"}
+                  {saving && (
+                    <AiOutlineLoading3Quarters
+                      className="animate-spin text-2xl"
+                      size={16}
+                    />
+                  )}
+                  {saving ? t("saving") : t("saveSelections")}
                 </button>
               </div>
             </motion.div>

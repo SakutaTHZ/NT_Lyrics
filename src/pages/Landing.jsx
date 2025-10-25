@@ -291,7 +291,7 @@ const Landing = () => {
             <AnnouncementBoard />
 
             {!isInstalled && !isIOS && (
-              <div className=" bg-white border c-border rounded-xl px-4 py-3 w-full flex items-center justify-between gap-2 text-sm">
+              <div className=" c-bg-2 border c-border rounded-xl px-4 py-3 w-full flex items-center justify-between gap-2 text-sm">
                   <p>
                     {t("AddThisApptoYourPhone")}
                   </p>
@@ -307,9 +307,9 @@ const Landing = () => {
 
             {/* Custom iOS Banner */}
             {!isInstalled && showIOSBanner && (
-              <div className=" bg-white border c-border rounded-xl px-4 py-3 w-full flex items-start gap-2 text-sm">
+              <div className=" c-bg-2 border c-border rounded-xl px-4 py-3 w-full flex items-start gap-2 text-sm">
                 <div className="w-full ">
-                  <p className="text-gray-600">
+                  <p className="c-gray-text">
                     {t("AddThisApptoYourPhone")}
                   </p>
                   <p className=" mt-2">

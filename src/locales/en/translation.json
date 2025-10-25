@@ -183,5 +183,15 @@
 
   "ThreeTypesOfUsers": "There are three types of users in NT Lyrics:",
 
-  "signInToSeeMoreLyrics": "Sign In to see more lyrics"
+  "signInToSeeMoreLyrics": "Sign In to see more lyrics",
+
+  "collectiondeletedSuccessfully": "Collection deleted successfully",
+  "defaultCollectionCannotBeDeleted" : "Default Collection cannot be deleted",
+  "areYouSureYouWantToDeleteThisCollection" : "Are you sure you want to delete this Collection?",
+  "collected" : "Collected",
+  "saving":"Saving",
+  "saveSelections" : "Save Selections",
+  "collectionLimitReached" : "Collection Limit reached!",
+  "lyrics": "Lyrics",
+  "loadingCollections" : "Loading Colections"
 }

@@ -243,7 +243,7 @@ const Profile = () => {
     if (!selectedGroup) return;
 
     if (selectedGroup === "Default") {
-      setMessageText("Default group cannot be deleted.");
+      setMessageText(t("defaultCollectionCannotBeDeleted"));
       setMessageType("error");
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 5000);
@@ -263,7 +263,9 @@ const Profile = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to delete Group");
 
-      setMessageText("Group Deleted successfully");
+      setMessageText(
+        `'${selectedGroup}' ${t("collectiondeletedSuccessfully")}`
+      );
       setMessageType("success");
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 5000);
@@ -283,7 +285,7 @@ const Profile = () => {
   const handleDelete = (e) => {
     confirmPopup({
       target: e.currentTarget,
-      message: "Are you sure you want to delete this Group?",
+      message: t("areYouSureYouWantToDeleteThisCollection"),
       icon: "pi pi-exclamation-triangle",
       acceptClassName: "p-button-danger",
       acceptLabel: "Yes",
@@ -345,7 +347,8 @@ const Profile = () => {
             <div className="flex items-center flex-col gap-4 w-full px-8 md:px-24 z-[50]">
               <div className="relative profileImageBox flex items-center justify-center">
                 <img
-                  src={ user?.profilePicture ||
+                  src={
+                    user?.profilePicture ||
                     "https://i.pinimg.com/736x/81/ec/02/81ec02c841e7aa13d0f099b5df02b25c.jpg"
                   }
                   alt="Profile"
@@ -369,7 +372,7 @@ const Profile = () => {
 
               <div className="relative w-full flex items-center justify-center md:gap-4 border p-2 rounded-full c-border c-bg">
                 <div className="flex items-center gap-2">
-                  <p className=" text-lg">Collected</p>
+                  <p>{t("lyrics")}</p>
                   <p className="pr-4">
                     <span
                       className={`${
@@ -390,7 +393,7 @@ const Profile = () => {
                 </div>
                 {userRole === "premium-user" && (
                   <div className="flex items-center gap-2 px-4 border-l border-gray-300">
-                    <p className=" text-lg">Collections</p>
+                    <p>{t("collections")}</p>
                     <span
                       className={`font-semibold ${
                         collection?.collections?.length >= 20
@@ -530,10 +533,22 @@ const Profile = () => {
 
                   <div className="w-full border border-b-0 px-2 py-2 rounded-t-md c-bg c-border font-semibold flex items-center justify-between">
                     <p>
-                      <span className="flex-shrink-0 border p-.5 rounded-md px-2 c-border c-bg font-semibold">
-                        {collection?.collections?.find(
-                          (item) => item.group === selectedGroup
-                        )?.count || 0}
+                      <span
+                        className={`flex-shrink-0 border p-.5 rounded-md px-2 c-border c-bg font-semibold `}
+                      >
+                        <span
+                          className={`${
+                            selectedGroup !== "Default" &&
+                            collection?.collections?.find(
+                              (item) => item.group === selectedGroup
+                            )?.count == 20 &&
+                            "text-red-500"
+                          }`}
+                        >
+                          {collection?.collections?.find(
+                            (item) => item.group === selectedGroup
+                          )?.count || 0}
+                        </span>
                         {selectedGroup === "Default" ? " / ∞ " : " / 20"}
                       </span>
                     </p>
@@ -552,8 +567,8 @@ const Profile = () => {
                 <div
                   className={`grid ${
                     loadingLyrics || selectedGroupLyrics.length > 0
-                      ? "md:gap-6"
-                      : "grid-cols-1 md:gap-12"
+                      ? ""
+                      : "grid-cols-1"
                   } p-2 py-0 gap-0 border c-border rounded-b-md`}
                 >
                   {loadingLyrics && !initialLoadDone ? (
@@ -594,7 +609,7 @@ const Profile = () => {
               className={`grid ${
                 loadingLyrics || selectedGroupLyrics.length > 0
                   ? ""
-                  : "grid-cols-1 md:gap-12"
+                  : "grid-cols-1"
               } p-2 py-4 gap-0 px-4 md:px-24`}
             >
               {loadingLyrics && !initialLoadDone ? (

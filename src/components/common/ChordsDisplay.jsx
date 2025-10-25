@@ -128,11 +128,11 @@ const ChordsDisplay = ({ originalChords, error, reading }) => {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="overflow-hidden"
               >
-                <div className="c-announcement-bg c-border rounded-md p-2 mb-2 overflow-x-auto whitespace-nowrap">
+                <div className="c-announcement-bg c-border rounded-md p-2 mb-2 overflow-x-auto whitespace-nowrap border">
                   {chordDataForGrid.map((chordItem, index) => (
                     <span
                       key={index}
-                      className="text-base font-mono font-medium c-text mr-2"
+                      className="text-base font-mono font-medium c-text mr-2 "
                     >
                       {chordItem.original}
                     </span>
