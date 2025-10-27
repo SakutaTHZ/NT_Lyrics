@@ -165,7 +165,7 @@ const Artists = () => {
                             artist?.photoLink ||
                             "https://i.pinimg.com/736x/54/75/6c/54756cbcfb2051c46f350ea33a0b78ef.jpg"
                           }
-                          className="w-12 h-12 object-contain rounded-full"
+                          className="w-14 aspect-square object-contain rounded-full"
                         />
                         {artist.name}
                       </div>

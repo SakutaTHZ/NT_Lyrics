@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import ChordsDisplay from "../components/common/ChordsDisplay";
 import { extractChordsFromImage } from "../assets/util/ocrChords";
 import { Link } from "react-router-dom";
-import { Dropdown } from "primereact/dropdown";
+//import { Dropdown } from "primereact/dropdown";
 
 const Chords = ({ imageLink, chordKey, onClose, isPremium }) => {
   const { t } = useTranslation();
@@ -116,10 +116,10 @@ const Chords = ({ imageLink, chordKey, onClose, isPremium }) => {
             </button>
           )}
 
-          <div className="py-4 space-y-4 pb-20">
+          <div className="py-4 pb-20">
             {/* Top row of chord buttons (C, Db, D...) */}
             <h1 className="text-lg font-semibold">Chords</h1>
-            <div className="relative flex gap-2 w-full overflow-y-scroll">
+            <div className="relative flex gap-2 w-full py-2 overflow-y-scroll">
               {Object.keys(chords).map((chord) => (
                 <button
                   key={chord}
@@ -140,51 +140,74 @@ const Chords = ({ imageLink, chordKey, onClose, isPremium }) => {
 
             {/* Sub-buttons for chord variants (C, Cm, Cm7, etc.) */}
             <div className="border c-border rounded-md p-4 space-y-2">
-              <h1 className="font-semibold">
+              <h1 className="font-semibold pb-2 border-b mb-2 c-border border-dashed">
                 Chord Variants for{" "}
                 <span className="text-lg text-blue-500 italic">
                   {activeChord}
                 </span>
               </h1>
 
-              <div className="rounded-md text-sm flex items-center gap-3 c-dd">
-                {Object.keys(groupedVariants || {}).length > 0 ? (
-                  <Dropdown
-                    value={activeVariant}
-                    options={Object.keys(groupedVariants).map((variant) => ({
-                      label: variant,
-                      value: variant,
-                    }))}
-                    onChange={(e) => setActiveVariant(e.value)}
-                    placeholder="Select a variant"
-                    className="w-full capitalize-first-letter c-bg c-border border-0"
-                    panelClassName="text-sm"
-                    appendTo="self"
-                  />
-                ) : (
-                  <p className="text-gray-400 text-sm">
-                    No variants available for this chord.
-                  </p>
-                )}
-              </div>
-
-              {/* Display chord images */}
-              {activeVariant && groupedVariants[activeVariant] && (
-                <div className="grid grid-cols-2 gap-4 py-2">
-                  {groupedVariants[activeVariant].map((img) => (
-                    <div key={img.name} className="text-center">
-                      <p className="text-sm text-left mb-2">{img.name}</p>
-                      <div className="bg-white opacity-75">
-                        <img
-                          src={img.src}
-                          alt={img.name}
-                          className="w-full h-auto border c-border rounded object-contain aspect-square"
-                        />
-                      </div>
-                    </div>
+              <div className="flex gap-4 mt-4">
+                <div className="grid gap-2">
+                  {Object.keys(groupedVariants).map((chord) => (
+                    <button
+                      key={chord}
+                      onClick={() => {
+                        setActiveVariant(chord)
+                      }}
+                      className={`p-2 w-20 rounded-full border c-border ${
+                        activeVariant === chord
+                          ? "bg-blue-500 text-white"
+                          : "border-dashed"
+                      }`}
+                    >
+                      {chord}
+                    </button>
                   ))}
                 </div>
-              )}
+                <div className="flex flex-col gap-2">
+                  {/*<div className="rounded-md text-sm flex items-center gap-3 c-dd">
+                    {Object.keys(groupedVariants || {}).length > 0 ? (
+                      <Dropdown
+                        value={activeVariant}
+                        options={Object.keys(groupedVariants).map(
+                          (variant) => ({
+                            label: variant,
+                            value: variant,
+                          })
+                        )}
+                        onChange={(e) => setActiveVariant(e.value)}
+                        placeholder="Select a variant"
+                        className="w-full capitalize-first-letter c-bg c-border border-0"
+                        panelClassName="text-sm"
+                        appendTo="self"
+                      />
+                    ) : (
+                      <p className="text-gray-400 text-sm">
+                        No variants available for this chord.
+                      </p>
+                    )}
+                  </div>*/}
+
+                  {/* Display chord images */}
+                  {activeVariant && groupedVariants[activeVariant] && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 py-0">
+                      {groupedVariants[activeVariant].map((img) => (
+                        <div key={img.name} className="text-center">
+                          <p className="text-sm text-left mb-2">{img.name}</p>
+                          <div className="bg-white opacity-75">
+                            <img
+                              src={img.src}
+                              alt={img.name}
+                              className="w-full h-auto border c-border rounded object-contain aspect-square"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
