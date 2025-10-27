@@ -20,14 +20,14 @@ const AnnouncementBoard = () => {
             } w-full transition-all  duration-300 `}
           >
             <b
-              className={`${expand ? "font-bold text-lg italic pb-2" : "pr-2"}`}
+              className={`font-bold  ${expand ? "text-lg italic pb-2" : "text-base pr-2"}`}
             >
               {t("Announcement")} {!expand && ":"}
             </b>
             {expand && (
               <span className="mb-1 h-1 border-b border-dashed border-gray-400" />
             )}
-            <span className="w-full overflow-hidden text-ellipsis leading-relaxed">
+            <span className="w-full text-md overflow-hidden text-ellipsis leading-relaxed">
               {t("WelcomeToNTLyrics")}
             </span>
           </p>

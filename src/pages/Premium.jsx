@@ -223,13 +223,13 @@ const Premium = () => {
             >
               <div className="flex items-center gap-2">
                 <CgCheck size={24} className="text-green-500" />
-                <span className="text-md font-semibold">
+                <span className="text-lg py-1 font-semibold">
                   {t("unlockAllLyrics")}
                 </span>
               </div>
 
               <div className="c-bg p-2 rounded-lg mt-2">
-                <p>{t("unlockAllLyricsExplained")}</p>
+                <p className="text-base">{t("unlockAllLyricsExplained")}</p>
               </div>
             </div>
 
@@ -240,13 +240,13 @@ const Premium = () => {
             >
               <div className="flex items-center gap-2">
                 <CgCheck size={24} className="text-green-500" />
-                <span className="text-md font-semibold">
+                <span className="text-lg py-1 font-semibold">
                   {t("canWatchYoutube")}
                 </span>
               </div>
 
               <div className="c-bg p-2 rounded-lg mt-2">
-                <p>{t("canWatchYoutubeExplained")}</p>
+                <p className="text-base">{t("canWatchYoutubeExplained")}</p>
               </div>
             </div>
 
@@ -256,13 +256,13 @@ const Premium = () => {
             >
               <div className="flex items-center gap-2">
                 <CgCheck size={24} className="text-green-500" />
-                <span className="text-md font-semibold">
+                <span className="text-lg py-1 font-semibold">
                   {t("collectionsexplained.title")}
                 </span>
               </div>
 
               <div className="c-bg p-2 rounded-lg mt-2">
-                <p>{t("collectionsexplained.explained")}</p>
+                <p className="text-base">{t("collectionsexplained.explained")}</p>
               </div>
             </div>
 
@@ -272,13 +272,13 @@ const Premium = () => {
             >
               <div className="flex items-center gap-2">
                 <CgCheck size={24} className="text-green-500" />
-                <span className="text-md font-semibold">
+                <span className="text-lg py-1 font-semibold">
                   {t("chordsExplained.title")}
                 </span>
               </div>
 
               <div className="c-bg p-2 rounded-lg mt-2">
-                <p>{t("chordsExplained.explained")}</p>
+                <p className="text-base">{t("chordsExplained.explained")}</p>
               </div>
             </div>
 
@@ -288,13 +288,13 @@ const Premium = () => {
             >
               <div className="flex items-center gap-2">
                 <CgCheck size={24} className="text-green-500" />
-                <span className="text-md font-semibold">
+                <span className="text-lg py-1 font-semibold">
                   {t("metronomeExplained.title")}
                 </span>
               </div>
 
               <div className="c-bg p-2 rounded-lg mt-2">
-                <p>{t("metronomeExplained.explained")}</p>
+                <p className="text-base">{t("metronomeExplained.explained")}</p>
               </div>
             </div>
 
@@ -304,13 +304,13 @@ const Premium = () => {
             >
               <div className="flex items-center gap-2">
                 <CgCheck size={24} className="text-green-500" />
-                <span className="text-md font-semibold">
+                <span className="text-lg py-1 font-semibold">
                   {t("transposeExplained.title")}
                 </span>
               </div>
 
               <div className="c-bg p-2 rounded-lg mt-2">
-                <p>{t("transposeExplained.explained")}</p>
+                <p className="text-base">{t("transposeExplained.explained")}</p>
               </div>
             </div>
             
