@@ -119,6 +119,22 @@ export const fetchPopularLyrics = async (authToken) => {
       throw err;
     }
   };
+
+  export const fetchLatestLyrics = async (authToken) => {
+    try {
+      const res = await axios.get(`${apiUrl}/lyrics/getLatestLyrics?limit=3`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+  
+      return res.data;
+    } catch (err) {
+      console.error("Error fetching top lyrics with artists:", err);
+      throw err;
+    }
+  };
   
  export const fetchSingers = async (type) => {
     try {

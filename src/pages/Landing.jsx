@@ -13,6 +13,7 @@ import LyricsRow from "../components/special/LyricsRow";
 // Utils
 import {
   changeToDefaultStatus,
+  fetchLatestLyrics,
   fetchPopularLyrics,
   fetchTop10Artists,
   //validateUser,
@@ -55,6 +56,7 @@ const Landing = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [popularLyrics, setPopularLyrics] = useState([]);
+  const [latestLyrics, setLatestLyrics] = useState([]);
   const [popularArtists, setPopularArtists] = useState([]);
 
   const handleSearch = () => {
@@ -71,6 +73,19 @@ const Landing = () => {
       setLoading(true);
       const lyrics = await fetchPopularLyrics(token);
       setPopularLyrics(lyrics);
+    } catch (err) {
+      console.error("Error fetching popular lyrics:", err);
+    }
+
+    setLoading(false);
+  }, [token]);
+
+  const getLatestLyrics = useCallback(async () => {
+    try {
+      setLoading(true);
+      const lyrics = await fetchLatestLyrics(token);
+      setLatestLyrics(lyrics);
+      console.log(lyrics)
     } catch (err) {
       console.error("Error fetching popular lyrics:", err);
     }
@@ -95,6 +110,10 @@ const Landing = () => {
   useEffect(() => {
     getPopularArtists();
   }, [getPopularArtists]);
+
+  useEffect(() => {
+    getLatestLyrics();
+  }, [getLatestLyrics]);
   //const [userLoaded, setUserLoaded] = useState(false);
 
   useEffect(() => {
@@ -183,7 +202,7 @@ const Landing = () => {
     return userTier >= lyricTier; // hide if user tier is lower
   };
 
-  const renderLyrics = () => {
+  const renderLyrics = (lyricsArray) => {
     if (loading) {
       return (
         <>
@@ -193,7 +212,7 @@ const Landing = () => {
         </>
       );
     }
-    if (popularLyrics.length === 0) {
+    if (lyricsArray.length === 0) {
       return (
         <div className="w-full flex justify-center items-center">
           <img
@@ -205,7 +224,7 @@ const Landing = () => {
       );
     }
 
-    return popularLyrics
+    return lyricsArray
       .sort((a, b) => b.view_count - a.view_count)
       .slice(0, 5)
       .map((lyric, i) => (
@@ -226,6 +245,7 @@ const Landing = () => {
 
   return (
     <>
+
       {showMessage && (
         <MessagePopup
           message_type={messageType}
@@ -349,6 +369,27 @@ const Landing = () => {
             )}
           </div>
 
+          {/* Latest Lyrics */}
+          <div className="relative p-4 pb-0 md:px-24">
+            <div className="flex justify-between border-b py-4 c-border border-dashed gradientTitle">
+              <p className="font-bold text-lg italic">{t("latestLyrics")}</p>
+              <Link
+                to="/NT_Lyrics/lyrics"
+                className="border c-border px-2 py-1 rounded-md text-sm c-reverse c-primary hover:bg-blue-600"
+              >
+                {t("seeAll")}
+              </Link>
+            </div>
+
+            <div
+              className={`grid ${
+                loading || latestLyrics?.length > 0 ? "" : "grid-cols-1"
+              }  pb-4 gap-0`}
+            >
+              {renderLyrics(latestLyrics)}
+            </div>
+          </div>
+
           {/* Featured Lyrics */}
           <div className="relative p-4 pb-0 md:px-24">
             <div className="flex justify-between border-b py-4 c-border border-dashed gradientTitle">
@@ -363,14 +404,14 @@ const Landing = () => {
 
             <div
               className={`grid ${
-                loading || popularLyrics.length > 0 ? "" : "grid-cols-1"
+                loading || popularLyrics?.length > 0 ? "" : "grid-cols-1"
               }  pb-4 gap-0`}
             >
-              {renderLyrics()}
+              {renderLyrics(popularLyrics)}
             </div>
           </div>
 
-          {/* Featured Songs */}
+          {/* Featured artists */}
           <div className="relative p-4 pb-0 md:px-24">
             <div className="flex justify-between border-b py-4 c-border border-dashed  gradientTitle">
               <p className="font-bold text-lg italic">{t("popularArtists")}</p>

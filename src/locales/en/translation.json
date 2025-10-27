@@ -193,5 +193,6 @@
   "saveSelections" : "Save Selections",
   "collectionLimitReached" : "Collection Limit reached!",
   "lyrics": "Lyrics",
-  "loadingCollections" : "Loading Colections"
+  "loadingCollections" : "Loading Colections",
+  "latestLyrics" : "Latest Lyrics"
 }

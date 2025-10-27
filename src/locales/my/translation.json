@@ -189,5 +189,6 @@
   "saveSelections": "ရွေးချယ်မှုများကို သိမ်းဆည်းမည်",
   "collectionLimitReached": "ဤ စုဆောင်းမှုအတွက် သတ်မှတ်ထားသော အကန့်အသတ်သို့ ရောက်ပါပြီ",
   "lyrics": "သီချင်းစာသားများ",
-  "loadingCollections" : "Loading Colections"
+  "loadingCollections" : "Loading Colections",
+  "latestLyrics" : "နောက်ဆုံးထွက်သီချင်းများ"
 }

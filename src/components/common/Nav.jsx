@@ -12,6 +12,7 @@ import { useVibration } from "../hooks/useVibration";
 import { useAuth } from "../hooks/authContext";
 import googleLogo from "../../assets/images/svgs/google.svg";
 import { siteUrl } from "../../assets/util/api";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const HIDDEN_PATHS = [
   "/NT_Lyrics/login",
@@ -44,6 +45,7 @@ const NAV_LINKS = [
 ];
 
 const Nav = () => {
+  const [logging, setLogging] = useState(false)
   const navigate = useNavigate();
   const location = useLocation();
   const { vibratePattern } = useVibration();
@@ -83,6 +85,13 @@ const Nav = () => {
 
   return (
     <>
+    
+          {logging && (
+            <div className="w-screen h-screen fixed z-[100000] bg-[#00000080] backdrop-blur-xs flex items-center justify-center gap-3 text-white">
+              <AiOutlineLoading3Quarters className="animate-spin" size={20} />
+              <span>Logging in...</span>
+            </div>
+          )}
       {/* Desktop Nav */}
       {!isMobile ? (
         <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-20 c-bg z-[10000]">
@@ -244,7 +253,10 @@ const Nav = () => {
             ) : (
               <button
                 //onClick={() => handleNav("/NT_Lyrics/login", "dandadan")}
-                onClick={googleSignin}
+                onClick={()=>{
+                  setLogging(true)
+                  googleSignin();
+                }}
                 className={`${isActive(
                   "/NT_Lyrics/login"
                 )} w-full p-2 flex items-center justify-center flex-col`}
