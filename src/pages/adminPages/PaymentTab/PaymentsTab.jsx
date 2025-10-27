@@ -146,9 +146,7 @@ const PaymentsTab = () => {
           closePopup={() => setShowMessage(false)}
         >
           <div className="message_text text-pretty text-left">
-            {messageText.split("\n").map((line, index) => (
-              <span key={index}>{line}</span>
-            ))}
+            {messageText}
           </div>
         </MessagePopup>
       )}

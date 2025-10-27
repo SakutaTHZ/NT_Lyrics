@@ -67,6 +67,7 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
     if (!response.ok) {
       const errorData = await response.json();
       showNewMessage("error", errorData.message);
+      console.log(errorData)
       throw new Error(errorData.message || "Failed to approve payment");
     }
     showNewMessage("success", "User updated successfully!");
