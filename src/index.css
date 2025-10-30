@@ -911,3 +911,10 @@ body.dark {
 .c-soft-shadow{
   background: rgb(var(--soft-shadow)) !important;
 }
+
+.fullCheckBox{
+  .p-checkbox-box{
+    background: rgb(var(--color-error-tint)) !important;
+  border: 2px solid rgb(var(--color-error-medium)) !important;
+  }
+}

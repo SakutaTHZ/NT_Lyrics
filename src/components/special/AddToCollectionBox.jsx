@@ -14,6 +14,9 @@ import { useVibration } from "../hooks/useVibration";
 import { AnimatePresence, motion } from "framer-motion";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
+// 💡 Define the limit constant
+const COLLECTION_LIMIT = 20;
+
 const AddToCollectionBox = ({
   id,
   addToCollection,
@@ -34,6 +37,7 @@ const AddToCollectionBox = ({
   };
 
   const token = localStorage.getItem("token");
+  // 💡 Update state structure to potentially include count: { group: "name", count: N }
   const [collection, setCollection] = useState([]);
   const [newCollectionName, setNewCollectionName] = useState("");
 
@@ -54,16 +58,18 @@ const AddToCollectionBox = ({
       ]);
 
       // --- Process User Collections ---
+      // 💡 ASSUME collectionsResponse.collections contains items like:
+      //    { group: "name", count: N } or just "name"
       let userCollections = collectionsResponse.collections || [];
 
-      // Ensure everything is in { group: "name" } format
+      // Ensure everything is in { group: "name", count: N } format
       userCollections = userCollections.map((col) =>
-        typeof col === "string" ? { group: col } : col
+        typeof col === "string" ? { group: col, count: 0 } : col
       );
 
-      // Ensure "Default" is always included
+      // 💡 Ensure 'Default' is always included, potentially with its count
       if (!userCollections.some((c) => c.group.toLowerCase() === "default")) {
-        userCollections = [{ group: "Default" }, ...userCollections];
+        userCollections = [{ group: "Default", count: 0 }, ...userCollections];
       }
 
       // --- Process Current Collections (Groups the lyric is already in) ---
@@ -78,7 +84,6 @@ const AddToCollectionBox = ({
       setCollection(userCollections);
       setCurrentCollections(currentGroupsArray);
       setSelectedCollections(initialSelected);
-
     } catch (err) {
       console.error("Error fetching collections data:", err);
     } finally {
@@ -93,13 +98,29 @@ const AddToCollectionBox = ({
     }
   }, [addToCollection, fetchAllCollectionsData]);
 
-  // 🗑️ DELETED: The two original separate useEffects and the third effect for
-  //             setting selectedCollections are no longer needed.
-
   const handleCheckboxChange = (group) => {
+    // 💡 Prevent selection if the collection (not default) is at the limit (20)
+    const targetCollection = collection.find((col) => col.group === group);
+    const isAtLimit =
+      targetCollection &&
+      targetCollection.group.toLowerCase() !== "default" &&
+      targetCollection.count >= COLLECTION_LIMIT;
+
+    // If it's at the limit and currently NOT selected, vibrate and exit
+    if (isAtLimit && !selectedCollections.includes(group)) {
+      vibratePattern("long");
+      handleMessageTimer(
+        t("collectionLimitReachedForGroup", { group }),
+        "error"
+      );
+      return; // 🛑 Stop the change
+    }
+
     setSelectedCollections((prev) => {
       vibratePattern("tick"); // Small vibration feedback for interaction
-      return prev.includes(group) ? prev.filter((g) => g !== group) : [...prev, group];
+      return prev.includes(group)
+        ? prev.filter((g) => g !== group)
+        : [...prev, group];
     });
   };
 
@@ -132,7 +153,8 @@ const AddToCollectionBox = ({
       return;
     }
 
-    const updated = [...collection, { group: newGroup }];
+    // 💡 Add new collection with initial count 0
+    const updated = [...collection, { group: newGroup, count: 0 }];
     setCollection(updated);
     setSelectedCollections((prev) => [...prev, newGroup]); // auto-check new
     setNewCollectionName("");
@@ -167,6 +189,21 @@ const AddToCollectionBox = ({
       const token = localStorage.getItem("token");
       const lyricId = id;
 
+      // 💡 PRE-CHECK: Prevent adding to a collection that is full (not default)
+      const fullCollectionToAdd = toAdd.find((group) => {
+        const col = collection.find((c) => c.group === group);
+        return (
+          col &&
+          col.group.toLowerCase() !== "default" &&
+          col.count >= COLLECTION_LIMIT
+        );
+      });
+
+      if (fullCollectionToAdd) {
+        throw new Error(`Collection Limit Reached: ${fullCollectionToAdd}`);
+      }
+      // ----------------------------------------------------------------------
+
       if (toAdd.length > 0) {
         await addLyricToGroups(lyricId, toAdd, token);
       }
@@ -183,8 +220,14 @@ const AddToCollectionBox = ({
     } catch (err) {
       console.error("Error updating lyric collections:", err);
       console.log(err);
-      if (String(err.message).startsWith("Collection Limit Reached")) { // Check err.message as a string
-        handleMessageTimer(t("collectionLimitReached"), "error");
+      // 💡 Updated limit check to include the new pre-check error format
+      if (String(err.message).startsWith("Collection Limit Reached")) {
+        const groupName =
+          String(err.message).split(":")[1]?.trim() || "a collection";
+        handleMessageTimer(
+          t("collectionLimitReachedForGroup", { group: groupName }),
+          "error"
+        );
       } else {
         handleMessageTimer(err.message, "error");
       }
@@ -312,30 +355,52 @@ const AddToCollectionBox = ({
                   </p>
                   {isLoading ? ( // 👈 RENDER LOADING MESSAGE
                     <p className="text-sm text-gray-400 flex items-center gap-2">
-                      <AiOutlineLoading3Quarters className="animate-spin" size={16} />
+                      <AiOutlineLoading3Quarters
+                        className="animate-spin"
+                        size={16}
+                      />
                       {t("loadingCollections") || "Loading Collections..."}
                     </p>
+                  ) : !sortedCollections.length ? (
+                    <p className="text-sm text-gray-400">
+                      {t("noCollections") || "No collections found."}
+                    </p>
                   ) : (
-                    !sortedCollections.length ? (
-                      <p className="text-sm text-gray-400">
-                        {t("noCollections") || "No collections found."}
-                      </p>
-                    ) : (
-                      sortedCollections.map((col, i) => (
+                    sortedCollections.map((col, i) => {
+                      // 💡 Determine if the collection is full (not Default)
+                      const isFull =
+                        col.group.toLowerCase() !== "default" &&
+                        col.count >= COLLECTION_LIMIT;
+
+                      return (
                         <div
                           key={i}
-                          className="flex items-center justify-between"
+                          className={`flex items-center justify-between`}
                         >
-                          {i + 1}. {col.group}
-                          <Checkbox
-                            checked={selectedCollections.includes(col.group)}
-                            onChange={() => handleCheckboxChange(col.group)}
-                            className="checkbox-fade"
-                            disabled={isLoading} // 👈 DISABLE WHILE LOADING
-                          />
+                          <span className="flex-1">
+                            {i + 1}. {col.group}
+                            {/* 💡 Display the limit message */}
+                          </span>
+                          <div className="flex items-center gap-2">
+                            {/* 💡 Optional: Display current count */}
+                            <small className={`ml-2 text-xs text-gray-400 ${isFull && "text-red-500"}`}>
+                              ({col.count}/{COLLECTION_LIMIT})
+                            </small>
+                            <Checkbox
+                              checked={selectedCollections.includes(col.group)}
+                              onChange={() => handleCheckboxChange(col.group)}
+                              className={`checkbox-fade `}
+                              // 💡 Disable checkbox if full and NOT currently selected
+                              disabled={
+                                isLoading ||
+                                (isFull &&
+                                  !selectedCollections.includes(col.group))
+                              }
+                            />
+                          </div>
                         </div>
-                      ))
-                    )
+                      );
+                    })
                   )}
                 </div>
 
@@ -366,7 +431,7 @@ AddToCollectionBox.propTypes = {
   id: PropTypes.string.isRequired,
   addToCollection: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
-  currentCollections: PropTypes.arrayOf(PropTypes.string),
+  // 💡 Note: currentCollections is not used in props, only state is updated
   onCollectionsUpdated: PropTypes.func,
 };
 
