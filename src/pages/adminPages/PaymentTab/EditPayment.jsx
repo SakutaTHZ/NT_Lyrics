@@ -7,8 +7,16 @@ import { apiUrl } from "../../../assets/util/api";
 import { RoleTab } from "../UsersTab/UserRow";
 import { useAuth } from "../../../components/hooks/authContext";
 
+const formatIsoDate = (input) => {
+  console.log("original - " + input)
+  if (!input) return "-"; // null / undefined / empty
+  const d = new Date(input);
+  if (isNaN(d.getTime())) return "-"; // invalid date guard
+  return d.toISOString().slice(0, 10); // "YYYY-MM-DD"
+};
+
 const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
-  const { user, token } = useAuth();
+  const { token } = useAuth();
   useModalEscClose(onClose);
 
   useEffect(() => {
@@ -29,13 +37,16 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await fetch(`${apiUrl}/users/userProfile/${request.userId}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `${apiUrl}/users/userProfile/${request.userId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (!response.ok) {
           const errorData = await response.json();
           showNewMessage("error", errorData.message);
@@ -67,7 +78,7 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
     if (!response.ok) {
       const errorData = await response.json();
       showNewMessage("error", errorData.message);
-      console.log(errorData)
+      console.log(errorData);
       throw new Error(errorData.message || "Failed to approve payment");
     }
     showNewMessage("success", "User updated successfully!");
@@ -143,21 +154,13 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
                           Premium Start
                         </span>
                         <span className="text-gray-900">
-                          {user?.premiumStartDate
-                            ? new Date(user.premiumStartDate)
-                                .toISOString()
-                                .slice(0, 10)
-                            : "-"}
+                          {formatIsoDate(userDetails?.premiumStartDate)}
                         </span>
                         <span className="font-medium text-gray-600">
                           Premium End
                         </span>
                         <span className="text-gray-900">
-                          {user?.premiumEndDate
-                            ? new Date(user.premiumEndDate)
-                                .toISOString()
-                                .slice(0, 10)
-                            : "-"}
+                          {formatIsoDate(userDetails?.premiumEndDate)}
                         </span>
                       </>
                     )}

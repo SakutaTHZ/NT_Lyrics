@@ -137,8 +137,8 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
 
   const [selectedDuration, setSelectedDuration] = React.useState("6");
   const durationOptions = [
-    { name: "6 Months", value: "6", price: "10000" },
-    { name: "12 Months", value: "12", price: "18000" },
+    { name: "6 Months", value: "6", price: "15000" },
+    { name: "12 Months", value: "12", price: "30000" },
   ];
 
   const [uploadedFile, setUploadedFile] = React.useState(null);
@@ -257,7 +257,7 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="absolute inset-0 bg-[#00000050]"
+              className="absolute inset-0 bg-[#00000090]"
               onClick={!isLoading ? onClose : undefined}
             />
 
@@ -268,9 +268,9 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: "100%", opacity: 0 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="c-bg p-6 rounded-lg shadow-lg relative z-[101] w-full max-w-md"
+              className="c-bg rounded-lg shadow-lg relative z-[101] w-full max-h-[80vh] overflow-y-scroll max-w-md"
             >
-              <div className="header flex justify-between items-center mb-4">
+              <div className="header  p-6 pb-0 flex justify-between items-center mb-4 sticky top-0 c-bg z-[102]">
                 <h2 className="text-xl font-semibold">
                   {t("upgradePremium.title")}
                 </h2>
@@ -283,7 +283,7 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
                 </button>
               </div>
               {/* Body content */}
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2  p-6 pt-0">
                 <hr className="c-border border-dashed" />
 
                 {errorMessage && (
@@ -384,9 +384,9 @@ const UpgradeToPremium = ({ onClose, onSuccess}) => {
                   </span>
                   <span className="text-lg font-bold text-blue-600">
                     {selectedDuration === "6"
-                      ? "10,000 MMK"
+                      ? "15,000 MMK"
                       : selectedDuration === "12"
-                      ? "18,000 MMK"
+                      ? "30,000 MMK"
                       : "0 MMK"}
                   </span>
                 </div>

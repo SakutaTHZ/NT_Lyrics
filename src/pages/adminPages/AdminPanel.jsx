@@ -231,7 +231,7 @@ const AdminPanel = () => {
                           <span>{paymentCount?.requestCount}</span>
                         </div>{" "}
                         <div className="flex flex-col">
-                          <div className="font-normal text-sm text-gray-500">
+                          <div className="font-normal text-sm text-gray-500 flex flex-col">
                             <span className="text-sm text-green-500">
                               <span className="min-w-[20px] font-semibold">
                                 {paymentCount?.approveCount}
