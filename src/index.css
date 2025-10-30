@@ -63,6 +63,8 @@
   --color-info-strong: 96, 165, 250; /* Blue-400: Text/Icon */
   --color-info-medium: 191, 219, 254; /* Blue-200: Border/Water Drop */
   --color-info-tint: 239, 246, 255; /* Blue-50: Light Gradient End */
+
+  --soft-shadow: 0,0,0,0.05;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -114,6 +116,8 @@ body.dark {
   --color-info-strong: 147, 197, 253; /* Blue-300 */
   --color-info-medium: 29, 78, 216; /* Blue-700 */
   --color-info-tint: 6, 17, 34; /* Dark Blue-950 */
+
+  --soft-shadow: 31, 41, 55;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -898,4 +902,12 @@ body.dark {
   .p-inputtext {
     border: 0 !important;
   }
+}
+
+.c-g-bg{
+  background: rgb(var(--color-bg-body)) !important;
+}
+
+.c-soft-shadow{
+  background: rgb(var(--soft-shadow)) !important;
 }

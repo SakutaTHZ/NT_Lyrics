@@ -147,25 +147,29 @@ const Chords = ({ imageLink, chordKey, onClose, isPremium }) => {
                 </span>
               </h1>
 
-              <div className="flex gap-4 mt-4">
+              <div className="flex mt-4">
                 <div className="grid gap-2">
                   {Object.keys(groupedVariants).map((chord) => (
-                    <button
-                      key={chord}
-                      onClick={() => {
-                        setActiveVariant(chord)
-                      }}
-                      className={`p-2 w-20 rounded-full border c-border ${
-                        activeVariant === chord
-                          ? "bg-blue-500 text-white"
-                          : "border-dashed"
-                      }`}
-                    >
-                      {chord}
-                    </button>
+                    <div className={`${
+                          activeVariant === chord
+                            && "c-soft-shadow"
+                        } flex p-2 w-20 rounded-l-full transition-all`} key={chord}>
+                      <button
+                        onClick={() => {
+                          setActiveVariant(chord);
+                        }}
+                        className={`py-1 w-full rounded-full border c-border ${
+                          activeVariant === chord
+                            ? "bg-blue-500 text-white"
+                            : "border-dashed"
+                        }`}
+                      >
+                        {chord}
+                      </button>
+                    </div>
                   ))}
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 c-soft-shadow">
                   {/*<div className="rounded-md text-sm flex items-center gap-3 c-dd">
                     {Object.keys(groupedVariants || {}).length > 0 ? (
                       <Dropdown
@@ -191,7 +195,7 @@ const Chords = ({ imageLink, chordKey, onClose, isPremium }) => {
 
                   {/* Display chord images */}
                   {activeVariant && groupedVariants[activeVariant] && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 py-0">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 py-2">
                       {groupedVariants[activeVariant].map((img) => (
                         <div key={img.name} className="text-center">
                           <p className="text-sm text-left mb-2">{img.name}</p>

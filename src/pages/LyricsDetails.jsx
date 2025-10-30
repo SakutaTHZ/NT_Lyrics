@@ -66,6 +66,12 @@ const LyricsDetails = ({
     getLyric();
   }, [lyricsId, token]);
 
+  const getEmbedUrl = (url) => {
+    if (!url) return "";
+    const videoId = url.split("v=")[1]?.split("&")[0] || url.split("/").pop();
+    return `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
+  };
+
   const handleClose = () => {
     onCollectionStatusChange && onCollectionStatusChange(isInCollection);
     setIsVisible(false);
@@ -91,6 +97,16 @@ const LyricsDetails = ({
 
   const [showArtistDetails, setShowArtistDetails] = useState(false);
   const [selectedArtist, setSelectedArtist] = useState(null);
+
+  useEffect(() => {
+    if (showChords || showArtistDetails || addToCollection) {
+      const iframe = document.getElementById("lyrics-player");
+      if (iframe) {
+        const src = iframe.src;
+        iframe.src = src; // stops video by resetting
+      }
+    }
+  }, [showChords, showArtistDetails, addToCollection]);
 
   useEffect(() => {
     if (showGallery) {
@@ -221,12 +237,12 @@ const LyricsDetails = ({
                     user?.role === "free-user" ? "watermark-wrapper" : ""
                   }`}
                 >
-                <button
-                  className="absolute right-2 top-2 md:flex gap-2 cursor-pointer text-right items-end shadow-md p-2 rounded-md c-primary hover:c-bg-2 transition-all text-white z-10 hidden "
-                  onClick={handleClose}
-                >
-                  <BiArrowBack size={20} />
-                </button>
+                  <button
+                    className="absolute right-2 top-2 md:flex gap-2 cursor-pointer text-right items-end shadow-md p-2 rounded-md c-primary hover:c-bg-2 transition-all text-white z-10 hidden "
+                    onClick={handleClose}
+                  >
+                    <BiArrowBack size={20} />
+                  </button>
                   <button
                     className={`absolute  bottom-2 right-2 z-10 p-3 bg-gray-500 text-white rounded-full shadow-md hover:bg-gray-100 transition-all opacity-40 ${
                       imageError && "hidden"
@@ -265,12 +281,14 @@ const LyricsDetails = ({
               </div>
 
               {/* Video Box */}
-              {lyric.youTubeLink && user?.role == "premium-user" && (
+              {lyric.youTubeLink && user?.role === "premium-user" && (
                 <div className="w-full md:w-122 aspect-video bg-gray-300 rounded-md lyrics-width">
                   <iframe
+                    id="lyrics-player"
                     className="w-full h-full rounded-md"
-                    src={lyric.youTubeLink}
+                    src={getEmbedUrl(lyric.youTubeLink)}
                     title="YouTube video player"
+                    frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                   ></iframe>
