@@ -243,18 +243,16 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
     }
   };
 
-  const handleOpenAppWithFallback = (deepLink, androidPackageId) => {
+  /*const handleOpenAppWithFallback = (deepLink, androidPackageId) => {
     const androidFallbackUrl = `market://details?id=${androidPackageId}`;
-    
+
     //const webFallbackUrl = `https://play.google.com/store/apps/details?id=${androidPackageId}`;
 
     window.location.href = deepLink;
     setTimeout(() => {
-        window.location.href = androidFallbackUrl; 
-        
-    }, 250); 
-    
-};
+      window.location.href = androidFallbackUrl;
+    }, 250);
+  };*/
 
   return (
     <ModalPortal>
@@ -302,8 +300,7 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
             <div className="flex flex-col gap-6 p-6 pt-0">
               <div className="flex flex-col gap-2 pt-0">
                 <Accordion activeIndex={1}>
-                  <AccordionTab
-                    header={t("aboutPayment")} >
+                  <AccordionTab header={t("aboutPayment")}>
                     <p className="m-0">
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed do eiusmod tempor incididunt ut labore et dolore magna
@@ -373,7 +370,7 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
 
                   {paymentinfo({ selectedpayment })}
 
-                  <div className="app-buttons">
+                  {/*<div className="app-buttons">
                     {selectedpayment === "KPay" ? (
                       <button
                         onClick={() => handleOpenAppWithFallback("kbzpay://", "com.kbzbank.kpaycustomer")}
@@ -396,7 +393,7 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
                         Open WavePay
                       </button>
                     )}
-                  </div>
+                  </div>*/}
                 </div>
               </div>
 
@@ -429,7 +426,7 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
 
                   <div className="relative">
                     <p
-                      className={`text-sm w-full p-2 border mt-1 rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed overflow-hidden text-ellipsis whitespace-nowrap ${
+                      className={`text-sm opacity-80 w-full p-2 border mt-1 rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed overflow-hidden text-ellipsis whitespace-nowrap ${
                         fieldErrors.file
                           ? "border-red-500 ring-1 ring-red-400"
                           : "!border-gray-500"
