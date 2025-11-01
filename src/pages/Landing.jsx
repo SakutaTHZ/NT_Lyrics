@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
 import { Link } from "react-router-dom";
 
-import EmptyData from "../assets/images/Collection list is empty.jpg";
-
 // Components
 import Footer from "../components/common/Footer";
 import LyricsRow from "../components/special/LyricsRow";
@@ -27,6 +25,7 @@ import Artist from "./Artist";
 import ModalContainer from "../components/special/ModalContainer";
 import { useAuth } from "../components/hooks/authContext";
 import useAddToHomePrompt from "../components/hooks/useAddToHomePrompt";
+import UpgradeToPremium from "../components/common/UpgradeToPremium";
 
 const Landing = () => {
   const { promptInstall, isInstalled, isIOS, showIOSBanner } =
@@ -68,6 +67,11 @@ const Landing = () => {
 
   const [loading, setLoading] = useState(false);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openUpgradeModal = () => {
+    setIsModalOpen(true);
+  };
+
   const getPopularLyrics = useCallback(async () => {
     try {
       setLoading(true);
@@ -85,7 +89,7 @@ const Landing = () => {
       setLoading(true);
       const lyrics = await fetchLatestLyrics(token);
       setLatestLyrics(lyrics);
-      console.log(lyrics)
+      console.log(lyrics);
     } catch (err) {
       console.error("Error fetching popular lyrics:", err);
     }
@@ -214,12 +218,8 @@ const Landing = () => {
     }
     if (lyricsArray.length === 0) {
       return (
-        <div className="w-full flex justify-center items-center">
-          <img
-            src={EmptyData}
-            alt="No data Found"
-            className="h-42 opacity-50"
-          />
+        <div className="w-full flex flex-col items-center md:items-start c-bg justify-center gap-4 text-center py-4 c-gray-text opacity-30">
+          No Lyrics Found
         </div>
       );
     }
@@ -245,7 +245,6 @@ const Landing = () => {
 
   return (
     <>
-
       {showMessage && (
         <MessagePopup
           message_type={messageType}
@@ -312,16 +311,14 @@ const Landing = () => {
 
             {!isInstalled && !isIOS && (
               <div className=" c-bg-2 border c-border rounded-xl px-4 py-3 w-full flex items-center justify-between gap-2 text-sm">
-                  <p>
-                    {t("AddThisApptoYourPhone")}
-                  </p>
+                <p>{t("AddThisApptoYourPhone")}</p>
 
-                  <button
-                    onClick={handleInstallClick}
-                    className="px-4 py-2 w-fit rounded-md c-primary text-white shadow-md transition"
-                  >
-                    Install App
-                  </button>
+                <button
+                  onClick={handleInstallClick}
+                  className="px-4 py-2 w-fit rounded-md c-primary text-white shadow-md transition"
+                >
+                  Install App
+                </button>
               </div>
             )}
 
@@ -329,9 +326,7 @@ const Landing = () => {
             {!isInstalled && showIOSBanner && (
               <div className=" c-bg-2 border c-border rounded-xl px-4 py-3 w-full flex items-start gap-2 text-sm">
                 <div className="w-full ">
-                  <p className="c-gray-text">
-                    {t("AddThisApptoYourPhone")}
-                  </p>
+                  <p className="c-gray-text">{t("AddThisApptoYourPhone")}</p>
                   <p className=" mt-2">
                     Tap <span className="font-semibold">Share</span> →{" "}
                     <span className="font-semibold">Add to Home Screen</span>
@@ -360,7 +355,7 @@ const Landing = () => {
                   </p>
                   <button
                     className="border c-border px-4 py-2 rounded-md text-sm font-semibold bg-white text-amber-950 self-center z-10 drop-shadow-2xl border-e"
-                    onClick={() => navigate("/NT_Lyrics/premium")}
+                    onClick={openUpgradeModal}
                   >
                     {t("upgradeNow")}
                   </button>
@@ -480,6 +475,15 @@ const Landing = () => {
             onClose={() => setShowArtistDetails(false)}
           />
         </ModalContainer>
+      )}
+
+      {isModalOpen && (
+        <UpgradeToPremium
+          onClose={() => setIsModalOpen(false)}
+          onSuccess={() => {
+            window.location.reload();
+          }}
+        />
       )}
     </>
   );

@@ -63,22 +63,22 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
       KPay: {
         img: kpay,
         entries: [
-          { phone: "095127803", name: "U Saw Lin" },
+          { phone: "095127803", name: "U Saw Lwin" },
           { phone: "09423543293", name: "Paing Htet Myet" },
         ],
       },
       AYAPay: {
         img: ayapay,
         entries: [
-          { phone: "09123456789", name: "NT Lyrics (1)" },
-          { phone: "09234567890", name: "NT Lyrics (2)" },
+          { phone: "095127803", name: "U Saw Lwin" },
+          { phone: "09423543293", name: "Paing Htet Myet" },
         ],
       },
       WaveMoney: {
         img: wavemoney,
         entries: [
-          { phone: "09123456789", name: "NT Lyrics (1)" },
-          { phone: "09234567890", name: "NT Lyrics (2)" },
+          { phone: "095127803", name: "U Saw Lwin" },
+          { phone: "09423543293", name: "Paing Htet Myet" },
         ],
       },
     };
@@ -297,7 +297,8 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
             <div className="flex flex-col gap-6 p-6 pt-0">
               <div className="flex flex-col gap-2 pt-0">
                 <Accordion activeIndex={1}>
-                  <AccordionTab header={t("aboutPayment")}>
+                  <AccordionTab
+                    header={t("aboutPayment")} >
                     <p className="m-0">
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed do eiusmod tempor incididunt ut labore et dolore magna
@@ -370,21 +371,33 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
                   <div className="app-buttons">
                     {selectedpayment === "KPay" ? (
                       <button
-                        onClick={() => handleOpenApp("kbzpay://")}
+                        onClick={() =>
+                          handleOpenApp(
+                            "https://play.google.com/store/apps/details?id=com.kbzbank.kpaycustomer"
+                          )
+                        }
                         className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowe"
                       >
                         Open KBZPay
                       </button>
                     ) : selectedpayment === "AYAPay" ? (
                       <button
-                        onClick={() => handleOpenApp("ayapay://")}
+                        onClick={() =>
+                          handleOpenApp(
+                            "https://play.google.com/store/apps/details?id=com.ayabank.ayapay"
+                          )
+                        }
                         className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowe"
                       >
                         Open AYA Pay
                       </button>
                     ) : (
                       <button
-                        onClick={() => handleOpenApp("wavepay://")}
+                        onClick={() =>
+                          handleOpenApp(
+                            "https://play.google.com/store/apps/details?id=mm.com.wavemoney.wavepay"
+                          )
+                        }
                         className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowe"
                       >
                         Open WavePay
