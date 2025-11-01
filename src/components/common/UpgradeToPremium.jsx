@@ -243,13 +243,18 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
     }
   };
 
-  const handleOpenApp = (scheme) => {
-    window.location.href = scheme;
+  const handleOpenAppWithFallback = (deepLink, androidPackageId) => {
+    const androidFallbackUrl = `market://details?id=${androidPackageId}`;
+    
+    //const webFallbackUrl = `https://play.google.com/store/apps/details?id=${androidPackageId}`;
 
+    window.location.href = deepLink;
     setTimeout(() => {
-      alert("The app may not be installed. Please check your phone.");
-    }, 500);
-  };
+        window.location.href = androidFallbackUrl; 
+        
+    }, 250); 
+    
+};
 
   return (
     <ModalPortal>
@@ -371,33 +376,21 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
                   <div className="app-buttons">
                     {selectedpayment === "KPay" ? (
                       <button
-                        onClick={() =>
-                          handleOpenApp(
-                            "https://play.google.com/store/apps/details?id=com.kbzbank.kpaycustomer"
-                          )
-                        }
+                        onClick={() => handleOpenAppWithFallback("kbzpay://", "com.kbzbank.kpaycustomer")}
                         className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowe"
                       >
                         Open KBZPay
                       </button>
                     ) : selectedpayment === "AYAPay" ? (
                       <button
-                        onClick={() =>
-                          handleOpenApp(
-                            "https://play.google.com/store/apps/details?id=com.ayabank.ayapay"
-                          )
-                        }
+                        onClick={() => handleOpenAppWithFallback("ayapay://", "com.ayabank.ayapay")}
                         className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowe"
                       >
                         Open AYA Pay
                       </button>
                     ) : (
                       <button
-                        onClick={() =>
-                          handleOpenApp(
-                            "https://play.google.com/store/apps/details?id=mm.com.wavemoney.wavepay"
-                          )
-                        }
+                        onClick={() => handleOpenAppWithFallback("wavepay://", "mm.com.wavemoney.wavepay")}
                         className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowe"
                       >
                         Open WavePay
