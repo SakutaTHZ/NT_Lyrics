@@ -389,7 +389,7 @@ const AddToCollectionBox = ({
                             <Checkbox
                               checked={selectedCollections.includes(col.group)}
                               onChange={() => handleCheckboxChange(col.group)}
-                              className={`checkbox-fade `}
+                              className={`checkbox-fade`}
                               // 💡 Disable checkbox if full and NOT currently selected
                               disabled={
                                 isLoading ||

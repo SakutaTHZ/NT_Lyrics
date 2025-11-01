@@ -343,7 +343,7 @@ const Landing = () => {
             {/* Support Us */}
             {user?.role === "free-user" && (
               <div className="relative w-full">
-                <div className="relative flex justify-between border py-4 c-border rounded-md px-4 c-linear-bg mx-auto overflow-hidden">
+                <div className="relative flex justify-between border py-4 c-border rounded-md px-4 c-premium-bg mx-auto overflow-hidden">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 1440 320"
@@ -355,11 +355,11 @@ const Landing = () => {
                     ></path>
                   </svg>
 
-                  <p className="z-2 text-xl font-bold w-1/2 text-white">
+                  <p className="z-2 text-xl font-bold w-1/2 text-amber-950">
                     Support us by buying the Premium version
                   </p>
                   <button
-                    className="border border-white px-4 py-2 rounded-md text-sm font-semibold bg-white text-blue-500 self-center z-10"
+                    className="border c-border px-4 py-2 rounded-md text-sm font-semibold bg-white text-amber-950 self-center z-10 drop-shadow-2xl border-e"
                     onClick={() => navigate("/NT_Lyrics/premium")}
                   >
                     {t("upgradeNow")}

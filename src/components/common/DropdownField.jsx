@@ -8,6 +8,7 @@ export const DropdownField = ({
   onChange,
   required,
   disabled,
+  customClass = "c-border"
 }) => (
   <div className="w-full c-dd">
     <label className="block mb-2 text-sm font-medium opacity-80">
@@ -20,7 +21,7 @@ export const DropdownField = ({
       onChange={(e) => onChange(e.value)}
       optionLabel="name"
       placeholder="Choose one ..."
-      className="w-full capitalize-first-letter c-bg c-border"
+      className={`w-full capitalize-first-letter c-bg ${customClass}`}
       disabled={disabled}
       showClear
       appendTo="self"
@@ -35,6 +36,7 @@ DropdownField.propTypes = {
   onChange: PropTypes.func.isRequired,
   required: PropTypes.bool,
   disabled: PropTypes.bool,
+  customClass: PropTypes.string,
 };
 
 export default DropdownField;

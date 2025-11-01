@@ -1,20 +1,16 @@
 import axios from "axios";
 
-
 export const apiUrl = import.meta.env.VITE_API_URL;
 export const siteUrl = import.meta.env.VITE_SITE_URL;
 // Artist
 export const fetchTop10Artists = async (authToken) => {
   try {
-    const res = await axios.get(
-      `${apiUrl}/artists/getTopArtists`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
+    const res = await axios.get(`${apiUrl}/artists/getTopArtists`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
 
     return res.data.topArtists.map((artist) => ({
       id: artist._id,
@@ -30,15 +26,12 @@ export const fetchTop10Artists = async (authToken) => {
 
 export const fetchArtistOverview = async (authToken) => {
   try {
-    const res = await axios.get(
-      `${apiUrl}/artists/getArtistOverview`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
+    const res = await axios.get(`${apiUrl}/artists/getArtistOverview`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
     return {
       countDiff: res.data.totalCount,
       totalCount: res.data.totalCount,
@@ -53,33 +46,27 @@ export const fetchArtistOverview = async (authToken) => {
 
 export const fetchArtistById = async (authToken, artistId) => {
   try {
-    const res = await axios.get(
-      `${apiUrl}/artists/getArtistById/${artistId}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
+    const res = await axios.get(`${apiUrl}/artists/getArtistById/${artistId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
     return res.data;
   } catch (err) {
     console.error("Error fetching artist by ID:", err);
   }
-}
+};
 
 // User Overview
 export const fetchUserOverview = async (authToken) => {
   try {
-    const res = await axios.get(
-      `${apiUrl}/users/getUserOverview`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
+    const res = await axios.get(`${apiUrl}/users/getUserOverview`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
     return res.data;
   } catch (err) {
     console.error("Error fetching user overview:", err);
@@ -89,15 +76,12 @@ export const fetchUserOverview = async (authToken) => {
 // Lyric Overview
 export const fetchLyricOverview = async (authToken) => {
   try {
-    const res = await axios.get(
-      `${apiUrl}/lyrics/getLyricsOverview`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
+    const res = await axios.get(`${apiUrl}/lyrics/getLyricsOverview`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
     return res.data;
   } catch (err) {
     console.error("Error fetching user overview:", err);
@@ -105,156 +89,140 @@ export const fetchLyricOverview = async (authToken) => {
 };
 
 export const fetchPopularLyrics = async (authToken) => {
-    try {
-      const res = await axios.get(`${apiUrl}/lyrics/getTopLyrics`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
-  
-      return res.data.topLyrics;
-    } catch (err) {
-      console.error("Error fetching top lyrics with artists:", err);
-      throw err;
-    }
-  };
-
-  export const fetchLatestLyrics = async (authToken) => {
-    try {
-      const res = await axios.get(`${apiUrl}/lyrics/getLatestLyrics?limit=3`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
-  
-      return res.data;
-    } catch (err) {
-      console.error("Error fetching top lyrics with artists:", err);
-      throw err;
-    }
-  };
-  
- export const fetchSingers = async (type) => {
-    try {
-      const res = await fetch(`${apiUrl}/artists/getArtistsByType`);
-      const data = await res.json();
-      if (data.artists) {
-        return data.artists
-      } else {
-        console.warn("No artists found in response:", data, type);
-        return null
-      }
-    } catch (error) {
-      console.error("Error fetching singers:", error);
-    }
-  };
-
-  export const disableLyricById = async (lyricId, token) => {
-    const response = await fetch(
-      `${apiUrl}/lyrics/disableLyrics/${lyricId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-  
-    const data = await response.json();
-  
-    if (!response.ok) {
-      throw new Error(data.errors?.[0]?.message || "Failed to disable lyric");
-    }
-  
-    return data;
-  };
-
-  export const enableLyricById = async (lyricId, token) => {
-    const response = await fetch(
-      `${apiUrl}/lyrics/enableLyrics/${lyricId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-  
-    const data = await response.json();
-  
-    if (!response.ok) {
-      throw new Error(data.errors?.[0]?.message || "Failed to enable lyric");
-    }
-  
-    return data;
-  };
-
-  export const changeUserValidity = async (userId, isValid, token) => {
-    const response = await fetch(
-      `${apiUrl}/users/${userId}?type=${
-        isValid ? "activate" : "deactivate"
-      }`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to update user validity");
-    }
-  };
-  
-
-  export const changeLyricsEnableFlag = async (lyricId, token) => {
-    const response = await fetch(
-      `${apiUrl}/lyrics/changeEnableFlag/${lyricId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-  
-    const data = await response.json();
-  
-    if (!response.ok) {
-      throw new Error(data.errors?.[0]?.message || "Failed to disable lyric");
-    }
-  
-    return data;
-  };
-
-  export const fetchLyricById = async (lyricId,token) => {
   try {
-    const res = await axios.get(
-      `${apiUrl}/lyrics/getLyricsById/${lyricId}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const res = await axios.get(`${apiUrl}/lyrics/getTopLyrics`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+
+    return res.data.topLyrics;
+  } catch (err) {
+    console.error("Error fetching top lyrics with artists:", err);
+    throw err;
+  }
+};
+
+export const fetchLatestLyrics = async (authToken) => {
+  try {
+    const res = await axios.get(`${apiUrl}/lyrics/getLatestLyrics?limit=3`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching top lyrics with artists:", err);
+    throw err;
+  }
+};
+
+export const fetchSingers = async (type) => {
+  try {
+    const res = await fetch(`${apiUrl}/artists/getArtistsByType`);
+    const data = await res.json();
+    if (data.artists) {
+      return data.artists;
+    } else {
+      console.warn("No artists found in response:", data, type);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching singers:", error);
+  }
+};
+
+export const disableLyricById = async (lyricId, token) => {
+  const response = await fetch(`${apiUrl}/lyrics/disableLyrics/${lyricId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.errors?.[0]?.message || "Failed to disable lyric");
+  }
+
+  return data;
+};
+
+export const enableLyricById = async (lyricId, token) => {
+  const response = await fetch(`${apiUrl}/lyrics/enableLyrics/${lyricId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.errors?.[0]?.message || "Failed to enable lyric");
+  }
+
+  return data;
+};
+
+export const changeUserValidity = async (userId, isValid, token) => {
+  const response = await fetch(
+    `${apiUrl}/users/${userId}?type=${isValid ? "activate" : "deactivate"}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to update user validity");
+  }
+};
+
+export const changeLyricsEnableFlag = async (lyricId, token) => {
+  const response = await fetch(`${apiUrl}/lyrics/changeEnableFlag/${lyricId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.errors?.[0]?.message || "Failed to disable lyric");
+  }
+
+  return data;
+};
+
+export const fetchLyricById = async (lyricId, token) => {
+  try {
+    const res = await axios.get(`${apiUrl}/lyrics/getLyricsById/${lyricId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return res.data;
   } catch (err) {
     console.error("Error fetching lyric by ID:", err);
   }
-}
+};
 
 // Collection
 export const addLyricsToCollection = async (lyricId, token) => {
-
   const response = await fetch(`${apiUrl}/collections/addToCollection`, {
     method: "POST",
     headers: {
@@ -273,19 +241,18 @@ export const addLyricsToCollection = async (lyricId, token) => {
   return data;
 };
 
-export const removeLyricsFromCollection = async (lyricId,group, token) => {
-
+export const removeLyricsFromCollection = async (lyricId, group, token) => {
   const response = await fetch(`${apiUrl}/collections/removeFromGroup`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ lyricsId: lyricId,group: group }), // double check this key name
+    body: JSON.stringify({ lyricsId: lyricId, group: group }), // double check this key name
   });
 
   const data = await response.json();
-  
+
   if (!response.ok) {
     throw new Error(data.errors?.[0]?.message || "Failed to add/remove lyric");
   }
@@ -295,15 +262,12 @@ export const removeLyricsFromCollection = async (lyricId,group, token) => {
 
 export const fetchCollectionOverview = async (authToken) => {
   try {
-    const res = await axios.get(
-      `${apiUrl}/collections/getCollectionOverview`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
+    const res = await axios.get(`${apiUrl}/collections/getCollectionOverview`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
     return res.data;
   } catch (err) {
     console.error("Error fetching user overview:", err);
@@ -312,15 +276,12 @@ export const fetchCollectionOverview = async (authToken) => {
 
 export const fetchPaymentOverview = async (authToken) => {
   try {
-    const res = await axios.get(
-      `${apiUrl}/paymentRequests/paymentOverview`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
+    const res = await axios.get(`${apiUrl}/paymentRequests/paymentOverview`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
     return res.data;
   } catch (err) {
     console.error("Error fetching user overview:", err);
@@ -342,7 +303,7 @@ export const fetchLyricsByGroup = async (group, authToken) => {
   } catch (err) {
     console.error("Error fetching lyrics by group:", err);
   }
-}
+};
 
 /*export const validateUser = async (id,token) => {
   try {
@@ -384,12 +345,12 @@ export const validateUser = async (id, token) => {
       message = "Your account has been deactivated or you don’t have access.";
     } else if (status === 500) {
       message = "Server error. Please try again later.";
-    } 
-    
+    }
+
     // Re-throw the error with the necessary context
     throw {
       ...err,
-      customError: { status, message }
+      customError: { status, message },
     };
   }
 };
@@ -400,7 +361,6 @@ export function logout(message) {
   if (message) alert(message);
   window.location.href = "/NT_Lyrics/login";
 }
-
 
 /*export const validateUser = async (
   id,
@@ -472,7 +432,7 @@ export const checkUserStatus = async (token) => {
     console.error("Error validating user:", err);
     throw err; // optionally let the caller handle this
   }
-}
+};
 
 export const addLyricToGroups = async (lyricId, groups, token) => {
   if (!Array.isArray(groups) || groups.length === 0) {
@@ -500,7 +460,9 @@ export const addLyricToGroups = async (lyricId, groups, token) => {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.errors?.[0]?.message || `Failed to add lyric to group: ${group}`);
+      throw new Error(
+        data.errors?.[0]?.message || `Failed to add lyric to group: ${group}`
+      );
     }
 
     results.push(data);
@@ -535,14 +497,17 @@ export const removeLyricFromGroups = async (lyricId, groups, token) => {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.errors?.[0]?.message || `Failed to remove lyric from group: ${group}`);
+      throw new Error(
+        data.errors?.[0]?.message ||
+          `Failed to remove lyric from group: ${group}`
+      );
     }
 
     results.push(data);
   }
 
   return results;
-}
+};
 
 export const lookForGroups = async (lyricId, token) => {
   if (!lyricId || !token) {
@@ -569,35 +534,37 @@ export const lookForGroups = async (lyricId, token) => {
 
 export const checkIfPaymentRequested = async (token) => {
   try {
-    const res = await axios.get(`${apiUrl}/paymentRequests/checkPaymentExists`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await axios.get(
+      `${apiUrl}/paymentRequests/checkPaymentExists`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return res.data;
   } catch (err) {
     console.error("Error checking payment request status:", err);
     throw err;
   }
-}
+};
 
 // Patch Api changeToDefaultStatus
 export const changeToDefaultStatus = async (token) => {
-  const response = await fetch(
-    `${apiUrl}/users/changeToDefaultStatus`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );  
+  const response = await fetch(`${apiUrl}/users/changeToDefaultStatus`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.errors?.[0]?.message || "Failed to change user status");
-  } 
+    throw new Error(
+      data.errors?.[0]?.message || "Failed to change user status"
+    );
+  }
   return data;
-}
+};

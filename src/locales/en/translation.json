@@ -159,6 +159,7 @@
     "uploadAValidPaymentProof": "Upload a Valid Payment Proof",
     "uploadFileRequired": "*",
     "uploadNotice": "* Please ensure you upload a clear and valid screenshot of your payment receipt.",
+    "screenshotHere" : "​Enter the screenshot of payment here",
     "upgradeButton": "Upgrade Now",
     "copyAlert": "Phone number copied to clipboard!",
     "total": "Total",
@@ -194,5 +195,8 @@
   "collectionLimitReached" : "Collection Limit reached!",
   "lyrics": "Lyrics",
   "loadingCollections" : "Loading Colections",
-  "latestLyrics" : "Latest Lyrics"
+  "latestLyrics" : "Latest Lyrics",
+
+  "aboutPremium" : "About Premium",
+  "toUpgradePremium" : "To upgrade to premium, transfer the correct amount of money to these KPay, AYA Pay, Wave money accounts according to your month plan"
 }

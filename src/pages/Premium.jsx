@@ -7,6 +7,8 @@ import { checkIfPaymentRequested, siteUrl } from "../assets/util/api";
 import { useAuth } from "../components/hooks/authContext";
 import googleLogo from "../assets/images/svgs/google.svg";
 
+import { Accordion, AccordionTab } from "primereact/accordion";
+
 const Premium = () => {
   const { t } = useTranslation();
   const columnClass = "p-2 text-pretty";
@@ -42,7 +44,7 @@ const Premium = () => {
         <div className="flex w-full min-h-screen pt-4 md:pt-16 pb-16 px-4 md:px-24 gap-6">
           <div className="premium-page w-full flex flex-col gap-2">
             {/* Premium Header */}
-            <div className="landingSpace overflow-hidden relative w-full h-24 c-linear-bg rounded-lg">
+            <div className="landingSpace overflow-hidden relative w-full h-20 c-linear-bg rounded-lg">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 1440 320"
@@ -61,259 +63,301 @@ const Premium = () => {
                   >
                     <BiArrowBack />
                   </span>
-                  {t("premiumFeatures")}
+                  {t("aboutPremium")}
                 </p>
               </h2>
+
+              
             </div>
 
             {/* Flavour Text */}
-            <p>{t("upgraedToGetTheseExclusiveFeaturesAndBenifits")}</p>
+            {/*<p>{t("upgraedToGetTheseExclusiveFeaturesAndBenifits")}</p>*/}
 
-            {/* Features Comparison */}
-            <div className="featuresTable w-full py-4 border-b c-border border-dashed">
-              <table className="w-full">
-                <thead>
-                  <tr>
-                    <td className={`${columnClass}`}>Features</td>
-                    <td className={`${columnClass} c-bg w-24`}>Free</td>
-                    <td className={`${columnClass} c-bg-2 w-24`}>Premium</td>
-                  </tr>
-                </thead>
+            <Accordion activeIndex={1}>
+              <AccordionTab header={t("aboutPayment")}>
+                <p className="m-0">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                  irure dolor in reprehenderit in voluptate velit esse cillum
+                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                  cupidatat non proident, sunt in culpa qui officia deserunt
+                  mollit anim id est laborum.
+                </p>
+              </AccordionTab>
+              <AccordionTab header={t("premiumFeatures")}>
+                {/* Features Comparison */}
+                <div className="featuresTable w-full pt-0 py-4 border-b c-border border-dashed">
+                  <table className="w-full">
+                    <thead>
+                      <tr>
+                        <td className={`${columnClass}`}>Features</td>
+                        <td className={`${columnClass} c-bg w-24`}>Free</td>
+                        <td className={`${columnClass} c-bg-2 w-24`}>
+                          Premium
+                        </td>
+                      </tr>
+                    </thead>
 
-                <tbody>
-                  <tr className="border c-border">
-                    <td className={`${columnClass}`}>
-                      <a href="#unlockAllLyrics">{t("unlockAllLyrics")}</a>
-                    </td>
-                    <td className={`${columnClass} c-bg w-24`}>
-                      <BiX size={20} className="text-red-500" />
-                    </td>
-                    <td className={`${columnClass} c-bg-2 w-24`}>
-                      <CgCheck size={20} className="text-green-500" />
-                    </td>
-                  </tr>
+                    <tbody>
+                      <tr className="border c-border">
+                        <td className={`${columnClass}`}>
+                          <a href="#unlockAllLyrics">{t("unlockAllLyrics")}</a>
+                        </td>
+                        <td className={`${columnClass} c-bg w-24`}>
+                          <BiX size={20} className="text-red-500" />
+                        </td>
+                        <td className={`${columnClass} c-bg-2 w-24`}>
+                          <CgCheck size={20} className="text-green-500" />
+                        </td>
+                      </tr>
 
-                  <tr className="border c-border">
-                    <td className={`${columnClass}`}>
-                      <a href="#canWatchYoutube">{t("canWatchYoutube")}</a>
-                    </td>
-                    <td className={`${columnClass} c-bg w-24`}>
-                      <BiX size={20} className="text-red-500" />
-                    </td>
-                    <td className={`${columnClass} c-bg-2 w-24`}>
-                      <CgCheck size={20} className="text-green-500" />
-                    </td>
-                  </tr>
+                      <tr className="border c-border">
+                        <td className={`${columnClass}`}>
+                          <a href="#canWatchYoutube">{t("canWatchYoutube")}</a>
+                        </td>
+                        <td className={`${columnClass} c-bg w-24`}>
+                          <BiX size={20} className="text-red-500" />
+                        </td>
+                        <td className={`${columnClass} c-bg-2 w-24`}>
+                          <CgCheck size={20} className="text-green-500" />
+                        </td>
+                      </tr>
 
-                  <tr className="border c-border">
-                    <td className={`${columnClass}`}>
-                      <a href="#collectionsexplained">
-                        {t("collectionsexplained.title")}
-                      </a>
-                    </td>
-                    <td className={`${columnClass} c-bg w-24`}>
-                      <BiX size={20} className="text-red-500" />
-                    </td>
-                    <td className={`${columnClass} c-bg-2 w-24`}>
-                      <CgCheck size={20} className="text-green-500" />
-                    </td>
-                  </tr>
+                      <tr className="border c-border">
+                        <td className={`${columnClass}`}>
+                          <a href="#collectionsexplained">
+                            {t("collectionsexplained.title")}
+                          </a>
+                        </td>
+                        <td className={`${columnClass} c-bg w-24`}>
+                          <BiX size={20} className="text-red-500" />
+                        </td>
+                        <td className={`${columnClass} c-bg-2 w-24`}>
+                          <CgCheck size={20} className="text-green-500" />
+                        </td>
+                      </tr>
 
-                  <tr className="border c-border">
-                    <td className={`${columnClass}`}>
-                      <a href="#chordsExplained">{t("chordsExplained.title")}</a>
-                    </td>
-                    <td className={`${columnClass} c-bg w-24`}>
-                      <BiX size={20} className="text-red-500" />
-                    </td>
-                    <td className={`${columnClass} c-bg-2 w-24`}>
-                      <CgCheck size={20} className="text-green-500" />
-                    </td>
-                  </tr>
+                      <tr className="border c-border">
+                        <td className={`${columnClass}`}>
+                          <a href="#chordsExplained">
+                            {t("chordsExplained.title")}
+                          </a>
+                        </td>
+                        <td className={`${columnClass} c-bg w-24`}>
+                          <BiX size={20} className="text-red-500" />
+                        </td>
+                        <td className={`${columnClass} c-bg-2 w-24`}>
+                          <CgCheck size={20} className="text-green-500" />
+                        </td>
+                      </tr>
 
-                  <tr className="border c-border">
-                    <td className={`${columnClass}`}>
-                      <a href="#metronomeExplained">{t("metronomeExplained.title")}</a>
-                    </td>
-                    <td className={`${columnClass} c-bg w-24`}>
-                      <BiX size={20} className="text-red-500" />
-                    </td>
-                    <td className={`${columnClass} c-bg-2 w-24`}>
-                      <CgCheck size={20} className="text-green-500" />
-                    </td>
-                  </tr>
+                      <tr className="border c-border">
+                        <td className={`${columnClass}`}>
+                          <a href="#metronomeExplained">
+                            {t("metronomeExplained.title")}
+                          </a>
+                        </td>
+                        <td className={`${columnClass} c-bg w-24`}>
+                          <BiX size={20} className="text-red-500" />
+                        </td>
+                        <td className={`${columnClass} c-bg-2 w-24`}>
+                          <CgCheck size={20} className="text-green-500" />
+                        </td>
+                      </tr>
 
-                  <tr className="border c-border">
-                    <td className={`${columnClass}`}>
-                      <a href="#transposeExplained">{t("transposeExplained.title")}</a>
-                    </td>
-                    <td className={`${columnClass} c-bg w-24`}>
-                      <BiX size={20} className="text-red-500" />
-                    </td>
-                    <td className={`${columnClass} c-bg-2 w-24`}>
-                      <CgCheck size={20} className="text-green-500" />
-                    </td>
-                  </tr>
+                      <tr className="border c-border">
+                        <td className={`${columnClass}`}>
+                          <a href="#transposeExplained">
+                            {t("transposeExplained.title")}
+                          </a>
+                        </td>
+                        <td className={`${columnClass} c-bg w-24`}>
+                          <BiX size={20} className="text-red-500" />
+                        </td>
+                        <td className={`${columnClass} c-bg-2 w-24`}>
+                          <CgCheck size={20} className="text-green-500" />
+                        </td>
+                      </tr>
 
-                  <tr className="border c-border">
-                    <td className={`${columnClass}`}>{t("noAds")}</td>
-                    <td className={`${columnClass} c-bg w-24`}>
-                      <CgCheck size={20} className="text-green-500" />
-                    </td>
-                    <td className={`${columnClass} c-bg-2 w-24`}>
-                      <CgCheck size={20} className="text-green-500" />
-                    </td>
-                  </tr>
+                      <tr className="border c-border">
+                        <td className={`${columnClass}`}>{t("noAds")}</td>
+                        <td className={`${columnClass} c-bg w-24`}>
+                          <CgCheck size={20} className="text-green-500" />
+                        </td>
+                        <td className={`${columnClass} c-bg-2 w-24`}>
+                          <CgCheck size={20} className="text-green-500" />
+                        </td>
+                      </tr>
 
-                  {isPaymentProcessing ? (
-                    <tr className="border c-border">
-                      <td colSpan={3} className={`${columnClass} c-bg-2 w-24`}>
-                        <div className="w-full bg-yellow-100 text-yellow-900 p-4 rounded-lg border border-yellow-500">
-                          <p>
-                            {t(
-                              "upgradePremium.yourPaymentIsBeingProcessedPleaseWait"
-                            )}
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                  ) : !token ? (
-                    <tr className="border c-border">
-                      <td colSpan={3} className={`${columnClass} c-bg-2 w-24`}>
-                        <button
-                          onClick={() => {
-                            window.location.href = `${siteUrl}/auth/google`;
-                          }}
-                          className={`w-full flex items-center gap-4 text-left border px-4 py-2 rounded-xl c-border`}
-                        >
-                          {/* <LuLogIn size={18} /> */}
-                          <img
-                            src={googleLogo}
-                            alt="Google Logo"
-                            className="w-4 h-4 inline-block"
-                            style={{
-                              animation: "wave 3s infinite",
-                            }}
-                          />
-                          {t("loginToTryCollection")}
-                        </button>
-                      </td>
-                    </tr>
-                  ) : (
-                    <tr className="border c-border">
-                      <td className={`${columnClass}`}></td>
-                      <td colSpan={2} className={`${columnClass} c-bg-2 w-24`}>
-                        <button
-                          className="loading-animation w-full c-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                          onClick={openUpgradeModal}
-                        >
-                          {t("upgradeNow")}
-                        </button>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                      {isPaymentProcessing ? (
+                        <tr className="border c-border">
+                          <td
+                            colSpan={3}
+                            className={`${columnClass} c-bg-2 w-24`}
+                          >
+                            <div className="w-full bg-yellow-100 text-yellow-900 p-4 rounded-lg border border-yellow-500">
+                              <p>
+                                {t(
+                                  "upgradePremium.yourPaymentIsBeingProcessedPleaseWait"
+                                )}
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : !token ? (
+                        <tr className="border c-border">
+                          <td
+                            colSpan={3}
+                            className={`${columnClass} c-bg-2 w-24`}
+                          >
+                            <button
+                              onClick={() => {
+                                window.location.href = `${siteUrl}/auth/google`;
+                              }}
+                              className={`w-full flex items-center gap-4 text-left border px-4 py-2 rounded-xl c-border`}
+                            >
+                              {/* <LuLogIn size={18} /> */}
+                              <img
+                                src={googleLogo}
+                                alt="Google Logo"
+                                className="w-4 h-4 inline-block"
+                                style={{
+                                  animation: "wave 3s infinite",
+                                }}
+                              />
+                              {t("loginToTryCollection")}
+                            </button>
+                          </td>
+                        </tr>
+                      ) : (
+                        <tr className="border c-border">
+                          <td className={`${columnClass}`}></td>
+                          <td
+                            colSpan={2}
+                            className={`${columnClass} c-bg-2 w-24`}
+                          >
+                            <button
+                              className="loading-animation w-full c-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                              onClick={openUpgradeModal}
+                            >
+                              {t("upgradeNow")}
+                            </button>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
 
-            {/* Unlock All Lyrics */}
-            <div
-              id="unlockAllLyrics"
-              className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
-            >
-              <div className="flex items-center gap-2">
-                <CgCheck size={24} className="text-green-500" />
-                <span className="text-lg py-1 font-semibold">
-                  {t("unlockAllLyrics")}
-                </span>
-              </div>
+                {/* Unlock All Lyrics */}
+                <div
+                  id="unlockAllLyrics"
+                  className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <CgCheck size={24} className="text-green-500" />
+                    <span className="text-lg py-1 font-semibold">
+                      {t("unlockAllLyrics")}
+                    </span>
+                  </div>
 
-              <div className="c-bg p-2 rounded-lg mt-2">
-                <p className="text-base">{t("unlockAllLyricsExplained")}</p>
-              </div>
-            </div>
+                  <div className="c-bg p-2 rounded-lg mt-2">
+                    <p className="text-base">{t("unlockAllLyricsExplained")}</p>
+                  </div>
+                </div>
 
-            {/* canWatchYoutube */}
-            <div
-              id="canWatchYoutube"
-              className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
-            >
-              <div className="flex items-center gap-2">
-                <CgCheck size={24} className="text-green-500" />
-                <span className="text-lg py-1 font-semibold">
-                  {t("canWatchYoutube")}
-                </span>
-              </div>
+                {/* canWatchYoutube */}
+                <div
+                  id="canWatchYoutube"
+                  className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <CgCheck size={24} className="text-green-500" />
+                    <span className="text-lg py-1 font-semibold">
+                      {t("canWatchYoutube")}
+                    </span>
+                  </div>
 
-              <div className="c-bg p-2 rounded-lg mt-2">
-                <p className="text-base">{t("canWatchYoutubeExplained")}</p>
-              </div>
-            </div>
+                  <div className="c-bg p-2 rounded-lg mt-2">
+                    <p className="text-base">{t("canWatchYoutubeExplained")}</p>
+                  </div>
+                </div>
 
-            <div
-              id="collectionsexplained"
-              className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
-            >
-              <div className="flex items-center gap-2">
-                <CgCheck size={24} className="text-green-500" />
-                <span className="text-lg py-1 font-semibold">
-                  {t("collectionsexplained.title")}
-                </span>
-              </div>
+                <div
+                  id="collectionsexplained"
+                  className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <CgCheck size={24} className="text-green-500" />
+                    <span className="text-lg py-1 font-semibold">
+                      {t("collectionsexplained.title")}
+                    </span>
+                  </div>
 
-              <div className="c-bg p-2 rounded-lg mt-2">
-                <p className="text-base">{t("collectionsexplained.explained")}</p>
-              </div>
-            </div>
+                  <div className="c-bg p-2 rounded-lg mt-2">
+                    <p className="text-base">
+                      {t("collectionsexplained.explained")}
+                    </p>
+                  </div>
+                </div>
 
-            <div
-              id="chordsExplained"
-              className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
-            >
-              <div className="flex items-center gap-2">
-                <CgCheck size={24} className="text-green-500" />
-                <span className="text-lg py-1 font-semibold">
-                  {t("chordsExplained.title")}
-                </span>
-              </div>
+                <div
+                  id="chordsExplained"
+                  className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <CgCheck size={24} className="text-green-500" />
+                    <span className="text-lg py-1 font-semibold">
+                      {t("chordsExplained.title")}
+                    </span>
+                  </div>
 
-              <div className="c-bg p-2 rounded-lg mt-2">
-                <p className="text-base">{t("chordsExplained.explained")}</p>
-              </div>
-            </div>
+                  <div className="c-bg p-2 rounded-lg mt-2">
+                    <p className="text-base">
+                      {t("chordsExplained.explained")}
+                    </p>
+                  </div>
+                </div>
 
-            <div
-              id="metronomeExplained"
-              className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
-            >
-              <div className="flex items-center gap-2">
-                <CgCheck size={24} className="text-green-500" />
-                <span className="text-lg py-1 font-semibold">
-                  {t("metronomeExplained.title")}
-                </span>
-              </div>
+                <div
+                  id="metronomeExplained"
+                  className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <CgCheck size={24} className="text-green-500" />
+                    <span className="text-lg py-1 font-semibold">
+                      {t("metronomeExplained.title")}
+                    </span>
+                  </div>
 
-              <div className="c-bg p-2 rounded-lg mt-2">
-                <p className="text-base">{t("metronomeExplained.explained")}</p>
-              </div>
-            </div>
+                  <div className="c-bg p-2 rounded-lg mt-2">
+                    <p className="text-base">
+                      {t("metronomeExplained.explained")}
+                    </p>
+                  </div>
+                </div>
 
-            <div
-              id="transposeExplained"
-              className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
-            >
-              <div className="flex items-center gap-2">
-                <CgCheck size={24} className="text-green-500" />
-                <span className="text-lg py-1 font-semibold">
-                  {t("transposeExplained.title")}
-                </span>
-              </div>
+                <div
+                  id="transposeExplained"
+                  className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <CgCheck size={24} className="text-green-500" />
+                    <span className="text-lg py-1 font-semibold">
+                      {t("transposeExplained.title")}
+                    </span>
+                  </div>
 
-              <div className="c-bg p-2 rounded-lg mt-2">
-                <p className="text-base">{t("transposeExplained.explained")}</p>
-              </div>
-            </div>
-            
+                  <div className="c-bg p-2 rounded-lg mt-2">
+                    <p className="text-base">
+                      {t("transposeExplained.explained")}
+                    </p>
+                  </div>
+                </div>
+              </AccordionTab>
+            </Accordion>
 
             {!isPaymentProcessing && (
               <button
