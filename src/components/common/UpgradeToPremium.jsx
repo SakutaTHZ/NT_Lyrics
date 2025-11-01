@@ -58,90 +58,73 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
   ];
 
   const paymentinfo = ({ selectedpayment }) => {
-    if (selectedpayment === "KPay") {
-      return (
-        <>
-          {[
-            { phone: "095127803", name: "U Saw Lin" },
-            { phone: "09423543293", name: "Paing Htet Myet" },
-          ].map((p, i) => (
-            <div
-              key={i}
-              className="animate-down-start p-4 c-bg-2 rounded-md border c-border c-info-box c-text"
-            >
-              <div className="flex gap-4 items-start">
-                <img
-                  src={kpay}
-                  alt="Payment"
-                  className="h-12 aspect-square object-center rounded-md"
-                />
-                <div className="flex flex-col gap-2">
+    // Data for each payment provider: two entries per provider to match KPay
+    const providers = {
+      KPay: {
+        img: kpay,
+        entries: [
+          { phone: "095127803", name: "U Saw Lin" },
+          { phone: "09423543293", name: "Paing Htet Myet" },
+        ],
+      },
+      AYAPay: {
+        img: ayapay,
+        entries: [
+          { phone: "09123456789", name: "NT Lyrics (1)" },
+          { phone: "09234567890", name: "NT Lyrics (2)" },
+        ],
+      },
+      WaveMoney: {
+        img: wavemoney,
+        entries: [
+          { phone: "09123456789", name: "NT Lyrics (1)" },
+          { phone: "09234567890", name: "NT Lyrics (2)" },
+        ],
+      },
+    };
+
+    const provider = providers[selectedpayment] || providers.KPay;
+
+    return (
+      <>
+        {provider.entries.map((p, i) => (
+          <div
+            key={i}
+            className="animate-down-start p-4 c-bg-2 rounded-md border c-border c-info-box c-text"
+          >
+            <div className="flex gap-3 items-start">
+              <img
+                src={provider.img}
+                alt={`${selectedpayment} logo`}
+                className="h-12 aspect-square object-center rounded-md"
+              />
+              <div className="flex flex-col gap-2 w-full">
+                <div className="w-auto flex items-center justify-between gap-2">
                   <div className="w-auto flex items-center gap-2">
                     <BiPhone size={20} className="text-gray-500" />
                     <span>{p.phone}</span>
-                    <button
-                      className="ml-2 -translate-y-1 text-blue-600 hover:underline"
-                      onClick={() => {
-                        navigator.clipboard.writeText(p.phone);
-                        alert("Phone number copied to clipboard!");
-                      }}
-                    >
-                      <BiCopy />
-                    </button>
                   </div>
-                  <div className="w-auto flex items-center gap-2">
-                    <CgProfile size={20} className="text-gray-500" />
-                    <span>{p.name}</span>
-                  </div>
+                  <button
+                    type="button"
+                    className="text-blue-600 hover:underline flex items-center gap-1 border px-1 rounded-full text-xs"
+                    onClick={() => {
+                      navigator.clipboard.writeText(p.phone);
+                      alert("Phone number copied to clipboard!");
+                    }}
+                  >
+                    <BiCopy /> Copy
+                  </button>
+                </div>
+                <div className="w-auto flex items-center gap-2">
+                  <CgProfile size={20} className="text-gray-500" />
+                  <span>{p.name}</span>
                 </div>
               </div>
             </div>
-          ))}
-        </>
-      );
-    } else {
-      const payData = {
-        AYAPay: {
-          img: ayapay,
-          phone: "09123456789",
-          name: "NT Lyrics",
-        },
-        WaveMoney: {
-          img: wavemoney,
-          phone: "09123456789",
-          name: "NT Lyrics",
-        },
-      };
-      const data = payData[selectedpayment];
-      return (
-        <div className="animate-down-start p-4 c-bg-2 rounded-md flex gap-4 items-start border c-border c-info-box c-text">
-          <img
-            src={data.img}
-            alt="Payment"
-            className="h-12 aspect-square object-center rounded-md"
-          />
-          <div>
-            <div className="w-auto flex items-center gap-2">
-              <BiPhone size={20} className="text-gray-500" />
-              <span>{data.phone}</span>
-              <button
-                className="ml-2 -translate-y-1 text-blue-600 hover:underline"
-                onClick={() => {
-                  navigator.clipboard.writeText(data.phone);
-                  alert("Phone number copied to clipboard!");
-                }}
-              >
-                <BiCopy />
-              </button>
-            </div>
-            <div className="w-auto flex items-center gap-2">
-              <CgProfile size={20} className="text-gray-500" />
-              <span>{data.name}</span>
-            </div>
           </div>
-        </div>
-      );
-    }
+        ))}
+      </>
+    );
   };
 
   // ✅ Validation logic
@@ -260,6 +243,14 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
     }
   };
 
+  const handleOpenApp = (scheme) => {
+    window.location.href = scheme;
+
+    setTimeout(() => {
+      alert("The app may not be installed. Please check your phone.");
+    }, 500);
+  };
+
   return (
     <ModalPortal>
       <AnimatePresence>
@@ -288,7 +279,7 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="c-bg rounded-lg shadow-lg relative z-[101] w-screen h-screen overflow-y-scroll"
+            className="c-bg rounded-lg shadow-lg relative z-[101] w-screen h-screen md:pt-12 md:px-24 overflow-y-scroll"
           >
             <div className="header p-6 pb-0 flex justify-between items-center mb-4 sticky top-0 c-bg z-[102]">
               <h2 className="text-xl font-semibold">
@@ -304,15 +295,21 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
             </div>
 
             <div className="flex flex-col gap-6 p-6 pt-0">
-              <Accordion activeIndex={1}>
-                <AccordionTab header={t("aboutPayment")}>
-                  <p className="m-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua.
-                  </p>
-                </AccordionTab>
-              </Accordion>
+              <div className="flex flex-col gap-2 pt-0">
+                <Accordion activeIndex={1}>
+                  <AccordionTab header={t("aboutPayment")}>
+                    <p className="m-0">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sed do eiusmod tempor incididunt ut labore et dolore magna
+                      aliqua.
+                    </p>
+                  </AccordionTab>
+                </Accordion>
+
+                <hr className="border border-dashed c-border" />
+
+                <h2 className="text-lg font-semibold">{t("toPay")}</h2>
+              </div>
 
               {/* Step 1 */}
               <div className="relative border p-4 rounded-md c-border payment-box space-y-2">
@@ -367,7 +364,33 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
                         : ""
                     }`}
                   />
+
                   {paymentinfo({ selectedpayment })}
+
+                  <div className="app-buttons">
+                    {selectedpayment === "KPay" ? (
+                      <button
+                        onClick={() => handleOpenApp("kbzpay://")}
+                        className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowe"
+                      >
+                        Open KBZPay
+                      </button>
+                    ) : selectedpayment === "AYAPay" ? (
+                      <button
+                        onClick={() => handleOpenApp("ayapay://")}
+                        className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowe"
+                      >
+                        Open AYA Pay
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleOpenApp("wavepay://")}
+                        className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowe"
+                      >
+                        Open WavePay
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
 

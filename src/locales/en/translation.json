@@ -198,5 +198,6 @@
   "latestLyrics" : "Latest Lyrics",
 
   "aboutPremium" : "About Premium",
-  "toUpgradePremium" : "To upgrade to premium, transfer the correct amount of money to these KPay, AYA Pay, Wave money accounts according to your month plan"
+  "toUpgradePremium" : "To upgrade to premium, transfer the correct amount of money to these KPay, AYA Pay, Wave money accounts according to your month plan",
+  "toPay": "Payment"
 }

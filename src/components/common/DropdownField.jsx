@@ -23,7 +23,6 @@ export const DropdownField = ({
       placeholder="Choose one ..."
       className={`w-full capitalize-first-letter c-bg ${customClass}`}
       disabled={disabled}
-      showClear
       appendTo="self"
     />
   </div>
