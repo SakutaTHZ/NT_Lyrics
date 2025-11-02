@@ -370,7 +370,7 @@ const Landing = () => {
               <p className="font-bold text-lg italic">{t("latestLyrics")}</p>
               <Link
                 to="/NT_Lyrics/lyrics"
-                className="border c-border px-2 py-1 rounded-md text-sm c-reverse c-primary hover:bg-blue-600"
+                className="border c-border px-2 py-1 rounded-md text-sm c-reverse c-primary hover:bg-blue-600 text-nowrap h-fit"
               >
                 {t("seeAll")}
               </Link>

@@ -8,7 +8,7 @@ const InputField = ({ label, value, onChange, placeholder, required, disabled ,c
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`w-full p-2 border rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed ${customClass}`}
+        className={`w-full min-h-12 p-2 border rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed ${customClass}`}
         disabled={disabled}
       />
     </div>

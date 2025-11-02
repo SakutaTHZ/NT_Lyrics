@@ -199,5 +199,7 @@
 
   "aboutPremium" : "About Premium",
   "toUpgradePremium" : "To upgrade to premium, transfer the correct amount of money to these KPay, AYA Pay, Wave money accounts according to your month plan",
-  "toPay": "Payment"
+  "toPay": "Payment",
+  "learnMoreAboutPremiumHere" : "Learn More about premium features here",
+  "accountToTransfer" : "Account to transfer"
 }

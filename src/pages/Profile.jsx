@@ -493,7 +493,7 @@ const Profile = () => {
                       to="/NT_Lyrics/premium"
                       className="text-blue-700 animate-pulse"
                     >
-                      Learn more ...
+                      Learn more
                     </Link>
                   </button>
                 )}

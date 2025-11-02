@@ -350,12 +350,12 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
                   Step - 2
                 </p>
                 <p className="mt-1 text-sm p-2 rounded c-alert-box">
-                  {t("toUpgradePremium")}
+                  {t("toUpgradePremium")} <br/> {t("upgradePremium.paymentMethod")}
                 </p>
 
                 <div className="flex flex-col gap-2">
                   <DropdownField
-                    label={t("upgradePremium.paymentMethod")}
+                    label={t("accountToTransfer")}
                     value={selectedpayment}
                     options={paymentOptions}
                     onChange={setSelectedPayment}
@@ -426,7 +426,7 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
 
                   <div className="relative">
                     <p
-                      className={`text-sm opacity-80 w-full p-2 border mt-1 rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed overflow-hidden text-ellipsis whitespace-nowrap ${
+                      className={`text-xs opacity-80 w-full h-12 p-2 border mt-1 rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed overflow-hidden text-ellipsis whitespace-nowrap ${
                         fieldErrors.file
                           ? "border-red-500 ring-1 ring-red-400"
                           : "!border-gray-500"
@@ -471,7 +471,7 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
                     {t("upgradePremium.makingSureYourPaymentIsCorrect")}
                   </div>
                 ) : (
-                  t("upgradePremium.upgradeButton")
+                  t("upgradeNow")
                 )}
               </button>
             </div>
