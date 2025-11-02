@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
-import { IoInformationCircleOutline, IoSettingsOutline } from "react-icons/io5";
+import { IoSettingsOutline } from "react-icons/io5";
 import { CgTrash } from "react-icons/cg";
 import { Dialog } from "primereact/dialog";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
@@ -410,11 +410,10 @@ const Profile = () => {
               {/* Premium request Status */}
               {isPaymentProcessing && (
                 <div
-                  className="relative w-full bg-blue-50 p-2 rounded-full text-center text-blue-700 font-semibold flex items-center justify-center gap-2 border border-blue-200"
+                  className="relative w-full bg-blue-50 p-2 py-1 rounded-2xl text-center text-blue-700  border border-blue-200 text-sm"
                   onClick={() => setVisible(true)}
                 >
-                  Premium request Pending
-                  <IoInformationCircleOutline size={18} fontWeight={900} />
+                  {t("upgradePremium.yourPaymentIsBeingProcessedPleaseWait")}
                 </div>
               )}
               <Dialog
@@ -469,13 +468,6 @@ const Profile = () => {
                             : "???"}
                         </span>
                       </div>
-                      <div className="w-full bg-yellow-100 text-yellow-900 p-4 rounded-lg border border-yellow-500">
-                        <p>
-                          {t(
-                            "upgradePremium.yourPaymentIsBeingProcessedPleaseWait"
-                          )}
-                        </p>
-                      </div>
                     </div>
                   ) : (
                     <div className="text-center text-gray-500 py-6">
@@ -485,7 +477,7 @@ const Profile = () => {
                 </div>
               </Dialog>
 
-              <div className="relative">
+              {!isPaymentProcessing && (<div className="relative">
                 {userRole !== "premium-user" && defaultGroupCount >= 20 && (
                   <button className="bg-amber-200 text-black px-5 py-1 rounded-full w-full">
                     More features in Premium{" "}
@@ -497,7 +489,7 @@ const Profile = () => {
                     </Link>
                   </button>
                 )}
-              </div>
+              </div>)}
 
               <button
                 className="ml-4 bg-gray-100 rounded-md cursor-pointer p-2 absolute right-4 top-4 z-50"

@@ -13,9 +13,9 @@ const Premium = () => {
   const { t } = useTranslation();
   const columnClass = "p-2 text-pretty";
 
-  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
-
   const { token } = useAuth();
+
+  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
 
   useEffect(() => {
     const checkPayment = async () => {

@@ -11,6 +11,7 @@ import LyricsRow from "../components/special/LyricsRow";
 // Utils
 import {
   changeToDefaultStatus,
+  checkIfPaymentRequested,
   fetchLatestLyrics,
   fetchPopularLyrics,
   fetchTop10Artists,
@@ -105,6 +106,23 @@ const Landing = () => {
     } catch (err) {
       console.error("Error fetching popular lyrics:", err);
     }
+  }, [token]);
+
+  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+
+  useEffect(() => {
+    const checkPayment = async () => {
+      try {
+        const paymentData = await checkIfPaymentRequested(token);
+        if (!paymentData) throw new Error("No payment returned");
+        const exists = paymentData.isExist;
+        setIsPaymentProcessing(exists);
+      } catch (err) {
+        console.error("Failed to fetch payment:", err);
+      }
+    };
+
+    checkPayment();
   }, [token]);
 
   useEffect(() => {
@@ -286,11 +304,11 @@ const Landing = () => {
               <p className="text-lg font-semibold c-text">
                 သီချင်းများနဲ့ ပျော်ရွှင်နိုင်ကြပါစေ ...
               </p>
-              <div className="border c-border rounded-md p-2 flex items-center gap-2">
+              <div className="border c-border-dark rounded-md p-2 flex items-center gap-2">
                 <input
                   type="text"
                   placeholder={t("searchSongs")}
-                  className="w-full outline-0"
+                  className="w-full outline-0 "
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -336,7 +354,7 @@ const Landing = () => {
             )}
 
             {/* Support Us */}
-            {user?.role === "free-user" && (
+            {(user?.role === "free-user" && !isPaymentProcessing) && (
               <div className="relative w-full">
                 <div className="relative flex justify-between border py-4 c-border rounded-md px-4 c-premium-bg mx-auto overflow-hidden">
                   <svg

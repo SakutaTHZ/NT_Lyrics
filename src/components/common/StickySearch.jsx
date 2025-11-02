@@ -30,7 +30,7 @@ export default function StickySearch({ searchTerm, setSearchTerm, title, redirec
           placeholder={title}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className={`w-full p-2 border c-border rounded transition-all duration-300`}
+          className={`w-full p-2 border c-border-dark rounded transition-all duration-300`}
         />
 
         {/* Back Arrow — fades in when stuck */}
