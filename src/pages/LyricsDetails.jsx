@@ -9,7 +9,6 @@ import { BiArrowBack, BiMusic } from "react-icons/bi";
 import googleLogo from "../assets/images/svgs/google.svg";
 //import { fetchLyricById } from "../assets/util/api";
 import charcoal from "../assets/images/charcoal.jpg";
-import loading from "../assets/images/playing.png";
 import {
   addLyricsToCollection,
   fetchLyricById,
@@ -28,6 +27,7 @@ import Metronome from "../components/common/Metronome";
 import ImageGallery from "../components/common/ImageGallery";
 import { useAuth } from "../components/hooks/authContext";
 import { Navigate } from "react-router-dom";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const LyricsDetails = ({
   access,
@@ -122,8 +122,8 @@ const LyricsDetails = ({
 
   if (!lyric) {
     return (
-      <div className="w-screen h-screen flex items-center justify-center">
-        <img src={loading} alt="Loading..." className="w-1/2 mx-auto" />
+      <div className="w-screen h-screen fixed z-[100000] bg-[#00000040] backdrop-blur-xs flex items-center justify-center gap-3 text-white">
+        <AiOutlineLoading3Quarters className="animate-spin" size={20} />
       </div>
     );
   }
@@ -305,14 +305,14 @@ const LyricsDetails = ({
                     </p>
                     {isPremiumUser ? (
                       <button
-                        className="bg-blue-500 p-2 rounded-full hover:bg-blue-600 text-white flex items-center justify-center opacity-75"
+                        className="bg-blue-500 p-2 rounded-full hover:bg-blue-600 text-white flex items-center justify-center"
                         onClick={() => setShowChords(true)}
                       >
                         <BiMusic size={18} />
                       </button>
                     ) : (
                       <button
-                        className="bg-amber-200 p-2 rounded-full hover:bg-amber-300 text-black flex items-center justify-center opacity-75"
+                        className="bg-amber-200 p-2 rounded-full hover:bg-amber-300 text-black flex items-center justify-center"
                         onClick={() => {
                           setMessageType("error");
                           setMessageText(
@@ -350,17 +350,16 @@ const LyricsDetails = ({
                     {/* Artist name */}
                     {lyric.singers.length > 0 && (
                       <div className="flex items-start gap-2">
-                        <p className={`text-sm   min-w-16 max-w-24 p-1`}>
-                          {t("singer")}:
+                        <p className={`text-sm min-w-20 max-w-20 p-1`}>
+                          {t("singer")}
                         </p>
 
                         <div className="w-1/2 flex flex-wrap gap-2">
                           {lyric.singers.map((artistData, index) => (
                             <div
                               key={index}
-                              className={`flex items-center gap-2 border c-border p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
+                              className={`max-w-42 flex items-center gap-2 border c-border p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
                               onClick={() => {
-                                //navigate(`/NT_Lyrics/artist/${artist._id}`);
                                 setSelectedArtist(artistData._id);
                                 setShowArtistDetails(true);
                                 console.log(
@@ -372,42 +371,14 @@ const LyricsDetails = ({
                               <img
                                 src={artistData.photoLink}
                                 alt="Lyrics"
-                                className="w-6 h-6 object-cover rounded-full"
+                                className="w-6 h-6 aspect-square object-cover rounded-full"
                               />
-                              <p>{artistData.name}</p>{" "}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {/* Feature Artist name */}
-                    {lyric.featureArtists.length > 0 && (
-                      <div className="flex flex-wrap items-start gap-2">
-                        <p className={`text-sm  min-w-16 max-w-24 p-1`}>
-                          {t("featuring")}:
-                        </p>
-
-                        <div className="w-1/2 flex flex-wrap gap-2">
-                          {lyric.featureArtists.map((featuringData, index) => (
-                            <div
-                              key={index}
-                              className={`flex items-center gap-2 border c-border p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
-                              onClick={() => {
-                                //navigate(`/NT_Lyrics/artist/${artist._id}`);
-                                setSelectedArtist(featuringData._id);
-                                setShowArtistDetails(true);
-                                console.log(
-                                  "Selected artist ID:",
-                                  featuringData._id
-                                );
-                              }}
-                            >
-                              <img
-                                src={featuringData.photoLink}
-                                alt="Lyrics"
-                                className="w-6 h-6 object-cover rounded-full"
-                              />
-                              <p>{featuringData.name}</p>
+                              <p
+                                className="truncate text-ellipsis overflow-hidden whitespace-nowrap flex-1 text-sm text-gray-800"
+                                title={artistData.name} // shows full name on hover
+                              >
+                                {artistData.name}
+                              </p>
                             </div>
                           ))}
                         </div>
@@ -416,14 +387,14 @@ const LyricsDetails = ({
                     {/* Writer name */}
                     {lyric.writers.length > 0 && (
                       <div className="flex items-start gap-2">
-                        <p className={`text-sm  min-w-16 max-w-24 p-1`}>
-                          {t("writer")}:
+                        <p className={`text-sm  min-w-20 max-w-20 p-1`}>
+                          {t("writer")}
                         </p>
                         <div className="w-1/2 flex flex-wrap gap-2">
                           {lyric.writers.map((writerData, index) => (
                             <div
                               key={index}
-                              className={`flex items-center gap-2 border c-border p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
+                              className={`max-w-42 flex items-center gap-2 border c-border p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
                               onClick={() => {
                                 //navigate(`/NT_Lyrics/artist/${artist._id}`);
                                 setSelectedArtist(writerData._id);
@@ -437,9 +408,53 @@ const LyricsDetails = ({
                               <img
                                 src={writerData.photoLink}
                                 alt="Lyrics"
-                                className="w-6 h-6 object-cover rounded-full"
+                                className="w-6 h-6 aspect-square object-cover rounded-full"
                               />
-                              <p className="text-nowrap">{writerData.name}</p>
+                              <p
+                                className="truncate text-ellipsis overflow-hidden whitespace-nowrap flex-1 text-sm text-gray-800"
+                                title={writerData.name}
+                              >
+                                {writerData.name}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Feature Artist name */}
+                    {lyric.featureArtists.length > 0 && (
+                      <div className="flex flex-wrap items-start gap-2">
+                        <p className={`text-sm  min-w-16 max-w-20 p-1`}>
+                          {t("featuring")}
+                        </p>
+
+                        <div className="w-1/2 flex flex-wrap gap-2">
+                          {lyric.featureArtists.map((featuringData, index) => (
+                            <div
+                              key={index}
+                              className={`max-w-42 flex items-center gap-2 border c-border p-1 px-2 pr-3 rounded-full cursor-pointer text-nowrap`}
+                              onClick={() => {
+                                //navigate(`/NT_Lyrics/artist/${artist._id}`);
+                                setSelectedArtist(featuringData._id);
+                                setShowArtistDetails(true);
+                                console.log(
+                                  "Selected artist ID:",
+                                  featuringData._id
+                                );
+                              }}
+                            >
+                              <img
+                                src={featuringData.photoLink}
+                                alt="Lyrics"
+                                className="w-6 h-6 aspect-square object-cover rounded-full"
+                              />
+                              <p
+                                className="truncate text-ellipsis overflow-hidden whitespace-nowrap flex-1 text-sm text-gray-800"
+                                title={featuringData.name}
+                              >
+                                {featuringData.name}
+                              </p>
                             </div>
                           ))}
                         </div>

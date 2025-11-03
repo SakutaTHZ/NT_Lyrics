@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import { apiUrl } from "../../assets/util/api";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Accordion, AccordionTab } from "primereact/accordion";
+import PaymentGuide from "./PaymentGuide";
 
 const UpgradeToPremium = ({ onClose, onSuccess }) => {
   const { t } = useTranslation();
@@ -300,18 +301,17 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
             <div className="flex flex-col gap-6 p-6 pt-0">
               <div className="flex flex-col gap-2 pt-0">
                 <Accordion activeIndex={1}>
-                  <AccordionTab header={t("aboutPayment")}>
-                    <p className="m-0">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua.
-                    </p>
+                  <AccordionTab
+                    header={t("aboutPayment")}
+                    headerClassName="bg-blue-100 text-blue-700 font-medium rounded-md"
+                  >
+                    <PaymentGuide />
                   </AccordionTab>
                 </Accordion>
 
                 <hr className="border border-dashed c-border" />
 
-                <h2 className="text-lg font-semibold">{t("toPay")}</h2>
+                <h2 className="text-lg font-semibold my-2">{t("toPay")}</h2>
               </div>
 
               {/* Step 1 */}
@@ -350,7 +350,8 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
                   Step - 2
                 </p>
                 <p className="mt-1 text-sm p-2 rounded c-alert-box">
-                  {t("toUpgradePremium")} <br/> {t("upgradePremium.paymentMethod")}
+                  {t("toUpgradePremium")} <br />{" "}
+                  {t("upgradePremium.paymentMethod")}
                 </p>
 
                 <div className="flex flex-col gap-2">

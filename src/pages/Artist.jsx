@@ -144,7 +144,7 @@ const Artist = ({ artistId, onClose }) => {
         setLoading(false);
       }
     },
-    [debouncedSearchTerm, name,token]
+    [debouncedSearchTerm, name, token]
   );
 
   //const [hasToken, setHasToken] = useState(false);
@@ -221,22 +221,21 @@ const Artist = ({ artistId, onClose }) => {
           >
             {/* ...all your modal content here... */}
             <div className="relative p-4 py-4 md:px-24 md:pt-16 ">
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex items-start justify-between gap-4">
                 {/* header content */}
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-start gap-4">
                   <img
                     src={artist?.photoLink || "https://via.placeholder.com/150"}
                     loading="lazy"
                     alt="Lyrics"
-                    className="w-16 h-16 object-contain rounded-full"
+                    className="w-16 h-16 aspect-square object-contain rounded-full"
                   />
                   <div>
                     {artist ? (
-                      <p className="font-bold text-xl italic flex items-center gap-2">
+                      <p className="font-bold text-xl italic flex items-start gap-2">
                         {artist.name}
-                        <span className="text-sm text-gray-500 font-normal">
-                          {" "}
+                        <span className="text-sm translate-y-1 text-gray-500 font-normal text-nowrap">
                           [
                           {artist.type === "singer"
                             ? t("singer")
@@ -256,7 +255,7 @@ const Artist = ({ artistId, onClose }) => {
                     </div>
                   </div>
                 </div>
-                <button onClick={handleClose} className="text-blue-500">
+                <button onClick={handleClose} className="h-full text-blue-500 flex items-start translate-y-1">
                   <BiArrowBack size={20} />
                 </button>
               </div>

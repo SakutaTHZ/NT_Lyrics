@@ -51,7 +51,7 @@
   --color-error-tint: 254, 242, 242; /* Red-50: Light Gradient End */
 
   /* Alert (Yellow/Amber) */
-  --color-alert-strong: 180, 83, 9 ; /* Amber-500: Text/Icon */
+  --color-alert-strong: 180, 83, 9; /* Amber-500: Text/Icon */
   --color-alert-medium: 253, 230, 138; /* Yellow-200: Border/Water Drop */
   --color-alert-tint: 255, 251, 235; /* Yellow-50: Light Gradient End */
 
@@ -65,7 +65,7 @@
   --color-info-medium: 191, 219, 254; /* Blue-200: Border/Water Drop */
   --color-info-tint: 239, 246, 255; /* Blue-50: Light Gradient End */
 
-  --soft-shadow: 0,0,0,0.05;
+  --soft-shadow: 0, 0, 0, 0.05;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -338,7 +338,7 @@ img {
   );
 }
 
-.p-dropdown-label{
+.p-dropdown-label {
   border: 0 !important;
 }
 
@@ -552,7 +552,9 @@ img {
 /* Primary Color Displacement/Shadow */
 .glitch-text::before,
 .glitch-text::after {
-  content: attr(data-text); /* Important: You might need to add data-text prop to your motion.span */
+  content: attr(
+    data-text
+  ); /* Important: You might need to add data-text prop to your motion.span */
   position: absolute;
   top: 0;
   left: 0;
@@ -883,7 +885,7 @@ body.dark .c-announcement-bg {
 }
 .c-info-box {
   background: rgb(var(--color-info-tint)) !important;
-  color: rgb(var(--color-info-strong)) ;
+  color: rgb(var(--color-info-strong));
   border: 1px solid rgb(var(--color-info-medium)) !important;
 }
 
@@ -909,35 +911,35 @@ body.dark {
   }
 }
 
-.c-g-bg{
+.c-g-bg {
   background: rgb(var(--color-bg-body)) !important;
 }
 
-.c-soft-shadow{
+.c-soft-shadow {
   background: rgb(var(--soft-shadow)) !important;
 }
 
-.fullCheckBox{
-  .p-checkbox-box{
+.fullCheckBox {
+  .p-checkbox-box {
     background: rgb(var(--color-error-tint)) !important;
-  border: 2px solid rgb(var(--color-error-medium)) !important;
+    border: 2px solid rgb(var(--color-error-medium)) !important;
   }
 }
 
-.p-accordion-content{
-  padding:12px !important;
+.p-accordion-content {
+  padding: 12px !important;
   border-color: rgb(var(--color-border-base)) !important;
 }
 
+.p-accordion-header-link {
+  padding: 0.75em;
+  background: rgb(var(--color-info-tint)) !important;
 
-.p-accordion-header-link{
-  padding: .75em;
-  background-color: rgb(var(--color-bg-card)) !important;
-  border-color: rgb(var(--color-border-base)) !important;
+  border: 1px solid rgb(var(--color-info-medium)) !important;
   color: rgb(var(--color-text-base)) !important;
 }
 
-.p-accordion-content{
+.p-accordion-content {
   background-color: rgb(var(--color-fade-overlay)) !important;
   color: rgb(var(--color-text-base)) !important;
 }

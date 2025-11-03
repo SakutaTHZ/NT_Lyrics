@@ -45,7 +45,7 @@ const NAV_LINKS = [
 ];
 
 const Nav = () => {
-  const [logging, setLogging] = useState(false)
+  const [logging, setLogging] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { vibratePattern } = useVibration();
@@ -85,13 +85,11 @@ const Nav = () => {
 
   return (
     <>
-    
-          {logging && (
-            <div className="w-screen h-screen fixed z-[100000] bg-[#00000080] backdrop-blur-xs flex items-center justify-center gap-3 text-white">
-              <AiOutlineLoading3Quarters className="animate-spin" size={20} />
-              <span>Logging in...</span>
-            </div>
-          )}
+      {logging && (
+        <div className="w-screen h-screen fixed z-[100000] bg-[#00000040] backdrop-blur-xs flex items-center justify-center gap-3 text-white">
+          <AiOutlineLoading3Quarters className="animate-spin" size={20} />
+        </div>
+      )}
       {/* Desktop Nav */}
       {!isMobile ? (
         <nav className="animate-down-start w-screen h-12 shadow-sm fixed top-0 flex justify-between items-center px-4 md:px-20 c-bg z-[10000]">
@@ -253,8 +251,8 @@ const Nav = () => {
             ) : (
               <button
                 //onClick={() => handleNav("/NT_Lyrics/login", "dandadan")}
-                onClick={()=>{
-                  setLogging(true)
+                onClick={() => {
+                  setLogging(true);
                   googleSignin();
                 }}
                 className={`${isActive(
