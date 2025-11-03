@@ -150,10 +150,12 @@ const Chords = ({ imageLink, chordKey, onClose, isPremium }) => {
               <div className="flex mt-4">
                 <div className="grid gap-2">
                   {Object.keys(groupedVariants).map((chord) => (
-                    <div className={`${
-                          activeVariant === chord
-                            && "c-soft-shadow"
-                        } flex p-2 w-20 rounded-l-full transition-all`} key={chord}>
+                    <div
+                      className={`${
+                        activeVariant === chord && "c-soft-shadow"
+                      } flex p-2 w-20 rounded-l-full transition-all`}
+                      key={chord}
+                    >
                       <button
                         onClick={() => {
                           setActiveVariant(chord);
@@ -195,20 +197,38 @@ const Chords = ({ imageLink, chordKey, onClose, isPremium }) => {
 
                   {/* Display chord images */}
                   {activeVariant && groupedVariants[activeVariant] && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 py-2">
-                      {groupedVariants[activeVariant].map((img) => (
-                        <div key={img.name} className="text-center">
-                          <p className="text-sm text-left mb-2">{img.name}</p>
-                          <div className="bg-white opacity-75">
-                            <img
-                              src={img.src}
-                              alt={img.name}
-                              className="w-full h-auto border c-border rounded object-contain aspect-square"
-                            />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeVariant} // crucial — triggers transition when variant changes
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.98 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 py-2"
+                      >
+                        {groupedVariants[activeVariant].map((img) => (
+                          <motion.div
+                            key={img.name}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="text-center"
+                          >
+                            <p className="text-sm text-left mb-2">{img.name}</p>
+                            <div className="bg-white/75">
+                              <motion.img
+                                src={img.src}
+                                alt={img.name}
+                                className="w-full h-auto border c-border rounded object-contain aspect-square"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.4 }}
+                              />
+                            </div>
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    </AnimatePresence>
                   )}
                 </div>
               </div>
