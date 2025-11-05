@@ -6,7 +6,6 @@
   "emailRequired": "Email cannot be empty.",
   "passwordRequired": "New Password cannot be empty.",
   "updateFailed": "An error occurred while updating the profile.",
-
   "setting": "Settings",
   "info": "Info",
   "app": "App",
@@ -31,7 +30,7 @@
   "learnMore": "Learn More",
   "myanmar": "Myanmar",
   "english": "English",
-
+  "japan" : "Japan",
   "haveFunWithSongs": "Have fun with songs",
   "discoverLyrics": "Discover lyrics of your favorite songs",
   "searchSongs": "Search for songs",
@@ -41,70 +40,54 @@
   "popularArtists": "Popular Artists",
   "featureVideos": "Feature Videos",
   "Announcement": "Announcement",
-
   "songLyrics": "Song Lyrics",
   "lyricHasBeenAddedToCollection": "The lyrics have been added to your collection.",
   "lyricHasBeenRemovedFromCollection": "The lyrics have been removed from your collection.",
   "lyricNotFound": "Lyrics not found.",
-
   "artistsList": "Artists List",
   "artistDetails": "Artist Details",
   "artistNotFound": "Artist not found.",
   "noArtistsFound": "No artists found.",
   "searchforArtists": "Search for artists",
-
   "addToCollection": "Add to your collection",
   "removeFromCollection": "Remove from your collection",
   "albumn": "Album",
   "artist": "Artist",
-  "singer" : "Singer",
+  "singer": "Singer",
   "writer": "Writer",
   "featuring": "Featuring",
-  "backtoLyrics" : "Back to Lyrics",
-  "loginToTryCollection" : "Login to try Collections",
-
+  "backtoLyrics": "Back to Lyrics",
+  "loginToTryCollection": "Login to try Collections",
   "enterNewCollectionName": "Enter New Collection Name",
   "createNewCollection": "Create New Collection",
-  "collections" : "Collections",
+  "collections": "Collections",
   "maxCollectionsReached": "You have reached the maximum number of collections (20).",
   "reachedMaxLength": "You’ve reached the 20-character limit.",
   "collectionAlreadyExists": "Collection with this name already exists.",
-
   "aboutNtLyrics": "About NT Lyrics",
   "ntlyricsDescription": "began as a humble Facebook page — created out of necessity to help beginner musicians navigate the often messy world of Burmese music chords. Back in the early days, finding accurate chords and lyrics for local songs was more about guesswork than guidance. That frustration gave birth to this project. What started as a few shared posts quickly gained traction. Musicians, singers, and hobbyists began using and contributing, turning the page into a quiet but growing hub. Today, NT Lyric n Chord is a dedicated space — built not just to host lyrics and chords, but to make playing and learning music feel accessible for everyone. We’re not a corporation, and we’re not some faceless aggregator. This project is run by people who play music too.",
-
   "aboutApp": "About App",
   "appDescription": "With over 3000 song lyrics and chords, we strive to provide accurate lyrics and chords for every song.",
   "premiumToo": "Not only do we provide song lyrics, but we also include YouTube videos for audio listening and practice.",
-
   "3UserTypes": "In the app, users are categorized into 3 types:",
   "guestUsers": "1. Free User: Can check out a limited number of lyrics and features without creating an account. (Can access 50 free lyrics)",
   "freeUsers": "2. Registered User: By creating an account, users can access more lyrics and features. (Can access 200 free lyrics)",
   "premiumUsers": "3. Premium User: By subscribing to Premium, users unlock all lyrics and exclusive features. (Can access all lyrics and Youtube videos)",
-
   "userExtraNote": "Lyrics can be organized into custom collections for easy access and practice whenever needed.",
   "learnMoreBoutPremium": "Learn more about the benefits of being a Premium User #.",
-
   "aboutPayment": "About Payment",
   "paymentDescription": "The Premium User subscription is priced at \n6 months = 10,000 MMK  and \n1 year = 20,000 MMK.",
-
   "noteForPayment": "* Please make sure to double-check your payment details before submitting your request. Incorrect information may lead to delays in processing your subscription.",
-
   "messageToUser": "Message to User",
   "futurePlans": "In the near future we will try to upgrade it to a mobile app and add more features. Current Premium Users will be able to use the mobile app without any extra charges.",
-  "weWillAddMoreSongs" : "We will continuously add more songs and features to enhance your experience.",
+  "weWillAddMoreSongs": "We will continuously add more songs and features to enhance your experience.",
   "weWillCorrectMistakes": "We will correct any mistakes in lyrics and chords to ensure accuracy.",
-
   "WeWillTryOurBestToMakeThisAppBetter": "We will try our best to make this app better for all music lovers.",
-
-  "supportNT" : "The app’s owner, NT, is a cancer patient. If you wish to make a medical donation, you can scan the QR code below or directly support by purchasing a Premium account.",
-
+  "supportNT": "The app’s owner, NT, is a cancer patient. If you wish to make a medical donation, you can scan the QR code below or directly support by purchasing a Premium account.",
   "youDontHaveAccessToThisFeature": "You don't have access to this feature.",
   "youHaveToBePremiumUserToAccessThisFeature": "You have to be a Premium user to access this feature.",
-
   "premiumFeatures": "Premium Features",
   "upgraedToGetTheseExclusiveFeaturesAndBenifits": "Upgrade to get these exclusive features and benefits.",
-
   "upgradeNow": "Upgrade Now",
   "unlockAllLyrics": "Unlock all lyrics",
   "unlockAllLyricsExplained": "Premium users can access and view all available songs.Guest accounts and free users can only open and view a limited number of songs.",
@@ -112,7 +95,7 @@
   "thisAlsoUnlocksCollections": "This also unlocks Collections, allowing you to create and manage your own lyric collections.",
   "collectionsexplained": {
     "title": "Save Lyrics in Collections",
-    "explained" : "You can save your favourite lyrics to collection so You don't have to search for it again",
+    "explained": "You can save your favourite lyrics to collection so You don't have to search for it again",
     "description": "Collections are like your own albums for lyrics. You can group your favorite lyrics into categories you love.",
     "limitInfo": "You can create up to 20 collections, each holding up to 20 lyrics.",
     "defaultInfo": "Your Default Collection is unlimited, so you can always save more lyrics there.",
@@ -120,18 +103,18 @@
   },
   "chordsExplained": {
     "title": "Learn How to hold Chords",
-    "explained" : "If there is a chord you don't know You can search it easily"
+    "explained": "If there is a chord you don't know You can search it easily"
   },
   "metronomeExplained": {
     "title": "Use Metronomme",
-    "explained" : "You can use this feature to have a better timing when you play"
+    "explained": "You can use this feature to have a better timing when you play"
   },
   "transposeExplained": {
     "title": "Can Transpose Keys",
     "explained": "If you want to change the chords different from the original chords you can use this transpose feature"
   },
-  "canWatchYoutube" : "Can Watch Youtube Videos",
-  "canWatchYoutubeExplained" : "Not only Lyrics, you can also watch and play with Youtube Videos for the Lyrics",
+  "canWatchYoutube": "Can Watch Youtube Videos",
+  "canWatchYoutubeExplained": "Not only Lyrics, you can also watch and play with Youtube Videos for the Lyrics",
   "SeeFeatures": "See Features",
   "noAds": "No Ads",
   "Themes": "Themes",
@@ -159,13 +142,13 @@
     "uploadAValidPaymentProof": "Upload a Valid Payment Proof",
     "uploadFileRequired": "*",
     "uploadNotice": "* Please ensure you upload a clear and valid screenshot of your payment receipt.",
-    "screenshotHere" : "​Enter the screenshot of payment here",
+    "screenshotHere": "​Enter the screenshot of payment here",
     "upgradeButton": "Upgrade Now",
     "copyAlert": "Phone number copied to clipboard!",
     "total": "Total",
     "yourRequestIsBeingProcessed": "Your request is being processed. Please wait for confirmation.",
     "yourPaymentIsBeingProcessedPleaseWait": "Your payment is being processed. Please wait for confirmation.",
-    "makingSureYourPaymentIsCorrect":"Making sure your payment is Correct"
+    "makingSureYourPaymentIsCorrect": "Making sure your payment is Correct"
   },
   "youCanOnlyAddUpTo20SongsToEachCollection": "You can only add up to 20 songs to each collection.",
   "profileUpdatedSuccessfully": "Profile updated successfully.",
@@ -175,31 +158,51 @@
   "youHaveReachedTheMaximumNumberOfCollections": "You have reached the maximum number of collections.",
   "chordsList": "Chords List",
   "chordReadingAvailableForPremiumUsers": "Chord reading is available for Premium users.",
-
   "WelcomeToNTLyrics": "Welcome to NT Lyrics\n We are currently uploading more lyrics. Stay tuned!. \n New App Features are coming soon!",
-
   "AddThisApptoYourPhone": "Add This App to Your Phone",
   "AppInstalling": "App Installing...",
   "AppIsAlreadyInstalled": "App is already installed.",
-
   "ThreeTypesOfUsers": "There are three types of users in NT Lyrics:",
-
   "signInToSeeMoreLyrics": "Sign In to see more lyrics",
-
   "collectiondeletedSuccessfully": "Collection deleted successfully",
-  "defaultCollectionCannotBeDeleted" : "Default Collection cannot be deleted",
-  "areYouSureYouWantToDeleteThisCollection" : "Are you sure you want to delete this Collection?",
-  "collected" : "Collected",
-  "saving":"Saving",
-  "saveSelections" : "Save Selections",
-  "collectionLimitReached" : "Collection Limit reached!",
+  "defaultCollectionCannotBeDeleted": "Default Collection cannot be deleted",
+  "areYouSureYouWantToDeleteThisCollection": "Are you sure you want to delete this Collection?",
+  "collected": "Collected",
+  "saving": "Saving",
+  "saveSelections": "Save Selections",
+  "collectionLimitReached": "Collection Limit reached!",
   "lyrics": "Lyrics",
-  "loadingCollections" : "Loading Colections",
-  "latestLyrics" : "Latest Lyrics",
-
-  "aboutPremium" : "About Premium",
-  "toUpgradePremium" : "To upgrade to premium, transfer the correct amount of money to these KPay, AYA Pay, Wave money accounts according to your month plan",
+  "loadingCollections": "Loading Colections",
+  "latestLyrics": "Latest Lyrics",
+  "aboutPremium": "About Premium",
+  "toUpgradePremium": "To upgrade to premium, transfer the correct amount of money to these KPay, AYA Pay, Wave money accounts according to your month plan",
   "toPay": "Payment",
-  "learnMoreAboutPremiumHere" : "Learn More about premium features here",
-  "accountToTransfer" : "Account to transfer"
+  "learnMoreAboutPremiumHere": "Learn More about premium features here",
+  "accountToTransfer": "Account to transfer",
+  "paymentGuide": {
+    "title": "Payment Guide",
+    "guideIntro": "To make a payment, users must first transfer the required amount using one of the following methods: KPay, AYA Pay, or Wave Money. Then, they must submit the transfer receipt (slip) in the App for approval.",
+    "topay": "To Make a Payment",
+    "step1": "From the Home page, tap 'Upgrade Now'. (Image 1)",
+    "step2": "Select the plan you want to purchase. Choose either a 6-month or 1-year plan. (Image 2)",
+    "step3": "Transfer the value of the plan you wish to purchase to the provided accounts using any payment app (KPay, AYA Pay, Wave Money) of your choice. (You can use any Pay App installed on your phone to transfer.) (Image 3)",
+    "step3extra": "Take a screenshot of the money transfer E-Receipt. If transferring through external shops/agents, ask for the receipt (slip) or take a photo of it. (Image 3/1)",
+    "step4": "Return to the App and enter the phone number you used for the money transfer. (Image 4)",
+    "step5": "Upload the screenshot/photo of the money transfer receipt through the provided box. (Image 4)",
+    "step5extra": "(When the Camera and Photos and Videos icons appear, tap 'Photos and Videos' and select the saved screenshot from your Gallery.) (Image 5), (Image 5/1)",
+    "step6": "Tap 'Upgrade Now'. (Image 6)",
+    "step6extra": "*The Admin team will check the transfer receipt and phone number, then process the approval. (Image 7)",
+    "step7": "To confirm your Premium status, press and pull down on your phone screen to Refresh. (Image 7)",
+    "step8": "A message stating 'You are now a Premium user.' will appear on the Home Screen. (Image 8)",
+    "step8extra": "Tap on that message. The same status will also be displayed in the Profile section.",
+    "withoutPremium": {
+      "intro": "If you wish to subscribe to Premium without going through the above steps:",
+      "step1": "The desired Plan (6 months / 12 months)",
+      "step2": "The E-Receipt / Slip image of the transfer",
+      "step3": "Phone number",
+      "step4": "User Name",
+      "step5": "Email",
+      "outro": "You can directly send this information to the given phone number's Viber account to purchase."
+    }
+  }
 }

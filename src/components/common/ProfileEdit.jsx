@@ -336,6 +336,22 @@ const ProfileEdit = ({
                               {t("english")}
                             </label>
                           </div>
+                          <div className="flex align-items-center">
+                            <RadioButton
+                              inputId="language"
+                              name="language"
+                              value="jp"
+                              onChange={(e) => {
+                                setIsGlitching(true);
+                                setTimeout(() => setLanguage(e.value), 300);
+                                setTimeout(() => setIsGlitching(false), 500);
+                              }}
+                              checked={language === "jp"}
+                            />
+                            <label htmlFor="language" className="ml-2">
+                              {t("japan")}
+                            </label>
+                          </div>
                         </div>
                       </div>
 

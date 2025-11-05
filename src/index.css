@@ -785,6 +785,22 @@ img {
   display: inline-block;
 }
 
+.payment-list {
+  counter-reset: list-counter;
+  list-style: none;
+  padding-left: 0;
+}
+
+.payment-list li {
+  counter-increment: list-counter;
+}
+
+.payment-list li::before {
+  content: counter(list-counter) ") ";
+  font-weight: 700; /* makes the number even bolder if you want contrast */
+  margin-right: 4px;
+}
+
 /* -------------------------------------------------------------------------- */
 /* 3. Custom Classes                                                          */
 /* -------------------------------------------------------------------------- */
@@ -942,4 +958,6 @@ body.dark {
 .p-accordion-content {
   background-color: rgb(var(--color-fade-overlay)) !important;
   color: rgb(var(--color-text-base)) !important;
+  box-shadow: 0px 0px 5px rgb(var(--soft-shadow)),0px 0px 10px rgb(var(--soft-shadow)),0px 0px 20px rgb(var(--soft-shadow));
+  transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
