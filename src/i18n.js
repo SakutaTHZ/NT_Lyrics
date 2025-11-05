@@ -4,12 +4,14 @@ import { initReactI18next } from "react-i18next";
 import en from "./locales/en/translation.json";
 import my from "./locales/my/translation.json";
 import jp from "./locales/jp/translation.json";
+import th from "./locales/th/translation.json";
 
 i18n.use(initReactI18next).init({
   resources: {
     en: { translation: en },
     my: { translation: my },
     jp: { translation: jp },
+    th: { translation: th },
   },
   lng: localStorage.getItem("language") || "my", // Set initial language
   fallbackLng: "en",
