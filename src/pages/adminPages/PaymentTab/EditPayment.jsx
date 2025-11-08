@@ -6,6 +6,7 @@ import useModalEscClose from "../../../components/hooks/useModalEscClose";
 import { apiUrl } from "../../../assets/util/api";
 import { RoleTab } from "../UsersTab/UserRow";
 import { useAuth } from "../../../components/hooks/authContext";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const formatIsoDate = (input) => {
   console.log("original - " + input)
@@ -18,6 +19,8 @@ const formatIsoDate = (input) => {
 const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
   const { token } = useAuth();
   useModalEscClose(onClose);
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -63,6 +66,7 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
   }, [request.userId, token, showNewMessage]);
 
   const ApprovePayment = async (requestId, token) => {
+    setLoading(true);
     const response = await fetch(
       `${apiUrl}/paymentRequests/approvePayment/${requestId}`,
       {
@@ -81,11 +85,15 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
       console.log(errorData);
       throw new Error(errorData.message || "Failed to approve payment");
     }
+    setLoading(false);
     showNewMessage("success", "User updated successfully!");
     return response.json();
   };
 
+  const [loadingReject, setLoadingReject] = useState(false);
+
   const RejectPayment = async (requestId, token) => {
+    setLoadingReject(true);
     const response = await fetch(
       `${apiUrl}/paymentRequests/rejectPayment/${requestId}`,
       {
@@ -101,6 +109,7 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
       showNewMessage("error", errorData.message);
       throw new Error(errorData.message || "Failed to reject payment");
     }
+    setLoadingReject(false);
     showNewMessage("success", "User updated successfully!");
     return response.json();
   };
@@ -230,7 +239,17 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
                   }}
                   className="w-full cursor-pointer mt-4 bg-red-200 text-red-700 font-semibold px-4 py-2 rounded"
                 >
-                  Reject
+                  {loadingReject ? (
+                    <div className="flex justify-center items-center gap-2">
+                      <AiOutlineLoading3Quarters
+                        size={16}
+                        className="animate-spin text-2xl text-red-800"
+                      />
+                      Rejecting...
+                    </div>
+                  ) : (
+                    "Reject"
+                  )}
                 </button>
                 <button
                   onClick={async () => {
@@ -240,7 +259,19 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
                   }}
                   className="w-full cursor-pointer mt-4 bg-green-200 text-green-700 font-semibold px-4 py-2 rounded"
                 >
-                  Approve
+                  <div className="flex justify-center items-center gap-2">
+                    {loading ? (
+                      <div className="flex justify-center items-center gap-2">
+                        <AiOutlineLoading3Quarters
+                          size={16}
+                          className="animate-spin text-2xl text-green-800"
+                        />
+                        Approving...
+                      </div>
+                    ) : (
+                      "Approve"
+                    )}
+                  </div>
                 </button>
                 <button
                   onClick={onClose}
