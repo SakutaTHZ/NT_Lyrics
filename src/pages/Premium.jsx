@@ -11,6 +11,10 @@ import { Accordion, AccordionTab } from "primereact/accordion";
 import PaymentGuide from "../components/common/PaymentGuide";
 
 const Premium = () => {
+  // get index from url params
+  const pageIndex =
+    new URLSearchParams(window.location.search).get("page") || 1;
+
   const { t } = useTranslation();
   const columnClass = "p-2 text-pretty";
 
@@ -67,16 +71,31 @@ const Premium = () => {
                   {t("aboutPremium")}
                 </p>
               </h2>
-
-              
             </div>
 
             {/* Flavour Text */}
             {/*<p>{t("upgraedToGetTheseExclusiveFeaturesAndBenifits")}</p>*/}
 
-            <Accordion activeIndex={1}>
+            {!isPaymentProcessing && (
+              <button
+                className="loading-animation w-full c-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 my-2"
+                onClick={openUpgradeModal}
+              >
+                {t("upgradeNow")}
+              </button>
+            )}
+
+            <Accordion activeIndex={pageIndex - 1} className="w-full">
               <AccordionTab header={t("aboutPayment")}>
-                <PaymentGuide/>
+              <div className="w-full aspect-video bg-gray-300 rounded-md mb-4">
+                      <iframe
+                        className="w-full h-full rounded-md"
+                        src="https://www.youtube.com/embed/n5HVa6TJ4Zk"
+                        title="YouTube video player"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                <PaymentGuide />
               </AccordionTab>
               <AccordionTab header={t("premiumFeatures")}>
                 {/* Features Comparison */}
@@ -351,14 +370,7 @@ const Premium = () => {
               </AccordionTab>
             </Accordion>
 
-            {!isPaymentProcessing && (
-              <button
-                className="loading-animation w-full c-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 my-2 mb-8"
-                onClick={openUpgradeModal}
-              >
-                {t("upgradeNow")}
-              </button>
-            )}
+            <span className="loading-animation w-full text-white px-4 py-2 rounded-lg my-2 mb-8"></span>
           </div>
         </div>
       </div>

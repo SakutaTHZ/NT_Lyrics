@@ -250,7 +250,7 @@ const ProfileEdit = ({
                           Premium
                         </span>
                         <Link
-                          to={"/NT_Lyrics/premium"}
+                          to={"/NT_Lyrics/premium?page=2"}
                           title="See Features"
                           className="ml-auto text-blue-500 font-semibold underline"
                         >
@@ -283,7 +283,7 @@ const ProfileEdit = ({
                       </p>
                       <p className="text-gray-500">[{t("tryPremium")}]</p>
                       <Link
-                        to={"/NT_Lyrics/premium"}
+                        to={"/NT_Lyrics/premium?page=2"}
                         className="c-primary text-black px-2 py-2 rounded-md text-center"
                       >
                         {t("learnMore")}...

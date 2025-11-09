@@ -354,7 +354,7 @@ const Landing = () => {
             )}
 
             {/* Support Us */}
-            {(user?.role === "free-user" && !isPaymentProcessing) && (
+            {user?.role === "free-user" && !isPaymentProcessing && (
               <div className="relative w-full">
                 <div className="relative flex justify-between border py-4 c-border rounded-md px-4 c-premium-bg mx-auto overflow-hidden">
                   <svg
@@ -472,7 +472,7 @@ const Landing = () => {
               <div className="w-full aspect-video bg-gray-300 rounded-md">
                 <iframe
                   className="w-full h-full rounded-md"
-                  src="https://www.youtube-nocookie.com/embed/n_XxP4K1iYA?si=Bo-75TdZD02fZtAf"
+                  src="https://www.youtube.com/embed/n5HVa6TJ4Zk"
                   title="YouTube video player"
                   allowFullScreen
                 ></iframe>

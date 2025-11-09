@@ -15,7 +15,6 @@ import { useTranslation } from "react-i18next";
 import { apiUrl } from "../../assets/util/api";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Accordion, AccordionTab } from "primereact/accordion";
-import PaymentGuide from "./PaymentGuide";
 
 const UpgradeToPremium = ({ onClose, onSuccess }) => {
   const { t } = useTranslation();
@@ -305,7 +304,14 @@ const UpgradeToPremium = ({ onClose, onSuccess }) => {
                     header={t("aboutPayment")}
                     headerClassName="bg-blue-100 text-blue-700 font-medium rounded-md"
                   >
-                    <PaymentGuide />
+                    <div className="w-full aspect-video bg-gray-300 rounded-md">
+                      <iframe
+                        className="w-full h-full rounded-md"
+                        src="https://www.youtube.com/embed/n5HVa6TJ4Zk"
+                        title="YouTube video player"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
                   </AccordionTab>
                 </Accordion>
 

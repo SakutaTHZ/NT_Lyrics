@@ -523,7 +523,7 @@ const Profile = () => {
                   <button className="bg-amber-200 text-black px-5 py-1 rounded-full w-full">
                     More features in Premium{" "}
                     <Link
-                      to="/NT_Lyrics/premium"
+                      to="/NT_Lyrics/premium?page=2"
                       className="text-blue-700 animate-pulse"
                     >
                       {t("learnMore")}

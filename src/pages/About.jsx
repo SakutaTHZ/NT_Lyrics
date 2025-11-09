@@ -3,6 +3,7 @@ import KpayQR from "../assets/images/Kpaythz.jpg";
 import cover from "../assets/images/cover_bg.png";
 
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 const About = () => {
   const { t } = useTranslation();
@@ -65,24 +66,22 @@ const About = () => {
               </p>
 
               <p className="leading-relaxed c-bg p-2 rounded-md text-md z-10 relative">
-                <a
-                  href="/NT_Lyrics/premium"
-                  className="underline rounded-md text-md z-10 relative c-text-primary font-semibold"
-                >
+                <Link to="/NT_Lyrics/premium?page=2" className="underline rounded-md text-md z-10 relative c-text-primary font-semibold">
                   {t("learnMoreBoutPremium")}
-                </a>
+                </Link>
               </p>
             </section>
 
             <hr className="c-border" />
 
             <section>
-              <h2 className="font-bold text-2xl italic mb-2">
-                {t("aboutPayment")}
-              </h2>
-              <p className="leading-relaxed c-bg p-4 px-2 rounded-md text-md z-10 relative whitespace-pre-line">
+              <p className="leading-relaxed c-bg p-4 px-2 pt-0 rounded-md text-md z-10 relative whitespace-pre-line">
                 {t("paymentDescription")}
               </p>
+
+              <Link to="/NT_Lyrics/premium?page=1" className="px-2 underline rounded-md text-md z-10 relative c-text-primary font-semibold">
+                  {t("aboutPayment")}
+                </Link>
 
               <p className="leading-relaxed c-bg p-4 px-2 rounded-md text-md z-10 relative whitespace-pre-line">
                 {t("noteForPayment")}

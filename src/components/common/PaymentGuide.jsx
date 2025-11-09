@@ -56,9 +56,6 @@ const PaymentGuide = () => {
           </li>
           <li>
             <span>{t("paymentGuide.step6extra")}</span>
-          </li>
-          <li>
-            <span>{t("paymentGuide.step6extra")}</span>
             <img src={step9} className="w-full mt-4 border-2 c-border border-dashed" />
           </li>
           <li>
