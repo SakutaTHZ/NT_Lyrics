@@ -187,7 +187,7 @@ const LyricsRow = ({
             </p>
           </div>
 
-          {access && !hideCollection && !processing ? (
+          {access && !hideCollection && (!processing ? (
             isInCollection ? (
               <Normal_Button
                 icon={BsHeartFill}
@@ -219,7 +219,7 @@ const LyricsRow = ({
               custom_class={`w-8 h-8 border-transparent shadow-sm c-bg-2 transition-all`}
               disabled={true}
             />
-          )}
+          ))}
         </div>
       </motion.div>
 

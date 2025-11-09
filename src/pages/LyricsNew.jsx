@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useRef,
   useState,
+  useMemo,
 } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import useDebounce from "../components/hooks/useDebounce";
@@ -17,36 +18,162 @@ import { BiArrowBack } from "react-icons/bi";
 import StickySearch from "../components/common/StickySearch";
 import { useAuth } from "../components/hooks/authContext";
 
+// Lazy load Footer
 const Footer = React.lazy(() => import("../components/common/Footer"));
+
+// Constants for pagination and API
+const LYRICS_PER_PAGE = 50;
+const DEBOUNCE_DELAY = 2000;
+const LAST_ITEM_OFFSET = 30;
 
 const Lyrics = () => {
   const { t } = useTranslation();
-
-  const { user, token , isLoading } = useAuth();
-
-  // Search params
-  const [searchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
-  const debouncedSearchTerm = useDebounce(searchTerm,2000);
+  const { user, isLoading: isAuthLoading } = useAuth(); // Renamed isLoading to isAuthLoading for clarity
   const navigate = useNavigate();
 
-  // State
+  // Search and Debounce
+  const [searchParams] = useSearchParams();
+  const initialQuery = searchParams.get("query") || "";
+  const [searchTerm, setSearchTerm] = useState(initialQuery);
+  const debouncedSearchTerm = useDebounce(searchTerm, DEBOUNCE_DELAY);
+
+  // State for lyrics and pagination
   const [lyrics, setLyrics] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [totalPages, setTotalPages] = useState(0);
-  const [initialLoadDone, setInitialLoadDone] = useState(false);
-
-  //const [user, setUser] = useState(null);
-  //const [userLoaded, setUserLoaded] = useState(false);
-  //const [hasToken, setHasToken] = useState(false);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [initialLoadDone, setInitialLoadDone] = useState(false); // To distinguish initial load from subsequent loads
 
+  // Intersection Observer setup
   const observer = useRef(null);
 
-  // Intersection Observer for infinite scroll
+  /**
+   * Memoized access control logic.
+   * Calculates user's access tier once on component load or user change.
+   */
+  const { userTier, isPremium } = useMemo(() => {
+    const tierMap = { guest: 0, free: 1, premium: 2 };
+    const role = user?.role;
+    const isUserPremium = role === "premium-user";
+    const userType = !user
+      ? "guest"
+      : isUserPremium
+      ? "premium"
+      : "free";
+    const tier = tierMap[userType];
+
+    // This function checks if the user has sufficient access for a given lyric tier.
+    const shouldHideCollection = (lyricTier = 0) => tier >= lyricTier;
+    
+    return {
+      userTier: tier,
+      isPremium: isUserPremium,
+      shouldHideCollection, // Passed directly to the component render for clarity
+    };
+  }, [user]);
+
+  /**
+   * Fetch function using `page` as the source of truth for the API call.
+   * Use a ref for `totalPages` to ensure the intersection observer callback
+   * has the latest value without making `lastUserRef` depend on it,
+   * which would cause unnecessary re-creation.
+   */
+  const totalPagesRef = useRef(totalPages);
+  useEffect(() => {
+    totalPagesRef.current = totalPages;
+  }, [totalPages]);
+
+  const fetchLyrics = useCallback(
+    async (pageNum, isNewSearch = false) => {
+      // Prevents fetching beyond total pages, only applies to non-initial pages
+      if (pageNum > 1 && pageNum > totalPagesRef.current) return;
+
+      setLoading(true);
+      
+      try {
+        const token = localStorage.getItem("token"); // Use local storage token here as fallback/direct access
+        
+        const res = await axios.get(
+          `${apiUrl}/lyrics/searchLyricsByTitleAndAlbum`,
+          {
+            params: {
+              page: pageNum,
+              limit: LYRICS_PER_PAGE,
+              keyword: debouncedSearchTerm,
+            },
+            headers: {
+              "Content-Type": "application/json",
+              ...(token && { Authorization: `Bearer ${token}` }),
+            },
+          }
+        );
+
+        const newLyricsData = res.data.lyrics || [];
+        
+        setLyrics((prev) => {
+          // If it's a new search (page 1) or an explicit override, replace the list.
+          // Otherwise, append.
+          const merged = isNewSearch ? newLyricsData : [...prev, ...newLyricsData];
+          
+          // Use a Map to deduplicate by `_id`. This is robust.
+          return Array.from(
+            new Map(merged.map((item) => [item._id, item])).values()
+          );
+        });
+
+        setTotalPages(res.data.totalPages);
+        
+      } catch (err) {
+        console.error("Failed to fetch lyrics:", err);
+      } finally {
+        setLoading(false);
+        // Only set initialLoadDone after the very first data fetch attempt finishes.
+        if (pageNum === 1) {
+          setInitialLoadDone(true);
+        }
+      }
+    },
+    [debouncedSearchTerm] // Only re-create when search term changes
+  );
+
+  /**
+   * Effect for handling new search or initial load.
+   * Resets pagination and triggers the first fetch.
+   */
+  useEffect(() => {
+    // Reset state for new search
+    setLyrics([]);
+    setPage(1);
+    setInitialLoadDone(false); // Reset initial load status
+
+    // Trigger the first fetch (page 1)
+    fetchLyrics(1, true);
+
+    // No need for a separate prefetch for page 2.
+    // Let the infinite scroll handler (lastUserRef/useEffect[page]) handle subsequent pages.
+  }, [debouncedSearchTerm, fetchLyrics]);
+
+  /**
+   * Effect for fetching next pages triggered by the Intersection Observer.
+   */
+  useEffect(() => {
+    // Only fetch if page is greater than 1 (which means it's triggered by the observer)
+    // and if it's within bounds (checked inside fetchLyrics).
+    if (page > 1) {
+      fetchLyrics(page);
+    }
+  }, [page, fetchLyrics]);
+
+  /**
+   * Intersection Observer callback for infinite scroll.
+   * Only depends on `loading` to prevent multiple page increment calls
+   * and `totalPagesRef` (which is a mutable ref and doesn't trigger effect/callback re-creation).
+   */
   const lastUserRef = useCallback(
     (node) => {
-      if (loading || page >= totalPages) return;
+      // Check for loading state and if we've reached the last page
+      if (loading || page >= totalPagesRef.current) return;
+
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
@@ -57,106 +184,16 @@ const Lyrics = () => {
 
       if (node) observer.current.observe(node);
     },
-    [loading, totalPages, page]
+    [loading, page] // Changed dependency: removed totalPages and uses page for current state check
   );
 
-  // User authentication
-  /*useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) setHasToken(true);
+  // Helper to determine when to show loading skeletons
+  const showSkeletons = loading && !initialLoadDone;
+  // Helper to determine if we should show "No Lyrics Found"
+  const showNoResults = !loading && initialLoadDone && lyrics.length === 0;
+  // Helper for conditional rendering within the list
+  const shouldRenderLyrics = !isAuthLoading && (showSkeletons || lyrics.length > 0 || showNoResults);
 
-    const id = JSON.parse(localStorage.getItem("user") || "{}")?.id;
-    if (!id) {
-      setUserLoaded(true);
-      return;
-    }
-
-    const getUser = async () => {
-      try {
-        const userData = await validateUser(id, token);
-        if (!userData) throw new Error("No user returned");
-        setUser(userData.user);
-      } catch (err) {
-        console.error("Failed to fetch user:", err);
-      } finally {
-        setUserLoaded(true);
-      }
-    };
-
-    getUser();
-  }, []);*/
-
-  // Fetch function
-  const fetchLyrics = useCallback(
-    async (pageNum, override = false) => {
-      setLoading(true);
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`${apiUrl}/lyrics/searchLyricsByTitleAndAlbum`, {
-          params: {
-            page: pageNum,
-            limit: 30,
-            keyword: debouncedSearchTerm,
-          },
-          headers: {
-            "Content-Type": "application/json",
-            ...(token && { Authorization: `Bearer ${token}` }),
-          },
-        });
-
-        const data = res.data.lyrics || [];
-        if (!Array.isArray(data)) {
-          console.error("Expected array, got:", data);
-          return [];
-        }
-
-        setLyrics((prev) => {
-          const merged = override || pageNum === 1 ? data : [...prev, ...data];
-          return Array.from(
-            new Map(merged.map((item) => [item._id, item])).values()
-          );
-        });
-        console.log("Fetched lyrics data:", data);
-
-        setTotalPages(res.data.totalPages);
-        setInitialLoadDone(true);
-      } catch (err) {
-        console.error("Failed to fetch lyrics:", err);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [debouncedSearchTerm]
-  );
-
-  // Initial fetch
-  useEffect(() => {
-    setLyrics([]);
-    setPage(1);
-    fetchLyrics(1, true).then(() => {
-      // Prefetch page 2 in background if more pages exist
-      if (totalPages > 1) {
-        fetchLyrics(2);
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearchTerm, fetchLyrics]);
-
-  // Fetch when page changes (after prefetch, will be instant if cached)
-  useEffect(() => {
-    if (page > 1) fetchLyrics(page);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
-
-  // Access control logic
-  const tierMap = { guest: 0, free: 1, premium: 2 };
-  const userType = !user
-    ? "guest"
-    : user.role === "premium-user"
-    ? "premium"
-    : "free";
-  const userTier = tierMap[userType];
-  const shouldHideCollection = (lyricTier = 0) => userTier >= lyricTier;
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -180,57 +217,59 @@ const Lyrics = () => {
           />
 
           {/* Lyrics List */}
-          {!isLoading && (
+          {shouldRenderLyrics && (
             <div
               className={`grid ${
-                loading || lyrics.length > 0 ? "" : "grid-cols-1"
+                showSkeletons || lyrics.length > 0 ? "" : "grid-cols-1"
               } pb-16 gap-0 px-4 md:px-24`}
             >
-              {(() => {
-                if (loading && !initialLoadDone) {
-                  return Array.from({ length: 12 }).map((_, i) => (
-                    <LoadingBox key={i} />
-                  ));
-                }
+              {/* Conditional Rendering Logic (Skeletons, No Results, List) */}
+              {showSkeletons ? (
+                // Show Skeletons on initial load
+                Array.from({ length: 20 }).map((_, i) => <LoadingBox key={i} />)
+              ) : showNoResults ? (
+                // Show No Results message
+                <div className="w-full flex flex-col items-center md:items-start c-bg justify-center gap-4 text-center py-4 c-gray-text opacity-30">
+                  No Lyrics Found with &lsquo;{debouncedSearchTerm}&lsquo;
+                </div>
+              ) : (
+                // Render Lyrics List
+                lyrics.map((lyric, index) => {
+                  // Reference the second-to-last item to trigger fetching the next page 
+                  // to give the Intersection Observer a good target.
+                  const isLast = index === lyrics.length - LAST_ITEM_OFFSET; 
 
-                if (lyrics.length === 0) {
-                  return (
-                    <div className="w-full flex flex-col items-center md:items-start c-bg justify-center gap-4 text-center py-4 c-gray-text opacity-30">
-                      No Lyrics Found with &#39;{debouncedSearchTerm}&#39;
-                    </div>
-                  );
-                }
+                  // Determine which component to render based on premium status
+                  const LyricComponent = isPremium ? LyricsRowPremium : LyricsRow;
 
-                return lyrics.map((lyric, index) => {
-                  // Trigger earlier — 10 from the end
-                  const isLast = index === lyrics.length - 20;
                   return (
                     <div
                       key={lyric._id}
                       className="border-b c-border last:border-0 border-dashed"
+                      // Use the ref only on the designated 'last' element
+                      ref={isLast ? lastUserRef : null}
                     >
-                      {user?.role === "premium-user" ? (
-                        <LyricsRowPremium
-                          id={lyric._id}
-                          lyric={lyric}
-                          isLast={isLast}
-                          lastUserRef={lastUserRef}
-                          hideCollection={!token}
-                        />
-                      ) : (
-                        <LyricsRow
-                          id={lyric._id}
-                          lyric={lyric}
-                          isLast={isLast}
-                          lastUserRef={lastUserRef}
-                          hideCollection={!token}
-                          access={shouldHideCollection(lyric.tier)}
-                        />
-                      )}
+                      <LyricComponent
+                        id={lyric._id}
+                        lyric={lyric}
+                        // isLast prop is redundant if the ref is only on the element above
+                        lastUserRef={null} // Pass null as the ref is on the wrapping div
+                        hideCollection={!user} // Check if user object exists
+                        // Access check only for non-premium component
+                        {...(!isPremium && { access: userTier >= lyric.tier })} 
+                      />
                     </div>
                   );
-                });
-              })()}
+                })
+              )}
+              
+              {/* Loading spinner for subsequent pages */}
+              {loading && page > 1 && (
+                 <div className="w-full py-4 flex justify-center">
+                    <LoadingBox isSpinner={true} />
+                 </div>
+              )}
+
             </div>
           )}
         </div>
