@@ -21,7 +21,7 @@ const Artist = ({ artistId, onClose }) => {
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
   const name = artistId;
   const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchTerm = useDebounce(searchTerm);
+  const debouncedSearchTerm = useDebounce(searchTerm,2000);
 
   const [isVisible, setIsVisible] = useState(true);
 

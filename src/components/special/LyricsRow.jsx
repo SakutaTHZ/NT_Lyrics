@@ -18,6 +18,7 @@ import { useTranslation } from "react-i18next";
 import LyricsDetails from "../../pages/LyricsDetails";
 import ModalContainer from "./ModalContainer";
 import { useAuth } from "../hooks/authContext";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const LyricsRow = ({
   id,
@@ -29,6 +30,7 @@ const LyricsRow = ({
   // variable pass to parent if collection status is changed
   onCollectionStatusChange = () => {},
 }) => {
+  const [processing, setProcessing] = useState(false);
   const { t } = useTranslation();
 
   const { token, user } = useAuth();
@@ -62,6 +64,8 @@ const LyricsRow = ({
       ? t("lyricHasBeenAddedToCollection")
       : t("lyricHasBeenRemovedFromCollection");
 
+    setProcessing(true);
+
     try {
       let res = null;
       if (shouldAdd) {
@@ -81,6 +85,7 @@ const LyricsRow = ({
       return res;
     } catch (err) {
       console.error(err.message);
+      setProcessing(false);
       setMessageType("error");
       if (err.message === "You can only add 20 collections") {
         setMessageText(t("youCanOnlyAddUpTo20SongsToEachCollection"));
@@ -90,6 +95,7 @@ const LyricsRow = ({
     } finally {
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 10000);
+      setProcessing(false);
     }
   };
 
@@ -181,9 +187,8 @@ const LyricsRow = ({
             </p>
           </div>
 
-          {access &&
-            !hideCollection &&
-            (isInCollection ? (
+          {access && !hideCollection && !processing ? (
+            isInCollection ? (
               <Normal_Button
                 icon={BsHeartFill}
                 text=""
@@ -205,8 +210,16 @@ const LyricsRow = ({
                   changeLyricsStatus(true);
                 }}
               />
-            ))}
-          {}
+            )
+          ) : (
+            <Normal_Button
+              text=""
+              icon={AiOutlineLoading3Quarters}
+              icon_class={`animate-spin c-gray-text opacity-20`}
+              custom_class={`w-8 h-8 border-transparent shadow-sm c-bg-2 transition-all`}
+              disabled={true}
+            />
+          )}
         </div>
       </motion.div>
 

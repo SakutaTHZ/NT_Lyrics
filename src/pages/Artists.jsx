@@ -19,7 +19,7 @@ const Artists = () => {
 
   const [artists, setArtists] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchTerm = useDebounce(searchTerm);
+  const debouncedSearchTerm = useDebounce(searchTerm,2000);
   const [loading, setLoading] = useState(false);
 
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));

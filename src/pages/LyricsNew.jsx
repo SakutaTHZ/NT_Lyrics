@@ -27,7 +27,7 @@ const Lyrics = () => {
   // Search params
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
-  const debouncedSearchTerm = useDebounce(searchTerm);
+  const debouncedSearchTerm = useDebounce(searchTerm,2000);
   const navigate = useNavigate();
 
   // State
