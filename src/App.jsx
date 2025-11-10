@@ -10,8 +10,11 @@ import { ThemeProvider } from "./components/hooks/ThemeContext";
 
 import AuthProvider from "./components/hooks/AuthProvider";
 import Nav from "./components/common/Nav";
+import useUpdateChecker from "./components/hooks/useUpdateChecker";
 
 function App() {
+  useUpdateChecker();
+
   return (
     <ThemeProvider>
       <PrimeReactProvider>
