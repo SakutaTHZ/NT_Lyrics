@@ -52,7 +52,8 @@ const LyricRow = ({ lyric, idx, isLast, lastUserRef, onEdit, isDisabled }) => {
     >
       <td className="px-4 py-3">{idx + 1}</td>
       <td className="px-4 py-3" title={lyric._id}>
-        <p className="w-16 truncate">{lyric._id}</p>
+        <p className="w-20 truncate">{lyric._id}</p>
+        <p className="mt-2 font-semibold w-20 break-words">{(lyric.lyricsPhoto).split("/").pop()}</p>
       </td>
       <td className="px-4 py-3">
         <img

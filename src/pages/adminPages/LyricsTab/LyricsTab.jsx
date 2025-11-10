@@ -85,6 +85,7 @@ const LyricsTab = () => {
             ? res.data.lyrics
             : [...prev, ...res.data.lyrics]
         );
+        console.log(res.data.lyrics)
         setTotalPages(res.data.totalPages);
         setInitialLoadDone(true);
         getLyricOverview();
@@ -402,7 +403,7 @@ const LyricsTab = () => {
           <thead className="thead-shadow text-xs text-gray-600 uppercase sticky top-0 bg-gray-100 z-10">
             <tr>
               <th className="px-4 py-3">#</th>
-              <th className="px-4 py-3 w-16">ID</th>
+              <th className="px-4 py-3 w-16">ID<br/>Image Name</th>
               <th className="px-4 py-3">Photo</th>
               <th className="px-4 py-3">Title / Album / Genres</th>
               <th className="px-4 py-3">Singers</th>
