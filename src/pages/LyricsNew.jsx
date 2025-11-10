@@ -24,11 +24,13 @@ const Footer = React.lazy(() => import("../components/common/Footer"));
 // Constants for pagination and API
 const LYRICS_PER_PAGE = 50;
 const DEBOUNCE_DELAY = 2000;
-const LAST_ITEM_OFFSET = 30;
+// CRITICAL FIX: LAST_ITEM_OFFSET should be a small positive number (e.g., 5 or 10)
+// to trigger the fetch before the end, not 30 for a page size of 50.
+const LAST_ITEM_OFFSET = 20;
 
 const Lyrics = () => {
   const { t } = useTranslation();
-  const { user, isLoading: isAuthLoading } = useAuth(); // Renamed isLoading to isAuthLoading for clarity
+  const { user, isLoading: isAuthLoading, token: authContextToken } = useAuth();
   const navigate = useNavigate();
 
   // Search and Debounce
@@ -42,57 +44,57 @@ const Lyrics = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [initialLoadDone, setInitialLoadDone] = useState(false); // To distinguish initial load from subsequent loads
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
 
   // Intersection Observer setup
   const observer = useRef(null);
 
-  /**
-   * Memoized access control logic.
-   * Calculates user's access tier once on component load or user change.
-   */
-  const { userTier, isPremium } = useMemo(() => {
-    const tierMap = { guest: 0, free: 1, premium: 2 };
-    const role = user?.role;
-    const isUserPremium = role === "premium-user";
-    const userType = !user
-      ? "guest"
-      : isUserPremium
-      ? "premium"
-      : "free";
-    const tier = tierMap[userType];
-
-    // This function checks if the user has sufficient access for a given lyric tier.
-    const shouldHideCollection = (lyricTier = 0) => tier >= lyricTier;
-    
-    return {
-      userTier: tier,
-      isPremium: isUserPremium,
-      shouldHideCollection, // Passed directly to the component render for clarity
-    };
-  }, [user]);
-
-  /**
-   * Fetch function using `page` as the source of truth for the API call.
-   * Use a ref for `totalPages` to ensure the intersection observer callback
-   * has the latest value without making `lastUserRef` depend on it,
-   * which would cause unnecessary re-creation.
-   */
+  // CRITICAL FIX: Stabilize totalPages access for infinite scroll check
   const totalPagesRef = useRef(totalPages);
   useEffect(() => {
     totalPagesRef.current = totalPages;
   }, [totalPages]);
 
+  // FIX: Stabilize 'page' state access for Intersection Observer logic
+  const pageRef = useRef(page);
+  useEffect(() => {
+    pageRef.current = page;
+  }, [page]);
+
+  /**
+   * Memoized access control logic.
+   * Moved the logic into a memo for clean access to user roles.
+   */
+  const { isPremium, shouldHideCollection } = useMemo(() => {
+    const tierMap = { guest: 0, free: 1, premium: 2 };
+    const role = user?.role;
+    const isUserPremium = role === "premium-user";
+    const userType = !user ? "guest" : isUserPremium ? "premium" : "free";
+    const tier = tierMap[userType];
+
+    const hideCollection = (lyricTier = 0) => tier >= lyricTier;
+
+    return {
+      userTier: tier,
+      isPremium: isUserPremium,
+      shouldHideCollection: hideCollection,
+    };
+  }, [user]);
+
   const fetchLyrics = useCallback(
     async (pageNum, isNewSearch = false) => {
-      // Prevents fetching beyond total pages, only applies to non-initial pages
-      if (pageNum > 1 && pageNum > totalPagesRef.current) return;
+      // Prevents fetching beyond total pages, uses the stable ref
+      if (pageNum > 1 && pageNum > totalPagesRef.current) {
+        setLoading(false); // Ensure loading is stopped if check fails
+        return;
+      }
 
       setLoading(true);
-      
+
       try {
-        const token = localStorage.getItem("token"); // Use local storage token here as fallback/direct access
-        
+        // Use the token from the Auth context if available, or fall back to localStorage
+        const token = authContextToken || localStorage.getItem("token");
+
         const res = await axios.get(
           `${apiUrl}/lyrics/searchLyricsByTitleAndAlbum`,
           {
@@ -109,12 +111,12 @@ const Lyrics = () => {
         );
 
         const newLyricsData = res.data.lyrics || [];
-        
+
         setLyrics((prev) => {
-          // If it's a new search (page 1) or an explicit override, replace the list.
-          // Otherwise, append.
-          const merged = isNewSearch ? newLyricsData : [...prev, ...newLyricsData];
-          
+          const merged = isNewSearch
+            ? newLyricsData
+            : [...prev, ...newLyricsData];
+
           // Use a Map to deduplicate by `_id`. This is robust.
           return Array.from(
             new Map(merged.map((item) => [item._id, item])).values()
@@ -122,69 +124,66 @@ const Lyrics = () => {
         });
 
         setTotalPages(res.data.totalPages);
-        
       } catch (err) {
         console.error("Failed to fetch lyrics:", err);
       } finally {
         setLoading(false);
-        // Only set initialLoadDone after the very first data fetch attempt finishes.
         if (pageNum === 1) {
           setInitialLoadDone(true);
         }
       }
     },
-    [debouncedSearchTerm] // Only re-create when search term changes
+    [debouncedSearchTerm, authContextToken] // Added authContextToken as a dependency
   );
 
   /**
-   * Effect for handling new search or initial load.
-   * Resets pagination and triggers the first fetch.
+   * Effect 1: Handling new search or initial load.
+   * Triggers when the DEBOUNCED search term changes.
    */
   useEffect(() => {
     // Reset state for new search
     setLyrics([]);
     setPage(1);
-    setInitialLoadDone(false); // Reset initial load status
+    setInitialLoadDone(false);
 
     // Trigger the first fetch (page 1)
     fetchLyrics(1, true);
-
-    // No need for a separate prefetch for page 2.
-    // Let the infinite scroll handler (lastUserRef/useEffect[page]) handle subsequent pages.
   }, [debouncedSearchTerm, fetchLyrics]);
 
   /**
-   * Effect for fetching next pages triggered by the Intersection Observer.
+   * Effect 2: Fetching next pages triggered by the Intersection Observer.
+   * Triggers when the `page` state increments.
    */
   useEffect(() => {
     // Only fetch if page is greater than 1 (which means it's triggered by the observer)
-    // and if it's within bounds (checked inside fetchLyrics).
     if (page > 1) {
       fetchLyrics(page);
     }
   }, [page, fetchLyrics]);
 
   /**
-   * Intersection Observer callback for infinite scroll.
-   * Only depends on `loading` to prevent multiple page increment calls
-   * and `totalPagesRef` (which is a mutable ref and doesn't trigger effect/callback re-creation).
+   * CRITICAL FIX: Intersection Observer callback must be highly stable.
+   * By removing 'page' from the dependency array and using 'pageRef.current',
+   * we prevent the callback from being recreated on every page state change,
+   * which can lead to the observer not re-connecting correctly in certain browser environments.
    */
   const lastUserRef = useCallback(
     (node) => {
-      // Check for loading state and if we've reached the last page
-      if (loading || page >= totalPagesRef.current) return;
+      // Use the stable ref for totalPages check
+      if (loading || pageRef.current >= totalPagesRef.current) return;
 
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
+          // Use a functional update to ensure we get the latest state
           setPage((prev) => prev + 1);
         }
       });
 
       if (node) observer.current.observe(node);
     },
-    [loading, page] // Changed dependency: removed totalPages and uses page for current state check
+    [loading] // Only depends on loading state
   );
 
   // Helper to determine when to show loading skeletons
@@ -192,8 +191,8 @@ const Lyrics = () => {
   // Helper to determine if we should show "No Lyrics Found"
   const showNoResults = !loading && initialLoadDone && lyrics.length === 0;
   // Helper for conditional rendering within the list
-  const shouldRenderLyrics = !isAuthLoading && (showSkeletons || lyrics.length > 0 || showNoResults);
-
+  const shouldRenderLyrics =
+    !isAuthLoading && (showSkeletons || lyrics.length > 0 || showNoResults);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -235,41 +234,51 @@ const Lyrics = () => {
               ) : (
                 // Render Lyrics List
                 lyrics.map((lyric, index) => {
-                  // Reference the second-to-last item to trigger fetching the next page 
-                  // to give the Intersection Observer a good target.
-                  const isLast = index === lyrics.length - LAST_ITEM_OFFSET; 
+                  // Determine where to place the Intersection Observer target
+                  const isLastItem = index === lyrics.length - 1;
+                  const targetIndex = lyrics.length - LAST_ITEM_OFFSET;
+                  const isTarget =
+                    lyrics.length > LAST_ITEM_OFFSET && index === targetIndex;
+                  // If the list is short, target the last item instead of relying on offset
+                  const useLastItem =
+                    lyrics.length <= LAST_ITEM_OFFSET && isLastItem;
+
+                  // Reference the target item
+                  const setRef = isTarget || useLastItem ? lastUserRef : null;
 
                   // Determine which component to render based on premium status
-                  const LyricComponent = isPremium ? LyricsRowPremium : LyricsRow;
+                  const LyricComponent = isPremium
+                    ? LyricsRowPremium
+                    : LyricsRow;
 
                   return (
                     <div
                       key={lyric._id}
                       className="border-b c-border last:border-0 border-dashed"
-                      // Use the ref only on the designated 'last' element
-                      ref={isLast ? lastUserRef : null}
+                      // Use the ref only on the designated 'target' element
+                      ref={setRef}
                     >
                       <LyricComponent
                         id={lyric._id}
                         lyric={lyric}
-                        // isLast prop is redundant if the ref is only on the element above
-                        lastUserRef={null} // Pass null as the ref is on the wrapping div
-                        hideCollection={!user} // Check if user object exists
+                        lastUserRef={null}
+                        hideCollection={!user}
                         // Access check only for non-premium component
-                        {...(!isPremium && { access: userTier >= lyric.tier })} 
+                        {...(!isPremium && {
+                          access: shouldHideCollection(lyric.tier),
+                        })}
                       />
                     </div>
                   );
                 })
               )}
-              
+
               {/* Loading spinner for subsequent pages */}
               {loading && page > 1 && (
-                 <div className="w-full py-4 flex justify-center">
-                    <LoadingBox isSpinner={true} />
-                 </div>
+                <div className="w-full py-4 flex justify-center">
+                  <LoadingBox isSpinner={true} />
+                </div>
               )}
-
             </div>
           )}
         </div>

@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App.jsx";
 import "./i18n";
 
-window.APP_VERSION_HASH = 'v1.2';
+window.APP_VERSION_HASH = 'v1.1.0.1';
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
