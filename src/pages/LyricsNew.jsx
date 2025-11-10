@@ -19,6 +19,10 @@ import { useAuth } from "../components/hooks/authContext";
 
 const Footer = React.lazy(() => import("../components/common/Footer"));
 
+const LYRICS_PER_PAGE = 50;
+const DEBOUNCE_DELAY = 2000;
+const LAST_ITEM_OFFSET = 20;
+
 const Lyrics = () => {
   const { t } = useTranslation();
 
@@ -27,7 +31,7 @@ const Lyrics = () => {
   // Search params
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
-  const debouncedSearchTerm = useDebounce(searchTerm,2000);
+  const debouncedSearchTerm = useDebounce(searchTerm,DEBOUNCE_DELAY);
   const navigate = useNavigate();
 
   // State
@@ -95,7 +99,7 @@ const Lyrics = () => {
         const res = await axios.get(`${apiUrl}/lyrics/searchLyricsByTitleAndAlbum`, {
           params: {
             page: pageNum,
-            limit: 30,
+            limit: LYRICS_PER_PAGE,
             keyword: debouncedSearchTerm,
           },
           headers: {
@@ -116,7 +120,6 @@ const Lyrics = () => {
             new Map(merged.map((item) => [item._id, item])).values()
           );
         });
-        console.log("Fetched lyrics data:", data);
 
         setTotalPages(res.data.totalPages);
         setInitialLoadDone(true);
@@ -203,7 +206,7 @@ const Lyrics = () => {
 
                 return lyrics.map((lyric, index) => {
                   // Trigger earlier — 10 from the end
-                  const isLast = index === lyrics.length - 20;
+                  const isLast = index === lyrics.length - LAST_ITEM_OFFSET;
                   return (
                     <div
                       key={lyric._id}

@@ -133,8 +133,6 @@ const AuthProvider = ({ children }) => {
 
       const res = await response.json();
 
-      console.log("Login response:", res); // Debug log
-
       if (res.token && res.user) {
         const userDetails = {
           id: res.user._id,

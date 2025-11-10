@@ -7,7 +7,6 @@ export default function useAddToHomePrompt() {
   const [showIOSBanner, setShowIOSBanner] = useState(false);
 
   useEffect(() => {
-    console.log("Checking installability...");
     const userAgent = window.navigator.userAgent.toLowerCase();
     const standalone =
       window.matchMedia("(display-mode: standalone)").matches ||
@@ -40,15 +39,12 @@ export default function useAddToHomePrompt() {
       setShowIOSBanner(false);
     };
 
-    console.log("✅ Hook init");
     window.addEventListener("beforeinstallprompt", (e) => {
-      console.log("✅ beforeinstallprompt fired");
       e.preventDefault();
       setDeferredPrompt(e);
     });
 
     window.addEventListener("appinstalled", () => {
-      console.log("📲 App installed");
       setIsInstalled(true);
     });
 
@@ -70,7 +66,6 @@ export default function useAddToHomePrompt() {
       setIsInstalled(true);
       return true;
     } else {
-      console.log("User dismissed install — can retry later");
       return false;
     }
   };

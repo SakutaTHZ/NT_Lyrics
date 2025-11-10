@@ -219,7 +219,6 @@ const AddToCollectionBox = ({
       handleClose();
     } catch (err) {
       console.error("Error updating lyric collections:", err);
-      console.log(err);
       // 💡 Updated limit check to include the new pre-check error format
       if (String(err.message).startsWith("Collection Limit Reached")) {
         const groupName =

@@ -13,6 +13,10 @@ import LyricsRowPremium from "../components/special/LyricRowPremium";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 
+const ARTISTS_PER_PAGE = 50;
+const DEBOUNCE_DELAY = 2000;
+const LAST_ITEM_OFFSET = 20;
+
 const Artist = ({ artistId, onClose }) => {
   const { t } = useTranslation();
 
@@ -21,7 +25,7 @@ const Artist = ({ artistId, onClose }) => {
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
   const name = artistId;
   const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchTerm = useDebounce(searchTerm,2000);
+  const debouncedSearchTerm = useDebounce(searchTerm,DEBOUNCE_DELAY);
 
   const [isVisible, setIsVisible] = useState(true);
 
@@ -110,7 +114,7 @@ const Artist = ({ artistId, onClose }) => {
           {
             params: {
               page: pageNum,
-              limit: 20,
+              limit: ARTISTS_PER_PAGE,
               keyword: debouncedSearchTerm,
             },
             headers: {
@@ -133,8 +137,6 @@ const Artist = ({ artistId, onClose }) => {
             new Map(merged.map((item) => [item._id, item])).values()
           );
         });
-
-        console.log("Fetched lyrics data:", data);
         setTotalPages(res.data.totalPages);
         setInitialLoadDone(true);
       } catch (error) {
@@ -295,7 +297,7 @@ const Artist = ({ artistId, onClose }) => {
                   <>
                     {!isLoading &&
                       lyrics.map((lyric, index) => {
-                        const isLast = index === lyrics.length - 1;
+                        const isLast = index === lyrics.length - LAST_ITEM_OFFSET;
                         return (
                           <div
                             key={index}

@@ -90,7 +90,6 @@ const Landing = () => {
       setLoading(true);
       const lyrics = await fetchLatestLyrics(token);
       setLatestLyrics(lyrics);
-      console.log(lyrics);
     } catch (err) {
       console.error("Error fetching popular lyrics:", err);
     }

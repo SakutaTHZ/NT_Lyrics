@@ -59,7 +59,6 @@ export const extractChordsFromImage = async (imageUrl) => {
   const processedImage = await preprocessImage(imageUrl);
 
   const result = await Tesseract.recognize(processedImage, "eng", {
-    logger: (info) => console.log(info),
     tessedit_char_whitelist: "ABCDEFGabcdefg#bmijsu0123456789/()",
   });
 

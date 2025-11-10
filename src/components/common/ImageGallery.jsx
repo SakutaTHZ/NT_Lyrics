@@ -2,7 +2,6 @@ import { CgClose } from "react-icons/cg";
 import PropTypes from "prop-types";
 
 const ImageGallery = ({ lyric, setShowGallery, setImageError }) => {
-  console.log(lyric);
   return (
     <div className="animate-appear fixed inset-0 bg-[#00000090] backdrop-blur-md flex flex-col items-center justify-center z-[10000] p-2">
 

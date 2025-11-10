@@ -91,7 +91,6 @@ const LyricsGallery = ({ setShowGallery, setImageError, lyric }) => {
         'eng', 
         { 
           logger: (m) => {
-            console.log(m);
             if (m.status === 'recognizing text') {
               setProgress({ 
                 status: 'Processing...', 

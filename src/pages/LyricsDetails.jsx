@@ -37,7 +37,6 @@ const LyricsDetails = ({
   onClose,
   onCollectionStatusChange,
 }) => {
-  console.log("LyricsDetails passed : ", lyricData);
   const { t } = useTranslation();
 
   const { user, token, isLoading } = useAuth();
@@ -46,7 +45,7 @@ const LyricsDetails = ({
 
   const [showChords, setShowChords] = useState(false);
 
-  const [lyric, setLyric] = useState(null);
+  const [lyric, setLyric] = useState(lyricData);
 
   const isPremiumUser = user?.role === "premium-user";
 
@@ -55,8 +54,6 @@ const LyricsDetails = ({
     const getLyric = async () => {
       try {
         const { lyrics } = await fetchLyricById(lyricsId, token);
-        // Only set lyricData if it's not provided via props
-        console.log("Fetched lyric data:", lyrics);
         setLyric(lyrics);
       } catch (err) {
         console.error("Error fetching lyric:", err);
@@ -362,10 +359,6 @@ const LyricsDetails = ({
                               onClick={() => {
                                 setSelectedArtist(artistData._id);
                                 setShowArtistDetails(true);
-                                console.log(
-                                  "Selected artist ID:",
-                                  artistData._id
-                                );
                               }}
                             >
                               <img
@@ -399,10 +392,6 @@ const LyricsDetails = ({
                                 //navigate(`/NT_Lyrics/artist/${artist._id}`);
                                 setSelectedArtist(writerData._id);
                                 setShowArtistDetails(true);
-                                console.log(
-                                  "Selected artist ID:",
-                                  writerData._id
-                                );
                               }}
                             >
                               <img
@@ -438,10 +427,6 @@ const LyricsDetails = ({
                                 //navigate(`/NT_Lyrics/artist/${artist._id}`);
                                 setSelectedArtist(featuringData._id);
                                 setShowArtistDetails(true);
-                                console.log(
-                                  "Selected artist ID:",
-                                  featuringData._id
-                                );
                               }}
                             >
                               <img

@@ -5,10 +5,8 @@ export default function InstallPromptButton() {
 
   const handleClick = async () => {
     const accepted = await promptInstall();
-    if (accepted) {
-      console.log("User accepted installation");
-    } else {
-      console.log("User dismissed installation");
+    if (!accepted) {
+      console.error("An error occured wjile installing the app");
     }
   };
 

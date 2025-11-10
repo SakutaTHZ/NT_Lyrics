@@ -9,7 +9,6 @@ import { useAuth } from "../../../components/hooks/authContext";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const formatIsoDate = (input) => {
-  console.log("original - " + input)
   if (!input) return "-"; // null / undefined / empty
   const d = new Date(input);
   if (isNaN(d.getTime())) return "-"; // invalid date guard
@@ -57,7 +56,6 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
         }
         const data = await response.json();
         setUserDetails(data.user);
-        console.log("Fetched user details:", data);
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
@@ -82,7 +80,6 @@ const EditPayment = ({ onClose, request, onUpdate, showNewMessage }) => {
     if (!response.ok) {
       const errorData = await response.json();
       showNewMessage("error", errorData.message);
-      console.log(errorData);
       throw new Error(errorData.message || "Failed to approve payment");
     }
     setLoading(false);

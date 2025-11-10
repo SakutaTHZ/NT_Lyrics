@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import useBackButtonHandler from "../hooks/useBackButtonHandler";
 
 const ModalContainer = ({ isOpen, onClose, children }) => {
-  console.log("ModalContainer render", isOpen);
   useBackButtonHandler(isOpen, onClose);
 
   useEffect(() => {

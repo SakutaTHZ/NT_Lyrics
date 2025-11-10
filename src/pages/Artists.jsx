@@ -13,13 +13,18 @@ import StickySearch from "../components/common/StickySearch";
 import LoadingBox from "../components/common/LoadingBox";
 import { motion } from "framer-motion";
 
+// Constants
+const ARTISTS_PER_PAGE = 50;
+const DEBOUNCE_DELAY = 2000;
+const LAST_ITEM_OFFSET = 20;
+
 const Artists = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [artists, setArtists] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchTerm = useDebounce(searchTerm,2000);
+  const debouncedSearchTerm = useDebounce(searchTerm,DEBOUNCE_DELAY);
   const [loading, setLoading] = useState(false);
 
   const AUTH_TOKEN = useRef(localStorage.getItem("token"));
@@ -36,7 +41,7 @@ const Artists = () => {
         const res = await axios.get(`${apiUrl}/artists/search`, {
           params: {
             page: pageNum,
-            limit: 40,
+            limit: ARTISTS_PER_PAGE,
             keyword: debouncedSearchTerm,
           },
           headers: {
@@ -141,7 +146,7 @@ const Artists = () => {
               // Artists list
               <div className="grid gap-0 c-border">
                 {artists.map((artist, index) => {
-                  const isLast = index === artists.length - 20;
+                  const isLast = index === artists.length - LAST_ITEM_OFFSET;
                   return (
                     <motion.div
                       key={artist.id}

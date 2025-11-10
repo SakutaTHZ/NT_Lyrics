@@ -18,13 +18,11 @@ const useUpdateChecker = () => {
     // 2. Initial Load or Reset: Store current version and exit
     if (!cachedVersion || cachedVersion === 'RESET') {
       localStorage.setItem(LOCAL_VERSION_KEY, currentVersion);
-      console.log(`Initialized app version to: ${currentVersion}`);
       return;
     }
 
     // 3. New Version Check
     if (cachedVersion !== currentVersion) {
-      console.log(`Update detected: Old Version (${cachedVersion}) vs New Version (${currentVersion})`);
       
       const confirmUpdate = window.confirm(
         "A new update is available! Click OK to refresh and apply the changes."

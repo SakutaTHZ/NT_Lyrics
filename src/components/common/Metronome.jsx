@@ -68,7 +68,6 @@ const Metronome = ({ initialBPM = 120, timeSignature = 4 }) => {
     const loadFiles = async () => {
       // Load ONLY the TokSound into the single beatBufferRef
       beatBufferRef.current = await loadSound(TokSound, audioContext);
-      console.log("Metronome sound loaded (TokSound).");
     };
     loadFiles();
 
