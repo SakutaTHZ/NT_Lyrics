@@ -1,1 +1,0 @@
-# nt-lyrics_frontend
