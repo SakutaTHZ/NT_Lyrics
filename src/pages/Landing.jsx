@@ -110,19 +110,20 @@ const Landing = () => {
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
 
   useEffect(() => {
+    if (!user || !token) return; // exit early until both are ready
+
     const checkPayment = async () => {
       try {
         const paymentData = await checkIfPaymentRequested(token);
         if (!paymentData) throw new Error("No payment returned");
-        const exists = paymentData.isExist;
-        setIsPaymentProcessing(exists);
+        setIsPaymentProcessing(paymentData.isExist);
       } catch (err) {
         console.error("Failed to fetch payment:", err);
       }
     };
 
     checkPayment();
-  }, [token]);
+  }, [user, token]);
 
   useEffect(() => {
     getPopularLyrics();
@@ -464,7 +465,7 @@ const Landing = () => {
           {/* Featured Videos */}
           <div className="relative p-4 md:px-24 pb-16">
             <div className="flex justify-between">
-              <p className="font-bold text-lg italic">{t("featureVideos")}</p>
+              <p className="font-bold text-lg italic">{t("instructionVideos")}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 py-4 gap-4 md:gap-12">

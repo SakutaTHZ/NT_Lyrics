@@ -205,5 +205,7 @@
       "step5": "Email",
       "outro": "You can directly send this information to the given phone number's Viber account to purchase."
     }
-  }
+  },
+
+  "instructionVideos" : "Instruction Videos"
 }

@@ -931,6 +931,10 @@ body.dark {
   background: rgb(var(--color-bg-body)) !important;
 }
 
+.c-soft-blue{
+  background: rgb(var(--color-info-tint)) !important;
+}
+
 .c-soft-shadow {
   background: rgb(var(--soft-shadow)) !important;
 }

@@ -16,12 +16,7 @@ import { useTheme } from "../hooks/ThemeContext";
 import GlitchAssets from "../special/GlitchEffect";
 import { motion, AnimatePresence } from "framer-motion";
 
-const ProfileEdit = ({
-  usernameChange,
-  emailChange,
-  closeBox,
-  onUpdate,
-}) => {
+const ProfileEdit = ({ usernameChange, emailChange, closeBox, onUpdate }) => {
   const [isVisible, setIsVisible] = useState(true);
 
   const handleClose = () => {
@@ -160,7 +155,7 @@ const ProfileEdit = ({
     } catch (error) {
       console.error("Error updating user:", error);
       alert(t("updateFailed"));
-    } 
+    }
   };
 
   const [language, setLanguage] = useState(
@@ -187,12 +182,12 @@ const ProfileEdit = ({
   }, [name, email, passwordChange, newPassword, user]);
 
   useEffect(() => {
-  if (isVisible) {
-    setUsername(user?.name || "");
-    setEmail(user?.email || "");
-  }
-// eslint-disable-next-line react-hooks/exhaustive-deps
-}, [isVisible]);
+    if (isVisible) {
+      setUsername(user?.name || "");
+      setEmail(user?.email || "");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isVisible]);
 
   if (isLoading) {
     return (
@@ -219,19 +214,12 @@ const ProfileEdit = ({
           >
             <div className="fixed inset-0 w-screen h-screen md:h-fit min-h-screen overflow-y-scroll py-6 md:px-18  pb-20 c-bg flex flex-col">
               <button
-                className="ml-4 rounded-md cursor-pointer p-2 absolute right-4 top-4 z-50"
+                className="ml-4 rounded-md cursor-pointer p-2 absolute right-4 top-4 md:top-18 md:right-24 z-50"
                 onClick={() => setTimeout(() => handleClose(), 200)}
               >
                 <BiArrowBack size={20} className="" />
               </button>
               <div className="w-full flex items-center justify-center md:mt-12 pb-2 mb-2">
-                {/* <div className="profileImageBox w-24 aspect-square rounded-full overflow-hidden border-8 border-white">
-            
-            <img
-              src="https://i.pinimg.com/736x/c8/69/8a/c8698a586eb96d0ec43fbb712dcf668d.jpg"
-              className="object-cover w-full h-full"
-            />
-          </div> */}
                 <p className="w-full px-6 font-bold text-lg italic">
                   {t("setting")}
                 </p>

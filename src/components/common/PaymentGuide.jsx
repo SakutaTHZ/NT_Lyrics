@@ -21,46 +21,46 @@ const PaymentGuide = () => {
           {t("paymentGuide.topay")}
         </h2>
 
-        <ol className="payment-list space-y-2">
+        <ol className="payment-list space-y-4">
           <li>
             <span>{t("paymentGuide.step1")}</span>
-            <img src={step1} className="w-full mt-4 border-2 c-border border-dashed" />
+            <img src={step1} className="w-full md:w-1/2 mt-4 border-2 c-border border-dashed" />
           </li>
           <li>
             <span>{t("paymentGuide.step2")}</span>
-            <img src={step2} className="w-full mt-4 border-2 c-border border-dashed" />
+            <img src={step2} className="w-full md:w-1/2 mt-4 border-2 c-border border-dashed" />
           </li>
           <li>
             <span>{t("paymentGuide.step3")}</span>
-            <img src={step3} className="w-full mt-4 border-2 c-border border-dashed" />
+            <img src={step3} className="w-full md:w-1/2 mt-4 border-2 c-border border-dashed" />
           </li>
           <li>
             <span>{t("paymentGuide.step3extra")}</span>
-            <img src={step4} className="w-full mt-4 border-2 c-border border-dashed" />
+            <img src={step4} className="w-full md:w-1/2 mt-4 border-2 c-border border-dashed" />
           </li>
           <li>
             <span>{t("paymentGuide.step4")}</span>
           </li>
           <li>
             <span>{t("paymentGuide.step5")}</span>
-            <img src={step5} className="w-full mt-4 border-2 c-border border-dashed" />
+            <img src={step5} className="w-full md:w-1/2 mt-4 border-2 c-border border-dashed" />
           </li>
           <li>
             <span>{t("paymentGuide.step5extra")}</span>
-            <img src={step6} className="w-full mt-4 border-2 c-border border-dashed" />
-            <img src={step7} className="w-full mt-4 border-2 c-border border-dashed" />
+            <img src={step6} className="w-full md:w-1/2 mt-4 border-2 c-border border-dashed" />
+            <img src={step7} className="w-full md:w-1/2 mt-4 border-2 c-border border-dashed" />
           </li>
           <li>
             <span>{t("paymentGuide.step6")}</span>
-            <img src={step8} className="w-full mt-4 border-2 c-border border-dashed" />
+            <img src={step8} className="w-full md:w-1/2 mt-4 border-2 c-border border-dashed" />
           </li>
           <li>
             <span>{t("paymentGuide.step6extra")}</span>
-            <img src={step9} className="w-full mt-4 border-2 c-border border-dashed" />
+            <img src={step9} className="w-full md:w-1/2 mt-4 border-2 c-border border-dashed" />
           </li>
           <li>
             <span>{t("paymentGuide.step8")}</span>
-            <img src={step10} className="w-full mt-4 border-2 c-border border-dashed" />
+            <img src={step10} className="w-full md:w-1/2 mt-4 border-2 c-border border-dashed" />
           </li>
           <li>{t("paymentGuide.step8extra")}</li>
         </ol>

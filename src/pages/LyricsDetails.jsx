@@ -235,7 +235,7 @@ const LyricsDetails = ({
                   }`}
                 >
                   <button
-                    className="absolute right-2 top-2 md:flex gap-2 cursor-pointer text-right items-end shadow-md p-2 rounded-md c-primary hover:c-bg-2 transition-all text-white z-10 hidden "
+                    className="absolute right-4 top-4 md:flex gap-2 cursor-pointer text-right items-end shadow-md p-2 rounded-md c-primary hover:c-bg-2 transition-all text-white z-10 hidden border-2"
                     onClick={handleClose}
                   >
                     <BiArrowBack size={20} />

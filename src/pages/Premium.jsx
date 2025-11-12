@@ -87,14 +87,14 @@ const Premium = () => {
 
             <Accordion activeIndex={pageIndex - 1} className="w-full">
               <AccordionTab header={t("aboutPayment")}>
-              <div className="w-full aspect-video bg-gray-300 rounded-md mb-4">
-                      <iframe
-                        className="w-full h-full rounded-md"
-                        src="https://www.youtube.com/embed/n5HVa6TJ4Zk"
-                        title="YouTube video player"
-                        allowFullScreen
-                      ></iframe>
-                    </div>
+                <div className="w-full aspect-video bg-gray-300 rounded-md mb-4">
+                  <iframe
+                    className="w-full h-full rounded-md"
+                    src="https://www.youtube.com/embed/n5HVa6TJ4Zk"
+                    title="YouTube video player"
+                    allowFullScreen
+                  ></iframe>
+                </div>
                 <PaymentGuide />
               </AccordionTab>
               <AccordionTab header={t("premiumFeatures")}>
@@ -265,7 +265,7 @@ const Premium = () => {
                 {/* Unlock All Lyrics */}
                 <div
                   id="unlockAllLyrics"
-                  className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+                  className="unlockAllLyrics w-full flex flex-col c-soft-blue p-2 rounded-lg mt-4"
                 >
                   <div className="flex items-center gap-2">
                     <CgCheck size={24} className="text-green-500" />
@@ -282,7 +282,7 @@ const Premium = () => {
                 {/* canWatchYoutube */}
                 <div
                   id="canWatchYoutube"
-                  className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+                  className="unlockAllLyrics w-full flex flex-col c-soft-blue p-2 rounded-lg mt-4"
                 >
                   <div className="flex items-center gap-2">
                     <CgCheck size={24} className="text-green-500" />
@@ -298,7 +298,7 @@ const Premium = () => {
 
                 <div
                   id="collectionsexplained"
-                  className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+                  className="unlockAllLyrics w-full flex flex-col c-soft-blue p-2 rounded-lg mt-4"
                 >
                   <div className="flex items-center gap-2">
                     <CgCheck size={24} className="text-green-500" />
@@ -316,7 +316,7 @@ const Premium = () => {
 
                 <div
                   id="chordsExplained"
-                  className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+                  className="unlockAllLyrics w-full flex flex-col c-soft-blue p-2 rounded-lg mt-4"
                 >
                   <div className="flex items-center gap-2">
                     <CgCheck size={24} className="text-green-500" />
@@ -334,7 +334,7 @@ const Premium = () => {
 
                 <div
                   id="metronomeExplained"
-                  className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+                  className="unlockAllLyrics w-full flex flex-col c-soft-blue p-2 rounded-lg mt-4"
                 >
                   <div className="flex items-center gap-2">
                     <CgCheck size={24} className="text-green-500" />
@@ -352,7 +352,7 @@ const Premium = () => {
 
                 <div
                   id="transposeExplained"
-                  className="unlockAllLyrics w-full flex flex-col c-announcement-bg p-2 rounded-lg mt-4"
+                  className="unlockAllLyrics w-full flex flex-col c-soft-blue p-2 rounded-lg mt-4"
                 >
                   <div className="flex items-center gap-2">
                     <CgCheck size={24} className="text-green-500" />
