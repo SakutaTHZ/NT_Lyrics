@@ -207,5 +207,10 @@
     }
   },
 
-  "instructionVideos" : "วิดีโอการเรียนการสอน"
+  "instructionVideos" : "วิดีโอการเรียนการสอน",
+  "guides": {
+    "usageGuide": "คู่มือการใช้งาน",
+    "paymentGuide": "คู่มือการชำระเงิน",
+    "signinGuide": "คู่มือการเข้าสู่ระบบ"
+  }
 }

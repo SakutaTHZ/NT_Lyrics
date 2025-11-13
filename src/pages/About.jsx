@@ -1,9 +1,11 @@
 import { Suspense } from "react";
-import KpayQR from "../assets/images/Kpaythz.jpg";
 import cover from "../assets/images/cover_bg.png";
+import kpay from "../assets/images/Payments/KpayLogo.png";
 
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { BiCopy, BiPhone } from "react-icons/bi";
+import { CgProfile } from "react-icons/cg";
 
 const About = () => {
   const { t } = useTranslation();
@@ -115,28 +117,39 @@ const About = () => {
                 {t("supportNT")}
               </p>
 
-              <div className="mt-4">
-                <h4 className="font-semibold mb-1">💸 KPay Donation</h4>
-                <p>
-                  We accept donations via <strong>KBZPay</strong>:
-                </p>
-                <ul className="list-disc list-inside ml-4">
-                  <li>
-                    <strong>Phone Number:</strong> 09-xxxxxxx
-                  </li>
-                  <li>
-                    <strong>Scan QR:</strong>
-                  </li>
-                </ul>
-
-                <div className="mt-4">
-                  <img
-                    src={KpayQR}
-                    alt="KBZPay QR Code"
-                    className="w-40 h-40 object-contain border c-border rounded"
-                  />
-                </div>
-              </div>
+              <div
+                          className="animate-down-start p-4 c-bg-2 rounded-md border c-border c-info-box c-text"
+                        >
+                          <div className="flex gap-3 items-start">
+                            <img
+                              src={kpay}
+                              alt={`logo`}
+                              className="h-12 aspect-square object-center rounded-md"
+                            />
+                            <div className="flex flex-col gap-2 w-full">
+                              <div className="w-auto flex items-center justify-between gap-2">
+                                <div className="w-auto flex items-center gap-2">
+                                  <BiPhone size={20} className="text-gray-500" />
+                                  <span>095127803</span>
+                                </div>
+                                <button
+                                  type="button"
+                                  className="text-blue-600 hover:underline flex items-center gap-1 border px-1 rounded-full text-xs"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText("095127803");
+                                    alert("Phone number copied to clipboard!");
+                                  }}
+                                >
+                                  <BiCopy /> Copy
+                                </button>
+                              </div>
+                              <div className="w-auto flex items-center gap-2">
+                                <CgProfile size={20} className="text-gray-500" />
+                                <span>U Saw Lwin</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
             </section>
 
             <hr className="c-border" />

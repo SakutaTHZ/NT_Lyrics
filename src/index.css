@@ -931,7 +931,7 @@ body.dark {
   background: rgb(var(--color-bg-body)) !important;
 }
 
-.c-soft-blue{
+.c-soft-blue {
   background: rgb(var(--color-info-tint)) !important;
 }
 
@@ -962,6 +962,20 @@ body.dark {
 .p-accordion-content {
   background-color: rgb(var(--color-fade-overlay)) !important;
   color: rgb(var(--color-text-base)) !important;
-  box-shadow: 0px 0px 5px rgb(var(--soft-shadow)),0px 0px 10px rgb(var(--soft-shadow)),0px 0px 20px rgb(var(--soft-shadow));
+  box-shadow: 0px 0px 5px rgb(var(--soft-shadow)),
+    0px 0px 10px rgb(var(--soft-shadow)), 0px 0px 20px rgb(var(--soft-shadow));
   transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.folder::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  height: 50%;
+  aspect-ratio: 1;
+  left: 100%;
+  bottom: 0;
+  background-color: transparent;
+  border-radius: var(--radius-md);
+  box-shadow: -5px 5px rgb(var(--color-light-blue-accent));
 }

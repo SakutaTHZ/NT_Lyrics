@@ -468,11 +468,30 @@ const Landing = () => {
               <p className="font-bold text-lg italic">{t("instructionVideos")}</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 py-4 gap-4 md:gap-12">
-              <div className="w-full aspect-video bg-gray-300 rounded-md">
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 py-4 gap-4 md:gap-8">
+              <div className="w-full aspect-video rounded-md">
+                <div className=" relative c-announcement-bg rounded-t-md w-fit px-4 py-2 folder">{t("guides.usageGuide")}</div>
                 <iframe
-                  className="w-full h-full rounded-md"
+                  className="w-full h-full rounded-b-md rounded-tr-md p-2 c-announcement-bg"
                   src="https://www.youtube.com/embed/n5HVa6TJ4Zk"
+                  title="YouTube video player"
+                  allowFullScreen
+                ></iframe>
+              </div>
+              <div className="w-full aspect-video rounded-md">
+                <div className=" relative c-announcement-bg rounded-t-md w-fit px-4 py-2 folder">{t("guides.signinGuide")}</div>
+                <iframe
+                  className="w-full h-full rounded-b-md rounded-tr-md p-2 c-announcement-bg"
+                  src="https://www.youtube.com/embed/uQDolrc6vBo"
+                  title="YouTube video player"
+                  allowFullScreen
+                ></iframe>
+              </div>
+              <div className="w-full aspect-video rounded-md">
+                <div className=" relative c-announcement-bg rounded-t-md w-fit px-4 py-2 folder">{t("guides.paymentGuide")}</div>
+                <iframe
+                  className="w-full h-full rounded-b-md rounded-tr-md p-2 c-announcement-bg"
+                  src="https://www.youtube.com/embed/HuxXP1Jb_Gg"
                   title="YouTube video player"
                   allowFullScreen
                 ></iframe>
